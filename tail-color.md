@@ -16,3 +16,11 @@ $echo "test" | grep --color=auto test
 $echo "test" | grep --color=always test
 $echo "test" | grep --color=never test
 ```
+
+## 3
+
+> 모두 출력되면서 특정 단어만 하이라이팅
+
+```shell
+$echo "test" | grep -E --color '^|test|INFO'
+```
