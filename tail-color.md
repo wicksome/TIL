@@ -22,5 +22,5 @@ $echo "test" | grep --color=never test
 > 모두 출력되면서 특정 단어만 하이라이팅
 
 ```shell
-$echo "test" | grep -E --color '^|test|INFO'
+$echo "test" | grep --color -E '^|test|INFO'
 ```
