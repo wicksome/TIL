@@ -7,7 +7,7 @@ Precious::App.set(:default_markup, :markdown) # set your favorite markup languag
 Precious::App.set(:wiki_options, {
 	:universal_toc => true,
 	:mathjax => true,
-	:live_preview => true,
+	:live_preview => false,
 	:css => true,
 	:js => true
 })
