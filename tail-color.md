@@ -7,9 +7,9 @@
 ```shell
 $echo "INFO" | awk '
 { handled = 0 }
-/Exception/ {print "\033[1;31m" $0 "\033[0;39m"; handled = 1}
-/WARN/ { if (!handled) print "\033[31m" $0 "\033[39m"; handled = 1}
-/INFO/ { if (!handled) print "\033[32m" $0 "\033[39m"; handled = 1}
+/Exception/ {print "\033[1;31m" $0 "\033[0;39m"; handled = 1} # Red
+/WARN/ { if (!handled) print "\033[31m" $0 "\033[39m"; handled = 1} # Red
+/INFO/ { if (!handled) print "\033[32m" $0 "\033[39m"; handled = 1} # Green
 { if (!handled) print "\033[39m" $0 "\033[39m"}
 '
 ```
