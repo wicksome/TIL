@@ -1,6 +1,6 @@
 # Node
 
-엘라스틱서치(es: elastic search)의 모든 인스턴스는 노드라고 부른다.
+엘라스틱서치(es: elastic search)의 모든 인스턴스를 말한다.
 
 **_노드 시작하는 동안 발생하는 액션_**
 - 환경 변수와 dlasticsearch.yml 설정 파일에서 설정을 읽는다.
