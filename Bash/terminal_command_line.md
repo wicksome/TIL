@@ -7,6 +7,7 @@ $ ps -ef | grep 'httpd' | wc -l
  
 # 열린 포트 확인
 $ lsof -n -i4TCP:포트번호 | grep LISTEN
+$ lsof -i -P | grep -i "listen"
 # 참고: http://thswave.github.io/mac/2015/05/10/mac-port-kill.html
  
 # 명령어어의 경로 확인
