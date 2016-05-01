@@ -3,6 +3,15 @@
 ## 스프링 MVC 웹 보안 활성화
 `@EnableWebSecurity` 로 웹 보안을 활성화한다. 애너테이션과 함께, 스프링 시큐리티가 `WebSecurityConfigurer`를 구현하거나, `WebSecurityConfigurerAdapoter`(자주 쓰이는 방법)를 확장한 빈으로 설정되어야 한다.
 
+**pom.xml**
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+**SecurityConfig.java**
 ```java
 ...
 @Configuration
