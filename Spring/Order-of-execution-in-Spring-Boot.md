@@ -2,7 +2,17 @@
 
 클래스명은 프로젝트마다 다를 수 있다.
 
-1. `configure`
+1. **_WebApplicationInitializer_**: `onStartup`
+```java
+public class WebConfig implements WebApplicationInitializer {
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        ...
+    }
+}
+```
+
+2. **_SpringBootServletInitializer_**: `configure`
 ```java
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
@@ -12,16 +22,18 @@ public class Application extends SpringBootServletInitializer {
     }
     ...
 ```
-2. `configureContectNegotiation`
+
+3. **_WebMvcConfigurerAdaper_**: `configureContectNegotiation`
 ```java
-public class WebConfig extends WebMvcConfigurerAdaper {
+public class ServletConfig extends WebMvcConfigurerAdaper {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         ...
     }
 }
 ```
-3. `configure`
+
+4. **_WebSecurityConfigurerAdapter_**: `configure`
 ```java
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
@@ -31,4 +43,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     ...
 }
 ```
-4. RequestMapping
+
+5. RequestMapping
