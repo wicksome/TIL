@@ -7,7 +7,7 @@
 </dependency>
 ```
 
-# 2. Update config files
+# 2. Update web config files
 
 `web.xml`을 수정하면 되지만, 여기서는 java 기반으로 `webConfig.java`를 만들어 설정한다.
 
@@ -18,7 +18,7 @@ public class WebConfig implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(Config.class);
 
-    // root application context의 생명주기를 관리
+        // root application context의 생명주기를 관리
         servletContext.addListener(new ContextLoaderListener(rootContext));
 
         this.addDispatcherServlet(servletContext);
@@ -81,6 +81,31 @@ public class SecurityInitializer extends AbstractSecurityWebApplicationInitializ
 
 _Question_
 > Q. `AbstractSecurityWebApplicationInitializer`은 `WebApplicationInitializer`을 구현하고 있는데, 그렇다면 하나만 만들어야하는가? 아니면 따로따로 만들어야 하는가?
+
+> Q. `AbstractAnnotationConfigDispatcherServletInitializer`를 상속받아 `getRootConfigClasses()`에서 root application context를 선언하면 에러가 발생하는 이유?
+
+> A. spring boot는 root application context, DelegatingFilterProxy를 만들어준다. 그렇기 때문에 따로 선언하지 않는다. 
+
+# 3. Update spring config files
+
+```java
+@Configuration
+@EnableWebMvc // mvc:annotation-driven
+public class ServletConfig extends WebMvcConfigurerAdapter {
+	@Override
+	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false) //
+            .favorParameter(true) //
+            .parameterName("format") //
+            .ignoreAcceptHeader(true) //
+            .useJaf(false) //
+            .defaultContentType(MediaType.APPLICATION_JSON) //
+            .mediaType("xml", MediaType.APPLICATION_XML) //
+            .mediaType("json", MediaType.APPLICATION_JSON);
+    }
+}
+```
+
 
 # 참고
 - [Pre-Authentication Scenarios](https://docs.spring.io/spring-security/site/docs/3.0.x/reference/preauth.html)
