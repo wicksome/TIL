@@ -25,18 +25,45 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 > `@EnableWebMvcSecurity`는 스프링 MVC 인수 결정자를 설정하며, 핸들러 메소드가 `@AuthenticationPrincipal`이 붙은 인자를 사용하여 인증한 사용자 주체를 받는다. 또한 자동으로 숨겨진 사이트 간 요청 위조(CSRF, Cross-Site Request Forgery) 토큰 필드를 스프링의 폼 바인딩 태그 라이브러리를 사용하여 추가하는 빈을 설정한다. 하지만, 스프링 시큐리티 4.0부터는 `@EnableWebSecurity`만으로도 가능하기 때문에 `@EnableWebSecurity`을 사용을 권장한다.
 
+### configure
+
 `WebSecurityConfigurerAdapter`의 세 가지 `configurer()` 오버라이딩을 통해 설정을 변경할 수 있다.
 
-|                메소드                   |             설명                     |
-|---------------------------------------|-------------------------------------|
-|configure(WebSecurity)                 | 스프링 시큐리티의 필터 연결을 설정           |
-|configure(httpSecutiry                 | 인터셉터로 요청을 안전하게 보호하는 방법을 설정 |
-|configure(AuthenticationManagerBuilder)| 사용자 세부 서비스를 설정                 |
+| 메소드 | 설명 |
+|------|-----|
+| configure(WebSecurity)  | 스프링 시큐리티의 필터 연결을 설정 |
+| configure(httpSecurity) | 인터셉터로 요청을 안전하게 보호하는 방법을 설정 |
+| configure(AuthenticationManagerBuilder) | 사용자 세부 서비스를 설정 |
 
-_작성중_
+####example
+
+**configure(httpSecutiry)**
+
+애플리케이션으로 들어오는 모든 HTTP 요청이 인증되기 위해서 `authorizRequests()`와 `anyRequest().authenticated()`가 호출된다.
+
+```java
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests().anyRequest().authenticated();
+    //http.authorizeRequests().anyRequest().permitAll();
+}
+```
+
+**configure(AuthenticationManagerBuilder)**
+
+인메모리 사용자 저장소로 작업하여 인증 받는 방법
+
+```java
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication()
+        .withUser("user").password("password").roles("USER").and()
+        .withUser("admin").password("password").roles("USER", "ADMIN");
+}
+```
 
 # 참고
 - [Getting Started · Securing a Web Application](https://spring.io/guides/gs/securing-web/)
 - [Code Base Spring Security 기본](http://netframework.tistory.com/entry/Code-Base-Spring-Security-%EA%B8%B0%EB%B3%B8)
-- [](https://docs.spring.io/spring-security/site/docs/current/reference/html/mvc.html)
+- [Spring Security 3 - 웹 보안 요청 아키텍쳐](http://springsource.tistory.com/80)
 - [Pre-Authentication Scenarios](https://docs.spring.io/spring-security/site/docs/3.0.x/reference/preauth.html)
