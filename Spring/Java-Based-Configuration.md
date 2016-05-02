@@ -49,7 +49,7 @@
     basePachages="com.test",
     excludeFilters=@ComponentScan.Filter(Configuration.class)
 )
-public class WebConfig extends WebMvcConfigurerAdapter { // 인터셉터를 추가하기위해 상속
+public class ServletConfig extends WebMvcConfigurerAdapter { // 인터셉터를 추가하기위해 상속
     @Bean
     public ViewResolver viewResolver() {
         ...
@@ -65,8 +65,51 @@ public class WebConfig extends WebMvcConfigurerAdapter { // 인터셉터를 추�
 
 ## 3. web.xml 업애기
 
+- `WebApplicationInitializer`를 구현한 `web.xml`을 대신하는 클래스이다.
+- [Spring docs-WebApplicationInitialzer](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/WebApplicationInitializer.html)를 참고한다.
 
+```java
+public class WebConfig implements WebApplicationInitializer {
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        // 'root' Spring application context를 생성한다.
+        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+        rootContext.register(Config.class);
 
+        // root application context의 생명주기를 관리
+        servletContext.addListener(new ContextLoaderListener(rootContext));
+
+        this.addDispatcherServlet(servletContext);
+        this.addUtf8CharacterEncodingFilter(servletContext);
+    }
+
+    /**
+     * Dispatcher Servlet 을 추가한다.
+     * @param servletContext
+     */
+    private void addDispatcherServlet(ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
+        //applicationContext.getEnvironment().addActiveProfile("production");
+        applicationContext.register(ServletConfig.class);
+
+        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(applicationContext));
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/");
+        dispatcher.setInitParameter("dispatchOptionsRequest", "true"); // CORS 를 위해서 option request 도 받아들인다.
+    }
+
+    /**
+     * UTF-8 캐릭터 인코딩 필터를 추가한다.
+     * @param servletContext
+     */
+    private void addUtf8CharacterEncodingFilter(ServletContext servletContext) {
+        FilterRegistration.Dynamic filter = servletContext.addFilter("CHARACTER_ENCODING_FILTER", CharacterEncodingFilter.class);
+        filter.setInitParameter("encoding", "UTF-8");
+        filter.setInitParameter("forceEncoding", "true");
+        filter.addMappingForUrlPatterns(null, false, "/*");
+    }
+}
+```
 
 # 참고
 - [Spring 3 – XML 없이 Java만 사용해서 설정하기](https://breadmj.wordpress.com/2013/08/04/spring-3-only-java-config-without-xml/)
