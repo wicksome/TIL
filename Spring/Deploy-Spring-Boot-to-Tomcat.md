@@ -37,7 +37,7 @@ public class Application extends SpringBootServletInitializer {
 }
 ```
 
-# 
+# 내장 톰캣을 사용할 경우 버전 문제
 
 **내장 톰캣 버전**
 
@@ -45,3 +45,10 @@ public class Application extends SpringBootServletInitializer {
 |-------------|--------|
 |  1.2.4 이상  |    8   |
 |  1.2.4 이하  |    7   |
+
+**pom.xml**
+```xml
+<properties>
+    <tomcat.version>8.0.8</tomcat.version>
+</properties>
+```
