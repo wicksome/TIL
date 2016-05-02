@@ -52,3 +52,6 @@ public class Application extends SpringBootServletInitializer {
     <tomcat.version>8.0.8</tomcat.version>
 </properties>
 ```
+
+# 참고
+- http://docs.spring.io/spring-boot/docs/1.1.12.RELEASE/reference/htmlsingle/#howto-use-tomcat-8
