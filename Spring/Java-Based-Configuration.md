@@ -35,7 +35,7 @@
 </plugin>
 ```
 
-## 2. servlet-context.xml 없애기
+## 2. `servlet-context.xml` 없애기
 
 - `mvc:annotation-driven`은 `@EnableWebMvc`, `task:annotation-driven`은 `@EnableAsync`로 대신한다.
 - 빈으로 등록될 오브젝트를 리턴하는 메소드를 만든 후, `@Bean`을 붙여준다.
@@ -63,7 +63,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter { // 인터셉터를 
 }
 ```
 
-## 3. web.xml 업애기
+## 3. `web.xml` 없애기
 
 - `WebApplicationInitializer`를 구현한 `web.xml`을 대신하는 클래스이다.
 - [Spring docs-WebApplicationInitialzer](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/WebApplicationInitializer.html)를 참고한다.
