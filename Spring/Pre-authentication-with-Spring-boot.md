@@ -21,7 +21,7 @@
 
 ```java
 @Configuration
-@ComponentScan("com.naver.memo.mobile")
+@ComponentScan
 public class Config {
     // root config
 }
@@ -43,7 +43,7 @@ public class WebConfig {
 Spring Security의 핵심적인 config파일이다. pre-authentication하기 위해서 필터를 등록한다.
 
 ```java
-@ComponentScan("com.naver.memo.mobile")
+@ComponentScan
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 `servlet-context.xml`을 대신할 java config 파일이다.
 
 ```java
-@ComponentScan("com.naver.memo.mobile")
+@ComponentScan
 @Configuration
 @EnableWebMvc
 public class ServletConfig extends WebMvcConfigurerAdapter {
