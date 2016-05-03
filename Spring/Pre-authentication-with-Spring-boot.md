@@ -13,7 +13,11 @@
 
 ## 2. Update config files
 
-**Config.java**
+각 설정을들 `xml`로 지정할 수 있지만, 나는 `java config`로 설정하겠다<small>(삽질의 시작)</small>. 
+
+**_Config.java_**
+
+`Config.java`는 `root-config`로 공통적으로 사용할 config들을 모아놓을 곳이다.
 
 ```java
 @Configuration
@@ -23,7 +27,9 @@ public class Config {
 }
 ```
 
-**WebConfig.java**
+**_WebConfig.java_**
+
+`WebConfig.java`는 `web.xml`을 대신할 용도로 사용할 것이다. 원래는 `WebApplicationInitializer`을 확장해서 디스패처, 맵핑 등 설정을 하지만 spring-boot에서는 알아서 해주므로 아무것도 상속,구현하지 않고 필요할때 `bean` 등록해서 사용할 것이다.
 
 ```java
 @Configuration
@@ -32,7 +38,9 @@ public class WebConfig {
 }
 ```
 
-**SecurityConfig.java**
+**_SecurityConfig.java_**
+
+Spring Security의 핵심적인 config파일이다. pre-authentication하기 위해서 필터를 등록한다.
 
 ```java
 @ComponentScan("com.naver.memo.mobile")
@@ -57,7 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-**ServletConfig.java**
+**_ServletConfig.java_**
+
+`servlet-context.xml`을 대신할 java config 파일이다.
 
 ```java
 @ComponentScan("com.naver.memo.mobile")
@@ -75,9 +85,11 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 > pre-authentication을 위해서 여러 설정(`web.xml`, conf files)을 해야하지만, Spring boot를 사용하면 알아서 해준다.
 예를 들어, `web.xml`에서 root-context 등록, 리스너 등록, 디스패처 등록, `DelegatingFilterProxy` 설정 등을 할 필요가 없고, `DelegatingFilterProxy`를 설정하기 위한 여러 방법(java config, `WebApplicationInitializer`, `AbstractSecurityWebApplicationInitializer`) 모두 필요 없다. <small>(이틀동안의 삽질..)</small>
 
-## 2. Create Filter, UserDetailsService files
+## 2. Extend PreAuth-Filter file
 
-`AbstractPreAuthenticatedProcessingFilter`를 상속받아 구현한다. `getPreAuthenticatedPrincipal()`에서 현재 요청으로부터의 주요한 정보를 가져오기 위해 오버라이드한다.
+`AbstractPreAuthenticatedProcessingFilter`를 상속받아 구현한다. `getPreAuthenticatedPrincipal()`에서 현재 요청으로부터의 원하는 정보를 가져오기 위해 오버라이드한다. 
+
+> TODO: `AuthenticationManager`, `Provider` 등 어떻게 실행되고, 어떤 구조로 이루어져 있는지 알아보자
 
 ```java
 public class PreAuthenticatedFilter extends AbstractPreAuthenticatedProcessingFilter {
@@ -98,6 +110,12 @@ public class PreAuthenticatedFilter extends AbstractPreAuthenticatedProcessingFi
 }
 ```
 
+## 3. Implement UserDetailsService file
+
+`PreAuthenticatedFilter`에서 등록한 `UserDetailsService`이다.
+
+> TODO: `AuthenticationUserDetailsService`의 `loadUserDetails()`를 구현하는 것과, `UserDetailsService`의 `loadUserByUsername()`을 구현하는 것의 차이점을 알아보자.
+
 ```java
 @Component
 public class CustomUserDetailsService implements AuthenticationUserDetailsService {
@@ -107,14 +125,19 @@ public class CustomUserDetailsService implements AuthenticationUserDetailsServic
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         authorities.add(authority);
 
-
         String username = authentication.getName();
-        UserDetails user = new org.springframework.security.core.userdetails.User(username, "password", authorities);
+        UserDetails user = new User(username, "password", authorities);
         return user;
     }
 }
 
 ```
+
+## 4. Test
+
+PostMan으로 `Headers`에 아무 값도 없는 요청과, `SM_USER`을 넣은 요청을 보내보자.
+
+> 테스트하고 돌아가는 것을 확인했다. 하지만 솔직히 제대로 돌아가는 것인지 모르겠다. 엄청난 삽질을 하면서 얻은 결과이지만, 아직 완벽하게 이해한 코드는 아니기 때문이다...ㅠㅠ 우선 기록해놓고 나중에 다른 부분이 있으면 수정하자..
 
 # 참고
 
