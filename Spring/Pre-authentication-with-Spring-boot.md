@@ -18,7 +18,6 @@
 ```java
 @Configuration
 @ComponentScan("com.naver.memo.mobile")
-@Slf4j
 public class Config {
     // root config
 }
@@ -28,7 +27,6 @@ public class Config {
 
 ```java
 @Configuration
-@Slf4j
 public class WebConfig {
 
 }
@@ -39,18 +37,22 @@ public class WebConfig {
 ```java
 @ComponentScan("com.naver.memo.mobile")
 @EnableWebSecurity
-@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+    @Bean
+    public RequestHeaderAuthenticationFilter siteminderFilter() throws Exception {
+        RequestHeaderAuthenticationFilter filter = new RequestHeaderAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setPrincipalRequestHeader("SM_USER");
+        return filter;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-            .withUser("user").password("password").roles("USER").and()
-            .withUser("admin").password("password").roles("USER", "ADMIN");
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new PreAuthenticatedFilter(), AbstractPreAuthenticatedProcessingFilter.class);
+        http.addFilterBefore(siteminderFilter(), RequestHeaderAuthenticationFilter.class);
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests().anyRequest().authenticated();
     }
 }
 ```
@@ -61,7 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 @ComponentScan("com.naver.memo.mobile")
 @Configuration
 @EnableWebMvc
-@Slf4j
 public class ServletConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -74,11 +75,46 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 > pre-authentication을 위해서 여러 설정(`web.xml`, conf files)을 해야하지만, Spring boot를 사용하면 알아서 해준다.
 예를 들어, `web.xml`에서 root-context 등록, 리스너 등록, 디스패처 등록, `DelegatingFilterProxy` 설정 등을 할 필요가 없고, `DelegatingFilterProxy`를 설정하기 위한 여러 방법(java config, `WebApplicationInitializer`, `AbstractSecurityWebApplicationInitializer`) 모두 필요 없다. <small>(이틀동안의 삽질..)</small>
 
-## 2. Filter 구현
+## 2. Create Filter, UserDetailsService files
 
-`AbstractPreAuthenticatedProcessingFilter`를 상속받아 구현한다.
+`AbstractPreAuthenticatedProcessingFilter`를 상속받아 구현한다. `getPreAuthenticatedPrincipal()`에서 현재 요청으로부터의 주요한 정보를 가져오기 위해 오버라이드한다.
+
+```java
+public class PreAuthenticatedFilter extends AbstractPreAuthenticatedProcessingFilter {
+    @Override
+    protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
+        PreAuthenticatedAuthenticationProvider provider = new PreAuthenticatedAuthenticationProvider();
+        provider.setPreAuthenticatedUserDetailsService(new CustomUserDetailsService());
+        setAuthenticationManager(new ProviderManager(Arrays.asList(new AuthenticationProvider[] {provider})));
+
+        Object user = request.getHeader("SM_USER");
+        return user;
+    }
+
+    @Override
+    protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
+        return "";
+    }
+}
+```
+
+```java
+@Component
+public class CustomUserDetailsService implements AuthenticationUserDetailsService {
+    @Override
+    public UserDetails loadUserDetails(Authentication authentication) throws UsernameNotFoundException {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        authorities.add(authority);
 
 
+        String username = authentication.getName();
+        UserDetails user = new org.springframework.security.core.userdetails.User(username, "password", authorities);
+        return user;
+    }
+}
+
+```
 
 # 참고
 
@@ -113,8 +149,11 @@ public class SecurityInitializer extends AbstractSecurityWebApplicationInitializ
 }
 > ```
 
+## addFilterBefore vs addFilterAfter
+
 ## 사이트
 - [Pre-Authentication Scenarios](https://docs.spring.io/spring-security/site/docs/4.0.x/reference/html/preauth.html#abstractpreauthenticatedprocessingfilter)
 - [Spring Security Pre-Authentication and Authorization using Java Configurations](http://www.learningthegoodstuff.com/2014/12/spring-security-pre-authentication-and.html)
 - [Spring 3 Security Siteminder Pre-authentication Example](http://howtodoinjava.com/spring/spring-security/spring-3-security-siteminder-pre-authentication-example/)
 - [DelegatingFilterProxy 참고](http://egloos.zum.com/springmvc/v/504862)
+- [Spring Security Session Management](http://www.baeldung.com/spring-security-session)
