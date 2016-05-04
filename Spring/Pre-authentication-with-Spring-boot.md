@@ -2,6 +2,8 @@
 
 > spring boot에서 pre-authentication을 받는 것으로, 기존의 방법에서 설정하는 방법과 다를 수 있다.
 
+> 다시 확인해보니까 잘못된 부분(헤더로 검사하는 것인지, pre-auth가 제대로 되고 있는건지 확인)이 있는것 같다. 다시 확인해보고 보완할 것.
+
 ## 1. Maven dependency
 
 ```xml
@@ -138,6 +140,18 @@ public class CustomUserDetailsService implements AuthenticationUserDetailsServic
 PostMan으로 `Headers`에 아무 값도 없는 요청과, `SM_USER`을 넣은 요청을 보내보자.
 
 > 테스트하고 돌아가는 것을 확인했다. 하지만 솔직히 제대로 돌아가는 것인지 모르겠다. 엄청난 삽질을 하면서 얻은 결과이지만, 아직 완벽하게 이해한 코드는 아니기 때문이다...ㅠㅠ 우선 기록해놓고 나중에 다른 부분이 있으면 수정하자..
+
+# 호출 순서
+
+- `FilterChainProxy` 내부
+ - `doFilter`: 등록된 필터의 `doFilter()` 호출
+- `AbstractPreAuthenticatedProcessingFilter` 내부
+ - `doAuthenticate()` 호출
+ - `AuthenticationManager`의 `authenticate()` 호출
+- `ProviderManager`에서 `AuthenticationProvider`의 `authenticate()` 호출(`ProviderManager`는 `AuthenticationManager`의 구현체)
+- 
+
+
 
 # 참고
 
