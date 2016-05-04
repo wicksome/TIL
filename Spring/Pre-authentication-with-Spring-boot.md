@@ -143,15 +143,21 @@ PostMan으로 `Headers`에 아무 값도 없는 요청과, `SM_USER`을 넣은 �
 
 # 호출 순서
 
+> TODO: 다시 정리
+
+> ex) 호출된 메서드: 처리 작업
+
 - `FilterChainProxy` 내부
- - `doFilter`: 등록된 필터의 `doFilter()` 호출
+ - `doFilter()`: 등록된 필터의 `doFilter()` 호출
 - `AbstractPreAuthenticatedProcessingFilter` 내부
- - `doAuthenticate()` 호출
- - `AuthenticationManager`의 `authenticate()` 호출
-- `ProviderManager`에서 `AuthenticationProvider`의 `authenticate()` 호출(`ProviderManager`는 `AuthenticationManager`의 구현체)
-- 
-
-
+ - `doFilter()`: `doAuthenticate()` 호출
+ - `doAuthenticate()`: `AuthenticationManager`의 `authenticate()` 호출
+   - `setAuthenticationManager(new ProviderManager(Arrays.asList(new AuthenticationProvider[] {provider})));`로 `ProviderManager` 등록
+- `ProviderManager` 내부: `AuthenticationManager`의 구현체
+ - `authenticate()`: `AuthenticationProvider`의 `authenticate()` 호출
+- `PreAuthenticatedAuthenticationProvider` 내부: `AuthenticationProvider`의 구현체
+ - `authenticate()`: `preAuthenticatedUserDetailsService`의 `loadUserDetails()`를 호출하여 `UserDetails` 생성
+   - `PreAuthenticatedFilter`(`AbstractPreAuthenticatedProcessingFilter` 확장)에서 provider 생성하고, provider.setPreAuthenticatedUserDetailsService()로 customUserDetailService 등록하고, setAuthenticationManager로 프로바이터 등록
 
 # 참고
 
