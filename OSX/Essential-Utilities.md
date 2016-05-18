@@ -3,6 +3,7 @@
 - BTT - 제스처 확장
 - InsomniaX - 잠들기 취소
 - 앱클리너
+- Itsycal - 메뉴막대 시간 표시
 - Karabiner - 키보드맵핑
 - homebrew 설치
 ```
