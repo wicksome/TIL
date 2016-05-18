@@ -1,6 +1,8 @@
+## 필수
 - caps lock 키 control로 변경하기 - http://macnews.tistory.com/2240
 - iterm
-- BTT - 제스처 확장
+- 💵 BTT - 제스처 확장
+- 💵 2do
 - InsomniaX - 잠들기 취소
 - 앱클리너
 - Itsycal - 메뉴막대 시간 표시
@@ -12,7 +14,6 @@ $ brew install tree
 $ brew install htop
 ```
 - 돋보기 활성화하기
-- 맥 시간에서 달력보기 - http://macnews.tistory.com/2571
 - 시간 영어로 표기하기 - http://macnews.tistory.com/988
 - 맥 단축키 알림 - https://www.mediaatelier.com/CheatSheet/
 - 호스트 변경 - http://exifeedi.tistory.com/240
@@ -20,6 +21,7 @@ $ brew install htop
 - 패럴러즈
 - http://www.trankynam.com/xtrafinder/, http://macnews.tistory.com/1216
 - 압축 - the unarchiver
+- 메뉴바에서 기본 메뉴 사라졌을 때 - http://iprize.tistory.com/574
 
+##
 - 시스템 모니터링 - https://itunes.apple.com/kr/app/id714196447?mt=12
-
