@@ -25,3 +25,7 @@ $ brew install htop
 
 ##
 - 시스템 모니터링 - https://itunes.apple.com/kr/app/id714196447?mt=12
+
+# 20160518
+![menu](./menubar_20160518.png)
+![dock](./dock_20160518.png)
