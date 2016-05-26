@@ -9,6 +9,7 @@
 - Karabiner - 키보드맵핑
 - 스트리밍 노래 앱으로 연동하기 - http://doctypeht.ml/44
 - homebrew 설치
+- http://www.sequelpro.com/
 ```
 $ brew install tree
 $ brew install htop
