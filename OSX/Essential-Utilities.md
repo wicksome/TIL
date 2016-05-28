@@ -8,6 +8,7 @@
 - Itsycal - 메뉴막대 시간 표시
 - Karabiner - 키보드맵핑
 - 스트리밍 노래 앱으로 연동하기 - http://doctypeht.ml/44
+- 웹사이트 앱으로 만들기 - http://fluidapp.com/
 - homebrew 설치
 - http://www.sequelpro.com/
 ```
