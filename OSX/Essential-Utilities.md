@@ -2,7 +2,12 @@
 - caps lock 키 control로 변경하기 - http://macnews.tistory.com/2240
 - iterm
 - 💵 BTT - 제스처 확장
-- 💵 2do
+- Getting Things Done (GTD) Apps
+  - 💵 2do
+- Kanban Board Apps
+  - trello
+- Plain Text Apps
+  - Evernote
 - InsomniaX - 잠들기 취소
 - 앱클리너
 - Itsycal - 메뉴막대 시간 표시
