@@ -22,7 +22,7 @@ exec.execute(task);
 	- 고정 갯수 thread pool을 반환
 	- 강도 높은 계산을 수행하는 태스크에 적합
 	- 다음 방법으로 스레드 갯수 도출
-	
+
 	```java
 	int processors = Runtime.getRuntime().availableProcessors();
 	```
@@ -156,7 +156,6 @@ public static void main(String[] args) {
 	- x와 y는 어떤 순서로 일어나도 상관 없다
 	- 프로세서는 두 단계를 병렬로 수행하거나(종종 이렇게 한다), y를 더 먼저 구할 수 있음
 	- 즉, 앞에 나온 코드를 다음과 같이 재배치 될 수 있음
-
 		```java
 		while (!done) i++; // before
 		if (!done) while (true) i++; // after
