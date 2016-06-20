@@ -62,6 +62,7 @@ Callable<V> task = () -> {
 
 **여러 태스크 실행**
 - `invokeAll()`: Callable 인스턴스의 Collection을 받을 수 있음
+
   	```java
 	Set<Path> paths = ...;
 	List<Callable<Long>> tasks = new ArrayList<>();
@@ -77,10 +78,11 @@ Callable<V> task = () -> {
 		total += result.get();
 	}
 	```
+
 	- 타임아웃을 파라미터로 받아서 해당 타임아웃때 나머지 태스크를 모두 취소하는 `invokeAll()`도 있음
 	- 서브태스크가 모두 완료될 때까지 호출된 태스크가 블록되는 것이 싫으면 `ExecutorCompletionService`
-	
 - `invokeAny()`: 하나가 완료하면 즉시 반환
+
 	```java
 	Set<Path> paths = ...;
 	List<Callable<Path>> tasks = new ArrayList<>();
@@ -96,11 +98,13 @@ Callable<V> task = () -> {
 	ExecutorService exec = Executors.newCachedThreadPool();
 	Path found = exec.invokeAny(tasks);
 	```
+
 	- 특정 대상을 발견한 즉지 결론을 내릴 수 있는 검색에 유용
 
 ## 스레드 안전성
 
 **가시성**
+
 ```java
 private static boolean done = true;
 
@@ -123,6 +127,7 @@ public static void main(String[] args) {
 	exec.execute(task2);
 }
 ```
+
 - 왜 task1이 1000을 출력했을 때 task2는 끝나지 않는가?
   - 캐싱과 명령어 재배치와 관련한 여러 이유
 
@@ -136,14 +141,17 @@ public static void main(String[] args) {
 
 명령어 재배치(instruction reordering)
 - 컴파일러, VM, 프로세서는 프로그램의 의미를 바꾸지 않는 한 연산 속도를 올릴 목적으로 명령어 순서 변경 가능
+
 	```java
 	x = y와 관련 없는 값;
 	y = x와 관련 없는 값;
 	z = x + y;
 	```
+
 	- x와 y는 어떤 순서로 일어나도 상관 없다
 	- 프로세서는 두 단계를 병렬로 수행하거나(종종 이렇게 한다), y를 더 먼저 구할 수 있음
 	- 즉, 앞에 나온 코드를 다음과 같이 재배치 될 수 있음
+
 		```java
 		while (!done) i++; // before
 		if (!done) while (true) i++; // after
