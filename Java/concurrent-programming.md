@@ -40,4 +40,11 @@ Callable<Integer> task = () -> {...};
 Future<Integer> result = exec.submit(task);
 ```
 
-**Future**: 
+**Future**: A Future represents the result of an asynchronous computation
+- `get()`: 결과를 얻게 되거나 타임아웃될 때까지 블록하고 값 반환
+  - `call()`에서 예외를 전졌을 경우 해당 예외를 감싸고 있는 `ExecutionException`을 던짐
+- `cancel()`: task 취소를 시도
+  - 실행중이 아닌 태스크일 경우 스케줄링 되지 않음
+  - 실행중이고 `cancel()`의 파라미터(mayInterruptIfRunning)가 true면 태스크 실행하는 스레드를 인터럽트
+  
+  
