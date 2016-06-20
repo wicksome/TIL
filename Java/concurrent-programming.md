@@ -162,14 +162,19 @@ public static void main(String[] args) {
 		if (!done) while (true) i++; // after
 		```
 
+---
+
 변수 업데이트가 보이게 보장하는 방법
 - final 변수의 값을 초기화 후에 보인다
 - static 변수의 초깃값은 정적 초기화(initialization) 후에 보인다
 - volatile 변수의 변경은 보인다
 - 잠금을 해제하기 전에 일어나는 변경은 같은 잠금을 획득하는 쪽에 보인다 
 
+---
+
 ```java
 private static volatile boolean done = false;
 ```
+
 - 앞에 나온 코드에서는 공유 변수 done을 volatile 제어자로 선언하면 해결
-- 컴파일러는 done을 변경했을 때 다른 태스크에도 해당 변경이 보이도록 보장하는 데 필요한 명령어를 만듦
+- 컴파일러는 done을 변경했을 때, 다른 태스크에도 해당 변경이 보이도록 보장하는 데 필요한 명령어를 만듦
