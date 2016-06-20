@@ -22,18 +22,22 @@ exec.execute(task);
 	- 고정 갯수 thread pool을 반환
 	- 강도 높은 계산을 수행하는 태스크에 적합
 	- 다음 방법으로 스레드 갯수 도출
+	
 	```java
 	int processors = Runtime.getRuntime().availableProcessors();
 	```
 
 **Callable**: Runnable.run()과는 달리 값을 반환
+
 ```java
 public interface Callable<V> {
 	V call() throws Exception;
 }
 ```
+
 - 실행하기 위해 `Executor`의 서브인터페이스인 `ExecutorService` 인터페이스의 인스턴스 필요
 	- `newCachedThreadPool()`와 `newFixedThreadPool()`가 반환
+
 	```java
 	ExecutorService exec = Exectors.newCachedThreadPool();
 	Callable<Integer> task = () -> {...};
@@ -48,6 +52,7 @@ public interface Callable<V> {
 	- 실행중이고 `cancel()`의 파라미터(mayInterruptIfRunning)가 true면 태스크 실행하는 스레드를 인터럽트
 
 _NOTE._ task를 interrupt될 수 있게 하려면 인터럽션 요청을 주기적으로 확인해야 함
+
 ```java
 Callable<V> task = () -> {
 	while (남은 작업이 있으면) {
