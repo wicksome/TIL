@@ -147,20 +147,20 @@ public static void main(String[] args) {
 명령어 재배치(instruction reordering)
 - 컴파일러, VM, 프로세서는 프로그램의 의미를 바꾸지 않는 한 연산 속도를 올릴 목적으로 명령어 순서 변경 가능
 
-	```java
-	x = y와 관련 없는 값;
-	y = x와 관련 없는 값;
-	z = x + y;
-	```
+```java
+x = y와 관련 없는 값;
+y = x와 관련 없는 값;
+z = x + y;
+```
 
 	- x와 y는 어떤 순서로 일어나도 상관 없다
 	- 프로세서는 두 단계를 병렬로 수행하거나(종종 이렇게 한다), y를 더 먼저 구할 수 있음
 	- 즉, 앞에 나온 코드를 다음과 같이 재배치 될 수 있음
 
-		```java
-		while (!done) i++; // before
-		if (!done) while (true) i++; // after
-		```
+	```java
+	while (!done) i++; // before
+	if (!done) while (true) i++; // after
+	```
 
 변수 업데이트가 보이게 보장하는 방법
 - final 변수의 값을 초기화 후에 보인다
