@@ -25,3 +25,19 @@ exec.execute(task);
   ```java
   int processors = Runtime.getRuntime().availableProcessors();
   ```
+
+**Callable**: Runnable.run()과는 달리 값을 반환
+```java
+public interface Callable<V> {
+	V call() throws Exception;
+}
+```
+- 실행하기 위해 `Executor`의 서브인터페이스인 `ExecutorService` 인터페이스의 인스턴스 필요
+  - `newCachedThreadPool()`와 `newFixedThreadPool()`가 반환
+```java
+ExecutorService exec = Exectors.newCachedThreadPool();
+Callable<Integer> task = () -> {...};
+Future<Integer> result = exec.submit(task);
+```
+
+**Future**: 
