@@ -5,8 +5,6 @@
 
 ## 태스크 실행하기
 
----
-
 ```java
 Runnable task = () -> {
 	System.out.println("yeongjun");
@@ -16,9 +14,10 @@ Executor exec = Executors.newFixedThreadPool()
 exec.execute(task);
 ```
 
----
+### Executor
 
-**Executor**: 자바 병행성 라이브러리에서 실행자(executor)
+> 자바 병행성 라이브러리에서 실행자(executor)
+
 - 태스크를 수행할 스레드를 선택해서 태스크를 실행한다
 - 다양한 유형의 실행자를 만들어내는 facroty method가 있다
 - `Exectors.newCachedThreadPool()`
@@ -33,17 +32,15 @@ exec.execute(task);
 	int processors = Runtime.getRuntime().availableProcessors();
 	```
 
----
+### Callable
 
-**Callable**: Runnable.run()과는 달리 값을 반환
+> Runnable.run()과는 달리 값을 반환
 
 ```java
 public interface Callable<V> {
 	V call() throws Exception;
 }
 ```
-
----
 
 - 실행하기 위해 `Executor`의 서브인터페이스인 `ExecutorService` 인터페이스의 인스턴스 필요
 	- `newCachedThreadPool()`와 `newFixedThreadPool()`가 반환
@@ -54,18 +51,19 @@ public interface Callable<V> {
 	Future<Integer> result = exec.submit(task);
 	```
 
----
+### Future
 
-**Future**: A Future represents the result of an asynchronous computation
+> A Future represents the result of an asynchronous computation
+
 - `get()`: 결과를 얻게 되거나 타임아웃될 때까지 블록하고 값 반환
 	- `call()`에서 예외를 전졌을 경우 해당 예외를 감싸고 있는 `ExecutionException`을 던짐
 - `cancel()`: task 취소를 시도
 	- 실행중이 아닌 태스크일 경우 스케줄링 되지 않음
 	- 실행중이고 `cancel()`의 파라미터(mayInterruptIfRunning)가 true면 태스크 실행하는 스레드를 인터럽트
 
----
+### _NOTE_
 
-_NOTE._ task를 interrupt될 수 있게 하려면 인터럽션 요청을 주기적으로 확인해야 함
+> task를 interrupt될 수 있게 하려면 인터럽션 요청을 주기적으로 확인해야 함
 
 ```java
 Callable<V> task = () -> {
@@ -79,10 +77,9 @@ Callable<V> task = () -> {
 }
 ```
 
----
+### 여러 태스크 실행
 
-**여러 태스크 실행**
-- `invokeAll()`: Callable 인스턴스의 Collection을 받을 수 있음
+#### `invokeAll()`: Callable 인스턴스의 Collection을 받을 수 있음
 
   	```java
 	Set<Path> paths = ...;
@@ -103,9 +100,7 @@ Callable<V> task = () -> {
 	- 타임아웃을 파라미터로 받아서 해당 타임아웃때 나머지 태스크를 모두 취소하는 `invokeAll()`도 있음
 	- 서브태스크가 모두 완료될 때까지 호출된 태스크가 블록되는 것이 싫으면 `ExecutorCompletionService`
 
----
-
-- `invokeAny()`: 하나가 완료하면 즉시 반환
+#### `invokeAny()`: 하나가 완료하면 즉시 반환
 
 	```java
 	Set<Path> paths = ...;
@@ -129,9 +124,7 @@ Callable<V> task = () -> {
 
 ## 스레드 안전성
 
----
-
-**가시성**
+### 가시성
 
 ```java
 private static boolean done = false;
@@ -159,9 +152,8 @@ public static void main(String[] args) {
 - 왜 task1이 1000을 출력했을 때 task2는 끝나지 않는가?
   - 캐싱과 명령어 재배치와 관련한 여러 이유
 
----
+#### 캐싱(caching)
 
-캐싱(caching)
 - done의 메모리 위치가 램 칩의 트랜지스터 어딘가에 있는 비트? - (개발자 생각)
   - 모던 프로세스보다 몇 배 느리다
   - 그래서! 프로세스는 필요한 데이터를 register나 보드에 달린 memory cache에 저장하려한다
@@ -169,9 +161,8 @@ public static void main(String[] args) {
 - 이러한 캐싱은 프로세스 퍼포먼스에서 빠질 수 없는 역할
 - 캐시된 사본을 동기화하는 연산이 있지만, 요청을 받을 때만 일어남
 
----
+#### 명령어 재배치(instruction reordering)
 
-명령어 재배치(instruction reordering)
 - 컴파일러, VM, 프로세서는 프로그램의 의미를 바꾸지 않는 한 연산 속도를 올릴 목적으로 명령어 순서 변경 가능
 
 	```java
@@ -189,15 +180,11 @@ public static void main(String[] args) {
 		if (!done) while (true) i++; // after
 		```
 
----
-
-변수 업데이트가 보이게 보장하는 방법
-- final 변수의 값을 초기화 후에 보인다
-- static 변수의 초깃값은 정적 초기화(initialization) 후에 보인다
-- volatile 변수의 변경은 보인다
-- 잠금을 해제하기 전에 일어나는 변경은 같은 잠금을 획득하는 쪽에 보인다 
-
----
+#### 변수 업데이트가 보이게 보장하는 방법
+1. final 변수의 값을 초기화 후에 보인다
+2. static 변수의 초깃값은 정적 초기화(initialization) 후에 보인다
+3. volatile 변수의 변경은 보인다
+4. 잠금을 해제하기 전에 일어나는 변경은 같은 잠금을 획득하는 쪽에 보인다 
 
 ```java
 private static volatile boolean done = false;
