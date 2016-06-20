@@ -46,5 +46,16 @@ Future<Integer> result = exec.submit(task);
 - `cancel()`: task 취소를 시도
   - 실행중이 아닌 태스크일 경우 스케줄링 되지 않음
   - 실행중이고 `cancel()`의 파라미터(mayInterruptIfRunning)가 true면 태스크 실행하는 스레드를 인터럽트
-  
-  
+
+_NOTE._ task를 interrupt될 수 있게 하려면 인터럽션 요청을 주기적으로 확인해야 함
+```java
+Callable<V> task = () -> {
+	while (남은 작업이 있으면) {
+		if (Thread.currentTheread().isInterrupted()) {
+			return null;
+		}
+		남은 작업을 수행한다.
+	}
+	returen result;
+}
+```
