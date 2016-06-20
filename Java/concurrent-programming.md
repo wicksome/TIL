@@ -100,3 +100,57 @@ Callable<V> task = () -> {
 ## 스레드 안전성
 
 **가시성**
+```java
+private static boolean done = true;
+
+public static void main(String[] args) {
+	Runnable task1 = () -> {
+		for (int i = 0; i <= 1000; i++) {
+			System.out.println(i);
+		}
+		done = true;
+	};
+	Runnable task2 = () -> {
+		int i = 1;
+		while(done) {
+			i++;
+		}
+		System.out.println("end: " + i);
+	};
+	Executor exec = Executors.newCachedThreadPool();
+	exec.execute(task1);
+	exec.execute(task2);
+}
+```
+- 왜 task1이 1000을 출력했을 때 task2는 끝나지 않는가?
+  - 캐싱과 명령어 재배치와 관련한 여러 이유
+
+캐싱(caching)
+- done의 메모리 위치가 램 칩의 트랜지스터 어딘가에 있는 비트? - (개발자 생각)
+  - 모던 프로세스보다 몇 배 느리다
+  - 그래서! 프로세스는 필요한 데이터를 register나 보드에 달린 memory cache에 저장하려한다
+  - 그리고! 다시 메모리에 쓴다
+- 이러한 캐싱은 프로세스 퍼포먼스에서 빠질 수 없는 역할
+- 캐시된 사본을 동기화하는 연산이 있지만, 요청을 받을 때만 일어남
+
+명령어 재배치(instruction reordering)
+- 컴파일러, VM, 프로세서는 프로그램의 의미를 바꾸지 않는 한 연산 속도를 올릴 목적으로 명령어 순서 변경 가능
+	```java
+	x = y와 관련 없는 값;
+	y = x와 관련 없는 값;
+	z = x + y;
+	```
+	- x와 y는 어떤 순서로 일어나도 상관 없다
+	- 프로세서는 두 단계를 병렬로 수행하거나(종종 이렇게 한다), y를 더 먼저 구할 수 있음
+	- 즉, 앞에 나온 코드를 다음과 같이 재배치 될 수 있음
+		```java
+		while (!done) i++; // before
+		if (!done) while (true) i++; // after
+		```
+
+변수 업데이트가 보이게 보장하는 방법
+- final 변수의 값을 초기화 후에 보인다
+- static 변수의 초깃값은 정적 초기화(initialization) 후에 보인다
+- volatile 변수의 변경은 보인다
+- 잠금을 해제하기 전에 일어나는 변경은 같은 잠금을 획득하는 쪽에 보인다 
+
