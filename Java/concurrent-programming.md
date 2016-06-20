@@ -111,7 +111,7 @@ Callable<V> task = () -> {
 **가시성**
 
 ```java
-private static boolean done = true;
+private static boolean done = false;
 
 public static void main(String[] args) {
 	Runnable task1 = () -> {
@@ -122,7 +122,7 @@ public static void main(String[] args) {
 	};
 	Runnable task2 = () -> {
 		int i = 1;
-		while(done) {
+		while(!done) {
 			i++;
 		}
 		System.out.println("end: " + i);
@@ -156,6 +156,7 @@ public static void main(String[] args) {
 	- x와 y는 어떤 순서로 일어나도 상관 없다
 	- 프로세서는 두 단계를 병렬로 수행하거나(종종 이렇게 한다), y를 더 먼저 구할 수 있음
 	- 즉, 앞에 나온 코드를 다음과 같이 재배치 될 수 있음
+
 		```java
 		while (!done) i++; // before
 		if (!done) while (true) i++; // after
@@ -167,3 +168,8 @@ public static void main(String[] args) {
 - volatile 변수의 변경은 보인다
 - 잠금을 해제하기 전에 일어나는 변경은 같은 잠금을 획득하는 쪽에 보인다 
 
+> 앞에 나온 코드에서는 공유 변수 done을 volatile 제어자로 선언하면 된다
+	```java
+	private static volatile boolean done = false;
+	```
+> 컴파일러는 done을 변경했을 때 다른 태스크에도 해당 변경이 보이도록 보장하는 데 필요한 명령어를 만듦
