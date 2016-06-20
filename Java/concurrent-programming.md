@@ -1,3 +1,27 @@
 # 병행 프로그래밍
 > 카이 호스트만의 코어 자바8
 
+## 태스크 실행하기
+
+```java
+Runnable task = () -> {
+	System.out.println("yeongjun");
+}
+Executor exec = Executors.newCachedThreadPool();
+Executor exec = Executors.newFixedThreadPool()
+exec.execute(task);
+```
+
+**Executor**: 자바 병행성 라이브러리에서 실행자(executor)
+- 태스크를 수행할 스레드를 선택해서 태스크를 실행한다
+- 다양한 유형의 실행자를 만들어내는 facroty method가 있다
+- `Exectors.newCachedThreadPool()`
+  - 프로그램에 최적화된 실행자를 반환
+  - idle thread에서 실행, 모든 스레드가 사용중이면 새로운 스레드 생성, 장시간 idle state이면 종료
+- `Executors.newFixedThreadPool(nThreads)`
+  - 고정 갯수 thread pool을 반환
+  - 강도 높은 계산을 수행하는 태스크에 적합
+  - 다음 방법으로 스레드 갯수 도출
+  ```java
+  int processors = Runtime.getRuntime().availableProcessors();
+  ```
