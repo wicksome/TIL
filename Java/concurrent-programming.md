@@ -79,6 +79,7 @@ Callable<V> task = () -> {
 	```
 	- 타임아웃을 파라미터로 받아서 해당 타임아웃때 나머지 태스크를 모두 취소하는 `invokeAll()`도 있음
 	- 서브태스크가 모두 완료될 때까지 호출된 태스크가 블록되는 것이 싫으면 `ExecutorCompletionService`
+	
 - `invokeAny()`: 하나가 완료하면 즉시 반환
 	```java
 	Set<Path> paths = ...;
