@@ -302,3 +302,31 @@ Arrays.parallelSort(values, values.length / 2, values.length); // 상반부를 �
 
 ## 스레드 안전 자료 구조
 
+- 잠금을 이용해서 다른 스레드 접근시 blocking 할 수 있지만, 비효율적
+- 잘 만들어진 `java.util.concurrent` 패키지에 있는 컬렉션 사용
+
+### 병행 해시 맵
+> ConcurrentHashMap
+
+- 스레드가 안전한 연산을 할 수 있게 해줌
+- 아무리 많은 스레드가 연산을 수행해도 내부가 손상되지 않음
+- 상당수의 병행 리더(concurrent reader)와 일정 개수의 병행 라이터(concurrent writer)를 효율적으로 지원
+- `compute()`는 원자적이다
+
+	```java
+	ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
+	map.compute(word, (k, v) -> (v == null) ? 1 : v + 1);
+	```
+
+_TODO: 필요할 때 더 찾아볼 것_
+
+### 블로킹 큐
+> `BlockingQueue` 태스크 사이에서 작업을 조율하는 데 사용
+
+- `LinkedBlockingQueue`: 연결 리스트 기반
+- `ArrayBlocingQueue`: 원형 배열
+
+_TODO: 필요할 때 더 찾아볼 것_
+
+### 기타 스레드 안전 자료 구조
+
