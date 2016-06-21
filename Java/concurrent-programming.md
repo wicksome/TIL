@@ -195,5 +195,68 @@ private static volatile boolean done = false;
 
 ### 경쟁 조건
 
+```java
+private static volatile int count = 0;
+count++; // 태스크 1
+count++; // 태스크 2
+```
 
+- `volatile`로 선언했지만 충분하지 않음
+- `count++`는 atomic 않기 때문
+	```java
+	count = count + 1;
+	```
+	- 값을 넣어주기 전에 스레드가 선점되면 인터럽트될 수 있음
+- 이런 오류는 공유 변수를 업데이트하는 '경쟁'에서 승리하는 스레드에 의존하므로 _경쟁 조건(race confition)_이라고 한다
+- 해결 방법
+	- 잠금을 이용해서 임계적인 연산을 원자적으로 만드는 것
+	- 하지만 퍼포먼스를 떨어뜨리거나, deadlock를 야기하는 실수를 저지를 수 있음
 
+### 안전한 병행성을 실행하는 전략
+
+1. 가두기(confinement)
+2. 불변성(immutability)
+3. 잠금 설정(locking)
+
+#### 가두기(confinement)
+
+```java
+public class Test {
+	public static void main(String[] args) throws ExecutionException, InterruptedException {
+		Callable<Integer> task1 = () -> 1;
+		Callable<Integer> task2 = () -> 2;
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		Future<Integer> x = exec.submit(task1);
+		Future<Integer> y = exec.submit(task2);
+
+		MyRunnable result = new MyRunnable(x.get(), y.get());
+		result.run();
+	}
+}
+
+class MyRunnable implements Runnable {
+	private int x;
+	private int y;
+	public MyRunnable(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public void run() {
+		System.out.println(x + y);
+	}
+}
+```
+
+- 데이터를 공유해야할 경우, 공유 변수를 사용하지 않고 각 태스크에서 비공개 변수를 제공
+- 태스크가 완료될 때, 각 결과들을 결합하는 또 다른 태스크에 전달
+
+#### 불변성(immutability)
+
+```java
+```
+#### 잠금 설정(locking)
+
+```java
+```
