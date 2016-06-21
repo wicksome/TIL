@@ -288,7 +288,7 @@ long result = coll.parallelStream()
 - 각 세그먼트에서 필터랑과 카운팅을 수행하고 결과를 결합한다
 - but, 개발자는 세부 내용을 신경쓰지 않아도 된다
 
-## 병렬 배열 연산
+### 병렬 배열 연산
 
 ```java
 Arrays.parallelSetAll(values, i -> i % 10);
