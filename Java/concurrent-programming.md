@@ -290,5 +290,15 @@ long result = coll.parallelStream()
 
 ## 병렬 배열 연산
 
+```java
+Arrays.parallelSetAll(values, i -> i % 10);
+Arrays.parallelSort(words, Comparator.comparing(String::length));
+Arrays.parallelSort(values, values.length / 2, values.length); // 상반부를 정렬
+```
 
+- Arrays 클래스는 다수의 병렬화된 연산 지원
+
+---
+
+## 스레드 안전 자료 구조
 
