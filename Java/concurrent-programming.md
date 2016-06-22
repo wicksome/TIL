@@ -520,7 +520,27 @@ String amountDue = currencyFormat.get().format(total);
 
 ### 기타 스레드 프로퍼티
 
+**priority**
 
+- 우선순위 설정 가능
+- 플랫폼에 상당히 의존적
+- 불안정하므로 권장하지 않음
+
+**state**
+
+- 새로운 스레드, 실행 상태, 블록 상태, 대기 상태, 종료 상태
+- application 개발자 입장에서는 스레드 상태를 조회할 이유가 없다
+
+**daemon**
+
+```java
+// 스레드 시작 전에 호출
+thread.setDaemon(true);
+```
+
+- 다른 스레드에 서비스를 제공하는 역할
+- 타이머 틱(timer tick)을 보내거나 오래된 캐시 엔트리를 정리하는 스레드에 유용
+- 데몬 스레드만 남아 있다면 가상 머신 종료
 
 ---
 
