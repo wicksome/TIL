@@ -406,7 +406,7 @@ try {
 
 - `ReentrantLock`를 이용한 명시적 잠금
 - deadlock에 빠지는 상황을 만들 수 있으므로 제대로 사용할 것
-- 공유가 필요할 때는 `ConcurrentHashMap`, `LongAdder` 같은 스레드 안전 자료구조를 사용한다
+- 공유가 필요할 때는 `ConcurrentHashMap`, `LongAdder` 같은 스레드 안전 자료구조를 사용한다.
 
 ### synchronized 키워드
 
@@ -449,7 +449,7 @@ public void method() {
 ### 조건 대기
 > 스레드가 `wait()`되어 비활성화되고 잠금을 놓은 상태를 조건 대기(waiting on a confition)
 
-Queue에서 값이 없다면 대기 중 상태였다가 값이 들어오면 지우는 메서드(`task()`)를 예로 들 수 있다
+Queue에서 값이 없다면 대기 중 상태였다가 값이 들어오면 지우는 메서드(`task()`)를 예로 들 수 있다.
 
 ```java
 public synchronized Object take() {
@@ -467,4 +467,32 @@ public synchronized void add(Object newValue) {
 
 - 스레드는 `wait()`를 호출하면 해당 객체의 대기 집합(wait set)에 들어감
 - 또 다른 스레드에서 같은 객체에 `notifyAll()`를 호출할 때까지 비활성화 상태
-- `notify()`는 모든 스레드의 블록 상태를 해제하는 것보다 효율적이지만, 선택된 스레드가 여전히 진행할 수 없다면 deadlock에 빠지기 때문에 위험하다
+- `notify()`는 모든 스레드의 블록 상태를 해제하는 것보다 효율적이지만, 선택된 스레드가 여전히 진행할 수 없다면 deadlock에 빠지기 때문에 위험하다.
+
+---
+
+## 스레드
+
+- 스레드를 대신 관리해주는 실행자를 사용하는 것이 더 좋다.
+
+### 스레드 시작하기
+
+```java
+Runnable task = () -> { ... };
+Thread thread = new Thread(task);
+thread.start();
+```
+
+- 현재 스레드를 잠들게 하려면 `Thread.sleep(millis)`
+- 스레드의 작업이 끝나기를 기다린다면 `thread.join(millis)`
+- 이 두 메서드는 검사 예외인 `InterruptedException`을 던짐
+
+- 스레드는 `run()`이 반환될 때 종료
+- 예외가 발생하면 해당 스레드의 _미처리 예외 핸들러_ 호출
+	- 스레드가 생성될 때 궁극적 전역 핸들러인 스레드 그룹의 미처리 예외 핸들러로 설정
+- `setUncaughtExceptionHandler()`로 스레드의 핸들러 변경 가능
+
+### 스레드 인터럽션
+
+
+
