@@ -406,3 +406,43 @@ try {
 
 - `ReentrantLock`를 이용한 명시적 잠금
 - deadlock에 빠지는 상황을 만들 수 있으므로 제대로 사용할 것
+- 공유가 필요할 때는 `ConcurrentHashMap`, `LongAdder` 같은 스레드 안전 자료구조를 사용한다
+
+### synchronized 키워드
+
+두 가지 형태로 사용할 수 있다. 위의 코드는 `synchronized` 사용 / 아래 코드는 본
+
+**case 1**
+
+```java
+synchronized (obj) {
+	// todo
+}
+
+// 본질적으로 다음 코드를 의미한다
+obj.intrinaicLock.lock();
+try {
+	// todo
+} finally {
+	obj.intrinsicLock.unlock();
+}
+```
+
+**case 2**
+
+```java
+public synchronized void method() {
+	// todo
+}
+
+// 본질적으로 다음 코드를 의미한다
+public void method() {
+	this.intrinaicLock.lock();
+	try {
+		// todo
+	} finally {
+		this.intrinsicLock.unlock();
+	}
+}
+```
+
