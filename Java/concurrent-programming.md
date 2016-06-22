@@ -389,4 +389,19 @@ LongAccumulator accumulator = new LongAccumulator(Long::sum, 0);
 
 ## 잠금
 
+### 재진입 가능 잠금
 
+```java
+Lock countLock = new ReentrantLock();
+int count = 0;
+
+countLock.lock(); // 임계구역 설정
+try {
+	count++;
+} finally {
+	countLock.unlock(); // 임계구역 해제
+}
+```
+
+- `ReentrantLock`를 이용한 명시적 잠금
+- deadlock에 빠지는 상황을 만들 수 있으므로 제대로 사용할 것
