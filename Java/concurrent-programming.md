@@ -485,7 +485,7 @@ thread.start();
 
 - 현재 스레드를 잠들게 하려면 `Thread.sleep(millis)`
 - 스레드의 작업이 끝나기를 기다린다면 `thread.join(millis)`
-- 이 두 메서드는 검사 예외 던짐 `InterruptedException`
+- 이 두 메서드는 검사 예외인 `InterruptedException`을 던짐
 
 - 스레드는 `run()`이 반환될 때 종료
 - 예외가 발생하면 해당 스레드의 _미처리 예외 핸들러_ 호출
