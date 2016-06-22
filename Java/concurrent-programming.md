@@ -417,7 +417,7 @@ synchronized (obj) {
 	// todo
 }
 
-// 본질적으로 다음 코드를 의미한다
+// 다음 코드와 같다
 obj.intrinaicLock.lock();
 try {
 	// todo
@@ -433,7 +433,7 @@ public synchronized void method() {
 	// todo
 }
 
-// 본질적으로 다음 코드를 의미한다
+// 다음 코드와 같다
 public void method() {
 	this.intrinaicLock.lock();
 	try {
@@ -444,3 +444,27 @@ public void method() {
 }
 ```
 
+- 잠금은 가시성을 보장함
+
+### 조건 대기
+> 스레드가 `wait()`되어 비활성화되고 잠금을 놓은 상태를 조건 대기(waiting on a confition)
+
+Queue에서 값이 없다면 대기 중 상태였다가 값이 들어오면 지우는 메서드(`task()`)를 예로 들 수 있다
+
+```java
+public synchronized Object take() {
+	while (head == null) wait();
+	Node n = head;
+	head = n.next();
+	return n.value;
+}
+
+public synchronized void add(Object newValue) {
+	...
+	notifyAll();
+}
+```
+
+- 스레드는 `wait()`를 호출하면 해당 객체의 대기 집합(wait set)에 들어감
+- 또 다른 스레드에서 같은 객체에 `notifyAll()`를 호출할 때까지 비활성화 상태
+- `notify()`는 모든 스레드의 블록 상태를 해제하는 것보다 효율적이지만, 선택된 스레드가 여전히 진행할 수 없다면 deadlock에 빠지기 때문에 위험하다
