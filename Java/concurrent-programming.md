@@ -472,8 +472,7 @@ public synchronized void add(Object newValue) {
 ---
 
 ## 스레드
-
-- 스레드를 대신 관리해주는 실행자를 사용하는 것이 더 좋다.
+> 스레드를 대신 관리해주는 실행자를 사용하는 것이 더 좋다.
 
 ### 스레드 시작하기
 
@@ -493,6 +492,43 @@ thread.start();
 - `setUncaughtExceptionHandler()`로 스레드의 핸들러 변경 가능
 
 ### 스레드 인터럽션
+
+```java
+Runnable task = () -> {
+	while (남은 작업이 있다면) {
+		if (Thread.currentThread().isInterrupted()) return;
+		// 남은 작업 수행	
+	}
+}
+```
+
+- 스레드가 wait 또는 sleep 상태에 인터럽트되면 즉시 재활성화되고, `InterruptedException` 던짐
+- `InterruptedException`은 검사 예외이므로 `Runnable`의 `run()`에서 반드시 잡아야 함
+- 보통 메서드를 끝내는 식으로 처리
+
+### 스레드 로컬 변수
+> 스레드별로 인스턴스 한 개를 생성하고자 할 때 `ThreadLocal`
+
+예를 들어 NumberFormat 클래스의 인스턴스는 스레드에 안전하지 않다. 이 경우 `ThreadLocal`을 사용하면 아래와 같다.
+
+```java
+public static final ThreadLocal<NumberFormat> currencyFormat = 
+	ThreadLocal.withInitial(() -> NumberFormat.getCurrencyInstance());
+
+String amountDue = currencyFormat.get().format(total);
+```
+
+### 기타 스레드 프로퍼티
+
+
+
+---
+
+## 비동기 계산
+
+---
+
+## 프로세스
 
 
 
