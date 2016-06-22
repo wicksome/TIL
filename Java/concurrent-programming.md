@@ -410,8 +410,6 @@ try {
 
 ### synchronized 키워드
 
-두 가지 형태로 사용할 수 있다. 위의 코드는 `synchronized` 사용 / 아래 코드는 본
-
 **case 1**
 
 ```java
