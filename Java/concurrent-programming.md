@@ -343,7 +343,7 @@ _TODO: 필요할 때 더 찾아볼 것_
 ---
 
 ## 원잣값
-> `java.util.concurrent.atomic`<br/>
+> 패키지: `java.util.concurrent.atomic`<br/>
 > `AtomicInteger`, `AtomicIntegerArray`, `AtomicIntegerFieldUpdater`, `AtomicLongArray`, `AtomicLongFieldUpdater`, `AtomicReference`, `AtomicReferenceArray`, `AtomicReferenceFieldUpdater`, ...
 
 - 안전하고 효율적인 머신 수준 명령어를 이용
@@ -375,6 +375,18 @@ long total = count.sum();
 ```
 
 ### LongAccumulator
+> 임의의 누적 연산으로 일반화함
 
+- 생성자 파라미터로 '수행할 연산', '해당 연산의 중립 요소'
+- 새 값을 넣을 때는 `accumlate()`
+- 현재 값을 얻으려면 `get()`
+
+```java
+LongAccumulator accumulator = new LongAccumulator(Long::sum, 0);
+```
+
+---
+
+## 잠금
 
 
