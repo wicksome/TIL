@@ -349,6 +349,7 @@ _TODO: 필요할 때 더 찾아볼 것_
 - 안전하고 효율적인 머신 수준 명령어를 이용
 - 연산의 원자성 보장
 - 원자적인 업데이트 방법
+
 	```java
 	public static AtomicLong largest = new AtomicLong();
 	largest.incrementAndGet(); // 1 증가
