@@ -335,7 +335,46 @@ _TODO: 필요할 때 더 찾아볼 것_
 	- `ConcurrentSkipListSet`: 유사한 클래스
 - `CopyOnWriteArrayList`: 스레드 안전 컬렉션 
 - `CopyOnWriterArraySet`: 스레드 안전 컬렉션
+
 ...
 
 _TODO: 필요할 때 더 찾아볼 것_
+
+---
+
+## 원잣값
+> `java.util.concurrent.atomic`<br/>
+> `AtomicInteger`, `AtomicIntegerArray`, `AtomicIntegerFieldUpdater`, `AtomicLongArray`, `AtomicLongFieldUpdater`, `AtomicReference`, `AtomicReferenceArray`, `AtomicReferenceFieldUpdater`, ...
+
+- 안전하고 효율적인 머신 수준 명령어를 이용
+- 연산의 원자성 보장
+- 원자적인 업데이트 방법
+	```java
+	public static AtomicLong largest = new AtomicLong();
+	largest.incrementAndGet(); // 1 증가
+	largest.updateAndGet(x -> Math.max(x, observed));
+	largest.accumulateAndGet(observed, Math::max);
+	```
+
+### LongAdder
+> AtomicLong 사용시, 경쟁이 심한 상황에서 업데이트하는 경우 많은 재시도로 퍼포먼스가 떨어질 때 사용<br/>
+> `increment()`, `add()`, `sum()`
+
+```java
+final LongAdder count = new LongAddr();
+for(스레드) {
+	executor.execute(() -> {
+		while(파일) {
+			if(조건) {
+				count.increment();
+			}
+		}
+	});
+}
+long total = count.sum();
+```
+
+### LongAccumulator
+
+
 
