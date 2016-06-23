@@ -597,5 +597,21 @@ Process p = builder.start();
 
 ### 프로세스 실행하기 
 
+- 빌더 설정 이후 `start()`로 호출해서 실행
+- 입력, 출력, 에러 스트림을 pipe로 설정했을 경우, 입력 스트림에 쓰고 출력, 오류 스트림으로 읽음
 
+```java
+Process p = new ProcessBuilder("/bin/ls", "-l")
+	.directory(Paths.get("/tmp").toFile())
+	.start();
+
+try (Scanner in = new Scanner(p.getInputStream())) {
+	while (in.hasNextLine()) {
+		System.out.println(in.nextLine());
+	}
+}
+```
+
+_Caution._
+프로세스 스트림용 버퍼 공간은 제한되어 있다. 그러므로 입력을 지나치게 제공하면 안 되고, 출력은 즉시 읽어야 한다. 입력과 출력이 많을 때는 별도의 스레드에서 생산하고 소비하는게 좋다.
 
