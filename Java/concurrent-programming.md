@@ -597,6 +597,8 @@ Process p = builder.start();
 
 ### 프로세스 실행하기 
 
+**실행**
+
 ```java
 Process p = new ProcessBuilder("/bin/ls", "-l")
 	.directory(Paths.get("/tmp").toFile())
@@ -614,6 +616,8 @@ try (Scanner in = new Scanner(p.getInputStream())) {
 
 _Caution._
 프로세스 스트림용 버퍼 공간은 제한되어 있다. 그러므로 입력을 지나치게 제공하면 안 되고, 출력은 즉시 읽어야 한다. 입력과 출력이 많을 때는 별도의 스레드에서 생산하고 소비하는게 좋다.
+
+**종료**
 
 ```java
 // 1. 프로세스 완료를 기다리는 경우
