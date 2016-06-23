@@ -597,9 +597,6 @@ Process p = builder.start();
 
 ### 프로세스 실행하기 
 
-- 빌더 설정 이후 `start()`로 호출해서 실행
-- 입력, 출력, 에러 스트림을 pipe로 설정했을 경우, 입력 스트림에 쓰고 출력, 오류 스트림으로 읽음
-
 ```java
 Process p = new ProcessBuilder("/bin/ls", "-l")
 	.directory(Paths.get("/tmp").toFile())
@@ -612,6 +609,29 @@ try (Scanner in = new Scanner(p.getInputStream())) {
 }
 ```
 
+- 빌더 설정 이후 `start()`로 호출해서 실행
+- 입력, 출력, 에러 스트림을 pipe로 설정했을 경우, 입력 스트림에 쓰고 출력, 오류 스트림으로 읽음
+
 _Caution._
 프로세스 스트림용 버퍼 공간은 제한되어 있다. 그러므로 입력을 지나치게 제공하면 안 되고, 출력은 즉시 읽어야 한다. 입력과 출력이 많을 때는 별도의 스레드에서 생산하고 소비하는게 좋다.
 
+```java
+// 1. 프로세스 완료를 기다리는 경우
+int result = p.waitFor();
+
+// 2. 시간을 주고 기다리는 경우
+long delay = 10;
+if (p.waitFor(delay, TimeUnit.SECONDS)) {
+	int result = p.exitValue();
+} else {
+	p.destroyForcibly();
+}
+```
+
+1. `waitFor()`: 프로세스의 종료 값 반환
+2. `waitFor(long, TimeUnit)`: 타임아웃에 이르지 않았을 경우 ture 반환
+	- 프로세스 종료 값은 `exitValue()` 사용
+
+- `isAlive()`: 중간중간 살아있는지 확인
+- `destroy()`: 프로세스 죽이기(unix에서 `SIGTERM`으로 죽임)
+- `destroyForcibly()`: 프로세스 죽이기(unix에서 `SIGKILL`으로 죽임)
