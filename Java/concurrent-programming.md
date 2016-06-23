@@ -529,7 +529,7 @@ String amountDue = currencyFormat.get().format(total);
 **state**
 
 - 새로운 스레드, 실행 상태, 블록 상태, 대기 상태, 종료 상태
-- application 개발자 입장에서는 스레드 상태를 조회할 이유가 없다
+- application 개발자 입장에서는 스레드 상태를 조회할 이유가 없음
 
 **daemon**
 
@@ -546,9 +546,56 @@ thread.setDaemon(true);
 
 ## 비동기 계산
 
+### 사용자 인터페이스 콜백에서 오랜 시간 실행하는 태스크
+
+- UI 업데이트는 UI 스레드에서 일어나도록 스케줄링
+- 사용자에게 진행 상황을 피드백하는 일종의 헬퍼 클래스
+	- swing: `SwingWorker`
+	- android: `AsyncTask`
+
+### 완료 가능한 퓨처
+
+
 ---
 
 ## 프로세스
+> 다른 프로그램을 실행할 때, `ProcessBuilder`, `Process` 클래스 사용
+
+- `Process`: command를 별도의 운영체제 프로세스에서 실행하고, standard input, standard output, standard error 스트림과 상호 작용
+- `ProcessBuilder`: Process 객체를 설정하는 기능 제공
+
+### 프로세스 생성하기
+
+**생성**
+
+```java
+ProcessBuilder builder = new ProcessBuilder("gcc", "myapp.c");
+builder.directory(path.toFile());
+```
+
+- 첫 번째 파라미터는 반드시 실행 가능한 명령
+- `directory()`로 작업 디렉토리를 지정할 수 있고, 상대경로를 해석하는데 사용
+
+**표준 입력, 출력, 오류 스트림에 할 일 명시하고자 할 경우**
+
+```java
+OutputStream processIn = builder.getOutputStream();
+IntputStream processOut = builder.getInputStream();
+InputStream processErr = builder.getErrorStream();
+```
+
+- 프로세스의 입력 스트림은 JVM에서는 출력 스트림
+
+**프로세스의 환경 변수 설정**
+
+```java
+Map<String, String> env = builder.environment();
+env.put("LANG", "fr_KR");
+env.remove("JAVA_HOME");
+Process p = builder.start();
+```
+
+### 프로세스 실행하기 
 
 
 
