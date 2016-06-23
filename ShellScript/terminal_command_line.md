@@ -17,8 +17,8 @@ $ whereis 명령어
 $ cp -r 디렉토리 이동될디렉토리
  
 # 링크
-$ ln -s [원본] [타겟] # 심볼릭 링크 == 바로가기
-$ ln [원본] [타겟] # 하드링크
+$ ln -s [원본] [타겟]	# 심볼릭 링크 == 바로가기
+$ ln [원본] [타겟]		# 하드링크
  
 # 텍스트에디터로 실행하기
 $ open -a TextWrangler 파일명
@@ -50,11 +50,13 @@ $ find / ! \( -path '/private' -prune \) -name "파일명"
 
 # date
 
+미래는 `ago`를 지우면 됨
+
 ```sh
+$ date --date='tomorrow'		# 내일
 $ date -d 'yesterday'			# 어제
 $ date -d '1 day ago'			# 1일전 = 어제
-$ date -d '2 day ago'			# 2일전
-$ date -d '35 day ago'			# 20일전
+$ date -d '2 days ago'			# 2일전
 $ date -d '1 week ago'			# 1주일전
 $ date -d '2 month ago'			# 1달전
 $ date -d '3 year ago'			# 3년전
@@ -62,9 +64,15 @@ $ date -d '10 second ago'		# 10초전
 $ date -d '20 minute ago'		# 20분전
 $ date -d '30 hour ago'			# 30시간전
 $ date -d '3 year 7 month ago'	# 3년 7개월전
+
+$ date -d 'this friday'			# 이번주 금요일
+$ date -d 'last monday'			# 지난 월요일
+$ date -d 'next tuesday'		# 다음 화요일
+
+# 2010년 1월 3일 7시 32분 10초를 기준으로 2일 5시간 17분후
+$ date -d '2010-01-03 07:32:10 + 2 day 5 hours 17 minute'	
+
+$ date -d '2 day ago' '+%Y-%m-%d %H:%M:%S'	# 2016-06-21 14:03:52
+$ date -d '30 day ago' +%y%m%d 				# 160524
 ```
 
-```sh
-$ date -d 'tomorrow'		# 내일
-$ date -d '1 day'			# 1일후 = 내일
-```
