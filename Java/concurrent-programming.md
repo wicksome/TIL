@@ -79,46 +79,50 @@ Callable<V> task = () -> {
 
 ### 여러 태스크 실행
 
-- `invokeAll()`: Callable 인스턴스의 Collection을 받을 수 있음
+**`invokeAll()`**
 
-  	```java
-	Set<Path> paths = ...;
-	List<Callable<Long>> tasks = new ArrayList<>();
-	for (Path p = paths) {
-		tasks.add(() -> {
-			return p에서 특정단어가 나타난 횟수;
-		});
-	}
-	ExecutorService exec = Executors.newCachedThreadPool();
-	List<Furure<Long>> results = exec.invokeAll(task);
-	long total = 0;
-	for (Future<Long> result : results) {
-		total += result.get();
-	}
-	```
+Callable 인스턴스의 Collection을 받을 수 있음
 
-	- 타임아웃을 파라미터로 받아서 해당 타임아웃때 나머지 태스크를 모두 취소하는 `invokeAll()`도 있음
-	- 서브태스크가 모두 완료될 때까지 호출된 태스크가 블록되는 것이 싫으면 `ExecutorCompletionService`
+```java
+Set<Path> paths = ...;
+List<Callable<Long>> tasks = new ArrayList<>();
+for (Path p = paths) {
+	tasks.add(() -> {
+		return p에서 특정단어가 나타난 횟수;
+	});
+}
+ExecutorService exec = Executors.newCachedThreadPool();
+List<Furure<Long>> results = exec.invokeAll(task);
+long total = 0;
+for (Future<Long> result : results) {
+	total += result.get();
+}
+```
 
-- `invokeAny()`: 하나가 완료하면 즉시 반환
+- 타임아웃을 파라미터로 받아서 해당 타임아웃때 나머지 태스크를 모두 취소하는 `invokeAll()`도 있음
+- 서브태스크가 모두 완료될 때까지 호출된 태스크가 블록되는 것이 싫으면 `ExecutorCompletionService`
 
-	```java
-	Set<Path> paths = ...;
-	List<Callable<Path>> tasks = new ArrayList<>();
-	for (Path p : paths) {
-		tasks.add(() -> {
-			if (특정 단어가 있다면) {
-				return p;
-			} else {
-				throw ...;
-			}
-		});
-	}
-	ExecutorService exec = Executors.newCachedThreadPool();
-	Path found = exec.invokeAny(tasks);
-	```
+**`invokeAny()`**
 
-	- 특정 대상을 발견한 즉지 결론을 내릴 수 있는 검색에 유용
+하나가 완료하면 즉시 반환
+
+```java
+Set<Path> paths = ...;
+List<Callable<Path>> tasks = new ArrayList<>();
+for (Path p : paths) {
+	tasks.add(() -> {
+		if (특정 단어가 있다면) {
+			return p;
+		} else {
+			throw ...;
+		}
+	});
+}
+ExecutorService exec = Executors.newCachedThreadPool();
+Path found = exec.invokeAny(tasks);
+```
+
+- 특정 대상을 발견한 즉지 결론을 내릴 수 있는 검색에 유용
 
 ---
 
