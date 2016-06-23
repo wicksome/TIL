@@ -55,15 +55,15 @@ $ find / ! \( -path '/private' -prune \) -name "파일명"
 ```sh
 $ date --date='tomorrow'		# 내일
 $ date -d 'yesterday'			# 어제
-$ date -d '1 day ago'			# 1일전 = 어제
-$ date -d '2 days ago'			# 2일전
-$ date -d '1 week ago'			# 1주일전
-$ date -d '2 month ago'			# 1달전
-$ date -d '3 year ago'			# 3년전
-$ date -d '10 second ago'		# 10초전
-$ date -d '20 minute ago'		# 20분전
-$ date -d '30 hour ago'			# 30시간전
-$ date -d '3 year 7 month ago'	# 3년 7개월전
+$ date -d '1 day ago'			# 1일 전 = 어제
+$ date -d '2 days ago'			# 2일 전
+$ date -d '1 week ago'			# 1주일 전
+$ date -d '2 month'				# 1달 후
+$ date -d '3 year'				# 3년 후
+$ date -d '10 second'			# 10초 후
+$ date -d '20 minute'			# 20분 후
+$ date -d '30 hour'				# 30시간 후
+$ date -d '3 year 7 month'		# 3년 7개월 후
 
 $ date -d 'this friday'			# 이번주 금요일
 $ date -d 'last monday'			# 지난 월요일
