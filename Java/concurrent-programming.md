@@ -629,7 +629,8 @@ if (p.waitFor(delay, TimeUnit.SECONDS)) {
 ```
 
 1. `waitFor()`: 프로세스의 종료 값 반환
-2. `waitFor(long, TimeUnit)`: 타임아웃에 이르지 않았을 경우 ture 반환
+2. `waitFor(long, TimeUnit)`
+	- 타임아웃에 이르지 않았을 경우 ture 반환
 	- 프로세스 종료 값은 `exitValue()` 사용
 
 - `isAlive()`: 중간중간 살아있는지 확인
