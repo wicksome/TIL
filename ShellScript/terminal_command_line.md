@@ -17,8 +17,8 @@ $ whereis 명령어
 $ cp -r 디렉토리 이동될디렉토리
  
 # 링크
-$ ln -s 원본경로,이름 타겟경로,이름 # 심볼릭 링크 == 바로가기
-$ ln 원본경로 타겟경로 # 하드링크
+$ ln -s [원본] [타겟] # 심볼릭 링크 == 바로가기
+$ ln [원본] [타겟] # 하드링크
  
 # 텍스트에디터로 실행하기
 $ open -a TextWrangler 파일명
@@ -46,4 +46,25 @@ $ find 경로 -name "디렉토리명" -type d
 # 특정 디렉토리 제외하고 검색
 ## \(, \)의 앞뒤에 공백 필수
 $ find / ! \( -path '/private' -prune \) -name "파일명"
+```
+
+# date
+
+```sh
+$ date -d 'yesterday'			# 어제
+$ date -d '1 day ago'			# 1일전 = 어제
+$ date -d '2 day ago'			# 2일전
+$ date -d '35 day ago'			# 20일전
+$ date -d '1 week ago'			# 1주일전
+$ date -d '2 month ago'			# 1달전
+$ date -d '3 year ago'			# 3년전
+$ date -d '10 second ago'		# 10초전
+$ date -d '20 minute ago'		# 20분전
+$ date -d '30 hour ago'			# 30시간전
+$ date -d '3 year 7 month ago'	# 3년 7개월전
+```
+
+```sh
+$ date -d 'tomorrow'		# 내일
+$ date -d '1 day'			# 1일후 = 내일
 ```
