@@ -115,8 +115,6 @@ Boolean b = Boolean.valueOf(true);
 			}
 		}
 
-		class 
-
 		public class Main {
 			public static void main(String[] args) {
 				Apple apple = Apple.getInstance();
