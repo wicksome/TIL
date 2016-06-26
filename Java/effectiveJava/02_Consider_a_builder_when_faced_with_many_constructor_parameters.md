@@ -1,1 +1,1 @@
-> 02_Consider_a_builder_when_faced_with_many_constructor_parameters
+> 생성자의 매개변수가 많을 때는 빌더(builder)를 고려하자
