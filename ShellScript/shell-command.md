@@ -8,6 +8,11 @@ elif [ $val -eq 12 ]; then # val == 12
 else
 	echo "case 3"
 fi
+
+# if 조건안에 사용자 함수 2개 사용하는 경우
+if isExist $path && ! isEmpty $path; then
+	echo "test"
+fi
 ```
 
 **_caution_**
@@ -15,7 +20,7 @@ fi
 - 조건식 앞뒤에 빈칸 반드시 넣어야 함
 
 | 조건식            | 설명 					|
-|---------------- |------------------------	|
+|-----------------|-------------------------|
 | str = str       | str == str 				|
 | str != str      | str != str 				|
 | -z str          | str.length == 0 		|
@@ -40,3 +45,43 @@ fi
 | file1 -nt file2 | file1이 더 최신이면 true 	|
 | file1 -ot file2 | file1이 예전 파일이면 true 	|
 | file1 -ef file2 | size가 같으면 true 		|
+
+# loop
+
+```sh
+ITEMS=("item1" "item2" "item3")
+for item in "${ITEMS[@]}"
+do 
+	echo $item
+done
+```
+
+```sh
+ITEMS=("item1" "item2" "item3")
+for (( index=0; index<${#ITEMS[*]}; index++ ))
+do
+	echo ${ITEMS[$index]}
+done
+```
+
+# function
+
+```sh
+function isExist(){
+	local path=$1
+	if [ -f $path ]; then
+		return 0 # true
+	else
+		return 1 # false
+	fi
+}
+```
+
+# du
+> 디스크 사용 현황 보기
+
+# import
+
+```sh
+source ./common.sh
+```
