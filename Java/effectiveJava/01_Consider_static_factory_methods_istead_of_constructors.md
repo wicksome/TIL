@@ -168,8 +168,8 @@ Boolean b = Boolean.valueOf(true);
 	- `of`: `valueOf` 줄인 형태, [`EnumSet`](#item32)에서 사용
 	- `getInstance`: 매개변수에 맞는 인스턴스 반환, 싱글톤인 경우 하나의 인스턴스 반환
 	- `newInstance`: 새로운 인스턴스 반환
-	- `get_Type_`: `getInstance`와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용. 여기서 _Type_은 팩토리 메서드에서 반환되는 객체의 타입을 나타낸다.
-	- `new_Type_`: `get_Type_`와 같음(?)
+	- `get`_Type_: `getInstance`와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용. 여기서 _Type_은 팩토리 메서드에서 반환되는 객체의 타입을 나타낸다.
+	- `new`_Type_: `get`_Type_와 같음(?)
 
 ## note
 
