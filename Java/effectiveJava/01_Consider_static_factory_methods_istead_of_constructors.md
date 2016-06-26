@@ -98,6 +98,57 @@ Boolean b = Boolean.valueOf(true);
 		}
 		```
 
+	- TODO: 이해하기
+
+4. 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
+
+	static 팩토리 메서드를 사용하면 컴파일러가 타입 추론(type inference)으로 해결할 수 있다.
+
+	```java
+	// before
+	Map<String, List<String>> m = new HashMap<String, List<String>>();
+
+	// after: 1.6 버전
+	public static <K, V> HashMap<K, V> newInstance() {
+		return new HashMap<K, V>();
+	}
+	Map<String, List<String>> m = HahsMap.newInstance();
+
+	// after: 1.7
+	// <>(다이아몬드) 연산자 추가
+	Map<String, List<String>> m = new HashMap<>();
+	``` 
+
+## 단점
+
+1. 인스턴스 생성을 위해 static 팩토리 메서드만 갖고 있으면서 public이나 protected 생성자가 없는 클래스의 경우는 서브 클래스를 가질 수 없다는 것이다.
+
+	```java
+	class Types {
+		private Types() {
+			throw new AssertionError();
+		}
+		...
+	}
+
+	// inheritance
+	public class Collection extends Types {
+		public Collecction() {
+			super(); // 불가능
+		}
+	}
+
+	// composition
+	public class Collection {
+		Types types;
+	}
+	```
+
+	- `public`이나 `protected` 생성자가 없기 때문에 확장이 불가능하다.
+	- 그러므로, [composition을 사용한다.](#item16)
+		- 상속을 사용하는 경우: `is-a` 관계
+		- 컴포지션을 사용하는 경우: `has-a` 관계
+
 ## note
 
 #### Flyweight pattern
