@@ -65,7 +65,38 @@ Boolean b = Boolean.valueOf(true);
 			- `equals()` 대신 `==` 연산자 사용 가능
 			- [`enum`에서는](#item30) 이것을 보장
 
-3. 서브
+3. 자신의 인스턴스만 반환하는 생성자와는 달리, 서브타입 객체도 반환 가능하다.
+
+	- inner 클래스의 객체를 생성하고 반환할 수 있는 API가 있다. 이런 형태로 구현 클래스를 감추면 API가 매우 간결해 진다. 이 기법은 static 팩토리 메서드의 반환 타입으로 `interface`를 사용하는 [_인터페이스 기반 프레임워크_](#item18)에 적합하다.
+
+		```java
+		// TODO: 이해하기
+		```
+
+	- 자바의 인터페이스는 static 메서드를 가질 수 없으므로 `Type`이라는 인터페이스 타입을 반환하는 static 팩토리 메서드들이 Types로 명명된 [인스턴스 생성 불가 클래스](#item4)에 들어있다.
+
+		```java
+		// TODO: 이해하기
+
+		// java.lang.reflect
+		iterface Type {
+			default String getTypeName() {
+				return toString();
+			}
+		}
+		// Q. default 키워드?
+		// A. java 8 추가기능, 
+
+		public class Types implements Type {
+			private Types() {
+				throw new AssertionError();
+			}
+
+			public Type getType() {
+				return ...
+			}
+		}
+		```
 
 ## note
 
