@@ -55,6 +55,5 @@ Boolean b = Boolean.valueOf(true);
 
 ## note
 
-### 1
+#### 1. Flyweight 패턴
 
-Flyweight 패턴
