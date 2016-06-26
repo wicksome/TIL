@@ -73,37 +73,53 @@ Boolean b = Boolean.valueOf(true);
 		// TODO: 이해하기
 		```
 
-	- 자바의 인터페이스는 static 메서드를 가질 수 없으므로 `Type`이라는 인터페이스 타입을 반환하는 static 팩토리 메서드들이 Types로 명명된 [인스턴스 생성 불가 클래스](#item4)에 들어있다.
+	- 자바의 인터페이스는 static 메서드를 가질 수 없으므로 _Type_이라는 인터페이스 타입을 반환하는 static 팩토리 메서드들이 _Types_로 명명된 [인스턴스 생성 불가 클래스](#item4)에 들어있다.
 
 		```java
 		// TODO: 이해하기
 
-		// java.lang.reflect
-		iterface Type {
-			default String getTypeName() {
-				return toString();
-			}
+		// Type
+		iterface Fruit {
+			String getName();
 		}
 		// Q. default 키워드?
 		// A. java 8 추가기능(default, static), 
 
-		public class Types {
+		class Types {
 			private Types() {
 				throw new AssertionError();
 			}
 
-			public Type getType() {
+			public Fruit getType() {
 				...
 			}
 
-			public Type newType() {
+			public Fruit newType() {
 				...
 			}
 		}
 
-		public class FruitType implements Type {
-			String getTypeName() {
-				return "fruit";
+		class Apple implements Fruit {
+			private String value;
+
+			private Apple() {
+				this.value = "apple"
+			}
+
+			public Apple getInstance() {
+				return new Apple();
+			}
+
+			String getName() {
+				...
+			}
+		}
+
+		class 
+
+		public class Main {
+			public static void main(String[] args) {
+				Apple apple = Apple.getInstance();
 			}
 		}
 		```
