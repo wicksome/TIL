@@ -85,15 +85,25 @@ Boolean b = Boolean.valueOf(true);
 			}
 		}
 		// Q. default 키워드?
-		// A. java 8 추가기능, 
+		// A. java 8 추가기능(default, static), 
 
-		public class Types implements Type {
+		public class Types {
 			private Types() {
 				throw new AssertionError();
 			}
 
 			public Type getType() {
-				return ...
+				...
+			}
+
+			public Type newType() {
+				...
+			}
+		}
+
+		public class FruitType implements Type {
+			String getTypeName() {
+				return "fruit";
 			}
 		}
 		```
@@ -148,6 +158,18 @@ Boolean b = Boolean.valueOf(true);
 	- 그러므로, [composition을 사용한다.](#item16)
 		- 상속을 사용하는 경우: `is-a` 관계
 		- 컴포지션을 사용하는 경우: `has-a` 관계
+
+2. 다른 static 팩토리 메서드와 쉽게 구별할 수 없다.
+
+	API 문서에 메서드와 생성자가 분리되어 있지만, static 팩토리 메서드는 다른 메서드와 섞여 잘 구분되지 않는다. 
+
+	컨벤션을 정하여 보다 구별하기 쉽게 한다.
+	- `valueOf`: 자신의 매개변수와 같은 값을 갖는 인스턴스를 반환
+	- `of`: `valueOf` 줄인 형태, [`EnumSet`](#item32)에서 사용
+	- `getInstance`: 매개변수에 맞는 인스턴스 반환, 싱글톤인 경우 하나의 인스턴스 반환
+	- `newInstance`: 새로운 인스턴스 반환
+	- `get_Type_`: `getInstance`와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용. 여기서 _Type_은 팩토리 메서드에서 반환되는 객체의 타입을 나타낸다.
+	- `new_Type_`: `get_Type_`와 같음(?)
 
 ## note
 
