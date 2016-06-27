@@ -4,33 +4,33 @@
 
 1. `public final` 이용
 
-```java
-public class Single {
-	public static final Single INSTANCE = new Single();
+	```java
+	public class Single {
+		public static final Single INSTANCE = new Single();
 
-	private Single() {
-		...
+		private Single() {
+			...
+		}
 	}
-}
-```
+	```
 
-_주의할점_
+2. `static factory` 이용
+
+	```java
+	public class Single {
+		private static final Single INSTANCE = new Single();
+		private Single() {
+			...
+		}
+		public static Single getInstance() {
+			return INSTANCE;
+		}
+	}
+	```
+
+**_주의할점_**
  
 리플렉션 기능을 통해 private 생성자를 호출할 수 있다.
-
-2. static factory 이용
-
-```java
-public class Single {
-	private static final Single INSTANCE = new Single();
-	private Single() {
-		...
-	}
-	public static Single getInstance() {
-		return INSTANCE;
-	}
-}
-```
 
 **직렬화 문제**
 
