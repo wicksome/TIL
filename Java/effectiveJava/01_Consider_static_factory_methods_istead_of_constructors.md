@@ -128,6 +128,15 @@ Boolean b = Boolean.valueOf(true);
 			}
 		}
 		```
+		+ 추가 예제 코드
+
+		```java
+		public static<T> Stream<T> generate(Supplier<T> s) {
+        	Objects.requireNonNull(s);
+        	return StreamSupport.stream(
+                new StreamSpliterators.InfiniteSupplyingSpliterator.OfRef<>(Long.MAX_VALUE, s), false);
+    	}
+		```
 
 4. 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
 
