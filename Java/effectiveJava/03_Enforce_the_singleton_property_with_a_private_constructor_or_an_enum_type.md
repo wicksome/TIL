@@ -36,7 +36,7 @@
 
 싱글톤 클래스를 직렬화 가능(Serializable) 클래스로 만드려면, 
 - 클래스 선언에 `implements Serializable` 추가
-- 모든 필드에 `transient` 선언
+- 모든 객체 필드에 `transient` 선언
 - [`readResolve()` 추가](#item77)
 	
 	```java
@@ -61,10 +61,14 @@ public enum Single {
 
 _why?_
 
-- todo
+- 선언된 상수 이외의 다른 객체는 존재할 수 없다는 확실한 보장이 생긴다(JVM이 해주는 보장).
 
 ## NOTE
 
 #### serializable
 
 객체의 내용을 바이트 단위로 변환
+
+- `Serializable` 인터페이스 구현 
+- 모든 필드 또한 `Serializable` 인터페이스 구현
+- 전송하지 않을 필드는 `transient`
