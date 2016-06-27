@@ -77,8 +77,21 @@ function isExist(){
 }
 ```
 
-# du
-> 디스크 사용 현황 보기
+# 명령어 치환
+
+`$()`
+
+```sh
+NGINX_PID=$(cat $DIR_NGINX/logs/nginx.pid)
+```
+
+# 산술연산
+
+`$(())`
+
+```sh
+$((3 * 3))
+```
 
 # import
 
