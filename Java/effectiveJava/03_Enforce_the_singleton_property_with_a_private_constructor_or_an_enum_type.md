@@ -74,12 +74,6 @@ _why?_
 - 모든 필드 또한 `Serializable` 인터페이스 구현
 - 제외하고자하는 필드는 `transient`
 
-- 직렬화: `java.io.ObjectOutputStream`
-- 역직렬화: `java.io.ObjectInputStream`
-
-- `writeObject()`: 파라미터로 넘긴 객체를 스트림으로 만들어서 출력하는 메서드
-- `readObject()`: 입력된 스트림으로부터 객체를 만들어서 반환하는 메서드
-
 ```java
 public class SerializerTest {
 	private String filePath = "/file/test.ser";
@@ -88,15 +82,15 @@ public class SerializerTest {
 	public void 직렬화() {
 		user = new User("yj", 26, "pwd");
 		FileOutputStream f = new FileOutputStream(filePath);
-		ObjectOutputStream o = new ObjectOutputStream(f);
-		o.writerObject(uesr);
+		ObjectOutputStream o = new ObjectOutputStream(f); // 직렬화 클래스
+		o.writerObject(uesr); // 파라미터로 넘긴 객체를 스트림으로 만들어서 출력하는 메서드
 		o.close();
 	}
 
 	public void 역직렬화() {
 		FileInputStream f = new FileInputStream(filePath);
-		ObjectInputStream o = new ObjectInputStram(f);
-		user = (User) o.readObject();
+		ObjectInputStream o = new ObjectInputStram(f); // 역직렬화 클래스
+		user = (User) o.readObject(); // 입력된 스트림으로부터 객체를 만들어서 반환하는 메서드
 		o.close();
 	}
 }
