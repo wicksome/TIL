@@ -84,4 +84,5 @@ function isExist(){
 
 ```sh
 source ./common.sh
+. ./common.sh
 ```
