@@ -129,8 +129,6 @@ Boolean b = Boolean.valueOf(true);
 		}
 		```
 
-	- TODO: 이해하기
-
 4. 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
 
 	static 팩토리 메서드를 사용하면 컴파일러가 타입 추론(type inference)으로 해결할 수 있다.
