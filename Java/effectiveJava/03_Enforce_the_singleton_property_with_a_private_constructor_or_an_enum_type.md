@@ -75,32 +75,51 @@ _why?_
 - 제외하고자하는 필드는 `transient`
 
 ```java
-public class SerializerTest {
-	private String filePath = "/file/test.ser";
-	private User user;
-
-	public void 직렬화() {
-		user = new User("yj", 26, "pwd");
-		FileOutputStream f = new FileOutputStream(filePath);
-		ObjectOutputStream o = new ObjectOutputStream(f); // 직렬화 클래스
-		o.writerObject(uesr); // 파라미터로 넘긴 객체를 스트림으로 만들어서 출력하는 메서드
-		o.close();
-	}
-
-	public void 역직렬화() {
-		FileInputStream f = new FileInputStream(filePath);
-		ObjectInputStream o = new ObjectInputStram(f); // 역직렬화 클래스
-		user = (User) o.readObject(); // 입력된 스트림으로부터 객체를 만들어서 반환하는 메서드
-		o.close();
+public class Test {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		SerializerTest test = new SerializerTest();
+		test.serialization();
+		test.deserialization();
 	}
 }
 
-@Data
-class User implments Serializable {
+class SerializerTest {
+	private String filePath = "/Users/yeongjun/Desktop/test.ser";
+	private User user;
+
+	public void serialization() throws IOException {
+		user = new User("yj", 26, "pwd");
+		FileOutputStream f = new FileOutputStream(filePath);
+		ObjectOutputStream o = new ObjectOutputStream(f); // 직렬화 클래스
+		o.writeObject(user); // 파라미터로 넘긴 객체를 스트림으로 만들어서 출력하는 메서드
+		o.close();
+	}
+
+	public void deserialization() throws IOException, ClassNotFoundException {
+		FileInputStream f = new FileInputStream(filePath);
+		ObjectInputStream o = new ObjectInputStream(f); // 역직렬화 클래스
+		user = (User)o.readObject(); // 입력된 스트림으로부터 객체를 만들어서 반환하는 메서드
+		o.close();
+		System.out.println(user.toString());
+	}
+}
+
+class User implements Serializable {
 	private static final long serialVersionUID = 1L; // 이건 왜?
 	private String name;
 	private int age;
 	private transient String password;
+
+	public User(String name, int age, String password) {
+		this.name = name;
+		this.age = age;
+		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "User{name='" + name + '\'' + ", age=" + age + ", password='" + password + "\'}";
+	}
 }
 ```
 
