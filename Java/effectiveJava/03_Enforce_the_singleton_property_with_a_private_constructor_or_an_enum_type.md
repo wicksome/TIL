@@ -32,7 +32,7 @@
  
 리플렉션 기능을 통해 private 생성자를 호출할 수 있다.
 
-**직렬화 문제**
+**[직렬화](#serializable) 문제**
 
 싱글톤 클래스를 직렬화 가능(Serializable) 클래스로 만드려면, 
 - 클래스 선언에 `implements Serializable` 추가
@@ -62,3 +62,9 @@ public enum Single {
 _why?_
 
 - todo
+
+## NOTE
+
+#### serializable
+
+객체의 내용을 바이트 단위로 변환
