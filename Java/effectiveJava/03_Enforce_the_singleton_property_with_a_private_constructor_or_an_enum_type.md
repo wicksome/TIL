@@ -32,7 +32,7 @@
  
 리플렉션 기능을 통해 private 생성자를 호출할 수 있다.
 
-**[직렬화](#serializable) 문제**
+**_[직렬화](#serializable) 문제_**
 
 싱글톤 클래스를 직렬화 가능(Serializable) 클래스로 만드려면, 
 - 클래스 선언에 `implements Serializable` 추가
@@ -68,8 +68,46 @@ _why?_
 
 #### serializable
 
-객체의 내용을 바이트 단위로 변환
+> 객체의 내용을 파일에 저장하거나 네트워크로 전송하기 위해서 스트림으로 만드는 작업(바이트 단위로 변환)
 
 - `Serializable` 인터페이스 구현 
 - 모든 필드 또한 `Serializable` 인터페이스 구현
-- 전송하지 않을 필드는 `transient`
+- 제외하고자하는 필드는 `transient`
+
+- 직렬화: `java.io.ObjectOutputStream`
+- 역직렬화: `java.io.ObjectInputStream`
+
+- `writeObject()`: 파라미터로 넘긴 객체를 스트림으로 만들어서 출력하는 메서드
+- `readObject()`: 입력된 스트림으로부터 객체를 만들어서 반환하는 메서드
+
+```java
+public class SerializerTest {
+	private String filePath = "/file/test.ser";
+	private User user;
+
+	public void 직렬화() {
+		user = new User("yj", 26, "pwd");
+		FileOutputStream f = new FileOutputStream(filePath);
+		ObjectOutputStream o = new ObjectOutputStream(f);
+		o.writerObject(uesr);
+		o.close();
+	}
+
+	public void 역직렬화() {
+		FileInputStream f = new FileInputStream(filePath);
+		ObjectInputStream o = new ObjectInputStram(f);
+		user = (User) o.readObject();
+		o.close();
+	}
+}
+
+@Data
+class User implments Serializable {
+	private static final long serialVersionUID = 1L; // 이건 왜?
+	private String name;
+	private int age;
+	private transient String password;
+}
+```
+
+
