@@ -2,7 +2,7 @@
 
 **JDK 1.5 이전에 싱글톤을 구현하는 방법**
 
-1. public final 이용
+1. `public final` 이용
 
 ```java
 public class Single {
@@ -58,3 +58,7 @@ public enum Single {
 
 - 직렬화 자동으로 처리된다.
 - 리플렉션 공격에도 안전하다.
+
+_why?_
+
+- todo
