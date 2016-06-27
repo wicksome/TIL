@@ -1,4 +1,6 @@
-# intro
+# Effective Java, 2nd Edition
+
+by Joshua Bloch
 
 ## 목차
 
