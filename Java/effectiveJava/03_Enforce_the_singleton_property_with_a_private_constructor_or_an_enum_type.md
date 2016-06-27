@@ -62,6 +62,7 @@ public enum Single {
 _why?_
 
 - 선언된 상수 이외의 다른 객체는 존재할 수 없다는 확실한 보장이 생긴다(JVM이 해주는 보장).
+- `enum` 타입은 `Comparable` 인터페이스, `Serializable` 인터페이스가 구현되어 있다.
 
 ## NOTE
 
