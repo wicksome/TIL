@@ -76,11 +76,11 @@ class Person {
 		}
 
 		public Person build() {
-			return new Persion(this);
+			return new Person(this);
 		}
 	}
 
-	private Persion(Builder builder) {
+	private Person(Builder builder) {
 		name = builder.name;
 		sex = builder.sex;
 		age = builder.age;
@@ -88,4 +88,40 @@ class Person {
 		...
 	}
 }
+```
+
+위 코드에 제네릭 사용
+
+```java
+...
+
+public interface Builder<T> {
+	public T build();
+}
+
+class Person {
+	private final String name;
+	...
+
+	public static class Builder implements Builder<Person> {
+		private final String name;
+		...
+
+		public Builder(String name, char sex) {
+			this.name = name;
+			this.sex = sex;
+		}
+
+		...
+
+		public Person build() {
+			return new Person(this);
+		}
+	}
+
+	private Person(Builder builder) {
+		name = builder.name;
+	}
+}
+
 ```
