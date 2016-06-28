@@ -84,5 +84,12 @@ public static void main(String[] args) {
 
 ## 4
 
+[규칙 39](#item39)("새로운 객체를 만들어야 한다면 기존 객체는 만들지 말라"는 이야기)는 _방어적 복사(defensive copy)_에 대한 이야기다. 방어적 복사가 요구되는 상황에서는 객체를 재사용하는데 드는 비용이 더 크다.
 
-
+```java
+// 방어적 복사 방법
+public Period(Date start, Date end) {
+	this.start = new Date(start.getTime());
+	this.end = new Date(end.getTime());
+}
+```
