@@ -31,6 +31,8 @@ $ httpd -k start|stop|restart
  
 # 트리
 $ tree . -L 2 -d # 현재디렉토리, 뎁스 2, 디렉토리만
+
+$ scp -p [port] -r (하위 모두 복사) 계정@원격주소:경로및파일
 ```
 
 # find
