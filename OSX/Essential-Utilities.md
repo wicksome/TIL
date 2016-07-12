@@ -13,6 +13,7 @@
 - 온도체크 - http://www.crystalidea.com/products?source=fancontrol_mac
 - Itsycal - 메뉴막대 시간 표시
 - Karabiner - 키보드맵핑
+  - http://algobomyun.tistory.com/348 특정장치만 변경가능
 - 스트리밍 노래 앱으로 연동하기 - http://doctypeht.ml/44
 - 웹사이트 앱으로 만들기 - http://fluidapp.com/
 - homebrew 설치
