@@ -89,6 +89,26 @@ public class testDefaultControll {
 }
 ```
 
+**Hamcrest 매처 사용**
+
+- 스택 트레이스를 봤을 때 더 자세한 정보를 볼 수 있다
+- `is()`: 문법 가독성 향상 목적으로 사용
+
+```java
+@Test
+@Deprecated
+public void testWithoutHamcrest() {
+	assertTrue(values.contains("one")
+		|| values.contains("two")
+		|| values.contains("three"));
+}
+
+@Test
+public void testWithHamcrest() {
+	assertThat(values, hasItem(anyOf(equalTo("one"), equalTo("two"), equalTo("there"))));
+}
+```
+
 **ETC**
 
 - 테스트 클래스 이름
@@ -96,3 +116,6 @@ public class testDefaultControll {
 		- junit 1.3 버전에서는 필수
 		- 1.4 버전에서는 `@Test`가 있기때문에 필수는 아님
 	- 인텔리제이에서 테스트케이스 자동생성하면 'Test' 접미어로 생성됨
+- 분리-평등(separate-but-equal) 디렉터리 구조
+	- 혼란 제거
+	- jar 배포, 테스트 자동화시키는 것이 쉬워짐
