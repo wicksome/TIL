@@ -21,15 +21,9 @@
 
 1. 동치 관계 구현
 
-  1.1 반사성
+  1.1 반사성: `x.equals(x)`는 `true`
 
-    `x.equals(x)`는 `true`
-
-  1.2 대칭성
-  
-    `x.equals(y)`가 `true`일 때, `y.equals(x)`도 `true`
+  1.2 대칭성: `x.equals(y)`가 `true`일 때, `y.equals(x)`도 `true`
     
-  1.3 추이성
-  
-    `x.equals(y)`가 `true`이고, `y.equals(z)`가 `true`이면 `x.equals(z)`도 `true`
+  1.3 추이성: `x.equals(y)`가 `true`이고, `y.equals(z)`가 `true`이면 `x.equals(z)`도 `true`
     
