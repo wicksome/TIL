@@ -9,4 +9,6 @@
 
 lombok의 `@EqualsAndHashCode` 사용([링크](https://projectlombok.org/features/EqualsAndHashCode.html))
 
+# 주의할 점
 
+- 성능을 개선하려고 객체의 중요 부분을 해시 코드 계산 과정에서 생략하면 안됨
