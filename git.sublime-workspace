@@ -67,15 +67,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "ETC/서브라임텍스트3_설치",
-			"settings":
-			{
-				"buffer_size": 83,
-				"line_ending": "Unix",
-				"name": "1. Boxy theme 설치"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -84,17 +75,29 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 71.0,
-		"last_filter": "json",
+		"height": 357.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
-				"json",
-				"Set Syntax: JSON"
-			],
-			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"com",
+				"Git: Commit"
+			],
+			[
+				"add",
+				"Git: Add All"
+			],
+			[
+				"git",
+				"Git: Log All"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
 			],
 			[
 				"synmar",
@@ -141,7 +144,7 @@
 				"Indentation: Reindent Lines"
 			]
 		],
-		"width": 467.0
+		"width": 512.0
 	},
 	"console":
 	{
@@ -162,11 +165,14 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/yeongjun/git",
-		"/Users/yeongjun/git/TIL/ETC"
+		"/Users/yeongjun/git/TIL",
+		"/Users/yeongjun/git/TIL/JavaScript"
 	],
 	"file_history":
 	[
+		"/Users/yeongjun/git/TIL/TIL.sublime-project",
+		"/Users/yeongjun/git/TIL/git.sublime-project",
+		"/Users/yeongjun/git/TIL/ETC/서브라임텍스트3_설치",
 		"/Users/yeongjun/git/bts-getter-title/popup.html",
 		"/Users/yeongjun/git/gitStudy/test2.md",
 		"/Users/yeongjun/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
@@ -253,7 +259,7 @@
 	],
 	"find":
 	{
-		"height": 48.0
+		"height": 26.0
 	},
 	"find_in_files":
 	{
@@ -335,7 +341,7 @@
 			"<em>{0}</em>",
 			"groupNos"
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -344,41 +350,6 @@
 	"groups":
 	[
 		{
-			"selected": 0,
-			"sheets":
-			[
-				{
-					"buffer": 0,
-					"file": "ETC/서브라임텍스트3_설치",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 83,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								82,
-								82
-							]
-						],
-						"settings":
-						{
-							"auto_name": "1. Boxy theme 설치",
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
-			]
-		},
-		{
 			"sheets":
 			[
 			]
@@ -386,7 +357,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 48.0
+		"height": 26.0
 	},
 	"input":
 	{
@@ -401,18 +372,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.487598649761,
 			1.0
 		],
 		"rows":
@@ -426,8 +390,12 @@
 	{
 		"height": 0.0
 	},
+	"output.git":
+	{
+		"height": 124.0
+	},
 	"pinned_build_system": "",
-	"project": "TIL.sublime-project",
+	"project": "git.sublime-project",
 	"replace":
 	{
 		"height": 48.0
@@ -448,6 +416,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"",
+				"~/git/TIL/TIL.sublime-project"
+			]
 		],
 		"width": 380.0
 	},
