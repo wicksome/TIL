@@ -116,7 +116,7 @@ $ npm test
 
 
 
-## Using BDD in chai
+## chai로 BDD 적용하기
 
 **Spec**
 
