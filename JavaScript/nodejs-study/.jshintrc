@@ -1,0 +1,6 @@
+{
+    // https://github.com/jshint/jshint/blob/master/examples/.jshintrc
+    "jquery": false, // jQuery
+    "mocha": true, // Mocha
+    "node": false // Node.js
+}
