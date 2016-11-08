@@ -1,4 +1,4 @@
-# javascript unit test 적용하기(1)
+# javascript unit test 적용하기
 
 **BDD란?**
 
@@ -12,14 +12,12 @@
 
 [chai](http://chaijs.com/): assertion library
 
-[Karma](https://karma-runner.github.io/1.0/index.html): Test Runner for JavaScript
-
 
 
 ## Installation
 
 ```shell
-$ sudo npm install --global mocha chai karma # global
+$ sudo npm install --global mocha chai # global
 $ npm install mocha chai --save-dev # local
 $ mkdir js-test
 $ cd js-test
@@ -131,7 +129,7 @@ describe('User', function() {
     var user = {
         'name': 'yeongjun.kim',
         'age': '26',
-        'isAult': true
+        'isAdult': true
     };
 
     it('사용자는 반드시 존재한다.', function() {
@@ -139,7 +137,7 @@ describe('User', function() {
     });
 
     it('성인일 경우 나이는 20살 이상이어야 한다.', function() {
-        expect(user.isAult).to.be.true;
+        expect(user.isAdult).to.be.true;
         expect(user.age).to.be.at.least(20);
     });
 });
