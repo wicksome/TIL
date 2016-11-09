@@ -64,7 +64,7 @@ var ejs = require('ejs'),
 
 *code*
 
-```json
+```javascript
 var ejs = require('ejs'),
     http = require('http'),
     fs = require('fs'),
