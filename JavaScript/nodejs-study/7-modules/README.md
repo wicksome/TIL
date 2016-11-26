@@ -35,7 +35,7 @@ $ npm list --depth=0 # 현재 설치된 모듈 확인
 >  Node.js에서 가장 많이 사용하는 웹 프레임의크인 express 프레임워크가 템플릿 엔진으로 ejs 모듈과 pug 모듈을 주소 사용하므로 2가지 모두 살펴보자.
 
 ```shell
-$ npm install --svae-dev ejs pug
+$ npm install --save-dev ejs pug
 ```
 
 ```javascript
@@ -183,7 +183,7 @@ describe('pug example', function() {
     const expectedHTML = '<p>' + data.name + '\'s Pug source code!</p>';
 
     console.log(expectedHTML);
-  
+
     it('compile된 마크업과 expectedHTML은 같아야 한다. - pug.compileFile()', function() {
         const tpl = pug.compileFile(__dirname + '/tpl.test.pug');
         expect(expectedHTML).to.equal(tpl(data));
@@ -359,4 +359,3 @@ $ npm install --save pug # package.json - dependencise에 추가
 >
 >
 > - 자세한 내용은 [이곳](https://semver.org/lang/ko)에서 확인.
-
