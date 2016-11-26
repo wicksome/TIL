@@ -1,3 +1,5 @@
+> equals를 재정의할 때는 일반 규약을 따르라
+
 # 재정의 하지 않는 경우
 
 1. 각각의 객체가 고유할 때
@@ -5,7 +7,7 @@
   `Random` 클래스를 설계할 때 값 비교를 사용안할 것 같아서 구현하지 않는 것처럼 필요 없을 경우
 3. 상위 클래스에서 정의한 equals가 하위 클래스에서 사용 가능할 때
 4. 클래스가 private, package-private로 선언되었고, equals를 호출할 일이 없을 때
- 
+
   ```java
   @Override
   public Boolean equals(Object obj) {
@@ -26,7 +28,7 @@
   - 추이성: `x.equals(y)`가 `true`이고, `y.equals(z)`가 `true`이면 `x.equals(z)`도 `true`
   - 일관성: 값이 변화가 없다면 `x.equals(y)`는 호출 횟수에 상관없이 항상 같아야 함
   - `null`이 아닌 참조 x에 대해서 `x.equals(null)`은 항상 `false`
-    
+
 # equlas 메서드를 구현하기 위해 따라야 할 지침
 
 1. === 연산자를 사용하여 equals의 인자가 자기 자신인지 검사
