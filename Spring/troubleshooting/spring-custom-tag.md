@@ -24,9 +24,10 @@
 
 
 
+
 ## 해결방안
 
-*결과*
+***결과***
 
 ```jsp
 <c:choose>
@@ -183,7 +184,7 @@ public class JsTag extends ResourceTagSupport {
 >
 > **해결방안**
 >
-> - spring custom tag로 갈아타자
+> - spring custom tag로 갈아타자!
 
 1. `tld`에 attribute 추가
 
@@ -198,6 +199,13 @@ public class JsTag extends ResourceTagSupport {
 ```
 
 2. `extends SimpleTagSupport` -> `extends RequestContextAwareTag` 변경 - `ResourceTagSupport.java`, `JsTag.java`
+
+   > **트러블슈팅**
+   >
+   > - `getRequestContext().getWebApplicationContext().getBean(클래스);`로 spring Bean 가져올수 있음
+   >
+   > - `SimpleTagSupport`는 매번 생성자를 호출하는데, `RequestContxtAwareTag`는 생성자는 한번만 호출
+   > - 같은 클래스에 Bean이 두개일 경우, `getBean()`에 Bean id/name을 파라미터로 전달
 
 ```java
 @Slf4j
