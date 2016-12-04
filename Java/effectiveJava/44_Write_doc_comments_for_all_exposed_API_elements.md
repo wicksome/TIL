@@ -13,28 +13,28 @@
 
 ```java
 /**
-  * Returns the hash code value for this list.  The hash code of a list
-  * is defined to be the result of the following calculation:
-  * <pre>{@code
-  *     int hashCode = 1;
-  *     for (E e : list)
-  *         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
-  * }</pre>
-  * This ensures that <tt>list1.equals(list2)</tt> implies that
-  * <tt>list1.hashCode()==list2.hashCode()</tt> for any two lists,
-  * <tt>list1</tt> and <tt>list2</tt>, as required by the general
-  * contract of {@link Object#hashCode}.
-  *
-  * @return the hash code value for this list
-  * @see Object#equals(Object)
-  * @see #equals(Object)
-  */
+ * Returns the hash code value for this list.  The hash code of a list
+ * is defined to be the result of the following calculation:
+ * <pre>{@code
+ *     int hashCode = 1;
+ *     for (E e : list)
+ *         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+ * }</pre>
+ * This ensures that <tt>list1.equals(list2)</tt> implies that
+ * <tt>list1.hashCode()==list2.hashCode()</tt> for any two lists,
+ * <tt>list1</tt> and <tt>list2</tt>, as required by the general
+ * contract of {@link Object#hashCode}.
+ *
+ * @return the hash code value for this list
+ * @see Object#equals(Object)
+ * @see #equals(Object)
+ */
 int hashCode();
 ```
 
 
 
->  **코드는 `{@code }` 태그를 사용하라.**
+**코드는 `{@code }` 태그를 사용하라.**
 
 - 코드 서체로 표시되도록 한다.
 
@@ -50,9 +50,7 @@ int hashCode();
   > This feature is obsolete. Although it may still work in some browsers, its use is discouraged since it could be removed at any time. Try to avoid using it.
 
 
-
-
->  **주석을 달 때 명심해야 할 일반적 원칙은, 문서화 주석은 소스 코드로 보나 javadoc으로 변환한 결과물로 보나 읽을 만해야 한다는 것이다. 그럴수 없는 상황이라면, javadoc으로 변환한 결과물의 가독성을 우선시하기 바란다.**
+**주석을 달 때 명심해야 할 일반적 원칙은, 문서화 주석은 소스 코드로 보나 javadoc으로 변환한 결과물로 보나 읽을 만해야 한다는 것이다. 그럴수 없는 상황이라면, javadoc으로 변환한 결과물의 가독성을 우선시하기 바란다.**
 
 ```java
 /**
@@ -66,14 +64,10 @@ int hashCode();
 - `{@code }` 태그와 유사하지만, 코드 서체로 표시되지 않는 차이가 있다.
 
 
-
-
 **모든 문서화 주석의 첫 번째 "문장"은 해당 주석에 담긴 내용을 요약한 것이다(summary description).**
 
 - 혼란을 막기 위해, 클래스나 인터페이스의 맴버나 생성자들 가운데 요약문 같은 것은 없어야 한다.
 - 오버로딩할 경우에는 같은 요약을 쓰는 것이 자연스러울 때가 있으니 주의하라(하지만 문서화 주석의 경우, 동일한 첫 문장은 곤란하다).
-
-
 
 
 **요약문에 마침표가 여러 번 포함되어야 하는 경우에는 주의하라.**
@@ -84,19 +78,17 @@ int hashCode();
 
     ```java
     /**
-    * A college degree, such as B.S., M.S. or Ph.D.
-    * College is a fountain of knowledge where many go to drink.
-    */
+     * A college degree, such as B.S., M.S. or Ph.D.
+     * College is a fountain of knowledge where many go to drink.
+     */
     public class Degree { ... }
     ```
 
     ```java
     /**
-    * A college degree, such as B.S., {@literal M.S.} or Ph.D.
-    * ...
+     * A college degree, such as B.S., {@literal M.S.} or Ph.D.
+     * ...
     ```
-
-
 
 
 **엄밀히 따지자면 문서화 주석의 요약문은 첫 번째 "문장"일 필요는 없다. 완벽한 문장일 필요가 없다는 것이다.**
@@ -120,19 +112,18 @@ int hashCode();
 
      ```java
      /**
-       * Constructs an empty list with the specified initial capacity.
-       *
-       * @param  initialCapacity  the initial capacity of the list
-       * @throws IllegalArgumentException if the specified initial capacity
-       *         is negative
-       */
+      * Constructs an empty list with the specified initial capacity.
+      *
+      * @param  initialCapacity  the initial capacity of the list
+      * @throws IllegalArgumentException if the specified initial capacity
+      *         is negative
+      */
      public ArrayList(int initialCapacity) { ... }
      ```
 
 -    **클래스와 인터페이스의 요약문은,** 해당 클래스나 인터페이스로 만들어진 객체가 무엇을 나타내는지를 표현하는 명사구여야 한다.
 
-     *Collection.java*  
-
+     *Collection.java*
 
      ```java
      /**
@@ -142,55 +133,169 @@ int hashCode();
      ```
 
 
+
 -    **필드의 요약문은,** 필드가 나타내는 것이 무엇인지를 설명하는 명사구여야 한다.
 
      *Math.PI*
 
      ```java
      /**
-       * The {@code double} value that is closer than any other to
-       * <i>pi</i>, the ratio of the circumference of a circle to its
-       * diameter.
-       */
+      * The {@code double} value that is closer than any other to
+      * <i>pi</i>, the ratio of the circumference of a circle to its
+      * diameter.
+      */
      public static final double PI = 3.14159265358979323846;
      ```
 
 
+**javadoc에는 메서드 주석을 "상속"하는 기능이 있다.**
 
+- 적용 가능한 문서화 주석 가운데 가장 근접한 것을 찾는다. 이때 상위 클래스보다는 인터페이스 쪽에 우선권이 주어진다.
 
-## 클래스
+- `{@inheritDoc }` 태그를 사용하면 상위 자료형에 있는 문서화 주석 가운데 일부를 상속할 수도 있다.
 
-```
+  *ArrayList.java*
 
-```
+  ```java
+  /**
+   * (중간 생략)
+   * @throws IndexOutOfBoundsException {@inheritDoc}
+   */
+  public E get(int index) { ... }
+  ```
 
-- 직렬화(serialization)가 가능한 클래스라면 직렬화 형식도 밝혀야 한다(규칙 75). 
+  *List.java*
 
+  ```java
+  /**
+   * (중간 생략)
+   * @throws IndexOutOfBoundsException if the index is out of range
+   *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+   */
+  E get(int index);
+  ```
 
 
 
 ## 메서드
 
-```
+**메서드에 대한 문서화 주석은, 메서드와 클라이언트 사이의 규약을 간명하게 설명해야 한다.** 
 
-```
-
-- 메서드와 클라이언트 사이의 규약을 간명하게 설명해야 한다. 
-- 메서드에 대한 문서화 주석은 메서드와 클라이언트 사이의 규약(contract)을 간명하게 설명해야 한다.
-- 계승을 위해 설계된 메서드가 아니라면(규칙 17) 메서드가 *무엇*을 하는지를 설명해야 한다. ( = *어떻게* 그 일을 하는지를 설명해서는 안 된다)
+- 계승을 위해 설계된 메서드가 아니라면(규칙17) 메서드가 *어떻게*가 아닌 *무엇*을 하는지를 설명해야 한다.
 - 해당 메서드의 모든 선행조건(precondition)과 후행조건(postcondition)을 나열해야 한다.
   - 선행조건: 메서드를 호출하려면 반드시 참(true)이 되어야 하는 조건들
-     무결점 예외(unchecked exception)에 대한 @throw 태그를 통해 암묵적으로 기술한다. 관계도니 인자의 @param 태그를 통해 명시할 수도 있다.
   - 후행조건: 메서드 실행이 성공적으로 끝난 다음에 만족되어야 하는 조건들
+- 보통 선행조건은 무결점 예외(unchecked exception)에 대한 `@throw` 태그를 통해 암묵적으로 기술한다. 관계된 인자의 `@param` 태그를 통해 명시할 수도 있다.
+
+
 - 메서드는 부작용(side effect)에 대해서도 문서화 해야 한다. 부작용은 후행조건을 만족하기 위해 필요한 것이 아닌, 시스템의 관측 가능한 상태 변화를 일컫는다.
 - 규칙 70에 설명한 대로, 클래스가 메서드의 스레드 안전성(thread safety)에 대해서도 문서에 남겨야 한다.
-- 메서드의 규약(contract)을 완벽하게 기술하려고 문서화 주먹에는 인사마다 @param 태그를 달아야 하고, 반환값 자료형이 void 가 아니라면. @return 태그도 달아야 한고, 무덤덤/점검 여부에 상관없이 모든 예외에는 @throws 태그도 붙어야 한다(규칙 62).
+
+
+**메서드의 규약(contract)을 완벽하게 기술하려면, 문서화 주석에는 인자마다 `@param` 태그를 달아야 하고, 반환값 자료형이 void 가 아니라면 `@return` 태그도 달아야 하고, 무점검/점검 여부에 상관없이 모든 예외에는 `@throws` 태그도 붙어야 한다(규칙 62).**
+
+**관습적으로,**
+
+*List.java*
+
+```java
+/**
+ * Removes the element at the specified position in this list (optional
+ * operation).  Shifts any subsequent elements to the left (subtracts one
+ * from their indices).  Returns the element that was removed from the
+ * list.
+ *
+ * @param index the index of the element to be removed
+ * @return the element previously at the specified position
+ * @throws UnsupportedOperationException if the <tt>remove</tt> operation
+ *         is not supported by this list
+ * @throws IndexOutOfBoundsException if the index is out of range
+ *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+ */
+E remove(int index);
+```
+
+- `@param` 태그나 `@return` 태그 다음에는 인자나 반환값을 설명하는 명사구(noun phrase)가 와야 한다.
+- `@throw` 태그 다음에는 어떤 조건에서 예외가 발생하는지를 설명하는 if 절이 온다.
+- 명사구 대신 산술 표현식(arithmetic expression)이 쓰일 때도 있다.
+- `@param`, `@return`, `@throws` 태그 다음에 오는 구나 절에는 마침표를 찍지 않는다.
 
 
 
+## 클래스
+
+**클래스가 스레드에 안전하건 그렇지 않건 간에, 그 안전성 수준을 문서로 남겨야 한다(규칙 70).**
+
+**직렬화(serialization)가 가능한 클래스라면 직렬화 형식도 밝혀야 한다(규칙 75).** 
+
+**제네릭 자료형이나 메서드에 주석을 달 때는 모든 자료형 인자들을 설명해야 한다.**
+
+*Map.java*
+
+```java
+/**
+ * An object that maps keys to values.  A map cannot contain duplicate keys;
+ * each key can map to at most one value.
+ *
+ * (중간 생략)
+ *
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
+ */
+public interface Map<K,V> { ... }
+```
+
+**enum 자료형에 주석을 달 때는 자료형이나 public 메서드뿐 아니라 상수 각각에도 주석을 달아 주어야 한다.**
+
+```java
+/**
+ * 조직 연동에 사용되는 서비스.
+ * 어드민에서 조직연동 API와 같이 내려오는 값도 포함(SSO, IPT)
+ * @author yeongjun on 2016. 11. 2.
+ */
+public enum OrgSyncType {
+	/** 조직/구성원의 조직 */
+	GROUP,
+
+	/** 조직/구성원의 구성원 */
+	MEMBER,
+
+	/** 직급/직책 */
+	JOB
+}
+```
+
+**어노테이션 자료형에 주석을 달 때는 자료형뿐 아니라 모든 멤버에도 주석을 달아야 한다.**
+
+- 멤버에는 필드인 것처럼 명사구 주석을 달아라.
+- 자료형 요약문에는 동사구를 써서, 언제 이 자료형을 어노테이션으로 붙여야 하는지 설명하라.
+
+```java
+/**
+ * 조직연동시 접근제한이 필요한 API라는 것을 명시.
+ *
+ * @author yeongjun on 2016. 11. 2.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({java.lang.annotation.ElementType.METHOD})
+public @interface OrgSyncUsersDenied {
+	/**
+	 * 어노테이션 붙은 메서드가 제한되어야 하는 조직연동 서비스 타입.
+	 */
+	OrgSyncType[] value();
+}
+```
+
+**릴리즈 1.5부터는 *패키지 수준 문서화 주석(package-level doc comment)*은 `package-info.java`에 두어야 한다.**
+
+- 패키지 선언 및 패키지 어노테이션을 넣을 수 있다.
 
 
 
+>   문서화 주석에 관해서, 마지막으로 한 가지 주의사항만 더 살펴보자. 모든 공개 API 요소에는 문서화 주석을 달 필요가 있지만, 한상 그 정도면 충분하지 않다. **관련된 클래스가 많아서 복잡한 API의 경우, API의 전반적인 구조를 설명하는 	별도 문서(external document)가 필요한 경우가 많다. 그런 문서가 있다면, 관련 클래스나 패키지의 문서화 주석에는 해당 문서로 연결되는 링크가 있어야 한다.**
 
 
-swagger
+
+## 참고
+
+- [Swagger](http://swagger.io/): API Document을 만들어 주는 툴
