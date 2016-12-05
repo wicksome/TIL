@@ -2,7 +2,7 @@
 
 > **좋은 API 문서를 만들려면 API에 포함된 모든 클래스, 인터페이스, 생성자, 메서드, 그리고 필드 선언에 문서화 주석을 달아야 한다.**
 
-- 문서화 주석과 javadoc을 통해 API 문서를 자동으로 만들 수 있다. 문서화 주석 분법은 자바 언어의 일부는 아니지만, 모든 프로그래머가 알아야 하는 실질적인 표준 API다. ([How to Write Doc Comments - Oracle 웹사이트](http://www.oracle.com/technetwork/articles/java/index-137868.html))
+- 문서화 주석과 javadoc을 통해 API 문서를 자동으로 만들 수 있다. 문서화 주석 문법은 자바 언어의 일부는 아니지만, 모든 프로그래머가 알아야 하는 실질적인 표준 API다. ([How to Write Doc Comments - Oracle 웹사이트](http://www.oracle.com/technetwork/articles/java/index-137868.html))
 
 
 
@@ -123,15 +123,14 @@ int hashCode();
 
 -    **클래스와 인터페이스의 요약문은,** 해당 클래스나 인터페이스로 만들어진 객체가 무엇을 나타내는지를 표현하는 명사구여야 한다.
 
-     *Collection.java*
+        *Collection.java*
 
      ```java
      /**
       * The root interface in the <i>collection hierarchy</i>.  A collection...
       */
-     public interface Collection<E> extends Iterable<E> { ... }
+      public interface Collection<E> extends Iterable<E> { ... }
      ```
-
 
 
 -    **필드의 요약문은,** 필드가 나타내는 것이 무엇인지를 설명하는 명사구여야 한다.
@@ -150,31 +149,30 @@ int hashCode();
 
 **javadoc에는 메서드 주석을 "상속"하는 기능이 있다.**
 
-- 적용 가능한 문서화 주석 가운데 가장 근접한 것을 찾는다. 이때 상위 클래스보다는 인터페이스 쪽에 우선권이 주어진다.
+-  적용 가능한 문서화 주석 가운데 가장 근접한 것을 찾는다. 이때 상위 클래스보다는 인터페이스 쪽에 우선권이 주어진다.
 
-- `{@inheritDoc }` 태그를 사용하면 상위 자료형에 있는 문서화 주석 가운데 일부를 상속할 수도 있다.
+-  `{@inheritDoc }` 태그를 사용하면 상위 자료형에 있는 문서화 주석 가운데 일부를 상속할 수도 있다.
 
-  *ArrayList.java*
+   *ArrayList.java*
 
-  ```java
-  /**
+   ```java
+   /**
    * (중간 생략)
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public E get(int index) { ... }
-  ```
+   public E get(int index) { ... }
+   ```
 
-  *List.java*
+   *List.java*
 
-  ```java
-  /**
-   * (중간 생략)
-   * @throws IndexOutOfBoundsException if the index is out of range
-   *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
-   */
-  E get(int index);
-  ```
-
+   ```java
+   /**
+    * (중간 생략)
+    * @throws IndexOutOfBoundsException if the index is out of range
+    *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+    */
+   E get(int index);
+   ```
 **API 관련 별도 문서가 있다면, 문서화 주석에 링크를 남긴다.**
 
 >   문서화 주석에 관해서, 마지막으로 한 가지 주의사항만 더 살펴보자. 모든 공개 API 요소에는 문서화 주석을 달 필요가 있지만, 항상 그 정도면 충분하지 않다. **관련된 클래스가 많아서 복잡한 API의 경우, API의 전반적인 구조를 설명하는 	별도 문서(external document)가 필요한 경우가 많다. 그런 문서가 있다면, 관련 클래스나 패키지의 문서화 주석에는 해당 문서로 연결되는 링크가 있어야 한다.**
