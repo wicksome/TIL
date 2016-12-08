@@ -1,7 +1,5 @@
 ## jekyll 설치하기
 
-**ruby 설치하기**
-
 [참고 링크](https://gorails.com/setup/osx/10.12-sierra)
 
 ```shell
@@ -45,6 +43,8 @@ $ jekyll new blog
 $ jekyll server --watch
 ```
 
+
+
 ### TroubleShooting
 
 jekyll 새로운 프로젝트 생성시 에러 발생하는 문제
@@ -59,20 +59,6 @@ $ sudo gem install activesupport
 $ bundle install
 ```
 
-
-
-[재설치 링크](https://rvm.io/rvm/install)
-
-
-
 - rvm -> rbenv 갈아타기 http://theeye.pe.kr/archives/1798
 - homebrew PATH 설정 http://stackoverflow.com/a/8731098/3793078
-
-
-
-
-
-참고
-
-https://nolboo.kim/blog/2013/10/15/free-blog-with-github-jekyll/
-
+- 참고 설명 https://nolboo.kim/blog/2013/10/15/free-blog-with-github-jekyll/
