@@ -8,3 +8,8 @@ Gemfile.lock
 git.sublime-workspace
 node_modules
 .tern-project
+
+# jekyll
+_site
+.sass-cache
+.jekyll-metadata
