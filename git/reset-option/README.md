@@ -1,4 +1,4 @@
-[](https://github.com/wicksome/TIL/blob/35a58f8/git/reset-option/asset/git-reset-ui-in-intellij.png?raw=true)
+![](./asset/git-reset-ui-in-intellij.png)
 
 ```bash
 $ git reset -h
