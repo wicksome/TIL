@@ -1,0 +1,2 @@
+- 현재 작업들을 모두 지워버릴 때 - `git checkout HEAD -- <files...>`
+- 이전 커밋으로 되돌릴 때 - `git reset HEAD~`
