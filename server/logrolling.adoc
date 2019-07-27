@@ -1,0 +1,39 @@
+logrotate로 로그롤링하기
+=================
+김영준 <opid911@gmail.com>
+:author: yeongjun.kim
+:Email: <opid911@gmail.com>
+:source-highlighter: prettify
+
+== logrotate란?
+
+`/usr/sbin/logrotate`
+
+== catalina.out 로그롤링하기
+
+[source,bash]
+----
+$ cd /etc/logrotate.d/
+$ vi tomcat
+----
+
+[source,bash]
+./etc/logrotate.d/tomcat
+----
+/home/yj/apps/tomcat/logs/catalina.out {
+    copytruncate
+    daily
+    compress
+    dateext
+    missingok
+    rotate 60
+}
+----
+
+. Options
+* copytruncate
+* daily
+* compress
+* dateext
+* missingok
+* rotate 60

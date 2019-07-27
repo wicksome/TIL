@@ -1,0 +1,202 @@
+= Java Non-Standard Options
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2018-03-25
+:toc:
+:homepage: https://wickso.me
+
+== Description
+이 옵션은 Java HotSpot Virtual Machine에 특정한 범용 옵션이다.
+
+== Options
+=== -X
+사용 가능한 모든 `-X` 옵션에 대한 도움말을 표시한다.
+
+=== -Xbatch
+Disables background compilation. By default, the JVM compiles the method as a background task, running the method in interpreter mode until the background compilation is finished. The -Xbatch flag disables background compilation so that compilation of all methods proceeds as a foreground task until completed.
+
+This option is equivalent to `-XX:-BackgroundCompilation`.
+
+=== -Xbootclasspath:+++<i>path</i>+++
+Specifies a list of directories, JAR files, and ZIP archives separated by colons (:) to search for boot class files. These are used in place of the boot class files included in the JDK.
+
+Do not deploy applications that use this option to override a class in rt.jar, because this violates the JRE binary code license.
+
+=== -Xbootclasspath/a:+++<i>path</i>+++
+Specifies a list of directories, JAR files, and ZIP archives separated by colons (:) to append to the end of the default bootstrap class path.
+
+Do not deploy applications that use this option to override a class in rt.jar, because this violates the JRE binary code license.
+
+=== -Xbootclasspath/p:+++<i>path</i>+++
+Specifies a list of directories, JAR files, and ZIP archives separated by colons (:) to prepend to the front of the default bootstrap class path.
+
+Do not deploy applications that use this option to override a class in rt.jar, because this violates the JRE binary code license.
+
+=== -Xcheck:jni
+Performs additional checks for Java Native Interface (JNI) functions. Specifically, it validates the parameters passed to the JNI function and the runtime environment data before processing the JNI request. Any invalid data encountered indicates a problem in the native code, and the JVM will terminate with an irrecoverable error in such cases. Expect a performance degradation when this option is used.
+
+=== -Xcomp
+Forces compilation of methods on first invocation. By default, the Client VM (-client) performs 1,000 interpreted method invocations and the Server VM (-server) performs 10,000 interpreted method invocations to gather information for efficient compilation. Specifying the -Xcomp option disables interpreted method invocations to increase compilation performance at the expense of efficiency.
+
+You can also change the number of interpreted method invocations before compilation using the -XX:CompileThreshold option.
+
+=== -Xdebug
+아무 동작도 하지 않는다. 이전 버전과의 호환성을 위해 제공된다.
+
+=== -Xdiag
+추가 diagnostic 메시지를 보여준다.
+
+=== -Xfuture
+Enables strict class-file format checks that enforce close conformance to the class-file format specification. Developers are encouraged to use this flag when developing new code because the stricter checks will become the default in future releases.
+
+=== -Xint
+Runs the application in interpreted-only mode. Compilation to native code is disabled, and all bytecode is executed by the interpreter. The performance benefits offered by the just in time (JIT) compiler are not present in this mode.
+
+=== -Xinternalversion
+-version 옵션보다 자세한 JVM 버전 정보를 표시한 뒤 종료한다.
+
+=== -Xloggc:+++<i>filename</i>+++
+Sets the file to which verbose GC events information should be redirected for logging. The information written to this file is similar to the output of -verbose:gc with the time elapsed since the first GC event preceding each logged event. The -Xloggc option overrides -verbose:gc if both are given with the same java command.
+
+Example:
+
+    -Xloggc:garbage-collection.log
+
+=== -Xmaxjitcodesize=_size_
+Specifies the maximum code cache size (in bytes) for JIT-compiled code. Append the letter k or K to indicate kilobytes, m or M to indicate megabytes, g or G to indicate gigabytes. The default maximum code cache size is 240 MB; if you disable tiered compilation with the option -XX:-TieredCompilation, then the default size is 48 MB:
+
+    -Xmaxjitcodesize=240m
+
+This option is equivalent to -XX:ReservedCodeCacheSize.
+
+=== -Xmixed
+Executes all bytecode by the interpreter except for hot methods, which are compiled to native code.
+
+=== -Xmn+++<i>size</i>+++
+Sets the initial and maximum size (in bytes) of the heap for the young generation (nursery). Append the letter k or K to indicate kilobytes, m or M to indicate megabytes, g or G to indicate gigabytes.
+
+The young generation region of the heap is used for new objects. GC is performed in this region more often than in other regions. If the size for the young generation is too small, then a lot of minor garbage collections will be performed. If the size is too large, then only full garbage collections will be performed, which can take a long time to complete. Oracle recommends that you keep the size for the young generation between a half and a quarter of the overall heap size.
+
+The following examples show how to set the initial and maximum size of young generation to 256 MB using various units:
+
+    -Xmn256m
+    -Xmn262144k
+    -Xmn268435456
+
+Instead of the -Xmn option to set both the initial and maximum size of the heap for the young generation, you can use -XX:NewSize to set the initial size and -XX:MaxNewSize to set the maximum size.
+
+=== -Xms+++<i>size</i>+++
+힙의 초기 사이즈를 설정한다. 이 값은 반드시 1024의 배수 및 1MB보다 커야한다. KB는 `k` 또는 `K`, MB는 `m` 또는 `M`, GB는 `g` 또는 `G` 를 덧붙힌다.
+
+다음 예제는 메모리의 크기를 6MB로 설정하는 방법이다:
+
+    -Xms6291456
+    -Xms6144k
+    -Xms6m
+
+이 옵션을 사용하지 않으면, 초기 사이즈는 old 영역과 young 영역이 할당된 크기의 합으로 설정된다.
+
+=== -Xmx_size_
+메모리 할당 풀의 최대 값을 설정한다. 이 값은 반드시 1024의 배수 및 2MB 보다 커야 한다. KB는 `k` 또는 `K`, MB는 `m` 또는 `M`, GB는 `g` 또는 `G` 를 덧붙힌다.
+기본값은 시스템 구성에 따라 런타임에 설정된다. 서버 배포의 경우 `-Xms` 및 `-Xmx` 는 종종 동일한 값으로 설정된다.
+link:http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html[Java SE HotSpot Virtual Machine Garbage Collection Tuning Guide]의 "Ergonomics" 섹션을 참조하라.
+
+다음 예제는 메모리의 최대 크기를 80MB로 설정하는 방법이다:
+
+    -Xmx83886080
+    -Xmx81920k
+    -Xmx80m
+
+`-Xmx` 옵션은 `-XX:MaxHeapSize` 와 동일하다.
+
+=== -Xnoclassgc
+Disables garbage collection (GC) of classes. This can save some GC time, which shortens interruptions during the application run.
+
+When you specify -Xnoclassgc at startup, the class objects in the application will be left untouched during GC and will always be considered live. This can result in more memory being permanently occupied which, if not used carefully, will throw an out of memory exception.
+
+=== -Xprof
+Profiles the running program and sends profiling data to standard output. This option is provided as a utility that is useful in program development and is not intended to be used in production systems.
+
+=== -Xrs
+Reduces the use of operating system signals by the JVM.
+
+Shutdown hooks enable orderly shutdown of a Java application by running user cleanup code (such as closing database connections) at shutdown, even if the JVM terminates abruptly.
+
+The JVM catches signals to implement shutdown hooks for unexpected termination. The JVM uses SIGHUP, SIGINT, and SIGTERM to initiate the running of shutdown hooks.
+
+The JVM uses a similar mechanism to implement the feature of dumping thread stacks for debugging purposes. The JVM uses SIGQUIT to perform thread dumps.
+
+Applications embedding the JVM frequently need to trap signals such as SIGINT or SIGTERM, which can lead to interference with the JVM signal handlers. The -Xrs option is available to address this issue. When -Xrs is used, the signal masks for SIGINT, SIGTERM, SIGHUP, and SIGQUIT are not changed by the JVM, and signal handlers for these signals are not installed.
+
+There are two consequences of specifying -Xrs:
+
+* SIGQUIT thread dumps are not available.
+* User code is responsible for causing shutdown hooks to run, for example, by calling System.exit() when the JVM is to be terminated.
+
+=== -Xshare:_mode_
+Sets the class data sharing (CDS) mode. Possible mode arguments for this option include the following:
+
+auto::
+Use CDS if possible. This is the default value for Java HotSpot 32-Bit Client VM.
+
+on::
+Require the use of CDS. Print an error message and exit if class data sharing cannot be used.
+
+off::
+Do not use CDS. This is the default value for Java HotSpot 32-Bit Server VM, Java HotSpot 64-Bit Client VM, and Java HotSpot 64-Bit Server VM.
+
+dump::
+Manually generate the CDS archive. Specify the application class path as described in "Setting the Class Path".
++
+You should regenerate the CDS archive with each new JDK release.
+
+=== -XshowSettings:category
+Shows settings and continues. Possible category arguments for this option include the following:
+
+all::
+Shows all categories of settings. This is the default value.
+
+locale::
+Shows settings related to locale.
+
+properties::
+Shows settings related to system properties.
+
+vm::
+Shows the settings of the JVM.
+
+=== -Xss_size_
+Sets the thread stack size (in bytes). Append the letter k or K to indicate KB, m or M to indicate MB, g or G to indicate GB. The default value depends on the platform:
+
+* Linux/ARM (32-bit): 320 KB
+* Linux/i386 (32-bit): 320 KB
+* Linux/x64 (64-bit): 1024 KB
+* OS X (64-bit): 1024 KB
+* Oracle Solaris/i386 (32-bit): 320 KB
+* Oracle Solaris/x64 (64-bit): 1024 KB
+
+The following examples set the thread stack size to 1024 KB in different units:
+
+    -Xss1m
+    -Xss1024k
+    -Xss1048576
+
+This option is equivalent to -XX:ThreadStackSize.
+
+=== -Xusealtsigs
+Use alternative signals instead of SIGUSR1 and SIGUSR2 for JVM internal signals. This option is equivalent to -XX:+UseAltSigs.
+
+=== -Xverify:+++<i>mode</i>+++
+Sets the mode of the bytecode verifier. Bytecode verification ensures that class files are properly formed and satisfy the constraints listed in section 4.10, Verification of class Files in the The Java Virtual Machine Specification.
+
+Do not turn off verification as this reduces the protection provided by Java and could cause problems due to ill-formed class files.
+
+Possible mode arguments for this option include the following:
+
+remote::
+Verifies all bytecodes not loaded by the bootstrap class loader. This is the default behavior if you do not specify the -Xverify option.
+
+all::
+Enables verification of all bytecodes.
+
+none::
+Disables verification of all bytecodes. Use of -Xverify:none is unsupported.

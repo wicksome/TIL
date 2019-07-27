@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>socket.io example</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        window.onload = () => {
+            var socket = io.connect();
+
+            socket.on('echo', data => {
+                alert('[ID] ' + socket.id + '\n' + data);
+            });
+
+            document.getElementById('btnSend').onclick = () => {
+                var type = [].slice.call(document.getElementsByName('chkType'), 0).filter((radio) => {
+                    return radio.checked;
+                })[0].value;
+                socket.emit('createSocket', {
+                    type: type,
+                    msg: document.getElementById('txtMsg').value
+                });
+            };
+        };
+    </script>
+</head>
+
+<body>
+    <label><input type="radio" name="chkType" value="SOCKET" checked="checked">SOCKET</label><br />
+    <label><input type="radio" name="chkType" value="BROADCAST">BROADCAST</label><br />
+    <label><input type="radio" name="chkType" value="PUBLIC">PUBLIC</label><br />
+    <label><input type="radio" name="chkType" value="PRIVATE">PRIVATE</label><br />
+    <input type="text" id="txtMsg" />
+    <input type="button" id="btnSend" value="send" />
+</body>
+
+</html>

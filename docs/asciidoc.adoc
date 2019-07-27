@@ -1,0 +1,55 @@
+= Markdown에서 Asciidoc으로 이사하기
+:author: 김영준<opid911@gmail.com>
+
+== Asciidoc 문법
+
+=== 소스코드
+
+[source]
+----
+ ----
+ [source,java]
+ .HelloWorld.java
+ ----
+ class HelloWorld {
+     public static void main(String[] args) {
+         System.out.println("Hello World");
+     }
+ }
+ ----
+----
+
+[source,java]
+.HelloWorld.java
+----
+class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}
+----
+
+=== Quotes
+
+[quote,"Charles Dickens","A Tale of Two Cities"]
+It was the best of times, it was the worst of times, it was the age of wisdom,
+it was the age of foolishness...
+
+== Markdown to Asciidoc
+
+[source,bash]
+----
+$ pandoc README.me > README.adoc
+----
+
+== Asciidoc to Presentation
+
+
+== 참고
+
+* https://powerman.name/doc/asciidoc
+* http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/
+* https://asciidoclive.com/edit/scratch/1
+* https://blog.outsider.ne.kr/1220
+* https://gist.github.com/ihoneymon/40fd306b4f460f44f4050d3bf73a6637
+* https://oss.navercorp.com/sanghyuk-jung/asciidoc-coding

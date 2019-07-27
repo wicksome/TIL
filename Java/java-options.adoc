@@ -1,0 +1,41 @@
+= Java option of JDK8 for Linux
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2018-03-25
+:toc:
+:homepage: https://wickso.me
+
+== Description
+`java` 커맨드는 자바 어플리케이션을 실행한다. JRE를 시작하고, 명시된 클래스를 로딩하고 클래스의 `main()` 메서드를 호출한다.
+이 메서드는 반드시 `public static void main(String[] args)` 이어야 한다.
+
+기본적으로, 옵션이 아닌 첫번째 인자는 호출할 클래스의 이름이다. 만약 `-jar` 옵션을 추가하면 첫번째 인자는 클래스와 리소스를 포함하는 JAR 파일명이다.
+
+클래스 혹은 JAR 파일명 뒤의 나머지 인자들은 `main()` 의 인자로 전달된다.
+
+== Options
+`java` 커맨드는 다음 범주로 나눌 수 있는 다양한 옵션을 지원한다:
+
+* link:./java-standard-options.adoc[Standard Options]
+* link:./java-non-standard-options.adoc[Non-Standard Options]
+* link:./java-advanced-runtime-options.adoc[Advanced Runtime Options]
+* link:./java-advanced-jit-compiler-options.adoc[Advanced JIT Compiler Options]
+* link:./java-advanced-serviceability-options.adoc[Advanced Serviceability Options]
+* link:./java-advanced-gc-options.adoc[Advanced Garbage Collection Options]
+
+Standard options은 모든 JVM에서 지원된다. JRE 버전 확인, 클래스 경로 설정, 상세 출력 등과 같이 공통 액션에 사용된다.
+
+Non-Standard options은 Java HotSpot Virtual Machine에 특정 범용 옵션이다. 따라서 모든 JVM이 지원할 수 없고 변경 될 수 있다. 이 옵션은 `-X` 로 시작한다.
+
+Advanced options을 대충 사용하는 것은 추천하지 않는다. 이것은 개발자 옵션으로 Java HotSpot VM 작업의 특정 영역을 튜닝하는 데 사용된다.
+보통 특정 시스템 요구사항을 가지고, system configuration parameter에 접근할 수 있는 권한이 있어야 한다. 그리고 모든 JVM에 대한 지원이 보장되지 않고, 변경될 수 있다.
+이 옵션은 `-XX` 로 시작된다.
+
+Boolean 옵션은 기본적으로 활성화/비활성화 된 기능을 비활성화/활성화하는데 사용되며, 이러한 옵션에는 매개 변수가 필요하지 않다.
+Boolean `-XX` 옵션은 활성화할 때 `+` 기호를 사용하고(`-XX:+OptionName`), 비활성화 할 때 `-` 기호를 사용한다(`-XX:-OptionName`).
+
+인자가 필요한 옵션의 경우 인자는 공백, `:`, `=` 로 이름과 구분된다(정확한 문법은 각 옵션마다 다르다).
+만약 크기를 바이트로 지정해야 하는 경우 접미사를 사용하지 않거나 KB를 `k` 혹은 `K`, MB를 `m` 혹은 `M`, GB를 `g` 혹은 `G` 로 사용할 수 있다.
+또한 백분율을 지정해야하는 경우에는 0에서 1까지의 숫자를 사용한다(e.g. 25%는 `0.25` 로 나타낸다).
+
+== Reference
+* link:https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html[java documentation]

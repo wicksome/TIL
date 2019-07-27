@@ -1,0 +1,23 @@
+@startuml
+' same-reference-type
+objA --> (val: 40)
+objB --> (val: 40)
+@enduml
+
+@startuml
+' compare-object
+objA --> (value: 100 )
+objB --> (value: 100)
+objC --> (value: 100)
+@enduml
+
+@startUml prototype-obj-vs-arr
+object Object.prototype
+object Array.prototype
+object obj
+object arr
+
+Object.prototype <|-- "prototype" obj
+Object.prototype <|-- "prototype" Array.prototype
+Array.prototype <|-- "prototype" arr
+@enduml

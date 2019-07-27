@@ -1,0 +1,14 @@
+tmp
+.DS_Store
+Gemfile.lock
+git.sublime-workspace
+node_modules
+.tern-project
+
+# jekyll
+_web/_site
+.sass-cache
+.jekyll-metadata
+
+.idea
+.git.bak
