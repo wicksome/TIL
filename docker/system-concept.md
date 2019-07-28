@@ -122,6 +122,7 @@
     - 보안 대상에 따라 HTTP/FTP와 같은 프로세스마다 액세스 제한을 거는 Type Enforcement(TE)와 root도 포함한 모든 사용자에 관해 제어를 거는 RBAC(role-based access control) 등으로 Linux를 제어
 
 **Web Server/Web Application Server**
+
 |Name|Description|
 |---|---|
 |Apache HTTP Server|- 오픈소스 웹 서버<br/>- 1995년에 나온 역사가 오래된 웹 서버|
@@ -129,6 +130,7 @@
 |Nginx|소비 메모리가 적으며 리버스 프록시 기능과 로드밸런서 기능도 갖고 있음|
 
 **Database Server**
+
 |Name|Description|
 |---|---|
 |MySQL|Oracle이 제공하는 오픈소스 RDBMS|
