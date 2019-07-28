@@ -89,13 +89,14 @@
 
 **Linux 디렉토리 구성**
 - Linux 디렉토리 목록은 FHS(Filesystem Hierarchy Standard)라는 규격에 의해 표준화 됨
+- [Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)
 ```
 <root>
-├── /bin   기본 command
+├── /bin   Essential command binaries
 ├── /boot  files for OS booting
 ├── /dev   device files
 ├── /etc   config files
-├── /home  user home directory
+├── /home  User's home directories
 ├── /lib   shared library
 ├── /mnt   file system의 mount point용 directory
 ├── /media CD/DVD-ROM의 mount point
@@ -118,8 +119,26 @@
 - SELinux(Security-Enhanced Linux)
     - 미국 국가안전보장국이 제공하는 Linux 커널에 강제 액세스 제어 기능을 추가한 기능
     - 기존의 Linux는 root 사용자는 퍼미션에 상관없이 모든 액세스가 가능
-    - 보안 대상에 따라 HTTP/FTP와 같은 프로세스마다 액세스 제한을 거는 Type Enforcement(TE)와 root도 포함한 모든 사용자에 관해 제어를 거는 RBAC(role-based access control) 등으로 Linux를 제어 
-    
-    
-    
-    
+    - 보안 대상에 따라 HTTP/FTP와 같은 프로세스마다 액세스 제한을 거는 Type Enforcement(TE)와 root도 포함한 모든 사용자에 관해 제어를 거는 RBAC(role-based access control) 등으로 Linux를 제어
+
+**Web Server/Web Application Server**
+|Name|Description|
+|---|---|
+|Apache HTTP Server|- 오픈소스 웹 서버<br/>- 1995년에 나온 역사가 오래된 웹 서버|
+|IIS(Internet Infomation Services)|Microsoft가 제공하는 웹 서버|
+|Nginx|소비 메모리가 적으며 리버스 프록시 기능과 로드밸런서 기능도 갖고 있음|
+
+**Database Server**
+|Name|Description|
+|---|---|
+|MySQL|Oracle이 제공하는 오픈소스 RDBMS|
+|PostgreSQL|오픈소스 RDBMS|
+|Oracle Database|Oracle이 개발한 상용 RDBMS|
+|Redis|메모리상에 KVS(Key-Value Store)를 구축할 수 있는 OSS의 NoSQL. 메모리상의 데이터는 정기적으로 백업되지만 데이터가 갱신될 때마다 기록되는 것은 아니기 때문에 전원 차단이 있으면 데이터 손실되는 경우 발생|
+|MongoDB|document라는 구조적 데이터를 컬렉션으로 관리하는 OSS의 NoSQL. 복잡하 계층 구조를 가질 수 있음. 온라인 게임이나 로그 분석등에 이용|
+|Apache Cassandra|하나의 Key에 대해 여러 개의 컬럼을 가지고, 관계형 테이블에 가까운 데이터 구조를 갖고 있는 OSS의 NoSQL|
+
+**시스템 관리 툴**
+- Zabbix
+- Datadog
+- Mackerel
