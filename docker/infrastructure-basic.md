@@ -1,3 +1,5 @@
+> 완벽한 IT 인프라 구축을 위한 Docker 2판
+
 **Immutable Infrastructure**
 - 인프라의 변경 이력을 관리하는 것이 아니라 현재 인프라 상태를 관리하면 되도록 바뀜
 
