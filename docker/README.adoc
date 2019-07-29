@@ -2,20 +2,20 @@ ____
 완벽한 IT 인프라 구축을 위한 Docker 2판
 ____
 
-= Container
+== Container
 
 * Container란 Host OS상에 논리적인 구획(컨테이너)를 만들어, 마치 별도의 서버인 것 처럼 사용할 수 있게 만든 것
 * Host OS는 리소스를 논리적으로 분리시키고, 여러 개의 Container가 공유하여 사용
 * Overhead가 적기 때문에 가볍고 고속으로 작동
 ** Overhead란 가상화를 수행하기 위해 필요한 CPU 자원, 디스크 용량, 메모리 사용량 등
 
-== 서버 가상화 기술
+=== 서버 가상화 기술
 
 * 컨테이너 기술과 서버 가상화 기술은 비슷하지만 목적이 다름
 * 컨테이너 기술은 어플리케이션의 실행 환경을 모음으로써 이식성을 높이고 확장성이 좋은 환경에서 작동하는 것을 지향
 * 가상화 기술의 대부분은 서로 다른 환경을 어떻게 효율적으로 에뮬레이트할지를 지향
 
-=== 호스트 서버 가상화
+==== 호스트 서버 가상화
 
 * 하드웨어 상에 베이스가 되는 Host OS를 설치하고, Host OS에 가상화 소프트웨어를 설치한 후, 가상화 소프트웨어 상에서 Guest OS를 작동시키는 기술
 * Overhead가 큼
@@ -23,7 +23,7 @@ ____
 ** Oracle VM VirtualBox
 ** VMware
 
-=== 하이퍼바이저형 서버 가상화
+==== 하이퍼바이저형 서버 가상화
 
 * 하드웨어 상에 가상화를 전문으로 수행하는 소프트웨어인 '하이퍼바이저'를 배치하고, 하드웨어와 가상환경을 제어
 * Host OS 없이 하드웨어를 직접 제어하기 때문에 자원을 효율적으로 사용 가능
@@ -33,10 +33,10 @@ ____
 ** Microsoft Windows Server의 Hyper-V
 ** Citrix의 XenServer
 
-== 역사
+=== 역사
 
-=== FreeBSD Jail
+==== FreeBSD Jail
 
-=== Solaris Containers
+==== Solaris Containers
 
-=== Linux Containers(LXC)
+==== Linux Containers(LXC)
