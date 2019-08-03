@@ -129,9 +129,53 @@ PID:: Linux에서 각 프로세스에 할당된 고유한 ID
 ** Docker는 NAPT 기능을 사용하여 연결
 +
 NAPT(Network Address Port Translation::
-    * 하나의 IP 주소를 여러 컴퓨터가 공유하는 기술로, IP 주소와 포트 번호를 변환하는 기능
-    * 프라이빗 IP 주소와 글로벌 IP 주소를 투과적으로 상호 변환하는 기술
-    * TCP/IP의 포트 번호까지 동적으로 변환하기 때문에 하나의 글로벌 IP 주소로 여러 대의 머신이 동시에 연결 가능
-    * Docker에서는 NAPT에 Linux의 iptables를 사용
+*** 하나의 IP 주소를 여러 컴퓨터가 공유하는 기술로, IP 주소와 포트 번호를 변환하는 기능
+*** 프라이빗 IP 주소와 글로벌 IP 주소를 투과적으로 상호 변환하는 기술
+*** TCP/IP의 포트 번호까지 동적으로 변환하기 때문에 하나의 글로벌 IP 주소로 여러 대의 머신이 동시에 연결 가능
+*** Docker에서는 NAPT에 Linux의 iptables를 사용
+
+==== NAT와 IP 마스커레이드의 차이
+
+프라이빗 IP 주소와 글로벌 IP 주소를 변환하여 프라이빗 IP 주소가 할당된 컴퓨터에 대해 인터넷 액세스를 가능하게 할때 사용하는 기술
+
+NAT(Network Address Translation)::
+private IP 주소가 할당된 client가 인터넷상에 있는 서버에 액세스할 때 NAT 라우터는 client의 private IP를 NAT가 갖고 있는 global IP로 변환하여 요청을 송신한다. 응답은 NAT 라우터가 송신처의 client의 private IP 주소로 변환하여 송신한다.
++
+global IP와 private IP를 1:1로 변환하기 때문에 동시에 여러 client가 액세스할 수 없다.
+
+NAPT(Network Address Port Translation::
+private IP화 함께 port도 같이 변환하는 기술이다. private IP를 global IP로 변환할 때 private IP별로 서로 다른 port로 변환한다.
++
+Linux에서 NAPT를 구축하는 것을 IP 마스커레이드라고 부른다. mascarade는 가면무도회라는 뜻으로, 많은 가면을 쓴 IP 패킷이 포트번호의 가면을 붙혀 반환되는 모습을 나타낸 것이다.
 
 === Docker 이미지의 데이터 관리 장치
+
+Copy on Write 방식::
+데이터를 복사할 때 변경이 없다면 쓸데 없는 낭비이다. 그래서 복사를 요구받으면 바로 복사하지 않고 origin 만 참조시켜, 원본 혹ㅇ느 복사본에 수정이 가해진 시점에 새로운 영역을 확보하고 데이터를 복사한다.
+
+* Docker는 Copy on Write 방식으로 컨테이너 이미지를 관리
+* Docker의 이미지를 관리하는 스토리지 디바이스
+.. AUFS
+*** 다른 파일 시스템의 파일이나 디렉토리를 투과적으로 겹쳐서 하나의 파일 트리를 구성할 수 있게 하는 파일 시스템.
+*** 현재 AUFS는 Linux 커널의 일부가 아님
+.. Btrfs
+*** Linux용 Copy on Write 파일 시스템
+*** Oracle에 의해 2007년에 발표
+*** 과거의 상태로 돌아갈 수 있는 롤백 기능이나 어떤 시점에서의 상태를 저장할 수 있는 스냅샷 기능을 가짐
+.. Device Mapper
+*** Linux 커널 2.6에 추가
+*** Linux 블록 디바이스 드라이버와 그것을 지원하는 라이브러리들
+*** 파일 시스템의 블록 I/O와 디바이스의 매핑 관계를 관리
+*** thin-provisioning 기능과 snapshot 기능을 가진 것이 특징
+.. OverlayFS
+*** UnionFS 중 하나
+*** 파일 시스템에 다른 파일 시스템을 투과적으로 merging하는 장치
+*** Linux 커널 3.18에 도입
+*** 읽기(readout) 전용 파일 시스템에 읽어 들이기(readin)가 가능한 파일 시스템을 겹침으로써, 읽기 전용 파일 시스템상의 디렉토리나 파일에 대한 읽어들이기, 변경이 가능해짐
+*** Docker에서는 overlay와 overlay2 2종류의 드라이버를 이용할 수 있음
+*** Linux 커널 4.0 이상의 경우는 overlay2를 사용하는 것이 좋음
+
+.. ZFS
+*** 썬마이크로시스템즈(현재 Oracle)가 개발한 새로운 파일 시스템
+*** 볼륨 관리, 스냅샷, 체크섬 처리, 리플리케이션 등을 지원
+*** ZFS on Linux에 대한 충분한 경험이 없는 경우 제품 환경에서 사용하는 것을 권장하지 않음
