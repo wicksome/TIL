@@ -98,7 +98,7 @@ Stream.generate(() -> "str").limit(5);
 
 === _Stream.iterate()_
 
-`iterate() 는 초깃값과 다음 요소에 반영될 람다식이 들어간다.
+`iterate()` 는 초깃값과 다음 요소에 반영될 람다식이 들어간다.
 
 [source, java]
 ----
@@ -176,7 +176,7 @@ Stream<Integer> resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
 ____
 중간 작업, 중개 연산, 중간 연산자
 ____
-모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_을 반환해 메서드 체이닝이 가능하다.
+모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝이 가능하다.
 
 [source, java]
 ----
