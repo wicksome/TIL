@@ -10,12 +10,11 @@ Lamdba Expressions::
 +
 [source, java]
 ----
-ingerface Printer {
+interface Printer {
     void print(String str);
 }
 ----
 +
-.after(lamdba)
 [source, java]
 ----
 // as-is
