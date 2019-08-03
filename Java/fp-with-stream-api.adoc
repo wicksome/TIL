@@ -3,8 +3,17 @@
 == Stream API
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
 
-Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 클래스들이다.
+Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
 모든 클래스는 {javadoc-stream}[java.util.stream] 패키지 하위에 있다.
+
+[source, java]
+----
+// https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
+int sum = widgets.stream()
+                 .filter(w -> w.getColor() == RED)
+                 .mapToInt(w -> w.getWeight())
+                 .sum();
+----
 
 Lamdba Expressions:: 
 람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.
@@ -30,15 +39,39 @@ Printer p2 = str -> System.out.println(str);
 Printer p3 = System.out::println; // Java 8 method reference
 ----
 
+스트림은 각종 연산자(고계함수?)들의 모음인데
+
 == Stream Creation
 
+스트림을 생성하는 방법에는 여러가지가 있으며, 이미 많은 클래스들이 구현해두었다. e.g. 배열을 스트림으로 생성하는 `Arrays.stream()` 이나 `Stream.of()`.
+
+[source, java]
+----
+String[] arr = new String[]{"a", "b", "c"};
+Stream<String> stream = Arrays.stream(arr);
+stream = Stream.of("a", "b", "c");
+----
+
+`stream()` 디폴트 메서드가 _Collection_ 인터페이스에 추가되어 있어 모든 컬렉션에서 스트림은 생성할 수도 있다.
+
+[source, java]
+----
+Stream<String> stream = list.stream();
+----
 
 == Stream Operations
+
+스트림 연산은 크게 *intermediate operations*(return _Stream<T>_) 과 *terminal operations*(특정 타입의 결과를 반환) 나뉘어있다.
+
+=== Intermediate Operations
+
 
 . 스트림 생성
 . 스트림 연산
 . 중간 연산
 . 최종 연산
+
+=== Terminal Operations
 
 == Concurrency
 
