@@ -76,7 +76,7 @@ long count = list.stream()
                  .distinct()
                  .count(); // <2>
 ----
-<1> `filter()` , `distinct()`는 intermediate operations를 나타낸다.
+<1> `filter()` , `distinct()` 는 intermediate operations를 나타낸다.
 <2> stream의 사이즈를 반환하는 terminal operations이다.
 
 === Terminal Operations
