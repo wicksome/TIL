@@ -246,11 +246,12 @@ ____
 * forEach
 
 == Concurrency
+* Future
+* ListenableFuture
+* AsyncRestTemplate
+* CompletableRuture
 
-1. 기본 스트림 사용
-2. 실전 활용
-3. 동시성 구현
-4. 실전 활용
+https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
 == Cautions
 
