@@ -1,0 +1,23 @@
+:toc:
+
+== Stream API
+
+{javadoc-stream}[java.util.stream] 에 있는 클래스들
+
+1. 스트림 생성
+2. Intermediate operations, 중간 작업, 중개 연산, 중간 연산자
+    1. 
+    2. 고차함수
+3. Terminal operation, 종결작업, 최종 연산
+
+1. 기본 스트림 사용
+2. 실전 활용
+3. 동시성 구현
+4. 실전 활용
+
+
+== References
+* [Java 스트림 Stream (1) 총정리](https://futurecreator.github.io/2018/08/26/java-8-streams/)
+* [Java 스트림 Stream (2) 고급](https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/)
+
+:javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
