@@ -235,11 +235,13 @@ ____
 * min
 * max
 * average
+
 ==== Reduction
 ==== Matching
 * anyMatch
 * allMatch
 * noneMatch
+
 ==== Iterating
 * forEach
 
