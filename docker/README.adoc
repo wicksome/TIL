@@ -37,6 +37,18 @@ Overhead:: 가상화를 수행하기 위해 필요한 CPU 자원, 디스크 용�
 
 ==== FreeBSD Jail
 
+* 오픈소스 Unix의 FreeBSD의 기술
+* 2000년에 릴리스된 FreeBSD 4.0에 도입
+* 영어로 '(감옥 등에) 투옥하다'라는 뜻으로, Jail이라고 부르는 독립된 작은 구획에 가둬넣어 시스템을 분할
+
+===== 주요 특징
+
+1. 프로세스의 구획화
+2. 네트워크 구획화
+3. 파일 시스템의 구획화
+
 ==== Solaris Containers
+
+* Oracle의 상용 Unix인 Solaris에서 사용하는 컨테이너 기술
 
 ==== Linux Containers(LXC)
