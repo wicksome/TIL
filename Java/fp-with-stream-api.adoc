@@ -3,10 +3,11 @@
 == Stream API
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
 
-스트림은 Java 8에서 추가되었으며, 람다식을 잘 활용할 수 있는 API이다. 스트림과 관련된 모든 클래스는 {javadoc-stream}[java.util.stream] 패키지 하위에 들어있다.
+Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 클래스들이다.
+모든 클래스는 {javadoc-stream}[java.util.stream] 패키지 하위에 있다.
 
 Lamdba Expressions:: 
-짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 람다 표현식은 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다표현식으로 간결하게 표현한 코드 예제이다.
+람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.
 +
 [source, java]
 ----
