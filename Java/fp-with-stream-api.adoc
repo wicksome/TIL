@@ -64,14 +64,25 @@ Stream<String> stream = list.stream();
 스트림 연산은 크게 *intermediate operations*(return _Stream<T>_) 과 *terminal operations*(특정 타입의 결과를 반환) 나뉘어있다.
 
 === Intermediate Operations
+____
+중간 작업, 중개 연산, 중간 연산자
+____
+모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_을 반환해 메서드 체이닝이 가능하다.
 
-
-. 스트림 생성
-. 스트림 연산
-. 중간 연산
-. 최종 연산
+[source, java]
+----
+long count = list.stream()
+                 .filter(n -> n > 100) // <1>
+                 .distinct()
+                 .count(); // <2>
+----
+<1> `filter()` , `distinct()`는 intermediate operations를 나타낸다.
+<2> stream의 사이즈를 반환하는 terminal operations이다.
 
 === Terminal Operations
+____
+최종 연산
+____
 
 == Concurrency
 
