@@ -2,6 +2,7 @@
 
 == Stream API
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
+:oracle-fork-join: https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html
 
 Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
 모든 클래스는 {javadoc-stream}[java.util.stream] 패키지 하위에 있다.
@@ -108,12 +109,12 @@ Stream<Integer> s = Stream.iterate(10, n -> n + 1).limit(5); // 1, 2, 3, 4, 5
 
 [source, java]
 ----
-IntStream intStream = IntStream.range(1, 5); // 1, 2, 3, 4
-LongStream longStream = LongStream.rangeClosed(1, 5); // 1, 2, 3, 4, 5
-DoubleStream s = DoubleStream.of(0, 4, 3); // 0.0, 4.0, 3.0
-DoubleStream doubles = new Random().doubles(3)
+IntStream s1 = IntStream.range(1, 5); // 1, 2, 3, 4
+LongStream s2 = LongStream.rangeClosed(1, 5); // 1, 2, 3, 4, 5
+DoubleStream s3 = DoubleStream.of(0, 4, 3); // 0.0, 4.0, 3.0
+DoubleStream s4 = new Random().doubles(3)
 // boxing
-Stream<Integer> boxedIntStream = IntStream.range(1, 5).boxed();
+Stream<Integer> s5 = IntStream.range(1, 5).boxed();
 ----
 
 === String to Stream
@@ -126,7 +127,25 @@ Stream<String> s2 = Pattern.compile("\\|").splitAsStream("a|b|c");
 
 === File to Stream
 
+[source, java]
+----
+Stream<String> s1 = Files.lines(Paths.get("~/words.txt"), StandardCharsets.UTF_8);
+Stream<Path> s2 = Files.list(Paths.get("~/Documents"));
+----
+
 === Parallel Stream
+
+스트림 생성 시 `stream()` 대신 `parallelStream()` 을 사용하면 된다. 내부적으로 쓰레드를 처리하기 위해 자바 7부터 도입된 {oracle-fork-join}[Fork/Join framework] 를 사용한다.
+
+[source, java]
+----
+Stream<String> ps = list.parallelStream();
+// Check parallel stream
+boolean isParallel = ps.isParallel();
+// Change parallel to sequential stream
+ps.sequential();
+boolean isSequential = !ps.isParallel();
+----
 
 === Merging Streams
 
