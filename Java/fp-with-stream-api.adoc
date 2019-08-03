@@ -188,7 +188,6 @@ long count = list.stream()
 <1> `filter()` , `distinct()` 는 intermediate operations를 나타낸다.
 <2> stream의 사이즈를 반환하는 terminal operations이다.
 
-==== 
 
 === Terminal Operations
 ____
@@ -197,17 +196,10 @@ ____
 
 == Concurrency
 
-
-2. Intermediate operations, 중간 작업, 중개 연산, 중간 연산자
-    1. 
-    2. 고차함수
-3. Terminal operation, 종결작업, 최종 연산
-
 1. 기본 스트림 사용
 2. 실전 활용
 3. 동시성 구현
 4. 실전 활용
-
 
 == References
 * https://www.baeldung.com/java-streams[Java Streams]
