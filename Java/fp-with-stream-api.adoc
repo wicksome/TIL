@@ -52,7 +52,7 @@ Stream<String> stream = Arrays.stream(arr);
 stream = Stream.of("a", "b", "c");
 ----
 
-`stream()` 디폴트 메서드가 _Collection_ 인터페이스에 추가되어 있어 모든 컬렉션에서 스트림은 생성할 수도 있다.
+`stream()` 디폴트 메서드가 _Collection_ 인터페이스에 추가되어 있어 모든 컬렉션에서 스트림을 생성할 수 있다.
 
 [source, java]
 ----
