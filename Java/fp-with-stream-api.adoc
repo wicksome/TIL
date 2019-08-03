@@ -70,11 +70,13 @@ Stream<String> stream2 = list.parallelStream(); // 병렬 처리 스트림
 
 [source, java]
 ----
-// Stream.empty();
-public Stream<String> streamOf(List<String> list) {
+// Null-Safe
+public Stream<String> streamOf(Collection<String> list) {
   returen list == null || list.isEmpty() ? Stream.empty() : list.stream();
 }
 ----
+
+https://www.baeldung.com/java-null-safe-streams-from-collections[Java Null-Safe Streams from Collections]
 
 === _Stream.builder()_
 
@@ -176,7 +178,7 @@ Stream<Integer> resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
 ____
 중간 작업, 중개 연산, 중간 연산자
 ____
-모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝이 가능하다.
+모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝(chaining)이 가능하다.
 
 [source, java]
 ----
@@ -188,11 +190,58 @@ long count = list.stream()
 <1> `filter()` , `distinct()` 는 intermediate operations를 나타낸다.
 <2> stream의 사이즈를 반환하는 terminal operations이다.
 
+==== Filtering
+
+* filter
+* limit
+* skip
+
+==== Mapping
+
+* map
+* flatMap
+* boxed
+
+==== Sorting
+
+* sorted
+* distinct
+
+https://www.baeldung.com/java-stream-ordering
+
+==== Iterating
+
+* peek
+
+https://www.baeldung.com/java-streams-peek-api
 
 === Terminal Operations
 ____
 최종 연산
 ____
+
+==== Collecting
+===== _Collectors.toList()_
+===== _Collectors.joining()_
+===== _Collectors.groupingBy()_
+===== _Collectors.collectingAndThen()_
+===== _Collectors.of()_
+===== _Collectors.partitioningBy()_
+===== _Collectors.averageingInt()_
+===== _Collectors.summarizingInt()_
+==== Calculating
+* count
+* sum
+* min
+* max
+* average
+==== Reduction
+==== Matching
+* anyMatch
+* allMatch
+* noneMatch
+==== Iterating
+* forEach
 
 == Concurrency
 
@@ -201,8 +250,9 @@ ____
 3. 동시성 구현
 4. 실전 활용
 
+== Cautions
+
 == References
-* https://www.baeldung.com/java-streams[Java Streams]
 * https://www.baeldung.com/java-8-streams-introduction[Introduction to Java 8 Streams]
 * https://futurecreator.github.io/2018/08/26/java-8-streams/[Java 스트림 Stream (1) 총정리]
 * https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/[Java 스트림 Stream (2) 고급]
