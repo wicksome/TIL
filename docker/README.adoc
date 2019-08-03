@@ -61,9 +61,20 @@ Docker 호스트를 클러스터화하기 위한 툴.
 Linux의 오브젝트에 이름을 붙임으로써 6개의 독립된 환경 구축
 
 . PID namespace
++
+PID와 프로세스를 격리시킴으로써 namespace가 다른 프로세스끼리는 서로 액세스 할 수 없음
+PID:: Linux에서 각 프로세스에 할당된 고유한 ID
 . Network namespace
+** 네트워크 디바이스, IP 주소, 포트 번호, 라우팅 테이블, 필터링 테이블 등과 같은 네트워크 리소스를 격리시켜줌
+** 호스트 OS상에서 사용중인 포트가 있더라도 컨테이너 상에서 동일한 포트를 사용할 수 있음
 . UID namespace
+** UID(사용자 ID), GID(그룹 ID)를 namespace별로 독립적으로 가질 수 있음
+** namespace 안과 host OS에서 서로 연결되어 서로 다른 UID/GID로 가짐
+** 예를 들어, namespace 안에 UID/GID가 0인 root 사용자를 host OD에서는 일반 사용자로 취급할 수 있음
 . MOUNT namespace
+** 파일 시스템을 사용하기 위해서는 마운트가 필요
+** 마운트란 컴퓨터에 연결된 기기나 기억장치를 OS에 인식시켜 이용 가능한 상태로 만드는 것
+** namespace 안에 격이된 파일 시스템 트리를 만듦
 . UTS namespace
 +
 독자적으로 호스트명이나 도메인명을 가질 수 있음
