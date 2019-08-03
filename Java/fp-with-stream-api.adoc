@@ -1,6 +1,7 @@
 :toc:
 
 == Stream API
+:javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
 
 {javadoc-stream}[java.util.stream] 에 있는 클래스들
 
@@ -17,7 +18,5 @@
 
 
 == References
-* [Java 스트림 Stream (1) 총정리](https://futurecreator.github.io/2018/08/26/java-8-streams/)
-* [Java 스트림 Stream (2) 고급](https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/)
-
-:javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
+* https://futurecreator.github.io/2018/08/26/java-8-streams/[Java 스트림 Stream (1) 총정리]
+* https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/[Java 스트림 Stream (2) 고급]
