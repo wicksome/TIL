@@ -31,7 +31,7 @@
     - 통과하는 packet을 port나 ip를 바탕으로 filtering 하는 방법
     - rule을 정하고, 그 rule에 기초하여 packet을 filtering
     - 이러한 rule을 ACL(access control list)
-- 어플리케이션 게이트웨형
+- 어플리케이션 게이트웨이형
     - 어플리케이션 프로토콜 레벨에서 외부와의 통신을 대체 제어하는 것
     - 일반전으로 proxy server라고 부름
     
