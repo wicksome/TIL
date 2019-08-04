@@ -203,7 +203,7 @@ Stream<String> s1 = list.stream()
 Stream<String> s2 = list.stream()
                         .filter(str -> "a".equals(str));
 Stream<String> s3 = list.stream()
-                        .filter("a"::equals);
+                        .filter("a"::equals); // method reference
 // a
 ----
 
@@ -235,9 +235,9 @@ Stream<String> s1 = list.stream()
 ----
 List<String> list = Arrays.asList("a", "b", "c");
 Stream<String> s1 = list.stream()
-			                  .map(s -> s.toUpperCase());
+                        .map(s -> s.toUpperCase());
 Stream<String> s2 = list.stream()
-			                  .map(String::toUpperCase);
+                        .map(String::toUpperCase);
 // A B C
 ----
 
@@ -296,7 +296,7 @@ Stream<User> s1 = list1.stream()
 // User(name=a), User(name=b), User(name=c)
 
 Stream<User> s2 = list1.stream()
-                       .sorted(Comparator.comparing(User::getName).reversed);
+                       .sorted(Comparator.comparing(User::getName).reversed());
 // User(name=c), User(name=b), User(name=a)
 ----
 
@@ -332,7 +332,7 @@ IntStream.of(1, 2, 3, 4)
 ____
 최종 연산
 ____
-스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되지 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가는 역할이다.
+스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되기 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가는 역할이다.
 
 ==== Collecting
 
@@ -438,6 +438,11 @@ IntStream.of(1, 2, 3).max()     // OptionalInt[3]
 IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
 ----
 
+[source, java]
+----
+IntStream.of(1, 2, 3).summaryStatistics();
+----
+
 ==== Reduction
 
 ==== Matching
@@ -462,7 +467,7 @@ IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 * Future
 * ListenableFuture
 * AsyncRestTemplate
-* CompletableRuture
+* CompletableFuture
 
 https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
