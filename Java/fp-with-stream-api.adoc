@@ -179,7 +179,7 @@ Stream<Integer> resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
 ____
 중간 작업, 중개 연산, 중간 연산자
 ____
-모든 연산은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝(chaining)이 가능하다.
+모든 Intermediate Operations 은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝(chaining)이 가능하다.
 
 [source, java]
 ----
@@ -333,19 +333,98 @@ IntStream.of(1, 2, 3, 4)
 ____
 최종 연산
 ____
+스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되지 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가는 역할이다.
 
 ==== Collecting
 
 ===== _collect_
 
 * _Collectors.toList()_
++
+[source, java]
+----
+Stream.of("a", "b", "c")
+      .map(String::toUpperCase)
+      .collect(Collectors.toList())
+// [A, B, C]
+----
+
 * _Collectors.joining()_
++
+[source, java]
+----
+Stream.of("a", "b", "c")
+      .map(String::toUpperCase)
+      .collect(Collectors.joining(", "))
+// A, B, C
+
+Stream.of("a", "b", "c")
+	.map(String::toUpperCase)
+	.collect(Collectors.joining(", ", "<", ">"))
+// <A, B, C>
+----
+
 * _Collectors.groupingBy()_
++
+[source, java]
+----
+Map<Integer, List<User>> u1 = Stream.of(
+    User.builder().name("a").age(29).build(),
+    User.builder().name("b").age(19).build(),
+    User.builder().name("c").age(29).build(),
+    User.builder().name("d").age(19).build(),
+    User.builder().name("e").age(39).build()
+).collect(Collectors.groupingBy(User::getAge));
+----
++
+[source]
+----
+{
+  19=[User(name=b, age=19), User(name=d, age=19)], 
+  39=[User(name=e, age=39)], 
+  29=[User(name=a, age=29), User(name=c, age=29)]
+}
+----
+
 * _Collectors.collectingAndThen()_
++
+_collect_ 한 이후에 필요한 작업을 추가한다.
++
+[source, java]
+----
+Set<Product> unmodifiableSet = productList.stream()
+                                          .collect(Collectors.collectingAndThen(
+                                              Collectors.toSet(),
+                                              Collections::unmodifiableSet));
+----
+
 * _Collectors.of()_
++
+[source, java]
+----
+
+----
+
 * _Collectors.partitioningBy()_
++
+[source, java]
+----
+
+----
+
 * _Collectors.averageingInt()_
++
+[source, java]
+----
+
+----
+
 * _Collectors.summarizingInt()_
++
+[source, java]
+----
+
+----
 
 ===== _toArray_
 
@@ -357,10 +436,21 @@ ____
 * average
 
 ==== Reduction
+
 ==== Matching
-* anyMatch
-* allMatch
-* noneMatch
+
+_Predicate_ 를 받아 해당 조건을 만족하는지 체크한 결과를 반환한다.
+
+* _anyMatch_
+* _allMatch_
+* _noneMatch_
+
+[source, java]
+----
+IntStream.of(1, 1, 1).allMatch(a -> a == 1) // true
+IntStream.of(1, 2, 3).anyMatch(a -> a == 1) // true
+IntStream.of(1, 2, 3).noneMatch(a -> a == 4) // true
+----
 
 ==== Iterating
 * forEach
