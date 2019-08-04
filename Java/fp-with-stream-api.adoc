@@ -41,8 +41,6 @@ Printer p2 = str -> System.out.println(str);
 Printer p3 = System.out::println; // Java 8 method reference
 ----
 
-스트림은 각종 연산자(고계함수?)들의 모음인데
-
 == Stream Creation
 
 스트림을 생성하는 방법에는 여러가지가 있으며, 이미 많은 클래스들이 구현해두었다.
@@ -105,7 +103,7 @@ Stream.generate(() -> "str").limit(5);
 
 [source, java]
 ----
-Stream<Integer> s = Stream.iterate(10, n -> n + 1).limit(5); // 1, 2, 3, 4, 5
+Stream<Integer> s = Stream.iterate(10, n -> n + 1).limit(5); // 10, 11, 12, 13, 14
 ----
 
 === Primitive Type Stream
