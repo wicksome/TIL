@@ -192,9 +192,41 @@ long count = list.stream()
 
 ==== Filtering
 
-* filter
-* limit
-* skip
+* _filter_
++
+[source, java]
+----
+ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream<String> s1 = list.stream()
+                        .filter(str -> {
+                            return "a".equals(str);
+                        });
+Stream<String> s2 = list.stream()
+                        .filter(str -> "a".equals(str));
+Stream<String> s3 = list.stream()
+                        .filter("a"::equals);
+// a
+----
+
+* _limit_
++
+[source, java]
+----
+ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream<String> s1 = list.stream()
+                        .limit(3);
+// a b c
+----
+
+* _skip_
++
+[source, java]
+----
+ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream<String> s1 = list.stream()
+                        .skip(3);
+// A B C
+----
 
 ==== Mapping
 
