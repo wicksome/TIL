@@ -430,12 +430,6 @@ Set<Product> unmodifiableSet = productList.stream()
 
 ==== Calculating
 
-* _count_
-* _sum_
-* _min_
-* _max_
-* _average_
-
 [source, java]
 ----
 IntStream.of(1, 2, 3).count()   // 3
@@ -451,16 +445,16 @@ IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
 
 _Predicate_ 를 받아 해당 조건을 만족하는지 체크한 결과를 반환한다.
 
-* _anyMatch_ : 하나라도 만족하는지
-* _allMatch_ : 모두 만족하는지
-* _noneMatch_ : 모두 만족하지 않는지
-
 [source, java]
 ----
 IntStream.of(1, 1, 1).allMatch(a -> a == 1);  // true
 IntStream.of(1, 2, 3).anyMatch(a -> a == 1);  // true
 IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 ----
+
+* _anyMatch_ : 하나라도 만족하는지
+* _allMatch_ : 모두 만족하는지
+* _noneMatch_ : 모두 만족하지 않는지
 
 ==== Iterating
 * _forEach_
