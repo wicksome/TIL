@@ -276,6 +276,8 @@ List<Integer> l1= IntStream.of(3, 2, 1)
 
 ==== Sorting
 
+https://www.baeldung.com/java-stream-ordering[Stream Ordering in Java]
+
 * _sorted_
 +
 [source, java]
@@ -307,8 +309,6 @@ IntStream.of(1, 2, 3, 3)
          .toArray()
 // [1, 2, 3]
 ----
-+
-https://www.baeldung.com/java-stream-ordering[Stream Ordering in Java]
 
 ==== Iterating
 
@@ -333,6 +333,7 @@ ____
 * _Collectors.partitioningBy()_
 * _Collectors.averageingInt()_
 * _Collectors.summarizingInt()_
+
 ===== _toArray_
 
 ==== Calculating
