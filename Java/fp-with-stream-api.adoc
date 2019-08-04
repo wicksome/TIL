@@ -1,11 +1,12 @@
 :toc:
 
 == Stream API
-:javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
+:javadoc-stream-package: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
 :oracle-fork-join: https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html
+:javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 
 Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
-모든 클래스는 {javadoc-stream}[java.util.stream] 패키지 하위에 있다.
+모든 클래스는 {javadoc-stream-package}[java.util.stream] 패키지 하위에 있다.
 
 [source, java]
 ----
@@ -172,7 +173,7 @@ Stream<Integer> resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
 
 == Stream Operations
 
-스트림 연산은 크게 *intermediate operations*(return _Stream<T>_) 과 *terminal operations*(특정 타입의 결과를 반환) 나뉘어있다.
+스트림 연산은 크게 *intermediate operations*(return _Stream<T>_) 과 *terminal operations*(특정 타입의 결과를 반환) 나뉘어있다. 자세한 내용은 {javadoc-stream}[Stream 문서]에서 확인할 수 있다.
 
 === Intermediate Operations
 ____
@@ -230,14 +231,71 @@ Stream<String> s1 = list.stream()
 
 ==== Mapping
 
-* map
-* flatMap
-* boxed
+* _map_
++
+[source, java]
+----
+List<String> list = Arrays.asList("a", "b", "c");
+Stream<String> s1 = list.stream()
+			                  .map(s -> s.toUpperCase());
+Stream<String> s2 = list.stream()
+			                  .map(String::toUpperCase);
+// A B C
+----
+
+* _flatMap_
++
+중첩 구조를 단일 구조로 풀어주는 작업을 한다. 이러한 작업을 flattening 이라고 한다.
++
+[source, java]
+----
+List<String> list1 = Arrays.asList("a", "b", "c");
+List<String> list2 = Arrays.asList("A", "B", "C");
+Stream<String> s1 = Stream.of(list1.stream(), list2.stream())
+                          .flatMap(strings -> strings);
+// a b c A B C
+----
++
+.Flattening
+[caption="Figure 1: ",link=https://www.superdatascience.com/blogs/convolutional-neural-networks-cnn-step-3-flattening]
+image::https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/73_blog_image_1.png[Flattening,400]
+
+* _boxed_
++
+[source, java]
+----
+int[] a1 = IntStream.of(3, 2, 1)
+                    .toArray();
+// [3, 2, 1]
+
+List<Integer> l1= IntStream.of(3, 2, 1)
+.boxed()
+.collect(Collectors.toList());
+/ [3, 2, 1]
+----
 
 ==== Sorting
 
-* sorted
-* distinct
+* _sorted_
++
+[source, java]
+----
+int[] a1 = IntStream.of(3, 2, 1)
+                    .sorted()
+                    .toArray();
+// [1, 2, 3]
+
+List<User> list1 = Arrays.asList(new User("c"), new User("b"), new User("a"));
+Stream<User> s1 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName));
+// User(name=a), User(name=b), User(name=c)
+
+Stream<User> s2 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName).reversed);
+// User(name=c), User(name=b), User(name=a)
+----
+
+* _distinct_
 
 https://www.baeldung.com/java-stream-ordering
 
