@@ -299,14 +299,22 @@ Stream<User> s2 = list1.stream()
 ----
 
 * _distinct_
-
-https://www.baeldung.com/java-stream-ordering
++
+[source, java]
+----
+IntStream.of(1, 2, 3, 3)
+         .distinct()
+         .toArray()
+// [1, 2, 3]
+----
++
+https://www.baeldung.com/java-stream-ordering[Stream Ordering in Java]
 
 ==== Iterating
 
 * peek
 
-https://www.baeldung.com/java-streams-peek-api
+https://www.baeldung.com/java-streams-peek-api[Java 8 Streams peek() API]
 
 === Terminal Operations
 ____
@@ -314,14 +322,19 @@ ____
 ____
 
 ==== Collecting
-===== _Collectors.toList()_
-===== _Collectors.joining()_
-===== _Collectors.groupingBy()_
-===== _Collectors.collectingAndThen()_
-===== _Collectors.of()_
-===== _Collectors.partitioningBy()_
-===== _Collectors.averageingInt()_
-===== _Collectors.summarizingInt()_
+
+===== _collect_
+
+* _Collectors.toList()_
+* _Collectors.joining()_
+* _Collectors.groupingBy()_
+* _Collectors.collectingAndThen()_
+* _Collectors.of()_
+* _Collectors.partitioningBy()_
+* _Collectors.averageingInt()_
+* _Collectors.summarizingInt()_
+===== _toArray_
+
 ==== Calculating
 * count
 * sum
