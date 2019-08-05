@@ -495,8 +495,9 @@ Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
 // 2
 // 3
 ----
-<1> stream
-<2> Iterable
+<1> for-each Loop of _Stream_
+<2> for-each of _Iterable_
+
 *참고링크*
 * http://wonwoo.ml/index.php/post/1812[java의 몇가지 이야기]
 * https://stackoverflow.com/questions/23218874/what-is-difference-between-collection-stream-foreach-and-collection-foreach[What is difference between Collection.stream().forEach() and Collection.forEach()?]
