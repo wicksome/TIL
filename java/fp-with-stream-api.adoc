@@ -6,9 +6,6 @@
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 :javadoc-collectors-of: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collector.html#of-java.util.function.Supplier-java.util.function.BiConsumer-java.util.function.BinaryOperator-java.util.function.Function-java.util.stream.Collector.Characteristics...-
 
-Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
-모든 클래스는 {javadoc-stream-package}[java.util.stream] 패키지 하위에 있다.
-
 [source, java]
 ----
 // https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
@@ -17,6 +14,16 @@ int sum = widgets.stream()
                  .mapToInt(w -> w.getWeight())
                  .sum();
 ----
+
+스트림^Stream^은 {javadoc-stream-package}[Java 8에서 추가]되었고, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
+스트림은 컬렉션과 비슷하지만 다음과 같은 차이점이 있다.
+
+* 스트림은 값을 읽기만 할 뿐 저장하지 않는다.
+* 스트림의 모든 함수는 순수함수^pure^ ^function^이다.
+* 스트림은 게으르게^lazy^ 동작한다.
+* 무한한 스트림이 가능하다.
+* 스트림은 일회성으로 사용과 동시에 소멸된다.
+
 
 Lamdba Expressions:: 
 람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.
@@ -544,7 +551,7 @@ Arrays.asList(1, 2, 3)
 [IMPORTANT]
 ._Stream.forEach()_ vs _Collection.forEach()_
 ====
-두 코드의 결과는 동일하다. 하지만...
+두 코드의 결과는 동일하다. 하지만... TODO
 [source, java]
 ----
 // iterable
@@ -561,10 +568,10 @@ Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
 ====
 
 == Concurrency
-* Future
-* ListenableFuture
-* AsyncRestTemplate
-* CompletableFuture
+=== Future
+=== ListenableFuture
+=== AsyncRestTemplate
+=== CompletableFuture
 
 https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
