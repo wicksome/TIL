@@ -491,9 +491,6 @@ Arrays.asList(1, 2, 3)
 // iterable
 Arrays.asList(1, 2, 3).stream().forEach(System.out::println); // <1>
 Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
-// 1
-// 2
-// 3
 ----
 <1> for-each Loop of _Stream_
 <2> for-each of _Iterable_
