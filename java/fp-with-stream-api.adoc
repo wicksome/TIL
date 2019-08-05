@@ -569,16 +569,49 @@ Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
 
 == Concurrency
 === Future
+
+Java 5
+
 === ListenableFuture
+
+Spring Framework
+
 === AsyncRestTemplate
+
+
+
 === CompletableFuture
+
+Java 8
+
+[source, java]
+----
+CompletableFuture.supplyAsync()
+CompletableFuture.supplyAsync()
+CompletableFuture.supplyAsync()
+
+// Promise.all
+CompletableFuture.allOf()
+----
+
+https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
+
+==== Error Handling
 
 https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
+=== References
+
+* https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
+
 == Cautions
 
+=== References
+
+* https://hamait.tistory.com/547[자바8 Stream API 를 다룰때 실수하기 쉬운것 10가지]
+
 == References
+
 * https://www.baeldung.com/java-8-streams-introduction[Introduction to Java 8 Streams]
 * https://futurecreator.github.io/2018/08/26/java-8-streams/[Java 스트림 Stream (1) 총정리]
 * https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/[Java 스트림 Stream (2) 고급]
-* https://hamait.tistory.com/547[자바8 Stream API 를 다룰때 실수하기 쉬운것 10가지]
