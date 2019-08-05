@@ -483,7 +483,7 @@ Arrays.asList(1, 2, 3)
 ----
 +
 [CAUTION]
-._Stream.forEach()_ and _Collection.forEach()_
+._Stream.forEach()_ vs _Collection.forEach()_
 ====
 두 코드의 결과는 동일하다. 하지만...
 [source, java]
