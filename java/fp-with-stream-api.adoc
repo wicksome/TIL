@@ -4,9 +4,7 @@
 :javadoc-stream-package: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
 :oracle-fork-join: https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
-
-Stream은 Java 8에서 추가되었으며, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
-모든 클래스는 {javadoc-stream-package}[java.util.stream] 패키지 하위에 있다.
+:javadoc-collectors-of: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collector.html#of-java.util.function.Supplier-java.util.function.BiConsumer-java.util.function.BinaryOperator-java.util.function.Function-java.util.stream.Collector.Characteristics...-
 
 [source, java]
 ----
@@ -16,6 +14,16 @@ int sum = widgets.stream()
                  .mapToInt(w -> w.getWeight())
                  .sum();
 ----
+
+스트림^Stream^은 {javadoc-stream-package}[Java 8에서 추가]되었고, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
+스트림은 컬렉션과 비슷하지만 다음과 같은 차이점이 있다.
+
+* 스트림은 값을 읽기만 할 뿐 저장하지 않는다.
+* 스트림의 모든 함수는 순수함수^pure^ ^function^이다.
+* 스트림은 게으르게^lazy^ 동작한다.
+* 무한한 스트림이 가능하다.
+* 스트림은 일회성으로 사용과 동시에 소멸된다.
+
 
 Lamdba Expressions:: 
 람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.
@@ -174,9 +182,9 @@ Stream<Integer> resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
 스트림 연산은 크게 *intermediate operations*(return _Stream<T>_) 과 *terminal operations*(특정 타입의 결과를 반환) 나뉘어있다. 자세한 내용은 {javadoc-stream}[Stream 문서]에서 확인할 수 있다.
 
 === Intermediate Operations
-____
-중간 작업, 중개 연산, 중간 연산자
-____
+
+[.line-through]#_중간 작업, 중개 연산, 중간 연산자_#
+
 모든 Intermediate Operations 은 pure function으로 구현되어 있으며, _Stream<T>_ 을 반환해 메서드 체이닝(chaining)이 가능하다.
 
 [source, java]
@@ -191,8 +199,8 @@ long count = list.stream()
 
 ==== Filtering
 
-* _filter_
-+
+===== _filter_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -203,12 +211,12 @@ Stream<String> s1 = list.stream()
 Stream<String> s2 = list.stream()
                         .filter(str -> "a".equals(str));
 Stream<String> s3 = list.stream()
-                        .filter("a"::equals); // method reference
+                        .filter("a"::equals); // Java 8 method reference
 // a
 ----
 
-* _limit_
-+
+===== _limit_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -217,8 +225,8 @@ Stream<String> s1 = list.stream()
 // a b c
 ----
 
-* _skip_
-+
+===== _skip_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -229,22 +237,22 @@ Stream<String> s1 = list.stream()
 
 ==== Mapping
 
-* _map_
-+
+===== _map_
+
 [source, java]
 ----
 List<String> list = Arrays.asList("a", "b", "c");
 Stream<String> s1 = list.stream()
                         .map(s -> s.toUpperCase());
 Stream<String> s2 = list.stream()
-                        .map(String::toUpperCase);
+                        .map(String::toUpperCase); // Java 8 method reference
 // A B C
 ----
 
-* _flatMap_
-+
+===== _flatMap_
+
 중첩 구조를 단일 구조로 풀어주는 작업을 한다. 이러한 작업을 flattening 이라고 한다.
-+
+
 [source, java]
 ----
 List<String> list1 = Arrays.asList("a", "b", "c");
@@ -254,13 +262,13 @@ Stream<String> s1 = Stream.of(list1.stream(), list2.stream())
                           .flatMap(strings -> strings);
 // a b c A B C
 ----
-+
+
 .Flattening
 [caption="Figure 1: ",link=https://www.superdatascience.com/blogs/convolutional-neural-networks-cnn-step-3-flattening]
 image::https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/73_blog_image_1.png[Flattening,400]
 
-* _boxed_
-+
+===== _boxed_
+
 [source, java]
 ----
 int[] a1 = IntStream.of(3, 2, 1)
@@ -277,8 +285,8 @@ List<Integer> l1= IntStream.of(3, 2, 1)
 
 https://www.baeldung.com/java-stream-ordering[Stream Ordering in Java]
 
-* _sorted_
-+
+===== _sorted_
+
 [source, java]
 ----
 int[] a1 = IntStream.of(3, 2, 1)
@@ -286,7 +294,7 @@ int[] a1 = IntStream.of(3, 2, 1)
                     .toArray();
 // [1, 2, 3]
 ----
-+
+
 [source, java]
 ----
 List<User> list1 = Arrays.asList(new User("c"), new User("b"), new User("a"));
@@ -300,8 +308,8 @@ Stream<User> s2 = list1.stream()
 // User(name=c), User(name=b), User(name=a)
 ----
 
-* _distinct_
-+
+===== _distinct_
+
 [source, java]
 ----
 IntStream.of(1, 2, 3, 3)
@@ -312,12 +320,12 @@ IntStream.of(1, 2, 3, 3)
 
 ==== Iterating
 
-* _peek_
-+
+===== _peek_
+
 'peek'는 '훔쳐보다', '살짝 보이다'는 뜻으로, Stream API에서는 intermediate operation 에서 값을 확인할 수 있는 메서드로 사용한다. _peek_ 메서드만으로는 스트림을 소비하지 않는다.
-+
+
 https://www.baeldung.com/java-streams-peek-api[Java 8 Streams peek() API]
-+
+
 [source, java]
 ----
 IntStream.of(1, 2, 3, 4)
@@ -329,9 +337,9 @@ IntStream.of(1, 2, 3, 4)
 ----
 
 === Terminal Operations
-____
-최종 연산
-____
+
+[.line-through]#_최종 연산_#
+
 스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되기 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가는 역할이다.
 
 ==== Collecting
@@ -385,6 +393,24 @@ Map<Integer, List<User>> u1 = Stream.of(
 }
 ----
 
+* _Collectors.partitioningBy()_
++
+[source, java]
+----
+
+Map<Boolean, List<Integer>> result;
+result = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+               .collect(Collectors.partitioningBy(n -> n > 3));
+// {false=[1, 2, 3], true=[4, 5, 6, 7, 8, 9, 10]}
+----
++
+[source, java]
+----
+Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+      .collect(Collectors.partitioningBy(n -> n > 3, Collectors.counting()));
+// {false=3, true=7}
+----
+
 * _Collectors.collectingAndThen()_
 +
 _collect_ 한 이후에 필요한 작업을 추가한다.
@@ -397,35 +423,54 @@ Set<Product> unmodifiableSet = productList.stream()
                                               Collections::unmodifiableSet));
 ----
 
-* _Collectors.of()_
-+
-[source, java]
-----
-
-----
-
-* _Collectors.partitioningBy()_
-+
-[source, java]
-----
-
-----
-
 * _Collectors.averageingInt()_
 +
 [source, java]
 ----
+// average
+Integer averageAge = Stream.of(user1, user2, user2)
+                           .collect(Collectors.averageingInt(User::getAge));
+----
 
+* _Collectors.summingInt()_
++
+[source, java]
+----
+// 1. sum
+Integer sumAge1 = Stream.of(user1, user2, user2)
+                        .collect(Collectors.summingInt(User::getAge));
+// 2. mapToInt를 활용해 sum 구하는 방법
+Integer sumAge2 = Stream.of(user1, user2, user2)
+                        .mapToInt(User::getAge)
+                        .sum();
 ----
 
 * _Collectors.summarizingInt()_
 +
 [source, java]
 ----
-
+Stream<BigDecimal> s = Stream.iterate(BigDecimal.ONE, n -> n.add(BigDecimal.ONE))
+                             .limit(10);
+IntSummaryStatistics i = s.collect(Collectors.summarizingInt(BigDecimal::intValue));
+// IntSummaryStatistics{count=10, sum=55, min=1, average=5.500000, max=10}
 ----
 
+* _Collectors.of()_
++
+collector를 직접 만들어서 사용하고자 할 경우 _of()_ 를 활용할 수 있다.
++
+{javadoc-collectors-of}[Java Document - _Interface Collector<T,A,R>_]
+
 ===== _toArray_
+
+[source, java]
+----
+int[] a1 = Stream.of(1, 2, 3)
+                 .toArray();
+String[] a2 = Arrays.stream("a", "b", "c")
+                    .map(String::toUpperCase)
+                    .toArray(String[]::new);
+----
 
 ==== Calculating
 
@@ -440,10 +485,38 @@ IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
 
 [source, java]
 ----
-IntStream.of(1, 2, 3).summaryStatistics();
+IntSummaryStatistics s = IntStream.of(1, 2, 3).summaryStatistics();
+// {count=3, sum=6, min=1, average=2.000000, max=3}
+
+s.getCount();   // 3
+s.getMin();     // 1
+s.getMax();     // 3
+s.getSum();     // 6
+s.getAverage(); // 2.0
 ----
 
 ==== Reduction
+
+reduce는 캐터모피즘^catamorphism^ 이라는 목록 조작 개념의 특별한 변형으로, 컬렉션을 줄여나가는 방법이다.
+스트림 API에서는 _reduce()_ 로 리듀싱을 제공한다.
+
+
+[source, java]
+----
+Stream.of(1, 2, 3).reduce(0, (x, y) -> x + y); // 6
+Stream.of(1, 2, 3).reduce(0, Integer::sum);    // 6
+----
+
+[IMPORTANT]
+.reduce vs collect
+====
+reduce는 누산기^accumulator^를 사용해 값을 모으며, 변경 불가능한(immutable) 결과들로 동작하도록 설계되어 있다.
+그에 반해, collect는 변경 가능한(mutable) 결과 객체를 사용하여 동작한다.
+
+* https://stackoverflow.com/questions/22577197/java-8-streams-collect-vs-reduce[Java 8 Streams - collect vs reduce]
+* https://12bme.tistory.com/468[자바8 스트림으로 데이터 수집 (Collector)]
+
+====
 
 ==== Matching
 
@@ -461,20 +534,84 @@ IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 * _noneMatch_ : 모두 만족하지 않는지
 
 ==== Iterating
-* _forEach_
+
+===== _forEach_
+
+[source, java]
+----
+// stream
+Arrays.asList(1, 2, 3)
+      .stream()
+      .forEach(System.out::println);
+// 1
+// 2
+// 3
+----
+
+[IMPORTANT]
+._Stream.forEach()_ vs _Collection.forEach()_
+====
+두 코드의 결과는 동일하다. 하지만... TODO
+[source, java]
+----
+// iterable
+Arrays.asList(1, 2, 3).stream().forEach(System.out::println); // <1>
+Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
+----
+<1> for-each Loop of _Stream_
+<2> for-each of _Iterable_
+
+*참고링크*
+
+* http://wonwoo.ml/index.php/post/1812[java의 몇가지 이야기]
+* https://stackoverflow.com/questions/23218874/what-is-difference-between-collection-stream-foreach-and-collection-foreach[What is difference between Collection.stream().forEach() and Collection.forEach()?]
+====
 
 == Concurrency
-* Future
-* ListenableFuture
-* AsyncRestTemplate
-* CompletableFuture
+=== Future
+
+Java 5
+
+=== ListenableFuture
+
+Spring Framework
+
+=== AsyncRestTemplate
+
+
+
+=== CompletableFuture
+
+Java 8
+
+[source, java]
+----
+CompletableFuture.supplyAsync()
+CompletableFuture.supplyAsync()
+CompletableFuture.supplyAsync()
+
+// Promise.all
+CompletableFuture.allOf()
+----
+
+https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
+
+==== Error Handling
 
 https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
+=== References
+
+* https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
+
 == Cautions
 
+=== References
+
+* https://hamait.tistory.com/547[자바8 Stream API 를 다룰때 실수하기 쉬운것 10가지]
+
 == References
+
 * https://www.baeldung.com/java-8-streams-introduction[Introduction to Java 8 Streams]
 * https://futurecreator.github.io/2018/08/26/java-8-streams/[Java 스트림 Stream (1) 총정리]
 * https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/[Java 스트림 Stream (2) 고급]
-* https://hamait.tistory.com/547[자바8 Stream API 를 다룰때 실수하기 쉬운것 10가지]
