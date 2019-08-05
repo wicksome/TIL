@@ -192,8 +192,8 @@ long count = list.stream()
 
 ==== Filtering
 
-* _filter_
-+
+===== _filter_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -208,8 +208,8 @@ Stream<String> s3 = list.stream()
 // a
 ----
 
-* _limit_
-+
+===== _limit_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -218,8 +218,8 @@ Stream<String> s1 = list.stream()
 // a b c
 ----
 
-* _skip_
-+
+===== _skip_
+
 [source, java]
 ----
 ArrayList<String> list = Arrays.asList("a", "b", "c", "A", "B", "C");
@@ -230,8 +230,8 @@ Stream<String> s1 = list.stream()
 
 ==== Mapping
 
-* _map_
-+
+===== _map_
+
 [source, java]
 ----
 List<String> list = Arrays.asList("a", "b", "c");
@@ -242,10 +242,10 @@ Stream<String> s2 = list.stream()
 // A B C
 ----
 
-* _flatMap_
-+
+===== _flatMap_
+
 중첩 구조를 단일 구조로 풀어주는 작업을 한다. 이러한 작업을 flattening 이라고 한다.
-+
+
 [source, java]
 ----
 List<String> list1 = Arrays.asList("a", "b", "c");
@@ -255,13 +255,13 @@ Stream<String> s1 = Stream.of(list1.stream(), list2.stream())
                           .flatMap(strings -> strings);
 // a b c A B C
 ----
-+
+
 .Flattening
 [caption="Figure 1: ",link=https://www.superdatascience.com/blogs/convolutional-neural-networks-cnn-step-3-flattening]
 image::https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/73_blog_image_1.png[Flattening,400]
 
-* _boxed_
-+
+===== _boxed_
+
 [source, java]
 ----
 int[] a1 = IntStream.of(3, 2, 1)
@@ -278,8 +278,8 @@ List<Integer> l1= IntStream.of(3, 2, 1)
 
 https://www.baeldung.com/java-stream-ordering[Stream Ordering in Java]
 
-* _sorted_
-+
+===== _sorted_
+
 [source, java]
 ----
 int[] a1 = IntStream.of(3, 2, 1)
@@ -287,7 +287,7 @@ int[] a1 = IntStream.of(3, 2, 1)
                     .toArray();
 // [1, 2, 3]
 ----
-+
+
 [source, java]
 ----
 List<User> list1 = Arrays.asList(new User("c"), new User("b"), new User("a"));
@@ -301,8 +301,8 @@ Stream<User> s2 = list1.stream()
 // User(name=c), User(name=b), User(name=a)
 ----
 
-* _distinct_
-+
+===== _distinct_
+
 [source, java]
 ----
 IntStream.of(1, 2, 3, 3)
@@ -313,12 +313,12 @@ IntStream.of(1, 2, 3, 3)
 
 ==== Iterating
 
-* _peek_
-+
+===== _peek_
+
 'peek'는 '훔쳐보다', '살짝 보이다'는 뜻으로, Stream API에서는 intermediate operation 에서 값을 확인할 수 있는 메서드로 사용한다. _peek_ 메서드만으로는 스트림을 소비하지 않는다.
-+
+
 https://www.baeldung.com/java-streams-peek-api[Java 8 Streams peek() API]
-+
+
 [source, java]
 ----
 IntStream.of(1, 2, 3, 4)
@@ -528,8 +528,8 @@ IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 
 ==== Iterating
 
-* _forEach_
-+
+===== _forEach_
+
 [source, java]
 ----
 // stream
@@ -540,7 +540,7 @@ Arrays.asList(1, 2, 3)
 // 2
 // 3
 ----
-+
+
 [IMPORTANT]
 ._Stream.forEach()_ vs _Collection.forEach()_
 ====
