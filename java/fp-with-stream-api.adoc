@@ -203,7 +203,7 @@ Stream<String> s1 = list.stream()
 Stream<String> s2 = list.stream()
                         .filter(str -> "a".equals(str));
 Stream<String> s3 = list.stream()
-                        .filter("a"::equals); // method reference
+                        .filter("a"::equals); // Java 8 method reference
 // a
 ----
 
@@ -237,7 +237,7 @@ List<String> list = Arrays.asList("a", "b", "c");
 Stream<String> s1 = list.stream()
                         .map(s -> s.toUpperCase());
 Stream<String> s2 = list.stream()
-                        .map(String::toUpperCase);
+                        .map(String::toUpperCase); // Java 8 method reference
 // A B C
 ----
 
@@ -440,7 +440,14 @@ IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
 
 [source, java]
 ----
-IntStream.of(1, 2, 3).summaryStatistics();
+IntSummaryStatistics s = IntStream.of(1, 2, 3).summaryStatistics();
+// {count=3, sum=6, min=1, average=2.000000, max=3}
+
+s.getCount();   // 3
+s.getMin();     // 1
+s.getMax();     // 3
+s.getSum();     // 6
+s.getAverage(); // 2.0
 ----
 
 ==== Reduction
@@ -461,7 +468,27 @@ IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 * _noneMatch_ : 모두 만족하지 않는지
 
 ==== Iterating
+
 * _forEach_
++
+[source, java]
+----
+Arrays.asList(1, 2, 3)
+      .stream()
+      .forEach(System.out::println);
+// 1
+// 2
+// 3
+----
++
+[source, java]
+----
+Arrays.asList(1, 2, 3)
+      .forEach(System.out::println);
+// 1
+// 2
+// 3
+----
 
 == Concurrency
 * Future
