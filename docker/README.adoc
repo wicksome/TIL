@@ -180,3 +180,81 @@ Copy on Write 방식::
 *** 썬마이크로시스템즈(현재 Oracle)가 개발한 새로운 파일 시스템
 *** 볼륨 관리, 스냅샷, 체크섬 처리, 리플리케이션 등을 지원
 *** ZFS on Linux에 대한 충분한 경험이 없는 경우 제품 환경에서 사용하는 것을 권장하지 않음
+
+== Docker 명령어
+
+* Docker는 클라이언트/서버 아키텍처를 채택하고 있음. 따라서 docker 명령은 서버로 보내져 처리
+
+=== Docker
+
+[source, bash]
+----
+docker version
+docker system info # 실행 환경 확인
+docker system df # docker가 사용하고 있는 디스크 이용 상황
+docker login
+docker logout
+----
+
+=== Docker Image
+
+[source, bash]
+----
+
+docker pull <image:tag>
+docker image ls
+docker image pull [options] <image>[:tag]
+docker image inspect <image>[:tag]
+docker search [options] <keyword>
+docker image rm
+docker image prune
+----
+
+=== Docker Container
+
+[source, bash]
+----
+docker container run <image:tag> <command>
+docker stop
+docker start
+docker container ps
+docker container stats <container-name>
+docker container ls
+docker container stats
+docker container start
+docker container stop
+docker container restart
+docker container rm
+docker container pause
+----
+
+=== Docker Network
+
+Docker는 기본값으로 bridge, host, none 세 개의 네트워크를 만든다.
+
+[source, bash]
+----
+docker network ls
+docker network create
+----
+
+
+[source, bash]
+----
+docker container run \
+  --name webserver \ # <1>
+  -d # <2>
+  -p 80:80 \ # <3>
+  nginx # <4>
+----
+<1> 컨테이너명
+<2> 데몬으로 실행
+<3> 포트
+<4> 이미지명
+
+* 로컬 환경에 다운로드된 Docker 이미지를 로컬 캐시라고 한다.
+
+[source, bash]
+----
+
+----
