@@ -5,6 +5,7 @@
 :oracle-fork-join: https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html
 :javadoc-stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
 :javadoc-collectors-of: https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collector.html#of-java.util.function.Supplier-java.util.function.BiConsumer-java.util.function.BinaryOperator-java.util.function.Function-java.util.stream.Collector.Characteristics...-
+:javadoc-takewhile: https://docs.oracle.com/javase/9/docs/api/java/util/stream/Stream.html#takeWhile-java.util.function.Predicate-
 
 [source, java]
 ----
@@ -237,6 +238,21 @@ Stream<String> s1 = list.stream()
 // A B C
 ----
 
+===== _takeWhile_
+
+{javadoc-takewhile}[JDK9]에서 추가되었다.
+
+[source, java]
+----
+Stream.of(2, 4, 6, 8, 9, 10, 12)
+    .takeWhile(n -> n % 2 == 0)
+    .forEach(System.out::println);
+// 2
+// 4
+// 6
+// 8
+----
+
 ==== Mapping
 
 ===== _map_
@@ -394,6 +410,38 @@ Map<Integer, List<User>> u1 = Stream.of(
   29=[User(name=a, age=29), User(name=c, age=29)]
 }
 ----
++
+[NOTE]
+====
+[source, java]
+.chunk method
+----
+@Test
+public void fp() {
+    final List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+    System.out.println(chunk(list, 4));
+    // [[1, 2, 3, 4], [5, 6, 7, 8], [9]]
+
+    chunkStream(list, 4)
+        .limit(1)
+        .forEach(System.out::println);
+    // [1, 2, 3, 4]
+}
+
+private Collection<? extends List<?>> chunk(List<?> list, int size) {
+    // https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/
+    final AtomicInteger counter = new AtomicInteger();
+    return list.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / size)).values();
+}
+
+private Stream<?> chunkStream(List<?> list, int size) {
+    // https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/
+    final AtomicInteger counter = new AtomicInteger();
+    return list.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / size)).values().stream();
+}
+----
+====
 
 * _Collectors.partitioningBy()_
 +
