@@ -24,17 +24,18 @@ int sum = widgets.stream()
 * 무한한 스트림이 가능하다.
 * 스트림은 일회성으로 사용과 동시에 소멸된다.
 
-
-Lamdba Expressions:: 
+[NOTE]
+.Lamdba Expressions
+====
 람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.
-+
+
 [source, java]
 ----
 interface Printer {
     void print(String str);
 }
 ----
-+
+
 [source, java]
 ----
 // as-is
@@ -48,6 +49,7 @@ Printer p1 = new Printer() {
 Printer p2 = str -> System.out.println(str);
 Printer p3 = System.out::println; // Java 8 method reference
 ----
+====
 
 == Stream Creation
 
