@@ -4,6 +4,7 @@ Gemfile.lock
 git.sublime-workspace
 node_modules
 .tern-project
+*.class
 
 # jekyll
 _web/_site
