@@ -1,0 +1,14 @@
+[source, java]
+----
+# https://www.jenv.be/
+brew install jenv
+# mkdir ~/.jenv/versions
+
+brew tap AdoptOpenJDK/openjdk
+brew cask install homebrew/cask-versions/adoptopenjdk8
+
+jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+
+jenv global 1.8
+jenv versions
+----
