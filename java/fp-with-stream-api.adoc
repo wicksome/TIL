@@ -741,6 +741,7 @@ s.getAverage(); // 2.0
 
 :java-future: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html?is-external=true
 :java-completable-future: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html
+:java-completion-stage: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html
 :spring-listenable-future: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/ListenableFuture.html
 :spring-rest-template: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html
 :spring-async-rest-template: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/AsyncRestTemplate.html
@@ -772,6 +773,7 @@ HTTP Client::
 일단 작업이 완료되면 취소할 수 없으며, 결과는 작업이 완료되었을 때만 메서드를 통해 확인할 수 있고, 필요한 경우 준비가 될 때까지 blocking 한다.
 
 [source, java]
+.Example
 ----
 public static void main(String[] args) throws Exception {
     (new App()).future();
@@ -807,11 +809,11 @@ private void future() throws InterruptedException, ExecutionException {
 
 === ListenableFuture
 
-{spring-listenable-future}[_ListenableFuture_]는 Spring Framework 4.0 에서 추가된 클래스로, callback을 적용한 _Future_ 의 확장 클래스이다. _AsyncRestTemplate_ 의 리턴타입이기도 하다.
+Spring Framework 4.0 에서 추가된 {spring-listenable-future}[_ListenableFuture_]는 callback을 적용한 _Future_ 의 확장 클래스이다. _AsyncRestTemplate_ 의 리턴타입이기도 하다.
 [.line-through gray]#JQuery에서 Promise 사용하기 전 Ajax 호출하는 것과 비슷한것 같다.#
 
 [source, java]
-.ListenableFuture example
+.Example
 ----
 public void async() throws InterruptedException {
     AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
@@ -831,7 +833,7 @@ public void async() throws InterruptedException {
 <3> _sleep()_ 을 주지않으면 메인 스레드가 바로 종료되면서 HTTP 요청 반환값을 확인 할 수 없다.
 
 [source]
-.output
+.Output
 ----
 DEBUG: Created asynchronous GET request for "https://httpbin.org/get" ... 
 DEBUG: Setting request Accept header to [application/json, application/*+json]
@@ -866,7 +868,6 @@ entity.addCallback(new SuccessCallback<ResponseEntity<Map>>() {
     }
 });
 ----
-
 =====
 
 ==== References
@@ -875,21 +876,176 @@ entity.addCallback(new SuccessCallback<ResponseEntity<Map>>() {
 
 === CompletableFuture
 
-Java 8
+Java 8에 추가된 {java-completable-future}[_CompletableFuture_]는 _Future_ 뿐만 아니라 {java-completion-stage}[_CompletionStage_]를 함께 확장한 클래스이다.
+_CompletableFuture_ 의 개념은 다른 프로그래밍 언어에서는 _Deferred_ 또는 _Promise_ 라고 부른다.
+
+[.line-through gray]#_CompletionStage_ 는 다른 _CompletionStage_ 가 완료될 때 작업을 수행하거나 계산하기 위한 비동기 작업의 stage이다. stage는 작업이 종료될 때 완료되지만, 종속적인 다른 stage를 트리거 할 수도 있다.#
+
+[source, java]
+.Example
+----
+public Future<String> getStringAsync() throws InterruptedException {
+    CompletableFuture<String> cf = new CompletableFuture<>();
+    Executors.newCachedThreadPool().submit(() -> {
+        TimeUnit.SECONDS.sleep(1);
+        cf.complete("Hello");
+        return null;
+    });
+    return cf;
+}
+
+@Test
+public void completableFutureExample() {
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 1");
+
+    CompletableFuture<String> cf = (CompletableFuture)getAsync();
+    cf.thenAccept(s -> {
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 2");
+        System.out.println(s);
+    });
+
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 3");
+    TimeUnit.SECONDS.sleep(3);
+
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 4");
+}
+----
+
+[source, text]
+.Output
+----
+Thread#1: 1
+Thread#1: 3 <1>
+Thread#12: 2 <2>
+Hello
+Thread#1: 4 <3>
+----
+<1> 실행되면 메인 스레드에서 바로 "1", "3"이 출력된다.
+<2> 메인 스레드는 3초 기다리고 있는 중이지만 cf의 값이 반환되면서 "2"가 출력된다.
+<3> 메인 스레드에서 3초가 지나고나서 "4"가 출력되면서 프로그램이 종료된다.
+
+==== supplyAsync
+
+_CompletableFuture_ 를 생성하는 팩토리 메서드로 _Supplier_ 를 인자로 받는 _supplyAsync()_ 가 있다. 비동기적으로 실행해서 결과를 생성하며 람다식을 이용하여 쉽게 구성하고 조합할 수 있다.
+
+[source, java]
+.Example
+----
+@Test
+public void completableFutureExample() throws InterruptedException, ExecutionException {
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 1");
+    CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> {
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 2");
+        return "Hello";
+    });
+    CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "Beautiful");
+    CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "World");
+
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 3");
+
+    CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(f1, f2, f3);
+    combinedFuture.get();
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 4");
+
+    TimeUnit.SECONDS.sleep(3);
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 5");
+}
+----
+
+[source, text]
+.Output
+----
+Thread#1: 1
+Thread#1: 3 <1>
+Thread#12: 2 <2>
+Thread#1: 4
+Thread#1: 5 <3>
+----
+<1> 실행되면 메인 스레드에서 "1", "3"이 출력된다.
+<2> 1초 뒤 "2"가 출력되면서 `combinedFuture.get()` 아래의 "4"도 출력된다.
+<3> "4"가 출력되고 3초 뒤 "5"가 출력되면서 프포그램이 종료된다.
+
+==== thenCompose
+
+_CompletableFuture_ 를 반환하며 체이닝으로 실행하고 싶을 때 https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCompose-java.util.function.Function-[_thenCompose()_]가 사용된다.
+
+[source, java]
+.Example
+----
+@Test
+public void completableFutureExample() throws ExecutionException, InterruptedException {
+    CompletableFuture cf = CompletableFuture.supplyAsync(() -> {
+        sleep(2);
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 1");
+        return "Hello";
+    }).thenCompose(s -> CompletableFuture.supplyAsync(() -> {
+        sleep(2);
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 2");
+        return s + " Beautiful";
+    })).thenCompose(s -> CompletableFuture.supplyAsync(() -> {
+        sleep(2);
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 3");
+        return s + " World";
+    })).thenAccept(str -> {
+        sleep(2);
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 4");
+        System.out.println(str);
+    });
+    
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 5");
+    System.out.println(cf.isDone());
+    System.out.println(cf.get());
+
+    sleep(10);
+}
+----
+
+[source, text]
+.Output
+----
+Thread#1: 5
+false <1>
+Thread#12: 1 <2>
+Thread#13: 2 <3>
+Thread#13: 3 <4>
+Thread#13: 4 <5>
+Hello Beautiful World
+null <6>
+----
+<1> `isDone()` 의 결과로 아직 완료되지 않아 false가 출력된다.
+<2> 2초 뒤 "1"이 출력되고, "Hello"과 함께 CompletableFuture 값을 반환한다.
+<3> 2초 뒤 "2"이 출력되고, 앞에서 전달받은 "Hello"에 "Beautiful"을 조합한 CompletableFuture 값을 반환한다.
+<4> 2초 뒤 "3"이 출력된고, 앞에서 전달받은 "Hello Beautiful"에 "World"을 조합한 CompletableFuture 값을 반환한다.
+<5> `thenAccept()` 에서 2초 뒤 "4"와 함께 "Hello Beautiful World"가 출력된다.
+<6> cf의 작업이 완료되었으므로 `cf.get()` 의 반환값이 출력된다.
+
+==== thenApply
+
+TODO
+
+==== With Stream API
+
+Stream API와 `CompletableFuture::join` 을 활용하면 비동기 값들을 하나의 값으로 만들 수도 있다.
 
 [source, java]
 ----
-CompletableFuture.supplyAsync()
-CompletableFuture.supplyAsync()
-CompletableFuture.supplyAsync()
+CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "Hello");
+CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "Beautiful");
+CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "World");
 
-// Promise.all
-CompletableFuture.allOf()
+String str = Stream.of(f1, f2, f3)
+                   .map(CompletableFuture::join)
+                   .collect(Collectors.joining(" "));
+
+System.out.println(str); // Hello Beautiful World
 ----
 
 
-[source, java]
+[TIP]
 .ListenableFuture to CompletableFuture
+====
+[source, java]
 ----
 // https://jongmin92.github.io/2019/05/05/Java/java-async-4/
 public <T> CompletableFuture<T> toCompletableFuture(ListenableFuture<T> listenableFuture) {
@@ -898,9 +1054,18 @@ public <T> CompletableFuture<T> toCompletableFuture(ListenableFuture<T> listenab
     return completableFuture;
 }
 ----
+====
+
+==== Error Handling
+
+TODO
 
 ==== References
 
+* https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
+* https://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/[Java 8: Writing asynchronous code with CompletableFuture]
+* https://gist.github.com/HomoEfficio/be081b92a0d1ae078cbcc410c71415bc[SpringBoot2-SpringWebFlux-BasicExample]
+* http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
 * https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
 * https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
@@ -910,27 +1075,21 @@ public <T> CompletableFuture<T> toCompletableFuture(ListenableFuture<T> listenab
 
 [source, java]
 ----
-
+TODO
 ----
 
-Spring 5.x 부터 _AsyncRestTemplate_ 클래스는 deprecated 되었고 {spring-web-client}[_WebClient_] 사용을 권장한다. _RestTemplate_ 또한 앞으로 deprecated 될 예정이고 새로운 기능이 추가되지 않는다고 말한다.
+Spring Framework 5.0 부터 _AsyncRestTemplate_ 클래스는 deprecated 되었고 {spring-web-client}[_WebClient_] 사용을 권장한다. _RestTemplate_ 또한 앞으로 deprecated 될 예정이고 새로운 기능이 추가되지 않는다고 말한다.
 
 
 === WebClient
 
 _WebClient_ 는 기존의 _AsyncRestTemplate_ 역할을 하는 클래스이며 ThreadSafe 하다.
 
-==== Error Handling
-
-
-
-=== References
-
-* https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
-* https://gist.github.com/HomoEfficio/be081b92a0d1ae078cbcc410c71415bc[SpringBoot2-SpringWebFlux-BasicExample]
-* http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
+TODO
 
 == Cautions
+
+TODO
 
 === References
 
