@@ -584,14 +584,14 @@ reduce는 캐터모피즘^catamorphism^ 이라는 목록 조작 개념의 특별
 
 
 [source, java]
-.Example
+.Simple Example
 ----
 Stream.of(1, 2, 3).reduce(0, (x, y) -> x + y); // 6
 Stream.of(1, 2, 3).reduce(0, Integer::sum);    // 6
 ----
 
 [source, java]
-.https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-java.util.function.BinaryOperator-[Optional<T> reduce(BinaryOperator<T> accumulator)]
+.Example, https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-java.util.function.BinaryOperator-[Optional<T> reduce(BinaryOperator<T> accumulator)]
 ----
 int sum = Stream.of(1, 2, 3)
                 .reduce((l, r) -> {
@@ -605,7 +605,7 @@ System.out.println("sum:" + sum);
 ----
 
 [source, java]
-.https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-[T reduce(T identity, BinaryOperator<T> accumulator)]
+.Example, https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-[T reduce(T identity, BinaryOperator<T> accumulator)]
 ----
 int sum = Stream.of(1, 2, 3)
                 .reduce(10, (l, r) -> {
@@ -642,7 +642,7 @@ String result = Stream.of("1", "2", "3")
                           StringBuilder::new, // supplier
                           (sb, s) -> { // accumulator
                               System.out.println("sb:" + sb + ", s: " + s);
-                              sb.append(" ").append(s);
+                              sb.append(" ").append(s); // <2>
                           },
                           (r1, r2) -> { // combiner
                               System.out.println(r1 + ", " + r2);
@@ -656,7 +656,7 @@ System.out.println("result: " + result);
 // Result:  1 2 3
 ----
 <1> _reduce_ 에서는 새로운 immutable 객체를 반환한다.
-<2> _collect_ 에서는 새로운 값을 반환하지 않고, 값을 변경만 시켜준다.
+<2> _collect_ 에서는 새로운 값을 반환하지 않고, 값을 변경 시켜준다.
 
 만약 `int`, `double` 같은 immutable한 값을 다룬다면 _reduce_ 를, mutable한 데이터를 다룬다면 _collect_ 를 사용하면 된다.
 
@@ -738,17 +738,140 @@ s.getAverage(); // 2.0
 ----
 
 == Concurrency
+
+:java-future: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html?is-external=true
+:java-completable-future: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html
+:spring-listenable-future: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/ListenableFuture.html
+:spring-rest-template: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html
+:spring-async-rest-template: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/AsyncRestTemplate.html
+:spring-web-client: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/reactive/function/client/WebClient.html
+
+
+Asynchronous Execution::
+{java-future}[_Future_] (java 5) → {spring-listenable-future}[_ListenableFuture_] (spring 3.0) → {java-completable-future}[_CompletableFuture_] (java 8)
++
+[plantuml, diagram-classes, png]
+....
+class Future
+class ListenableFuture
+class CompletableFuture
+
+Future <|-- CompletableFuture
+Future <|-- ListenableFuture
+....
+
+
+HTTP Client::
+{spring-rest-template}[_RestTemplate_] (spring 3.0) → {spring-async-rest-template}[_AsyncRestTemplate_] (spring 4.0) → {spring-web-client}[_WebClient_] (spring 5.0)
+
+
 === Future
 
-Java 5
+{java-future}[_Future_]는 Java 5에 추가된 클래스로, 비동기 연산 결과를 나타낸다. 
+작업이 완료되었는지 확인하고(`isDone()`), 완료를 기다리며, 계산 결과를 확인하는(`get()`) 메서드와 작업을 취소(`cancel()`)하는 메서드가 제공된다.
+일단 작업이 완료되면 취소할 수 없으며, 결과는 작업이 완료되었을 때만 메서드를 통해 확인할 수 있고, 필요한 경우 준비가 될 때까지 blocking 한다.
+
+[source, java]
+----
+public static void main(String[] args) throws Exception {
+    (new App()).future();
+}
+
+private void future() throws InterruptedException, ExecutionException {
+    System.out.println("Thread#" + Thread.currentThread().getId());
+
+    ExecutorService executor = Executors.newFixedThreadPool(1); // <1>
+    Future<Integer> future = executor.submit(() -> {
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Thread#" + Thread.currentThread().getId());
+        return 123;
+    });
+
+    System.out.println("future done? " + future.isDone());
+
+    Integer result = future.get(); // <2>
+
+    System.out.println("future done? " + future.isDone());
+    System.out.println("result:" + result);
+}
+
+// Thread#1
+// future done? false
+// Thread#12
+// future done? true
+// result:123
+----
+<1> Java5 에서 멀티스레드와 콜백 사용하기 위해 ExecutorService 사용
+<2> _get()_ 은 blocking 메서드이다.
+
 
 === ListenableFuture
 
-Spring Framework
+{spring-listenable-future}[_ListenableFuture_]는 Spring Framework 4.0 에서 추가된 클래스로, callback을 적용한 _Future_ 의 확장 클래스이다. _AsyncRestTemplate_ 의 리턴타입이기도 하다.
+[.line-through gray]#JQuery에서 Promise 사용하기 전 Ajax 호출하는 것과 비슷한것 같다.#
 
-=== AsyncRestTemplate
+[source, java]
+.ListenableFuture example
+----
+public void async() throws InterruptedException {
+    AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+
+    ListenableFuture<ResponseEntity<Map>> entity = asyncRestTemplate.getForEntity("https://httpbin.org/get", Map.class);
+    entity.addCallback(result -> { // <1>
+        System.out.println(result.getStatusCode());
+    }, err -> System.out.println(Arrays.toString(err.getStackTrace()))); // <2>
+
+    System.out.println("test1");
+    TimeUnit.SECONDS.sleep(5); // <3>
+    System.out.println("test2");
+}
+----
+<1> 성공시 실행할 callback 함수(_SuccessCallback_ 인스턴스)
+<2> 실패시 실행할 callback 함수(_FailureCallback_ 인스턴스)
+<3> _sleep()_ 을 주지않으면 메인 스레드가 바로 종료되면서 HTTP 요청 반환값을 확인 할 수 없다.
+
+[source]
+.output
+----
+DEBUG: Created asynchronous GET request for "https://httpbin.org/get" ... 
+DEBUG: Setting request Accept header to [application/json, application/*+json]
+test1 <1>
+DEBUG: Async GET request for "https://httpbin.org/get" resulted in 200 (OK)
+DEBUG: Reading [interface java.util.Map] as "application/json" using [o.s.h.c.j.MappingJackson2HttpMessageConverter]
+200 <2>
+test2 <3>
+----
+<1> 코드를 실행시키면 바로 출력
+<2> HTTP 응답을 받을 때 바로 출력(sleep와 무관하게 동작)
+<3> "test1" 출력하고 5초 이후에 출력
 
 
+[NOTE]
+=====
+Java 8 lambda expression을 활용함으로써 코드가 간결해진다.
+
+[source, java]
+.lambda expression을 사용안할 경우
+----
+entity.addCallback(new SuccessCallback<ResponseEntity<Map>>() {
+    @Override
+    public void onSuccess(ResponseEntity<Map> result) {
+        System.out.println(result.getStatusCode());
+        System.out.println(result.getBody());
+    }
+}, new FailureCallback() {
+    @Override
+    public void onFailure(Throwable err) {
+        System.out.println(Arrays.toString(err.getStackTrace()))
+    }
+});
+----
+
+=====
+
+==== References
+
+* http://wonwoo.ml/index.php/post/903[AsyncRestTemplate (비동기 RestTemplate)]
 
 === CompletableFuture
 
@@ -764,15 +887,48 @@ CompletableFuture.supplyAsync()
 CompletableFuture.allOf()
 ----
 
-https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
+
+[source, java]
+.ListenableFuture to CompletableFuture
+----
+// https://jongmin92.github.io/2019/05/05/Java/java-async-4/
+public <T> CompletableFuture<T> toCompletableFuture(ListenableFuture<T> listenableFuture) {
+    final CompletableFuture<T> completableFuture = new CompletableFuture<>();
+    listenableFuture.addCallback(completableFuture::complete, completableFuture::completeExceptionally);
+    return completableFuture;
+}
+----
+
+==== References
+
+* https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
+* https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
+
+=== AsyncRestTemplate
+
+{spring-async-rest-template}[_AsyncRestTemplate_]은 Spring Framework 4.0 이후부터 제공되는 비동기 HTTP 요청을 위한 클래스이다. {spring-rest-template}[_RestTemplate_] 와 유사하지만 {spring-listenable-future}[_ListenableFuture_] wrapper를 반환한다.
+
+[source, java]
+----
+
+----
+
+Spring 5.x 부터 _AsyncRestTemplate_ 클래스는 deprecated 되었고 {spring-web-client}[_WebClient_] 사용을 권장한다. _RestTemplate_ 또한 앞으로 deprecated 될 예정이고 새로운 기능이 추가되지 않는다고 말한다.
+
+
+=== WebClient
+
+_WebClient_ 는 기존의 _AsyncRestTemplate_ 역할을 하는 클래스이며 ThreadSafe 하다.
 
 ==== Error Handling
 
-https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
+
 
 === References
 
 * https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
+* https://gist.github.com/HomoEfficio/be081b92a0d1ae078cbcc410c71415bc[SpringBoot2-SpringWebFlux-BasicExample]
+* http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
 
 == Cautions
 
