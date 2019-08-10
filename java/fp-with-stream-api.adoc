@@ -1,3 +1,4 @@
+:source-highlighter: pygments
 :toc:
 
 == Stream API
@@ -24,6 +25,15 @@ int sum = widgets.stream()
 * 스트림은 게으르게^lazy^ 동작한다.
 * 무한한 스트림이 가능하다.
 * 스트림은 일회성으로 사용과 동시에 소멸된다.
+
+[NOTE]
+.Functional Interface
+====
+:functional-interface: https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8
+
+Java에서 {functional-interface}[_Functional Interface_]는 하나의 abstract method를 가진 인터페이스로, 한가지 기능만 할 수 있다는 것을 나타낸다.
+`@FunctionalInterface` 은 _Functional Interface_ 로 선언되어 있다는 것을 나타내기 위한 어노테이션으로 컴파일 단계에서 확인해준다. 이는 리팩토링할 떄 발생하는 에러를 쉽게 찾아 해결할 수 있게된다.
+====
 
 [NOTE]
 .Lamdba Expressions
@@ -352,7 +362,28 @@ IntStream.of(1, 2, 3, 4)
          .map(e -> e * e)
          .peek(e -> System.out.println("Mapped value: " + e))
          .sum();
+// Filtered value: 3
+// Mapped value: 9
+// Filtered value: 4
+// Mapped value: 16
 ----
+
+[NOTE]
+.peek vs fxjs/tap
+====
+peek은 한개씩 볼 수 있는 반면에 https://github.com/marpple/FxJS/blob/master/API.md#tap[tap]은 전체를 볼 수 있다.
+[source, javascript]
+.https://jsfiddle.net/yeongjun_kim/20zbw1c9/[JSFiddle]
+----
+fx.go(
+  [10, 20, 30],
+  fx.tap(
+    a => a,
+    log), // [10, 20, 30]
+  a => a,
+  log); // [10, 20, 30]
+----
+====
 
 === Terminal Operations
 
@@ -412,9 +443,12 @@ Map<Integer, List<User>> u1 = Stream.of(
 ----
 +
 [NOTE]
+._groupingBy_ 로 chunk 구현하기
 ====
+
+TODO:: jdk9 takeWhile 활용해서 작성해보기. 아래 chunk 구현체들은 지연동작하지 않는다. 이미 평가가 된 상태로 반환.
+
 [source, java]
-.chunk method
 ----
 @Test
 public void fp() {
@@ -428,7 +462,10 @@ public void fp() {
         .forEach(System.out::println);
     // [1, 2, 3, 4]
 }
-
+----
+[source, java]
+.chunk(), chunkStream()
+----
 private Collection<? extends List<?>> chunk(List<?> list, int size) {
     // https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/
     final AtomicInteger counter = new AtomicInteger();
@@ -441,6 +478,11 @@ private Stream<?> chunkStream(List<?> list, int size) {
     return list.stream().collect(Collectors.groupingBy(it -> counter.getAndIncrement() / size)).values().stream();
 }
 ----
+
+*References*
+
+https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/[Divide a list to lists of n size in Java 8]
+
 ====
 
 * _Collectors.partitioningBy()_
@@ -509,6 +551,19 @@ IntSummaryStatistics i = s.collect(Collectors.summarizingInt(BigDecimal::intValu
 +
 collector를 직접 만들어서 사용하고자 할 경우 _of()_ 를 활용할 수 있다.
 +
+[source, java]
+----
+List<Integer> c = Arrays.asList(1, 2, 3, 4, 5, 6, 7).stream()
+                        .collect(Collector.of(
+                            ArrayList::new,
+                            List::add,
+                            (left, right) -> {
+                                left.addAll(right);
+                                return left;
+                            }));
+// [1, 2, 3, 4, 5, 6, 7]
+----
++
 {javadoc-collectors-of}[Java Document - _Interface Collector<T,A,R>_]
 
 ===== _toArray_
@@ -522,29 +577,6 @@ String[] a2 = Arrays.stream("a", "b", "c")
                     .toArray(String[]::new);
 ----
 
-==== Calculating
-
-[source, java]
-----
-IntStream.of(1, 2, 3).count()   // 3
-IntStream.of(1, 2, 3).sum()     // 6
-IntStream.of(1, 2, 3).min()     // OptionalInt[1]
-IntStream.of(1, 2, 3).max()     // OptionalInt[3]
-IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
-----
-
-[source, java]
-----
-IntSummaryStatistics s = IntStream.of(1, 2, 3).summaryStatistics();
-// {count=3, sum=6, min=1, average=2.000000, max=3}
-
-s.getCount();   // 3
-s.getMin();     // 1
-s.getMax();     // 3
-s.getSum();     // 6
-s.getAverage(); // 2.0
-----
-
 ==== Reduction
 
 reduce는 캐터모피즘^catamorphism^ 이라는 목록 조작 개념의 특별한 변형으로, 컬렉션을 줄여나가는 방법이다.
@@ -552,19 +584,83 @@ reduce는 캐터모피즘^catamorphism^ 이라는 목록 조작 개념의 특별
 
 
 [source, java]
+.Example
 ----
 Stream.of(1, 2, 3).reduce(0, (x, y) -> x + y); // 6
 Stream.of(1, 2, 3).reduce(0, Integer::sum);    // 6
 ----
 
+[source, java]
+.https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-java.util.function.BinaryOperator-[Optional<T> reduce(BinaryOperator<T> accumulator)]
+----
+int sum = Stream.of(1, 2, 3)
+                .reduce((l, r) -> {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r);
+                }).get();
+System.out.println("sum:" + sum);
+// l=1, r= 2
+// l=3, r= 3
+// sum: 6
+----
+
+[source, java]
+.https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-[T reduce(T identity, BinaryOperator<T> accumulator)]
+----
+int sum = Stream.of(1, 2, 3)
+                .reduce(10, (l, r) -> {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r);
+                });
+System.out.println("sum:" + sum);
+// l=10, r= 1
+// l=11, r= 2
+// l=13, r= 3
+// sum: 16
+----
+
 [IMPORTANT]
-.reduce vs collect
+.collect vs reduce
 ====
-reduce는 누산기^accumulator^를 사용해 값을 모으며, 변경 불가능한(immutable) 결과들로 동작하도록 설계되어 있다.
-그에 반해, collect는 변경 가능한(mutable) 결과 객체를 사용하여 동작한다.
+_collect_ 는 변경 가능한(mutable) 결과 객체를 사용하여 동작한다. 즉, 내부적으로 mutable한 collection이 하나 생성되고 각 요소를 collection에 축적해나가며 동작한다. 
+그에 반해, _reduce_ 는 immutable한 결과 객체(누산기^accumulator^)를 사용한다. 
+
+[source, java]
+----
+int sum = Stream.of(1, 2, 3)
+                .reduce((l, r) -> {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r); // <1>
+                }).get();
+System.out.println("sum: " + sum);
+// l=1, r= 2
+// l=3, r= 3
+// sum: 6
+
+String result = Stream.of("1", "2", "3")
+                      .collect(
+                          StringBuilder::new, // supplier
+                          (sb, s) -> { // accumulator
+                              System.out.println("sb:" + sb + ", s: " + s);
+                              sb.append(" ").append(s);
+                          },
+                          (r1, r2) -> { // combiner
+                              System.out.println(r1 + ", " + r2);
+                              r1.append(",").append(r2.toString());
+                          })
+                      .toString();
+System.out.println("result: " + result);
+// sb:, s: 1
+// sb: 1, s: 2
+// sb: 1 2, s: 3
+// Result:  1 2 3
+----
+<1> _reduce_ 에서는 새로운 immutable 객체를 반환한다.
+<2> _collect_ 에서는 새로운 값을 반환하지 않고, 값을 변경만 시켜준다.
+
+만약 `int`, `double` 같은 immutable한 값을 다룬다면 _reduce_ 를, mutable한 데이터를 다룬다면 _collect_ 를 사용하면 된다.
 
 * https://stackoverflow.com/questions/22577197/java-8-streams-collect-vs-reduce[Java 8 Streams - collect vs reduce]
-* https://12bme.tistory.com/468[자바8 스트림으로 데이터 수집 (Collector)]
 
 ====
 
@@ -599,9 +695,10 @@ Arrays.asList(1, 2, 3)
 ----
 
 [IMPORTANT]
-._Stream.forEach()_ vs _Collection.forEach()_
+.Stream.forEach vs Collection.forEach
 ====
-두 코드의 결과는 동일하다. 하지만... TODO
+두 코드의 결과는 동일하다. 하지만 두 코드의 속도만 비교한다면 `Collection.forEach()` 가 더 빠르게 동작한다.
+그러므로 단순히 `stream().forEach()` 만 사용할 것이라면 _Collection.forEach_ 를 사용할 것을 권장한다. IntelliJ IDEA에서는 `stream().forEach()` 코드를 검사해준다.
 [source, java]
 ----
 // iterable
@@ -616,6 +713,29 @@ Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
 * http://wonwoo.ml/index.php/post/1812[java의 몇가지 이야기]
 * https://stackoverflow.com/questions/23218874/what-is-difference-between-collection-stream-foreach-and-collection-foreach[What is difference between Collection.stream().forEach() and Collection.forEach()?]
 ====
+
+==== Calculating
+
+[source, java]
+----
+IntStream.of(1, 2, 3).count()   // 3
+IntStream.of(1, 2, 3).sum()     // 6
+IntStream.of(1, 2, 3).min()     // OptionalInt[1]
+IntStream.of(1, 2, 3).max()     // OptionalInt[3]
+IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]
+----
+
+[source, java]
+----
+IntSummaryStatistics s = IntStream.of(1, 2, 3).summaryStatistics();
+// {count=3, sum=6, min=1, average=2.000000, max=3}
+
+s.getCount();   // 3
+s.getMin();     // 1
+s.getMax();     // 3
+s.getSum();     // 6
+s.getAverage(); // 2.0
+----
 
 == Concurrency
 === Future
