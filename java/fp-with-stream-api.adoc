@@ -1211,7 +1211,15 @@ class User {
 
 ===== Example 1: _AsyncRestTemplate_ vs _RestTemplate_
 
-다음 예제는 `AsyncRestTemplate` 과 `RestTemplate` 의 속도를 비교해보려 한다. 모든 API에는 2초간 딜레이가 존재한다.
+다음 예제는 `AsyncRestTemplate` 과 `RestTemplate` 의 속도를 비교해보려 한다. 
+
+`asyncRestTemplate` , `restTemplate` , `restTemplateWithParallel` 메서드로 나눠져 있으며,
+모든 메서드가 ID가 1 부터 9까지의 사용자를 조회하고 응답값을 반환하는 작업을 한다. 모든 HTTP API에는 2초간 딜레이가 존재한다.
+
+결과는 `asyncRestTemplate` 이 가장 빠르게 동작했다. 모든 요청을 한번에 조회하고 `CompletableFurue::join` 에서 모든 응답을 모아 작업이 진행되었다.
+`restTemplate` 은 예상대로 한번 요청하고 응답 받고 하는 식으로 진행되었고, 가장 느린 결과를 보였다.
+[.line-through]#`restTemplateWithParallel` 은 로컬 환경에서 `Runtime.getRuntime().availableProcessors() - 1` 이 3으로 3번씩 호출하는 것 같았다.#
+
 
 [source, java]
 ----
