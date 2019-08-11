@@ -325,7 +325,7 @@ Stream<String> s1 = Stream.of(list1.stream(), list2.stream())
 
 ===== _boxed_
 
-Private Type Stream의 각 Element를 boxing 시켜 Wrapper class 변환시켜준다.
+Primitive Type Stream의 각 Element를 boxing 시켜 Wrapper class 변환시켜준다.
 
 [source, java]
 ----
@@ -1193,7 +1193,7 @@ private <T> CompletableFuture<T> convert(ListenableFuture<T> lf) {
 ==== Example
 
 여러 메서드들을 조합하여 몇가지 예제를 만들어 보고자 한다. Mock 데이터를 위해 https://fakerestapi.azurewebsites.net/[Fake Rest API]와 http://slowwly.robertomurray.co.uk/[Slowwly]를 사용할 것이며, 
-모든 예제 코드에는 아래와 같이은 _User_ 클래스가 선언되어 있다고 가정한다.
+모든 예제 코드에는 아래와 같은 _User_ 클래스가 선언되어 있다고 가정한다.
 
 [source, java]
 .User class
