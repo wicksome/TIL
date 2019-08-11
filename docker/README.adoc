@@ -228,6 +228,26 @@ docker container rm
 docker container pause
 ----
 
+[source, bash]
+----
+# docker container attach <container>
+# docker conainer exec [options] <container> <commands> [arguments]
+docker container exec -it webserver /bin/bash
+
+# 컨테이너의 프로세스 확인
+docker container top <container>
+
+docker container port <container>
+
+docker container rename <old> <new>
+
+# 컨테이너 파일 복사
+docker container cp <container>:<path> <path>
+docker container cp <path> <container>:<path>
+
+docker container diff <container>
+----
+
 === Docker Network
 
 Docker는 기본값으로 bridge, host, none 세 개의 네트워크를 만든다.
@@ -236,6 +256,10 @@ Docker는 기본값으로 bridge, host, none 세 개의 네트워크를 만든�
 ----
 docker network ls
 docker network create
+docker network connect [options] <network> <container>
+docker network disconnect <network> <container>
+docker network inspect [options] <network>
+docker network rm [option] <network>
 ----
 
 
@@ -252,7 +276,9 @@ docker container run \
 <3> 포트
 <4> 이미지명
 
-* 로컬 환경에 다운로드된 Docker 이미지를 로컬 캐시라고 한다.
+* 로컬 환경에 다운로드된 Docker 이미지를 로컬 캐시라고 한다
+* `--link` 옵션을 지정하면 컨테이너 안의 /etc/hosts/ 파일에 컨테이너명과 컨테이너에 할당된 IP 주소가 등록된다.
+
 
 [source, bash]
 ----
