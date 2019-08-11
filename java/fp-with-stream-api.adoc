@@ -1134,6 +1134,7 @@ Thread#1: 5 <3>
 
 Stream API와 `CompletableFuture::join` 을 활용하면 비동기 값들을 하나의 값으로 만들 수도 있다.
 
+.Example
 [source, java]
 ----
 CompletableFuture<String> f1 = CompletableFuture.supplyAsync(() -> "Hello");
@@ -1148,12 +1149,13 @@ System.out.println(str); // Hello Beautiful World
 ----
 
 ==== _exceptionally_
+:java-exceptionally: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#exceptionally-java.util.function.Function-
 
-_CompletableFuture_ 작업을 진행하던 중 에러가 발생하게 되면 _exceptionally_ 메서드를 통해 처리할 수 있다.
+_CompletableFuture_ 작업을 진행하던 중 에러가 발생하게 되면 {java-exceptionally}[_exceptionally_] 메서드를 통해 처리할 수 있다.
 
 [source, java]
 ----
-
+TODO
 ----
 
 ==== References
@@ -1220,7 +1222,7 @@ private final AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
 private final RestTemplate restTemplate = new RestTemplate();
 
 @Test
-public void diff() {
+public void test() {
     final List<String> ids = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
     final Map<String, Long> resultsTime = new HashMap<>(3);
     long startTime;
@@ -1251,29 +1253,21 @@ public void diff() {
 private List<User> asyncRestTemplate(List<String> ids) {
     List<CompletableFuture<ResponseEntity<User>>> res = new ArrayList<>(ids.size());
 
+    // stream 으로 만들면 lazy하게 동작하면서 한번씩 API 요청?
     ids.forEach(id -> res.add(convert(asyncRestTemplate.getForEntity(
         SLOW_HOST + "/api/Users/" + id, User.class))));
 
-    List<User> users = res.stream()
+    return res.stream()
         .map(CompletableFuture::join)
         .map(HttpEntity::getBody)
         .collect(Collectors.toList());
-
-    System.out.println("done");
-    return users;
 }
 
 private List<User> restTemplate(List<String> ids) {
-    List<ResponseEntity<User>> res = new ArrayList<>(ids.size());
-
-    ids.forEach(id -> res.add(restTemplate.getForEntity(
-        SLOW_HOST + "/api/Users/" + id, User.class)));
-
-    List<User> users = res.stream()
+    List<User> users = ids.stream()
+        .map(id -> restTemplate.getForEntity(SLOW_HOST + "/api/Users/" + id, User.class))
         .map(HttpEntity::getBody)
         .collect(Collectors.toList());
-
-    System.out.println("done");
     return users;
 }
 
@@ -1282,8 +1276,6 @@ private List<User> restTemplateWithParallel(List<String> ids) {
         .map(id -> restTemplate.getForEntity(SLOW_HOST + "/api/Users/" + id, User.class))
         .map(HttpEntity::getBody)
         .collect(Collectors.toList());
-
-    System.out.println("done");
     return users;
 }
 
