@@ -1190,7 +1190,13 @@ private <T> CompletableFuture<T> convert(ListenableFuture<T> lf) {
 ----
 ====
 
-==== Example
+=== WebClient
+
+_WebClient_ 는 기존의 _AsyncRestTemplate_ 역할을 하는 클래스이며 ThreadSafe 하다.
+
+TODO
+
+== Examples
 
 여러 메서드들을 조합하여 몇가지 예제를 만들어 보고자 한다. Mock 데이터를 위해 https://fakerestapi.azurewebsites.net/[Fake Rest API]와 http://slowwly.robertomurray.co.uk/[Slowwly]를 사용할 것이며, 
 모든 예제 코드에는 아래와 같은 _User_ 클래스가 선언되어 있다고 가정한다.
@@ -1209,7 +1215,7 @@ class User {
 }
 ----
 
-===== Example 1: _AsyncRestTemplate_ vs _RestTemplate_
+=== Example 1: _AsyncRestTemplate_ vs _RestTemplate_
 
 다음 예제는 `AsyncRestTemplate` 과 `RestTemplate` 의 속도를 비교해보려 한다. 
 
@@ -1292,13 +1298,6 @@ private List<User> restTemplateWithParallel(List<String> ids) {
 //   restTemplateWithParallelElapsedTime: 8,353ms
 //   restTemplateElapsedTime: 25,067ms
 ----
-
-
-=== WebClient
-
-_WebClient_ 는 기존의 _AsyncRestTemplate_ 역할을 하는 클래스이며 ThreadSafe 하다.
-
-TODO
 
 == Cautions
 
