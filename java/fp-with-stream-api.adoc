@@ -866,7 +866,7 @@ void async() throws InterruptedException {
 <2> 실패시 실행할 callback 함수(https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/FailureCallback.html[_FailureCallback_] 인스턴스)
 <3> _sleep()_ 을 주지않으면 메인 스레드가 바로 종료되면서 HTTP 응답값을 확인 할 수 없다.
 
-[source]
+[source, text]
 .Output
 ----
 DEBUG: Created asynchronous GET request for "https://httpbin.org/get" ... 
@@ -1087,7 +1087,77 @@ null <6>
 <5> `thenAccept()` 에서 2초 뒤 "4"와 함께 "Hello Beautiful World"가 출력된다.
 <6> `cf` 의 작업이 완료되었으므로 `cf.get()` 가 동작한다. 마지막에 호출된 _thenAccept_ 는 _Consumer_ 를 파라미터로 받는데, 이것은 반환값이 없으므로 _null_ 을 출력한다.
 
+==== _exceptionally_
+:java-exceptionally: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#exceptionally-java.util.function.Function-
+
+{java-exceptionally}[_exceptionally_]는 _CompletableFuture_ 작업 내에서 발생하는 Exception을 처리하기 위한 메서드이다.
+_ListenableFuture_ 에서 _FailCallback_ 의 _onFailure_ 를 대신할 수 있다. _ListenableFuture_ 는 요청별로 실패 로직을 설정하는 반면 _exceptionally_ 는 모든 Exception을 통합적으로 처리할 수 있다.
+
+[source, java]
+----
+@Test
+public void exceptionallyExample1() throws InterruptedException, ExecutionException {
+    final String result = CompletableFuture.supplyAsync(() -> {
+        System.out.println("1");
+        return "1";
+    }).thenApply(s -> {
+        System.out.println("2");
+        throw new RuntimeException();
+    }).thenApply(s -> {
+        System.out.println("3");
+        return s + "3";
+    }).exceptionally(throwable -> {
+        System.out.println("4");
+        log.error("catch error", throwable);
+        return "exception!!!";
+    }).get();
+
+    System.out.println(result);
+}
+// Output:
+//   1
+//   2
+//   4
+//   21:11:10.349 [main] ERROR com.example.demo.LocalTest - catch error
+//   java.util.concurrent.CompletionException: java.lang.RuntimeException
+//     at java.base/java.u.c.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
+//     at java.base/java.u.c.CompletableFuture.uniApplyNow(CompletableFuture.java:683)
+//     at java.base/java.u.c.CompletableFuture.uniApplyStage(CompletableFuture.java:658)
+//     at java.base/java.u.c.CompletableFuture.thenApply(CompletableFuture.java:2094)
+//     ...
+//   exception!!!
+----
+
 ==== _allOf_
+:java-all-of: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture...-
+:java-varargs: https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs
+
+{java-all-of}[_allOf_]는 여러 _CompletableFuture_ 의 작업들이 모두 완료되었는지 확인하고자 할 때 사용한다.
+
+[source, java]
+----
+public static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs)
+----
+
+확인할 _CompletableFuture_ 들을 가변인자^{java-varargs}[varargs]^ 를 받고 `CompletableFuture<Void>` 를 반환한다.
+반환값의 `get()` 혹은 `join()` 을 통해 모든 작업이 완료되기를 기다릴 수 있다.
+
+_allOf_ 의 반대로는, 여러 _CompletableFuture_ 중 하나라도 완료되었는지 확인할 수 있는 _anyOf_ 가 있다. 
+
+[TIP]
+.CompletableFuture vs Promise
+====
+
+|===
+| Java |JavaScript
+
+|_CompletableFuture.allOf_
+|https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all[_Promise.all_]
+
+|_CompletableFuture.anyOf_
+|https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race[_Promise.race_]
+|===
+====
 
 [source, java]
 .Example
@@ -1109,30 +1179,29 @@ public void completableFutureExample() throws InterruptedException, ExecutionExc
     print.accept("3");
 
     CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(f1, f2, f3);
-    combinedFuture.get();
     print.accept("4");
+    combinedFuture.get();
+    print.accept("5");
 
     TimeUnit.SECONDS.sleep(3);
-    print.accept("5");
+    print.accept("6");
 }
+// Output:
+//   Thread#1: 1
+//   Thread#1: 3 <1>
+//   Thread#1: 4
+//   Thread#12: 2 <2>
+//   Thread#1: 5
+//   Thread#1: 6 <3>
 ----
-
-[source, text]
-.Output
-----
-Thread#1: 1
-Thread#1: 3 <1>
-Thread#12: 2 <2>
-Thread#1: 4
-Thread#1: 5 <3>
-----
-<1> 실행되면 메인 스레드에서 "1", "3"이 출력된다.
-<2> 1초 뒤 "2"가 출력되면서 `combinedFuture.get()` 아래의 "4"도 출력된다.
+<1> 실행되면 메인 스레드에서 "1", "3", "4" 가 출력된다.
+<2> 1초 뒤 "2"가 출력되면서 `combinedFuture.get()` 아래의 "5"도 출력된다.
 <3> "4"가 출력되고 3초 뒤 "5"가 출력되면서 프포그램이 종료된다.
 
 ==== _join_
+:java-cf-join: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#join--
 
-Stream API와 `CompletableFuture::join` 을 활용하면 비동기 값들을 하나의 값으로 만들 수도 있다.
+{java-cf-join}[_join_]은 _CompletableFuture_ 의 작업이 완료되면 결과를 반환하거나 (unchecked)예외를 던지는 메서드이다.
 
 .Example
 [source, java]
@@ -1142,21 +1211,41 @@ CompletableFuture<String> f2 = CompletableFuture.supplyAsync(() -> "Beautiful");
 CompletableFuture<String> f3 = CompletableFuture.supplyAsync(() -> "World");
 
 String str = Stream.of(f1, f2, f3)
+                // .map(f -> { return f.join(); })
+                // .map(f -> f.join())
                    .map(CompletableFuture::join)
                    .collect(Collectors.joining(" "));
 
 System.out.println(str); // Hello Beautiful World
 ----
 
-==== _exceptionally_
-:java-exceptionally: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#exceptionally-java.util.function.Function-
+[NOTE]
+._get_ vs _join_
+====
+_CompletableFuture_ 의 _get_ 과 _join_ 은 작업이 완료되기를 기다리고 값을 반환하는 작업을 한다.
+동일한 동작을 하지만 다음과 같은 차이점이 있다.
 
-_CompletableFuture_ 작업을 진행하던 중 에러가 발생하게 되면 {java-exceptionally}[_exceptionally_] 메서드를 통해 처리할 수 있다.
-
+* _get_ 은 _Future_ 의 메서드를 구현한 것이고, _join_ 은 _CompletableFuture_ 의 메서드이다.
+* _get_ 은  checked exception을 던지고, _join_ 은 unchecked exception을 던지지 않는다.
++
 [source, java]
 ----
-TODO
+V get() throws InterruptedException, ExecutionException { ... }
 ----
++
+[source, java]
+----
+public T join() { ... }
+----
+
+따라서, _get_ 은 명시적으로 try-catch를 해줘야하는 반면 _join_ 은 에러를 밖으로 던질 수 있게된다.
+즉, 여러 CompletableFuture 를 다룰 때 _join_ 과 _exceptionally_ 를 통해 통합적인 에러 핸들링이 가능해진다.
+
+*References*
+
+* https://stackoverflow.com/a/47463228[completablefuture join vs get]
+
+====
 
 ==== References
 
@@ -1191,10 +1280,44 @@ private <T> CompletableFuture<T> convert(ListenableFuture<T> lf) {
 ====
 
 === WebClient
+:spring-webclient: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/reactive/function/client/WebClient.html
 
-_WebClient_ 는 기존의 _AsyncRestTemplate_ 역할을 하는 클래스이며 ThreadSafe 하다.
+Spring Framework 5.0에서 추가된 {spring-webclient}[_WebClient_]는 기존의 _AsyncRestTemplate_ 역할을 한다.
+_WebClient_ 는 Non-Block I/O 기반에 ThreadSafe 하다.
 
+
+[source, java]
+----
+private static final String HOST = "http://fakerestapi.azurewebsites.net/api";
+
+@Test
+public void webClientExample() {
+    WebClient client = WebClient.create(HOST);
+
+    WebClient.RequestBodySpec req1 = client
+        .method(HttpMethod.GET)
+        .uri("/Users/1")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .accept(MediaType.APPLICATION_JSON_UTF8);
+    WebClient.RequestBodySpec req2 = client
+        .method(HttpMethod.GET)
+        .uri("/Users/2");
+
+    User user1 = req1.exchange().block().bodyToMono(User.class).block();
+    User user2 = req2.exchange().block().bodyToMono(User.class).block();
+
+    System.out.println(user1);
+    System.out.println(user2);
+}
+// Output:
+//   User(id=1, name=User 1, password=Password1)
+//   User(id=2, name=User 2, password=Password2)
+----
+
+[source, java]
+----
 TODO
+----
 
 == Examples
 
@@ -1222,7 +1345,7 @@ class User {
 `asyncRestTemplate` , `restTemplate` , `restTemplateWithParallel` 메서드로 나눠져 있으며,
 모든 메서드가 ID가 1 부터 9까지의 사용자를 조회하고 응답값을 반환하는 작업을 한다. 모든 HTTP API에는 2초간 딜레이가 존재한다.
 
-결과는 `asyncRestTemplate` 이 가장 빠르게 동작했다. 모든 요청을 한번에 조회하고 `CompletableFurue::join` 에서 모든 응답을 모아 작업이 진행되었다.
+결과는 `asyncRestTemplate` 이 가장 빠르게 동작했다. 모든 요청을 한번에 조회하고 `CompletableFuture::join` 에서 모든 응답을 모아 작업이 진행되었다.
 `restTemplate` 은 예상대로 한번 요청하고 응답 받고 하는 식으로 진행되었고, 가장 느린 결과를 보였다.
 [.line-through]#`restTemplateWithParallel` 은 로컬 환경에서 `Runtime.getRuntime().availableProcessors() - 1` 이 3으로 3번씩 호출하는 것 같았다.#
 
@@ -1298,6 +1421,15 @@ private List<User> restTemplateWithParallel(List<String> ids) {
 //   restTemplateWithParallelElapsedTime: 8,353ms
 //   restTemplateElapsedTime: 25,067ms
 ----
+
+=== Example 2: 
+
+- userid 받아서
+- 검증하고
+- mapper에서 값 조회해서
+- connector에서 값 조회해서
+- accounts 일급콜렉션에 넣어서
+- 반환하고
 
 == Cautions
 
