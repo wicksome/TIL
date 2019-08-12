@@ -2,6 +2,21 @@
 
 > 워킹 디렉토리에 unstaged 파일들을 백업하고 워킹디렉토리를 HEAD의 상태로 변경하는 것
 
+```bash
+# 현재 작업이 있는데 pull을 받고자 할 경우
+## 1
+git stash
+git pull origin master
+git stash apply
+git stash drop
+
+## 2
+git stash
+git pull origin master
+git stash pop
+```
+
+
 ## 1. git status
 연재 작업중인 파일을 Stash에 저장한다.
 
@@ -48,8 +63,6 @@ stash를 만들고 다른 브랜치에서 한동안 작업하다가 stash를 적
 ```
 $ git stash branch test-branch
 ```
-
-
 
 **_참고_**
 - [git doc](https://git-scm.com/book/ko/v1/Git-%EB%8F%84%EA%B5%AC-Stashing)
