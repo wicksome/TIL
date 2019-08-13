@@ -1430,19 +1430,20 @@ public UserDetail get(@PathVariable(value = "userId") String id) {
     try {
         return Stream.of(id)
             .map(userMapper::get)
-            .map(validate)
+            .map(validate) // throw InvalidException
             .map(user -> {
                 final String uuid = user.getId();
-                final CompletableFuture<Accounts> fAccounts = accountConnector.getAccounts(uuid);
-                final CompletableFuture<Cards> fCards = cardConnector.getCards(uuid);
-                final CompletableFuture<Point> fPoint = pointConnector.getPoint(uuid);
+                
+                CompletableFuture<Accounts> fAccounts = accountConnector.getAccounts(uuid);
+                CompletableFuture<Cards> fCards = cardConnector.getCards(uuid);
+                CompletableFuture<Point> fPoint = pointConnector.getPoint(uuid);
 
                 return CompletableFuture.allOf(accountsFuture, cardsFuture, pointFuture)
                     .thenApply(ignore -> UserDetail.builder()
                         .user(user)
-                        .accounts(accountsFuture.join())
-                        .cards(cardsFuture.join())
-                        .point(pointFuture.join())
+                        .accounts(fAccounts.join())
+                        .cards(fCards.join())
+                        .point(fPoint.join())
                         .build())
                     .exceptionally(err -> {
                         throw new ConnectorException(err);
