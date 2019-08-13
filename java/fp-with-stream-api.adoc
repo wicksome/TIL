@@ -403,7 +403,7 @@ IntStream.of(1, 2, 3, 4)
 [NOTE]
 .peek vs fxjs/tap
 ====
-peek은 한개씩 볼 수 있는 반면에 https://github.com/marpple/FxJS/blob/master/API.md#tap[tap]은 전체를 볼 수 있다.
+peek은 한개씩 볼 수 있는 반면에 fxjs의 https://github.com/marpple/FxJS/blob/master/API.md#tap[tap]은 전체를 볼 수 있다.
 [source, javascript]
 .https://jsfiddle.net/yeongjun_kim/20zbw1c9/[JSFiddle]
 ----
@@ -421,7 +421,7 @@ fx.go(
 
 [.line-through]#_최종 연산_#
 
-스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되기 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가는 역할이다.
+스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되기 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가하는 역할이다.
 
 ==== Collecting
 
@@ -1201,7 +1201,7 @@ public void completableFutureExample() throws InterruptedException, ExecutionExc
 ==== _join_
 :java-cf-join: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#join--
 
-{java-cf-join}[_join_]은 _CompletableFuture_ 의 작업이 완료되면 결과를 반환하거나 (unchecked)예외를 던지는 메서드이다.
+{java-cf-join}[_join_]은 _CompletableFuture_ 의 작업이 완료되면 결과를 반환하거나, 예외 발생시 (unchecked)예외를 던지는 메서드이다.
 
 .Example
 [source, java]
@@ -1252,7 +1252,6 @@ public T join() { ... }
 * https://www.hungrydiver.co.kr/bbs/detail/develop?id=2[Java8 CompletableFuture 사용하기]
 * https://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/[Java 8: Writing asynchronous code with CompletableFuture]
 * https://gist.github.com/HomoEfficio/be081b92a0d1ae078cbcc410c71415bc[SpringBoot2-SpringWebFlux-BasicExample]
-* http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
 * https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156[thenApply vs thenCompose]
 * https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501[Javascript Like "Promise.all" in Java 8]
 
@@ -1285,6 +1284,7 @@ private <T> CompletableFuture<T> convert(ListenableFuture<T> lf) {
 Spring Framework 5.0에서 추가된 {spring-webclient}[_WebClient_]는 기존의 _AsyncRestTemplate_ 역할을 한다.
 _WebClient_ 는 Non-Block I/O 기반에 ThreadSafe 하다.
 
+TODO: Reactive programming, Flux, Mono 등 추가적인 학습이 더 필요할 것 같다.
 
 [source, java]
 ----
@@ -1314,10 +1314,7 @@ public void webClientExample() {
 //   User(id=2, name=User 2, password=Password2)
 ----
 
-[source, java]
-----
-TODO
-----
+* http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
 
 == Examples
 
@@ -1422,14 +1419,47 @@ private List<User> restTemplateWithParallel(List<String> ids) {
 //   restTemplateElapsedTime: 25,067ms
 ----
 
-=== Example 2: 
+=== Example 2: getUser
 
-- userid 받아서
-- 검증하고
-- mapper에서 값 조회해서
-- connector에서 값 조회해서
-- accounts 일급콜렉션에 넣어서
-- 반환하고
+슈도 코드
+
+[source, java]
+----
+@GetMapping("/users/{userId}")
+public UserDetail get(@PathVariable(value = "userId") String id) {
+    try {
+        return Stream.of(id)
+            .map(userMapper::get)
+            .map(validate)
+            .map(user -> {
+                final String uuid = user.getId();
+                final CompletableFuture<Accounts> fAccounts = accountConnector.getAccounts(uuid);
+                final CompletableFuture<Cards> fCards = cardConnector.getCards(uuid);
+                final CompletableFuture<Point> fPoint = pointConnector.getPoint(uuid);
+
+                return CompletableFuture.allOf(accountsFuture, cardsFuture, pointFuture)
+                    .thenApply(ignore -> UserDetail.builder()
+                        .user(user)
+                        .accounts(accountsFuture.join())
+                        .cards(cardsFuture.join())
+                        .point(pointFuture.join())
+                        .build())
+                    .exceptionally(err -> {
+                        throw new ConnectorException(err);
+                    });
+            })
+            .map(CompletableFuture::join)
+            .findFirst()
+            .orElse(null);
+    } catch (InvalidException | ConnectorException e) {
+        log.debug(e.getMessage(), e);
+        throw e;
+    } catch (Exception e) {
+        log.error(e.getMessage(), e);
+        throw e;
+    }
+}
+----
 
 == Cautions
 
