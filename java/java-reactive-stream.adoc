@@ -1,0 +1,63 @@
+= Java Reactive Stream
+
+____
+https://www.youtube.com/watch?v=8fenTR3KOJo&list=PLv-xDnFD-nnmof-yoZQN8Fs2kVljIuFyC&index=10
+____
+
+
+Interable <--> Observable (duality 상대성)
+pull            push
+
+
+
+* `Observable` 은 java9에서 deprecated 됨
+* observable -> source, event source, event 를 던짐
+** observer에게 던짐(관찰자에게 던짐)
+** observer를 observable에게 등록시킨다.
+** observable이 observer에 notify한다.
+* Observable: 생성자, 
+** 
+* Observer: 관찰자, 
+** 
+
+[source, java]
+----
+// 커스텀 옵져버블
+// - 값을 생성한다.
+// - event source
+// - gof: 서브젝트
+// - reactive streams: 퍼블리셔
+// - reactive extentions: 옵저버블
+static class IntObservable extends Obsevable implements Runable {
+  @Override
+  public void run() {
+    Arrays.asList(1, 2, 3, 4, 5).forEach(i -> {
+      setChanged();
+      notifyObservers(i);
+    });
+  }
+}
+
+public static void main(String[] args) {
+  // 옵져버
+  // - 값을 관창한다.
+  // - gof: 옵저버
+  // - reactive strems: 서브스크라이버
+  // - reactive extentions: 서브스크라이버 or 옵저버
+  Observer ob = new Observer() {
+    @Override
+    public void update(Observable o, Object arg) {
+    
+    }
+  }
+}
+----
+
+DATA method() <--> method(DATA)
+기능은 같지만, 상대성 / 카테고리 이론에서 상대성이라고 한다.
+
+ExcutorService es = Excutors.newSingleThreadExecutor(); // 스레드를 하나 받는다?
+es.execute(runneable)
+
+// 여기서부터 보기
+https://youtu.be/8fenTR3KOJo?list=PLv-xDnFD-nnmof-yoZQN8Fs2kVljIuFyC&t=3027
