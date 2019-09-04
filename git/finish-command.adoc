@@ -1,7 +1,7 @@
 release 처리하는 명령어 개발중 커밋(미완성)
 
 [source, bash]
-.release
+.finish.sh
 ----
 #!/usr/bin/env bash
 
@@ -31,5 +31,14 @@ echo "$(tput smul)$RELEASE_BRANCH$(tput rmul)"
 
 git checkout -t $RELEASE_BRANCH
 git checkout $WORKING_BRANCH
+
+# git flow release finish 20190904
+# git push origin master develop
+# git push --tags
+# git push origin --delete release/20190904
+
+# Create new GitHub release
+REMOTE_URL=$(git ls-remote --get-url origin)
+echo "$REMOTE_URL/releases"
 
 ----
