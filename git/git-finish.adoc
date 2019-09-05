@@ -4,6 +4,8 @@ release/hotfix 처리하는 명령어
 
 참고: https://www.facebook.com/groups/codingeverybody/permalink/2548382661868921/
 
+<script src="https://gist.github.com/wicksome/1ae5dfcd42dbbce69daff80823951492.js"></script>
+
 [source, bash]
 .git-finish
 ----
