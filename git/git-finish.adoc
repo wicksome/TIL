@@ -1,0 +1,83 @@
+release/hotfix 처리하는 명령어
+
+/usr/local/bin 에 아래 스크립트를 추가해두면 `git finish` 로 사용 가능
+
+참고: https://www.facebook.com/groups/codingeverybody/permalink/2548382661868921/
+
+[source, bash]
+.git-finish
+----
+#!/usr/bin/env bash
+
+# Fetch git
+git fetch origin
+
+# Set current branch to variable
+WORKING_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Check branch name
+if [ -z "$1" ]; then
+    echo "usage: git-finish <refspec>"
+    exit 1
+fi
+echo
+
+# Check release branch
+BRANCH_COUNT=$(git branch -ar | grep -E "origin\/.*$1" | wc -l | tr -d ' ')
+if [ "$BRANCH_COUNT" != "1" ]; then
+    echo "$(tput setaf 1)* '$(tput bold)$1$(tput sgr0;tput setaf 1)' branch is not one($BRANCH_COUNT).$(tput sgr0)"
+    git branch -ar | grep origin/$1 | tr -d ' '
+    exit 1
+fi
+
+# Check release branch
+RELEASE_BRANCH=$(git branch -ar | grep -E "origin\/.*$1" | tr -d ' ')
+while true; do
+    read -p "* $(tput setaf 11)Do you want a finish $(tput smul)$RELEASE_BRANCH$(tput rmul)?$(tput sgr0) " yn
+    case $yn in
+        [Yy]* ) 
+            git checkout -t $RELEASE_BRANCH
+            [[ $? == "0" ]] || exit 1
+            break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+echo
+
+# Make a release or hotfix
+echo "$(tput setaf 2)* Make a release(or hotfix)$(tput sgr0)"
+if [[ $RELEASE_BRANCH == *"release"*  ]]; then
+    git flow release finish ${RELEASE_BRANCH#"origin/$(git config gitflow.prefix.release)"}
+else
+    git flow hotfix finish ${RELEASE_BRANCH#"origin/$(git config gitflow.prefix.hotfix)"}
+fi
+[[ $? == "0" ]] || exit 1
+echo
+
+# Update remote branch and tags
+while true; do
+    read -p "* $(tput setaf 11)Do you want to update remote branch and tags?$(tput sgr0) " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+echo
+
+echo "$(tput setaf 2)* Push master, develop branch to origin$(tput sgr0)"
+git push origin master develop
+echo "$(tput setaf 2)* Push tags$(tput sgr0)"
+git push --tags
+echo "$(tput setaf 2)* Delete the branch:$(tput sgr0) $RELEASE_BRANCH"
+git push origin --delete ${RELEASE_BRANCH#"origin/"}
+echo
+
+# Show releases link
+REMOTE_URL=$(git ls-remote --get-url origin)
+echo "$(tput setaf 2)* Create new GitHub release:$(tput sgr0) $REMOTE_URL/releases"
+
+# Checkout to working branch
+# git checkout $WORKING_BRANCH
+----
