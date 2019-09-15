@@ -1,0 +1,66 @@
+---
+title: Difference between Optional.orElse() and Optional.orElseGet()
+date: "2018-02-05T15:20:00+09:00"
+layout: post
+path: /blog/difference-between-orelse-vs-orelseget
+tags: java, java8
+desc: Optional.orElse vs Optional.orElseGet
+draft: false
+---
+
+> fb-contrib:[OI\_OPTIONAL\_ISSUES\_USES\_IMMEDIATE\_EXECUTION][findbug-ol-optional-issues-users-immediate-executrion]
+
+`orElseGet()`는 `null`일 경우에만 호출되고, `orElse()`는 무조건 호출된다.
+
+```java{5-6}
+class LocalTest {
+	@Test
+	void test() {
+		System.out.println("1.");
+		Optional.ofNullable(null).orElse(new TestObject());
+		System.out.println("2.");
+		Optional.ofNullable(new TestObject()).orElse(new TestObject());
+		System.out.println("3.");
+		Optional.ofNullable(null).orElseGet(TestObject::new);
+		System.out.println("4.");
+		Optional.ofNullable(new TestObject()).orElseGet(TestObject::new);
+	}
+
+	class TestObject {
+		private String str;
+        
+		TestObject() {
+			System.out.println("new");
+		}
+	}
+}
+```
+
+```
+1.
+new
+2.
+new
+new
+3.
+new
+4.
+new
+```
+
+## Conclusion
+
+불필요한 호출을 줄이기 위해 `null`일 경우 반환할 값이 primitive type이면 `orElse()`, 객체를 생성해야한다면 `orElseGet()`를 사용하면 될 것 같다.
+
+```java
+int value = Optional.ofNullable(obj1).orElse(123);
+TestObject object = Optional.ofNullable(obj2).orElseGet(() -> new TestObject());
+TestObject object = Optional.ofNullable(obj2).orElseGet(TestObject::new);
+```
+
+## References
+
+- http://multifrontgarden.tistory.com/131
+
+
+[findbug-ol-optional-issues-users-immediate-executrion]: http://fb-contrib.sourceforge.net/bugdescriptions.html#OI_OPTIONAL_ISSUES_USES_IMMEDIATE_EXECUTION
