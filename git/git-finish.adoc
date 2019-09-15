@@ -1,3 +1,5 @@
+= git-finish
+
 release/hotfix 처리하는 명령어
 
 /usr/local/bin 에 아래 스크립트를 추가해두면 `git finish` 로 사용 가능

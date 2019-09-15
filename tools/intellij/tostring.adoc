@@ -7,7 +7,7 @@
 .ToStringStyle.JSON_STYLE (Apache commons-lang3)
 ----
 public java.lang.String toString() {
-return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE);
+  return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE);
 }
 ----
 
@@ -15,6 +15,6 @@ return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this,
 .ToStringStyle.MULTI_LINE_STYLE (Apache commons-lang3)
 ----
 public java.lang.String toString() {
-return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE);
+  return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE);
 }
 ----

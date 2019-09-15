@@ -1,8 +1,6 @@
-logrotate로 로그롤링하기
+= logrotate로 로그롤링하기
 =================
-김영준 <opid911@gmail.com>
 :author: yeongjun.kim
-:Email: <opid911@gmail.com>
 :source-highlighter: prettify
 
 == logrotate란?
