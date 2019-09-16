@@ -1,4 +1,5 @@
 = Java GC
+Yeongjun kim <opid911@gmail.com>
 v1.0, 2018-03-22
 :toc:
 

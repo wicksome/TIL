@@ -1,4 +1,6 @@
 = tostring
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-08-27
 
 1. ctrl+enter를 통해 Generate를 띄워 바로 toString 메서드 작성
 2. Template을 추가하여 활용

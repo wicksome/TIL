@@ -1,5 +1,6 @@
-:source-highlighter: pygments
-:source-language: java
+= Getting Started the Stream API
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-08-13
 :toc:
 
 == Stream API

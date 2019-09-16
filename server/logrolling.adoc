@@ -1,7 +1,6 @@
 = logrotate로 로그롤링하기
-=================
-:author: yeongjun.kim
-:source-highlighter: prettify
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-07-27
 
 == logrotate란?
 
