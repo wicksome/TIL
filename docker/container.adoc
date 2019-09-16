@@ -1,3 +1,7 @@
+= Container
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-08-03
+
 ____
 완벽한 IT 인프라 구축을 위한 Docker 2판
 ____
