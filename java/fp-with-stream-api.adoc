@@ -1,7 +1,8 @@
 = Getting Started the Stream API
-Yeongjun.kim <opid911@gmail.com>
+Yeongjun Kim <opid911@gmail.com>
 v1.0, 2019-08-13
-:toc:
+:toc: left
+:page-tocleft:
 
 == Stream API
 :javadoc-stream-package: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
