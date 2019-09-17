@@ -13,6 +13,8 @@ location /robots.txt {
 }
 ----
 
+추가 확인할 내용: http://www.seo-korea.com/robots-txt-%ED%8C%8C%EC%9D%BC%EA%B3%BC-meta-robots-%ED%83%9C%EA%B7%B8%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90/[robots.txt 파일과 meta robots 태그의 차이점]
+
 == 참고
 
 * https://www.twinword.co.kr/blog/basic-technical-seo/
