@@ -1,0 +1,605 @@
+= Effective Java - 객체 생성과 파괴
+Yeongjun Kim <opid911@gmail.com>
+:revdate: 2017-02-10T00:00:00+09:00
+:page-tags: java, effective-java 
+//:toc: left
+//:page-tocleft:
+:toc:
+
+[NOTE]
+****
+아래 책를 참고하여 학습한 내용을 정리/기록한 포스트입니다. 자세한 내용은 책을 참고하시기 바라며, 문제가 있을 경우 연락 부탁드립니다.
+
+- Joshua Bloch, 개앞맵시(옮긴이), Effective Java, 3/E, 인사이트, 2018.
+- Joshua Bloch, 이병준(옮긴이), Effective Java, 2/E, 인사이트, 2015.
+****
+
+'이펙티브 자바 2판'을 공부하고, 3판이 나왔다는 얘기를 듣고 다시 보면서 정리한 내용을 보완하고자 한다.
+
+[#item01]
+== 규칙 1. 생성자 대신 정적 팩터리 메서드를 고려하라
+:source-enumset: http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/7d1d5f4d019a/src/share/classes/java/util/EnumSet.java#l109
+:dp-factory-method: https://wickso.me/java/design-pattern/factory-method-pattern
+:dp-flyweight: https://wickso.me/java/design-pattern/flyweight-pattern
+:item3: https://wickso.me/java/effective-java/03
+:item4: https://wickso.me/java/effective-java/01-09#03
+:item17: https://wickso.me/java/effective-java/01-09#03
+:item20: https://wickso.me/java/effective-java/01-09#enum
+:item34: https://wickso.me/java/effective-java/01-09#enum
+
+**정적 팩터리 메서드(static factory method)**란 클래스의 인스턴스를 반환하는 단순한 static method를 말한다. {dp-factory-method}[팩토리 메서드 패턴]과 다르다.
+
+[TIP]
+.객체? 인스턴스? 인스턴스화?
+====
+비슷한 개념이지만 정확히 구별하면 **인스턴스(instance)**가 **객체(object)**보다 큰 의미이다. 
+객체는 어떤 클래스를 사용해서 만들어진 것을 의미한다.
+그리고 그 객체가 메모리에 할당되어 실제 메모리를 차지하는 것을 인스턴스라고 한다.  
+
+아래 코드에서 객체와 인스턴스를 구별해보자.
+
+[source, java]
+----
+String str; // <1>
+str = new String("Hello world"); // <2>
+----
+<1> `str` 은 String 클래스를 사용하여 객체를 선언한 것이다. 아직 `str` 에 문자열이 할당되어 있지 않은 상태이다. 
+<2> _new_ 키워드를 사용하여 JVM(Java Virtual Machine)에 데이터가 생성된 것을 보여준다. 
+다시 말해, 객체 `str` 에 "Hello world"라는 문자열을 할당하였다(instantiate).
+이렇게 객체를 실제로 메모리에 할당하는 과정을 **인스턴스화(instantiate)**라고 한다.
+그리고 이렇게 인스턴스화된 객체를 인스턴스라고 부른다.
+====
+
+
+.클래스의 인스턴스를 얻는 방법
+* public 생성자
++
+[source, java]
+----
+public Boolean(String str) {
+    this.value = "true".equalsIgnoreCase(str); 
+}
+----
++
+[TIP]
+.NPE를 피하는 방법
+====
+위 코드를 보면 `str` 의 _equalsIgnoreCase_ 가 아닌 문자 이터럴의 equalsIgnoreCase 를 사용한다.
+이와 같은 방법은 `str` 이 null 일 경우 발생할 NPE(NullPointException)를 피할 수 있다.
+====
+* 정적 팩터리 메서드
++
+[source, java]
+----
+public static Boolean valueOf(boolean b) {
+    return b ? Boolean.TRUE : Boolean.FALSE;
+}
+----
+
+[NOTE]
+.boxing 과 unboxing
+====
+Java에서 primitive type과 wrapper class는 서로 boxing/unboxing이 가능하다. [.line-through gray]#`Boolean` 클래스를 보다가 궁금해서 추가한다.#
+[source, java]
+----
+// primitive
+boolean b = (boolean)Boolean.TRUE; // <1>
+// reference type
+Boolean b = (Boolean)true; // <2>
+Boolean b = true; // <3>
+Boolean b = Boolean.valueOf(true);
+----
+<1> unboxing
+<2> boxing
+<3> auto boxing
+====
+
+[#advantage-of-static-factory-method]
+=== 정적 팩터리 메서드 장점
+
+`java.utils.Collections` 클래스에서 정적 팩터리 메서드의 장점이 많이 보여 코드의 일부를 추가하였다.
+
+==== 이름을 가질 수 있다
+
+[source, java]
+----
+public static final <K,V> Map<K,V> emptyMap() { ... }
+----
+
+생성자와 달리 반환되는 객체의 특성을 잘 설명한 메서드명을 통해 이해하기 쉬운 코드를 작성할 수 있다.
+
+==== 호출될 때마다 인스턴스를 새로 생성하지 않아도 된다
+
+[source, java]
+----
+public class Collections {
+    public static final Map EMPTY_MAP = new EmptyMap<>();
+
+    // static factory method
+    public static final <K,V> Map<K,V> emptyMap() {
+        return (Map<K,V>) EMPTY_MAP;
+    }
+}
+----
+
+인스턴스를 미리 만들어 놓거나 이미 만든 인스턴스를 캐싱하여 재사용하면서 불필요한 인스턴스화를 피할 수 있다. 
+(특히 인스턴스화 비용이 큰) 동일한 객체가 요청되는 일이 잦을 때 적용하면 성능을 크게 개선할 수 있다.
+이 기법을 활용한 좋은 사례로 `Boolean.value(boolean)` 를 둘 수 있으며 {dp-flyweight}[Flyweight 패턴]과 유사하다. 
+
+===== 인스턴스 통제(instance-controlled) 클래스
+반복적인 요청에도 같은 인스터스를 반환하는 정적 팩터리 방식의 클래스는 어떤 시점에 어떤 객체가 얼마나 존재할지를 정밀하게 제어할 수 있다. 
+인스턴스 통제는 플라이웨이트 패턴의 근간이 되며, enum은 인스턴스가 하나만 만들어짐을 보장한다.
+이런 클래스를 _인스턴스 통제 클래스_ 라고 부른다. 인스턴스를 통제하는 이유는 아래와 같다.
+
+* {item3}[Singleton pattern] 적용 가능
+* {item4}[Non-instantiable class] 생성 가능
++
+[source, java]
+.Example. Utility class
+----
+public class UtilityClass {
+    private UtilityClass() { throw new AssertionError(); }
+}
+----
+* {item17}[Immutable Class]
++
+[source, java,highlight=1;3-7;!]
+----
+public class Complex {
+    private final double re;
+    private final double im;
+
+    private Complex(double re, double im) {
+        this.re = re;
+        this.im = im;
+    }
+
+    public static Complex valueOf(double re, double im) {
+        return new Complex(re, im);
+    }
+}
+----
+** {item34}[enum]이 이 기법을 사용
+** `equals()` 대신 `==` 연산자 사용 가능
+
+==== 자신의 인스턴스만 반환하는 생성자와는 달리, 서브타입 객체도 반환 가능하다
+
+이러한 유연성을 응용하면 구현 세부사항을 감출 수 있으므로 아주 간결한 API가 가능하다. 
+{item20}[인터페이스 기반 프레임워크(interface-based framework)] 구현에 핵심 기술로, 이 프레임워크에서 인터페이스는 정적 팩터리 메서드의 반환값 자료형으로 이용된다.
+
+[source, java]
+----
+public class Collections {
+    public static final Map EMPTY_MAP = new EmptyMap<>();
+
+    public static final <K,V> Map<K,V> emptyMap() {
+        return (Map<K,V>) EMPTY_MAP;
+    }
+
+    private static class EmptyMap<K,V> extends AbstractMap<K,V> implements Serializable { ... }
+}
+----
+
+==== 입력 매개변수에 따라 매번 다른 클래스의 객체를 반환할 수 있다
+
+[source, java]
+.{source-enumset}[java.util.EnumSet] of OpenJDK
+----
+public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
+    Enum<?>[] universe = getUniverse(elementType);
+    if (universe == null)
+        throw new ClassCastException(elementType + " not an enum");
+
+    if (universe.length <= 64)
+        return new RegularEnumSet<>(elementType, universe);
+    else
+        return new JumboEnumSet<>(elementType, universe);
+}
+----
+
+`EnumSet` 클래스를 보면 원소의 수에 따라 두 가지 하위 클래스 중 하나의 인스턴스를 반환한다.
+사용자는 어떤 것이 반환되던지 알 필요가 없으며, 단지 `EnumSet` 의 하위 클래스를 반환해주기만 하면 된다.
+
+==== 정적 팩터리 메서드를 작성하는 시점에는 반환할 객체의 클래스가 존재하지 않아도 된다
+
+
+==== 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
+
+정적 팩토리 메서드를 사용하면 컴파일러가 타입 추론(type inference)으로 제네릭 클래스의 인스턴스화를 간결하게 해준다.
+
+[source, java]
+----
+// before
+Map<String, List<String>> m = new HashMap<String, List<String>>();
+
+// after: >= 1.6
+Map<String, List<String>> m = HahsMap.newInstance();
+
+public static <K, V> HashMap<K, V> newInstance() {
+    return new HashMap<K, V>();
+}
+----
+
+하지만, jdk7에서 제공된 다이아몬드 연산자를 사용하면 아래와 작성할 수 있다. 
+
+[source, java]
+----
+Map<String, List<String>> m = new HashMap<>();
+----
+
+[.line-through gray]#더이상 장점이라 할 수 없으므로 3판에서는 이 내용이 제거된 것 같다.#
+
+[#disadvantage-of-static-factory-method]
+=== 정적 팩터리 메서드 단점
+
+1. Static factory method만 있는 클래스는 public이나 protected로 선언된 클래스가 없으므로 하위 클래스를 만들 수 없다.
+
+   [source, java]
+----
+	public class Collections {
+		Collections() {}
+	}
+
+	// inheritance
+	public class CustomCollections extends Collections {
+		public CustomCollections() {
+			super(); // 불가능
+		}
+	}
+	----
+
+   그러므로, [Composition](#item16)을 사용한다.
+
+	[source, java]
+----
+	// composition
+	public class CustomCollections {
+		private Collections collections;
+	}
+	----
+
+	- 상속을 사용하는 경우: `is-a` 관계
+	- 컴포지션을 사용하는 경우: `has-a` 관계
+
+2. 다른 Static factory method와 쉽게 구별할 수 없다.
+
+	API 문서에 메서드와 생성자가 분리되어 있지만, static 팩토리 메서드는 다른 메서드와 섞여 잘 구분되지 않는다. 그래서 컨벤션을 정하여 보다 구별하기 쉽게 한다.
+
+	- `valueOf`: 자신의 매개변수와 같은 값을 갖는 인스턴스를 반환
+	- `of`: `valueOf` 줄인 형태, [*EnumSet*](#item32)에서 사용
+	- `getInstance`: 매개변수에 맞는 인스턴스 반환, 싱글톤인 경우 하나의 인스턴스 반환
+	- `newInstance`: 새로운 인스턴스 반환
+	- `get`*Type*: `getInstance`와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용. 여기서 *Type*은 팩토리 메서드에서 반환되는 객체의 타입을 나타낸다.
+	- `new`*Type*: `get`*Type*와 같음(?)
+
+[#item02]
+== 규칙 2. 생성자에 매개변수가 많다면 빌더를 고려하라
+
+생성자에 선택적 인자가 많을 때 객체를 생성하는 방법 세 가지를 보자.
+
+==== 1. 점층적 생성자 패턴(telescoping constructor pattern)
+
+*Bad Practice 👎*
+
+* 이 방법은 필수 인자만 받는 생성자를 하나 정의하고, 선택적 인자를 받는 생성자를 추가하는 것이다.
+* 객체를 생성할 때는 설정하려는 인자 갯수에 맞는 생성자를 골라 호출한다.
+
+===== 문제점
+
+- 설정할 필요가 없는 필드에도 인자를 전달해야 해야 한다.
+- 인자 수가 늘어날수록 가독성이 떨어진다.
+
+*Code*
+
+[source, java]
+----
+public class Person {
+	private final String name; // 필수
+	private final int age; // 필수
+	private final String mail;
+	private final String city;
+	private final String state;
+
+	public Person(String name, int age) {
+		this(name, age, "");
+	}
+
+	public Person(String name, int age, String mail) {
+		this(name, age, mail, "");
+	}
+
+	public Person(String name, int age, String mail, String city) {
+		this(name, age, mail, city, "");
+	}
+
+	public Person(String name, int age, String mail, String city, String state) {
+		this.name = name;
+		this.age = age;
+		this.mail = mail;
+		this.city = city;
+		this.state = state;
+	}
+}
+----
+
+*Usage*
+
+[source, java]
+----
+Person me = new Person("yeongjun.kim", "27");
+Person me = new Person("yeongjun.kim", "27", "opid911@gmail.com");
+----
+
+
+==== 2. JavaBeans 패턴
+
+> *Bad Practice 👎*
+
+- 인자 없는 생성자를 호출하여 객체를 만들고, setter로 값 설정하는 방법.
+- 객체 생성도 쉽고, 가독성도 좋다.
+
+**문제점**
+
+- 1회의 함수 호출로 객체 생성을 끝낼 수 없으므로, 객체 일관성이 일시작으로 깨질 수 있다.
+- 변경 불가능 클래스를 만들 수 없다. 해결하기 위해서 추가 구현할 코드가 많아진다.
+
+*Code*
+
+[source, java]
+----
+@Setter
+public class Person {
+	private String name;
+	private int age;
+	private String mail;
+	private String city;
+	private String state;
+
+	public Person() {}
+}
+----
+
+*Usage*
+
+[source, java]
+----
+Person me = new Person();
+me.setName("yeongjun.kim");
+me.setAge(27);
+----
+
+
+==== 3. Builder 패턴
+
+{dp-builder}[Builder 패턴]
+
+> ***Good Practice 👍***
+
+- 필수 인자들을 생성자(또는 정적 팩터리 메서드)에 전달하여 빌더 객체를 만들고, 선택적 인자들을 추가한 뒤, 마지막에 `build()`를 호출하여 Immutable 객체를 만드는 방법.
+
+	*Code*
+
+	[source, java]
+----
+	public class Person {
+		private final String name;
+		private final int age;
+		private final String mail;
+		private final String city;
+		private final String state;
+
+		// 빌더 객체
+		public static class Builder {
+			// 필수 인자
+			private final String name;
+			private final String age;
+			// 선택적 인자 - 기본값으로 초기화
+			private final String mail = "";
+			private final String city = "";
+			private final String state = "";
+
+			public Builder(String of, int age) {
+				this.name = name;
+				this.age = age;
+			}
+
+			public Builder mail(String mail) {
+				this.mail = mail;
+				return this;
+			}
+
+			public Builder city(String city) {
+				this.city = city;
+				return this;
+			}
+
+			public Builder state(String state) {
+				this.state = state;
+				return this;
+			}
+
+			public Person build() {
+				return new Person(this);
+			}
+		}
+
+		private Person(Builder builder) {
+			this.name = name;
+			this.age = age;
+			this.mail = mail;
+			this.city = city;
+			this.state = state;
+		}
+	}
+	----
+
+	*Usage*
+
+	[source, java]
+----
+	Person me = Person.Builder("yeongjun.kim", 27)
+		.mail("opid911@gmail.com")
+		.build();
+	----
+
+- 빌더 클래스(*Builder*)는 빌더가 만드는 객체 클래스(*Person*)의 정적 맴버 클래스로 정의한다([규칙 22](#item22)).
+
+	[source, java]
+----
+	public class Person {
+		public static class Builder {
+			...
+		}
+	}
+	----
+
+- 불변식을 적용할 수 있으며, build()에서 불변식이 위반되었는지 검사할 수 있다.
+
+	[source, java]
+----
+	public class Person {
+		public static class Builder {
+			...
+			public Person build() {
+				Person result = new Person(this);
+				if(/* result의 값 검사 */) {
+					throw new IllegalStateException(/* 위반 원인 */);
+				}
+				return result;
+			}
+		}
+	}
+	----
+
+	- 빌더 객체에서 실제 객체로 인자가 복사된 다음에 불변식들을 검사할 수 있다는 것, 그리고 그 불변식을 빌더 객체의 필드가 아니라 실제 객체의 필드를 두고 검사할 수 있다는 것은 중요하다([규칙 39](#item39)).
+	- 불변식을 위반한 경우, *build()*는 *IllegalStateException*을 던져야 한다([규칙 60](#item60)).
+	- 예외 객체를 살펴보면 어떤 불변식을 위반했는지 알아낼 수도 있어야 한다([규칙 63](#item63)).
+
+	*cf. 불변식을 강제하는 방법*
+
+	- 불변식이 적용될 값 전부를 인자로 받는 setter를 정의하는 방법.
+	- setter는 불변식이 만족하지 않으면 *IllegalArgumentException*을 던짐.
+	- build()가 호출되기 전에 불변식을 깨뜨리는 인자가 전달되었다는 것을 신속하게 알 수 있는 장점.
+
+	[source, java]
+----
+	public class Person {
+		...
+
+		public static class Builder {
+
+			public Builder setNameAndAge(String name, int ate) {
+				if(name == null) {
+					throw new IllegalArgumentException();
+				}
+				return this;
+			}
+
+			...
+
+			public Person build() {
+				return new Person(this);
+			}
+		}
+		...
+	}
+	----
+
+- 메서드마다 하나씩, 필요한 만큼 varargs 인자를 받을 수 있다.
+
+	[source, java]
+----
+	public class Person {
+		public static class Builder {
+			public Builder names(String... names) {
+				this.names = names;
+				return this;
+			}
+
+			public Builder foramily(String... names) {
+				this.farther = names[0];
+				this.marther = names[1];
+				return this;
+			}
+		}
+		...
+	}
+	----
+
+- 유연하다. (e.g. 객체가 만들어질 때마다 자동적으로 증가하는 일련번호 같은 것을 채울 수 있다)
+- 인자가 설정된 빌더는 훌륭한 [Abstract Factory][dp-abstract-factory]다. JDK1.5 이상을 사용하는 경우, 제네릭 자료형 하나면 어떤 자료형의 객체를 만드는 빌더냐의 관계 없이 모든 빌더에 적용할 수 있다.
+
+	[source, java]
+----
+	public interface Builder<T> {
+		public T build();
+	}
+	----
+
+	[source, java]
+----
+	public class Person {
+		public static class Builder implements Builder<Person> {
+			...
+			public Person build() {
+				return new Person(this);
+			}
+		}
+	}
+	----
+
+	**e.g.** *Code at package `java.util.stream`*
+
+	[source, java]
+----
+	Stream.builder().add(1).add(2).add(3).build();
+	----
+
+- 빌더 객체를 인자로 받는 메서드는 보통 *한정적 와일드카드 자료형~bounded wildcard type~*을 통해 인자의 자료형을 제한한다([규칙 28](#items28)).
+
+	[source, java]
+----
+	Tree buildTree(Builder<? extends Node> nodeBuilder) {...}
+	----
+
+- 자바가 제공하는 추상적 팩토리로는 Class 객체가 있으며, 이 객체의 *newInstance()* 가 build 메서드 구실을 한다.
+
+	**하지만,** newInstance()는 항상 무인자 생성자를 호출하려 하는데, 문제는 그런 생성자가 없을 수도 있다는 것. TO-DO
+
+**문제점**
+
+- 빌더 객체를 만드는 오버헤드가 문제가 될 수 있다(성능이 중요한 상황). 그러니 인자 갯수가 통제할 수 없을 정도로 많아지만 빌더 패턴을 적용하자.
+
+#### 요약
+
+빌더 패턴은 인자가 많은 생성자나 정적 팩터리가 필요한 클래스를 설계할 때, 특시 대부분의 인자가 선택적 인자인 상황에 유용하다.
+
+**cf.** *Code with [Lombok](https://projectlombok.org/features/Builder.html)* - 정적 팩터리 메서드로 구현
+
+[source, java]
+----
+@Value // immutable(private, final 적용)
+@Builder
+public class Person {
+	String name;
+	int age;
+	String mail;
+	String city;
+	String state;
+}
+----
+
+[#item3]
+== 규칙 3. private 생성자나 열거 타입으로 싱글턴임을 보증하라
+[#item4]
+== 규칙 4. 인스턴스화를 막으려거든 private 생성자를 사용하라
+[#item5]
+== 규칙 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
+[#item6]
+== 규칙 6. 불필요한 객체 생성을 피하라
+[#item7]
+== 규칙 7. 다 쓴 객체 참조는 해제하라
+[#item8]
+== 규칙 8. finalizer와 cleaner 사용을 피하라
+[#item9]
+== 규칙 9. try-finally 보다는 try-with-resources를 사용하라
