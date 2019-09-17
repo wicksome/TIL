@@ -1,0 +1,18 @@
+= robots.txt
+Yeongjun Kim <opid911.gmail.com>
+
+== 크롤링 거절하기
+
+급한대로 `nginx.conf` 만으로 모두 거절하는 방법
+
+[source]
+.nginx.conf
+----
+location /robots.txt {
+  return 200 "User-agent: *\nDisallow: /";
+}
+----
+
+== 참고
+
+* https://www.twinword.co.kr/blog/basic-technical-seo/
