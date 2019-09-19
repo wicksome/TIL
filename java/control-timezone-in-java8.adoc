@@ -32,34 +32,30 @@ Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://
 |===
 
 [NOTE]
-.TimeZone
+.타임존 관련 용어 설명
 ====
+비슷하지만 다른 용어들을 설명한다.
+
+____
+"GMT is a **time zone** and UTC is a **time standard**."
+____
+
+TimeZone::
 타임존은 여러 가지 다른 것을 설명하는 데 사용할 수 있지만 대개 지역 또는 국가의 현지 시간을 나타내며, 주로 해당 국가에
 의해 법적으로 지정된다. GMT와 UTC는 같은 시간을 공유하고(동일하진 않고 초의 소숫점단위에서 차이가 난다) 혼용되서 사용되지만
 엄밀히 구분하자면 다르다.
 
-"GMT is a **time zone** and UTC is a **time standard**."
-====
-
-[NOTE]
-.GMT: Greenwich Mean Time
-====
+GMT: Greenwich Mean Time::
 GMT는 경도 0도에 위치한 영국 런던 그리니치에 있는 왕립 천문대의 시간으로, 모든 시간대의 시작점을 나타내며, 
 일년내내 DST의 영향을 받지 않는다. GMT는 1925년 2월 5일부터 사용하기 시작했으며, 1972년 1월 1일까지 
 세계 표준시로 사용되었다.
-====
 
-[NOTE]
-.UTC: 협정 세계시, 協定世界時
-====
+UTC: 협정 세계시, 協定世界時::
 **UTC는 국제 표준시로 타임존이 아니다.** 즉, UTC를 공식적으로 현지 시간으로 사용하는 국가나 지역은 없다. 
 협정 세계시를 영어권에서는 Coordinated Universal Time^CUT^라고, 프랑스어권에서는 
 Temps Universel Coordonné^TUC^라고 하는데, 혼돈을 방지하기 위해서 공식적으로 UTC라고 정해졌다.
-====
 
-[NOTE]
-.DST: Daylight Saving time
-====
+DST: Daylight Saving time::
 DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 시간에서 1시간 앞으로, 그리고 다시 가을에 시간을 1시간 전으로 설정하는
 것을 말한다. DST와 "summer time"은 같은 말을 뜻하며 특정 나라에서 주로 불린다. 영국에서 썸머타임이라고 많이 사용하며, DST가 적용되지 않는 표준시는
 "winter time"이라고 사용되기도 한다. DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
