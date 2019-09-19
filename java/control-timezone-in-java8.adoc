@@ -2,8 +2,9 @@
 Yeongjun.kim <opid911@gmail.com>
 v1.0
 :revdate: 2018-02-21T17:50:00+09:00
+:toc:
 
-= TimeZone
+== 타임존?
 
 Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://www.iana.org/time-zones:[IANA 데이터베이스]를 사용하고, 따로 버전업 없이
 독립적으로 시간대 데이터베이스를 업데이트 한다. 즉, 하드코딩으로 관리하지 않아도 된다. 또한, Java8에서는 타임존, DST를 좀 더 편하게 사용하기 위해
@@ -64,9 +65,9 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 "winter time"이라고 사용되기도 한다. DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
 ====
 
-## Examples
+== 예제코드
 
-### 사용자에게 타임존(+offset)을 표시할 때 어떻게 보여줄 것인가?
+=== 사용자에게 타임존(+offset)을 표시할 때 어떻게 보여줄 것인가?
 
 [source]
 ----
@@ -111,7 +112,7 @@ final ZoneOffset offset = LocalDateTime.now().atZone(zoneId).getOffset();
 구글 캘린더에서는 `(GMT-03:00) 산티아고` 라고 DST를 적용한 GMT시간을 보여준다.
 ====
 
-### LocalDateTime 에 ZoneId 설정하기
+=== LocalDateTime 에 ZoneId 설정하기
 
 특정 지역 시간(localDateTime)에 Zone-ID를 추가하려면 아래와 같다.
 
@@ -147,7 +148,7 @@ final LocalDateTime localDateTime1 = localDateTime.atZone(seoul).toLocalDateTime
 final LocalDateTime localDateTime2 = localDateTime.atZone(utc).toLocalDateTime();
 ```
 
-#### 특정 구역 시간의 다른 구역 시간 구하기
+=== 특정 구역 시간의 다른 구역 시간 구하기
 
 예를 들어, 로스앤젤레스 시간으로 오전 9시가 서울 시간으로 몇시일지 확인하려고 하려고 한다. 아래와 같이 `withZoneSameInstant(ZoneId)` 를 사용하여 시간을 구할 수 있다.
 
@@ -158,9 +159,9 @@ final ZonedDateTime seoul = losAngeles.withZoneSameInstant(ZoneId.of("Asia/Seoul
 System.out.println(seoul.toLocalDateTime());
 ```
 
-#### 시간대(`ZoneId`) 변경하기
+=== 시간대 변경하기
 
-시간대만 변경하고자할 땐, `withZoneSameLocal(ZoneId)` 를 사용한다. 즉, 아래 코드에서 _Los_Angeles_ 와 _seoul_ 의 `localDateTime` 은 같다.
+시간대(`ZoneId`)만 변경하고자할 땐, `withZoneSameLocal(ZoneId)` 를 사용한다. 즉, 아래 코드에서 _Los_Angeles_ 와 _seoul_ 의 `localDateTime` 은 같다.
 
 [source,java]
 ----
@@ -177,7 +178,7 @@ System.out.println(seoul);
 2017-10-18T09:00+09:00[Asia/Seoul]
 ----
 
-#### 1주일뒤 회의시간 예약하기
+=== 1주일뒤 회의시간 예약하기
 
 예를 들어, Santiago에서 2018년 5월 10일 10시 기준으로 7주일 이후에 회의를 잡으려고 한다. 이 경우에는 `Period.ofDays(int)` 을 사용한다.
 
@@ -210,17 +211,18 @@ System.out.println(nextMeeting);
 2018-05-17T09:00-04:00[America/Santiago]
 ----
 
-## References
+== References
 
-* timeanddate - What is a Time Zone?: https://www.timeanddate.com/time/time-zones.html
-* 위키피디아 - 시간대: https://ko.wikipedia.org/wiki/시간대
-* https://greenwichmeantime.com/what-is-gmt/
+* timeanddate
+** https://www.timeanddate.com/time/time-zones.html[What is a Time Zone?]
+** https://www.timeanddate.com/time/utc-abbreviation.html
+** https://www.timeanddate.com/time/dst/
+** https://www.timeanddate.com/time/dst/summer-time.html
 * https://www.timeanddate.com/time/gmt-utc-time.html
+* https://ko.wikipedia.org/wiki/시간대[위키피디아 - 시간대]
+* https://greenwichmeantime.com/what-is-gmt/
 * https://community.akamai.com/groups/korea-user-group/blog/2015/06/30/gmt-vs-utc
-* https://www.timeanddate.com/time/utc-abbreviation.html
-* https://www.timeanddate.com/time/dst/
-* https://www.timeanddate.com/time/dst/summer-time.html
 * https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html
 * http://d2.naver.com/helloworld/645609
-* Java 8 이전 버전에서 시간 다루기: https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/
-* Toast - 자바스크립트에서 타임존 다루기 (1): http://meetup.toast.com/posts/125
+* https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/[Java 8 이전 버전에서 시간 다루기]
+* http://meetup.toast.com/posts/125[Toast - 자바스크립트에서 타임존 다루기 (1)]
