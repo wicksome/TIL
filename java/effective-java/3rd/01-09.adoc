@@ -2,6 +2,7 @@
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2017-02-10T00:00:00+09:00
 :page-tags: java, effective-java 
+:toc:
 
 [NOTE]
 ****
@@ -13,6 +14,9 @@ Yeongjun Kim <opid911@gmail.com>
 
 '이펙티브 자바 2판'을 공부하고, 3판이 나왔다는 얘기를 듣고 다시 보면서 정리한 내용을 보완하고자 한다.
 
+// 2/e 2017-02-10T00:00:00+09:00
+// 3/e 2019-09-20T01:28:00+09:00
+
 [#item01]
 == 규칙 1. 생성자 대신 정적 팩터리 메서드를 고려하라
 :source-enumset: http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/7d1d5f4d019a/src/share/classes/java/util/EnumSet.java#l109
@@ -21,6 +25,7 @@ Yeongjun Kim <opid911@gmail.com>
 :item3: https://wickso.me/java/effective-java/03
 :item4: https://wickso.me/java/effective-java/01-09#03
 :item17: https://wickso.me/java/effective-java/01-09#03
+:item18: https://wickso.me/java/effective-java/01-09#enum
 :item20: https://wickso.me/java/effective-java/01-09#enum
 :item34: https://wickso.me/java/effective-java/01-09#enum
 
@@ -199,6 +204,7 @@ public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
 
 ==== 정적 팩터리 메서드를 작성하는 시점에는 반환할 객체의 클래스가 존재하지 않아도 된다
 
+TODO: example code
 
 ==== 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
 
@@ -229,380 +235,122 @@ Map<String, List<String>> m = new HashMap<>();
 [#disadvantage-of-static-factory-method]
 === 정적 팩터리 메서드 단점
 
-1. Static factory method만 있는 클래스는 public이나 protected로 선언된 클래스가 없으므로 하위 클래스를 만들 수 없다.
-
-   [source, java]
-----
-	public class Collections {
-		Collections() {}
-	}
-
-	// inheritance
-	public class CustomCollections extends Collections {
-		public CustomCollections() {
-			super(); // 불가능
-		}
-	}
-	----
-
-   그러므로, [Composition](#item16)을 사용한다.
-
-	[source, java]
-----
-	// composition
-	public class CustomCollections {
-		private Collections collections;
-	}
-	----
-
-	- 상속을 사용하는 경우: `is-a` 관계
-	- 컴포지션을 사용하는 경우: `has-a` 관계
-
-2. 다른 Static factory method와 쉽게 구별할 수 없다.
-
-	API 문서에 메서드와 생성자가 분리되어 있지만, static 팩토리 메서드는 다른 메서드와 섞여 잘 구분되지 않는다. 그래서 컨벤션을 정하여 보다 구별하기 쉽게 한다.
-
-	- `valueOf`: 자신의 매개변수와 같은 값을 갖는 인스턴스를 반환
-	- `of`: `valueOf` 줄인 형태, [*EnumSet*](#item32)에서 사용
-	- `getInstance`: 매개변수에 맞는 인스턴스 반환, 싱글톤인 경우 하나의 인스턴스 반환
-	- `newInstance`: 새로운 인스턴스 반환
-	- `get`*Type*: `getInstance`와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용. 여기서 *Type*은 팩토리 메서드에서 반환되는 객체의 타입을 나타낸다.
-	- `new`*Type*: `get`*Type*와 같음(?)
-
-[#item02]
-== 규칙 2. 생성자에 매개변수가 많다면 빌더를 고려하라
-
-생성자에 선택적 인자가 많을 때 객체를 생성하는 방법 세 가지를 보자.
-
-==== 1. 점층적 생성자 패턴(telescoping constructor pattern)
-
-*Bad Practice 👎*
-
-* 이 방법은 필수 인자만 받는 생성자를 하나 정의하고, 선택적 인자를 받는 생성자를 추가하는 것이다.
-* 객체를 생성할 때는 설정하려는 인자 갯수에 맞는 생성자를 골라 호출한다.
-
-===== 문제점
-
-- 설정할 필요가 없는 필드에도 인자를 전달해야 해야 한다.
-- 인자 수가 늘어날수록 가독성이 떨어진다.
-
-*Code*
-
+. 정적 팩터리 메서드만 제공하는 클래스는 public 이나 protected로 선언된 생성자가 없으므로 하위 클래스를 만들 수 없다.
++
+어찌보면 {item18}[상속(inheritance)보다 합성(composition)을 사용]하도록 유도하므로 장점으로 받아들일 수도 있다.
++
 [source, java]
 ----
-public class Person {
-	private final String name; // 필수
-	private final int age; // 필수
-	private final String mail;
-	private final String city;
-	private final String state;
+// 정적 팩터리 메서드만 가진 클래스
+public class Collections {
+    Collections() {}
+}
 
-	public Person(String name, int age) {
-		this(name, age, "");
-	}
+// 상속을 통한 하위 클래스
+public class CustomCollections extends Collections {
+    public CustomCollections() {
+        super(); // 불가능
+    }
+}
 
-	public Person(String name, int age, String mail) {
-		this(name, age, mail, "");
-	}
-
-	public Person(String name, int age, String mail, String city) {
-		this(name, age, mail, city, "");
-	}
-
-	public Person(String name, int age, String mail, String city, String state) {
-		this.name = name;
-		this.age = age;
-		this.mail = mail;
-		this.city = city;
-		this.state = state;
-	}
+// "Favor object composition over class inheritance"
+public class CustomCollections {
+	private Collections collections;
 }
 ----
++
+[TIP]
+.언제 상속? 합성?
+====
+* 상속(inheritance)을 사용하는 경우: `is-a` 관계
+* 합성(composition)을 사용하는 경우: `has-a` 관계
+====
 
-*Usage*
+. 개발자가 찾기 어렵다.
++
+생성자와는 달리 정적 팩터리 메서드는 다른 메서드와 섞여 잘 구분되지 않고 어떤 정적 팩터리 메서드가 있는지 개발자가 알아야한다. 
+대안으로 흔히 사용되는 네이밍을 통해 구별하기 쉽게 할 수 있다.
++
+.정적 팩터리 메서드에 흔히 사용하는 네이밍
+[cols="1, 4"]
+|===
+| Naming | Description
 
+| **from**
+a| 인자를 하나 받아서 해당 타입의 인스턴스를 반환하는 형변환 메서드
 [source, java]
 ----
-Person me = new Person("yeongjun.kim", "27");
-Person me = new Person("yeongjun.kim", "27", "opid911@gmail.com");
+Date d = Date.from(instant);
 ----
 
-
-==== 2. JavaBeans 패턴
-
-> *Bad Practice 👎*
-
-- 인자 없는 생성자를 호출하여 객체를 만들고, setter로 값 설정하는 방법.
-- 객체 생성도 쉽고, 가독성도 좋다.
-
-**문제점**
-
-- 1회의 함수 호출로 객체 생성을 끝낼 수 없으므로, 객체 일관성이 일시작으로 깨질 수 있다.
-- 변경 불가능 클래스를 만들 수 없다. 해결하기 위해서 추가 구현할 코드가 많아진다.
-
-*Code*
-
+| **of**
+a| 여러 인자를 받아 적합한 타입의 인스턴스를 반환하는 집계 메서드
 [source, java]
 ----
-@Setter
-public class Person {
-	private String name;
-	private int age;
-	private String mail;
-	private String city;
-	private String state;
-
-	public Person() {}
-}
+Set<Rank> faceCards = EnumSet.of(JACK, QUEEN, KING);
 ----
 
-*Usage*
-
+| **valueOf**
+a| `from` 과 `of` 의 더 자세한 버전, 자신의 매개변수와 같은 값을 갖는 인스턴스를 반환
 [source, java]
 ----
-Person me = new Person();
-me.setName("yeongjun.kim");
-me.setAge(27);
+BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);
 ----
 
-
-==== 3. Builder 패턴
-
-{dp-builder}[Builder 패턴]
-
-> ***Good Practice 👍***
-
-- 필수 인자들을 생성자(또는 정적 팩터리 메서드)에 전달하여 빌더 객체를 만들고, 선택적 인자들을 추가한 뒤, 마지막에 `build()`를 호출하여 Immutable 객체를 만드는 방법.
-
-	*Code*
-
-	[source, java]
-----
-	public class Person {
-		private final String name;
-		private final int age;
-		private final String mail;
-		private final String city;
-		private final String state;
-
-		// 빌더 객체
-		public static class Builder {
-			// 필수 인자
-			private final String name;
-			private final String age;
-			// 선택적 인자 - 기본값으로 초기화
-			private final String mail = "";
-			private final String city = "";
-			private final String state = "";
-
-			public Builder(String of, int age) {
-				this.name = name;
-				this.age = age;
-			}
-
-			public Builder mail(String mail) {
-				this.mail = mail;
-				return this;
-			}
-
-			public Builder city(String city) {
-				this.city = city;
-				return this;
-			}
-
-			public Builder state(String state) {
-				this.state = state;
-				return this;
-			}
-
-			public Person build() {
-				return new Person(this);
-			}
-		}
-
-		private Person(Builder builder) {
-			this.name = name;
-			this.age = age;
-			this.mail = mail;
-			this.city = city;
-			this.state = state;
-		}
-	}
-	----
-
-	*Usage*
-
-	[source, java]
-----
-	Person me = Person.Builder("yeongjun.kim", 27)
-		.mail("opid911@gmail.com")
-		.build();
-	----
-
-- 빌더 클래스(*Builder*)는 빌더가 만드는 객체 클래스(*Person*)의 정적 맴버 클래스로 정의한다([규칙 22](#item22)).
-
-	[source, java]
-----
-	public class Person {
-		public static class Builder {
-			...
-		}
-	}
-	----
-
-- 불변식을 적용할 수 있으며, build()에서 불변식이 위반되었는지 검사할 수 있다.
-
-	[source, java]
-----
-	public class Person {
-		public static class Builder {
-			...
-			public Person build() {
-				Person result = new Person(this);
-				if(/* result의 값 검사 */) {
-					throw new IllegalStateException(/* 위반 원인 */);
-				}
-				return result;
-			}
-		}
-	}
-	----
-
-	- 빌더 객체에서 실제 객체로 인자가 복사된 다음에 불변식들을 검사할 수 있다는 것, 그리고 그 불변식을 빌더 객체의 필드가 아니라 실제 객체의 필드를 두고 검사할 수 있다는 것은 중요하다([규칙 39](#item39)).
-	- 불변식을 위반한 경우, *build()*는 *IllegalStateException*을 던져야 한다([규칙 60](#item60)).
-	- 예외 객체를 살펴보면 어떤 불변식을 위반했는지 알아낼 수도 있어야 한다([규칙 63](#item63)).
-
-	*cf. 불변식을 강제하는 방법*
-
-	- 불변식이 적용될 값 전부를 인자로 받는 setter를 정의하는 방법.
-	- setter는 불변식이 만족하지 않으면 *IllegalArgumentException*을 던짐.
-	- build()가 호출되기 전에 불변식을 깨뜨리는 인자가 전달되었다는 것을 신속하게 알 수 있는 장점.
-
-	[source, java]
-----
-	public class Person {
-		...
-
-		public static class Builder {
-
-			public Builder setNameAndAge(String name, int ate) {
-				if(name == null) {
-					throw new IllegalArgumentException();
-				}
-				return this;
-			}
-
-			...
-
-			public Person build() {
-				return new Person(this);
-			}
-		}
-		...
-	}
-	----
-
-- 메서드마다 하나씩, 필요한 만큼 varargs 인자를 받을 수 있다.
-
-	[source, java]
-----
-	public class Person {
-		public static class Builder {
-			public Builder names(String... names) {
-				this.names = names;
-				return this;
-			}
-
-			public Builder foramily(String... names) {
-				this.farther = names[0];
-				this.marther = names[1];
-				return this;
-			}
-		}
-		...
-	}
-	----
-
-- 유연하다. (e.g. 객체가 만들어질 때마다 자동적으로 증가하는 일련번호 같은 것을 채울 수 있다)
-- 인자가 설정된 빌더는 훌륭한 [Abstract Factory][dp-abstract-factory]다. JDK1.5 이상을 사용하는 경우, 제네릭 자료형 하나면 어떤 자료형의 객체를 만드는 빌더냐의 관계 없이 모든 빌더에 적용할 수 있다.
-
-	[source, java]
-----
-	public interface Builder<T> {
-		public T build();
-	}
-	----
-
-	[source, java]
-----
-	public class Person {
-		public static class Builder implements Builder<Person> {
-			...
-			public Person build() {
-				return new Person(this);
-			}
-		}
-	}
-	----
-
-	**e.g.** *Code at package `java.util.stream`*
-
-	[source, java]
-----
-	Stream.builder().add(1).add(2).add(3).build();
-	----
-
-- 빌더 객체를 인자로 받는 메서드는 보통 *한정적 와일드카드 자료형~bounded wildcard type~*을 통해 인자의 자료형을 제한한다([규칙 28](#items28)).
-
-	[source, java]
-----
-	Tree buildTree(Builder<? extends Node> nodeBuilder) {...}
-	----
-
-- 자바가 제공하는 추상적 팩토리로는 Class 객체가 있으며, 이 객체의 *newInstance()* 가 build 메서드 구실을 한다.
-
-	**하지만,** newInstance()는 항상 무인자 생성자를 호출하려 하는데, 문제는 그런 생성자가 없을 수도 있다는 것. TO-DO
-
-**문제점**
-
-- 빌더 객체를 만드는 오버헤드가 문제가 될 수 있다(성능이 중요한 상황). 그러니 인자 갯수가 통제할 수 없을 정도로 많아지만 빌더 패턴을 적용하자.
-
-#### 요약
-
-빌더 패턴은 인자가 많은 생성자나 정적 팩터리가 필요한 클래스를 설계할 때, 특시 대부분의 인자가 선택적 인자인 상황에 유용하다.
-
-**cf.** *Code with [Lombok](https://projectlombok.org/features/Builder.html)* - 정적 팩터리 메서드로 구현
-
+| **getInstance** or **instance** 
+a| 매개변수에 맞는 인스턴스 반환. 싱글톤인 경우 하나의 인스턴스 반환. 
 [source, java]
 ----
-@Value // immutable(private, final 적용)
-@Builder
-public class Person {
-	String name;
-	int age;
-	String mail;
-	String city;
-	String state;
-}
+StackWalker luke = StackWalker.getInstance(options);
 ----
 
-[#item3]
-== 규칙 3. private 생성자나 열거 타입으로 싱글턴임을 보증하라
+| **newInstance** or **create** 
+a| 매번 새로운 인스턴스를 반환하는 것을 보장
+[source, java]
+----
+Object newArray = Array.newInstance(classObject, arrayLen);
+----
 
-[#item4]
-== 규칙 4. 인스턴스화를 막으려거든 private 생성자를 사용하라
+| **get**_**Type**_ 
+a| `getInstance` 와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용
+[source, java]
+----
+FileStore fs = Files.getFileStore(path);
+----
+
+| **new**_**Type**_ 
+a| `newInstance` 와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용
+[source, java]
+----
+BufferedReader br = Files.newBufferedReader(path);
+----
+
+| **type**
+a| _getType_ 과 _newType_ 의 간결한 버전
+[source, java]
+----
+List<Item> items = Collections.list();
+----
+
+|===
+
+include::02.adoc[]
+// 2017-02-12 10:00:00
+
+include::03.adoc[]
+
+include::04.adoc[]
 
 [#item5]
 == 규칙 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
 
-[#item6]
-== 규칙 6. 불필요한 객체 생성을 피하라
+include::06.adoc[]
 
-[#item7]
-== 규칙 7. 다 쓴 객체 참조는 해제하라
+// 2017-02-21 10:00:00
 
-[#item8]
-== 규칙 8. finalizer와 cleaner 사용을 피하라
+include::07.adoc[]
+
+include::08.adoc[]
 
 [#item9]
 == 규칙 9. try-finally 보다는 try-with-resources를 사용하라
