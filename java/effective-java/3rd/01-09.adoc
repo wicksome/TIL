@@ -2,7 +2,6 @@
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2017-02-10T00:00:00+09:00
 :page-tags: java, effective-java 
-:toc: left
 
 [NOTE]
 ****
