@@ -209,16 +209,24 @@ System.out.println(nextMeeting);
 
 == References
 
-* timeanddate
-** https://www.timeanddate.com/time/time-zones.html[What is a Time Zone?]
-** https://www.timeanddate.com/time/utc-abbreviation.html
-** https://www.timeanddate.com/time/dst/
-** https://www.timeanddate.com/time/dst/summer-time.html
-* https://www.timeanddate.com/time/gmt-utc-time.html
-* https://ko.wikipedia.org/wiki/시간대[위키피디아 - 시간대]
-* https://greenwichmeantime.com/what-is-gmt/
-* https://community.akamai.com/groups/korea-user-group/blog/2015/06/30/gmt-vs-utc
-* https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html
-* http://d2.naver.com/helloworld/645609
-* https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/[Java 8 이전 버전에서 시간 다루기]
-* http://meetup.toast.com/posts/125[Toast - 자바스크립트에서 타임존 다루기 (1)]
+++++
+<details><summary>참고 링크</summary>
+<br/>
+<dif class="ulist">
+    <ul>
+        <li><p><a href="https://www.timeanddate.com/time/time-zones.html">What is a Time Zone?</a></p></li>
+        <li><p><a href="https://www.timeanddate.com/time/utc-abbreviation.html">Why is it Called UTC - not CUT?</a></p></li>
+        <li><p><a href="https://www.timeanddate.com/time/dst/">Daylight Saving Time - DST - Summer Time</a></p></li>
+        <li><p><a href="https://www.timeanddate.com/time/dst/summer-time.html">Summer Time Is Daylight Saving Time</a></p></li>
+        <li><p><a href="https://www.timeanddate.com/time/gmt-utc-time.html">The Difference Between GMT and UTC</a></p></li>
+        <li><p><a href="https://ko.wikipedia.org/wiki/시간대">위키피디아 - 시간대</a></p></li>
+        <li><p><a href="https://greenwichmeantime.com/what-is-gmt/">What is Greenwich Mean Time (GMT)?</a></p></li>
+        <li><p><a href="https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html">Java Docs - Class ZoneId</a></p></li>
+        <li><p><a href="http://d2.naver.com/helloworld/645609">Java의 날짜와 시간 API - Naver D2</a></p></li>
+        <li><p><a href="https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/">Java 8 이전 버전에서 시간 다루기</a></p></li>
+        <li><p><a href="http://meetup.toast.com/posts/125">자바스크립트에서 타임존 다루기 (1) - Toast</a></p></li>
+    </ul>
+</div>
+</details>
+++++
+
