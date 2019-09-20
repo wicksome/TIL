@@ -1,6 +1,7 @@
 = Markdown에서 Asciidoc으로 이사하기
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2019-01-01: 히스토리 삭제로 확인 불가
+:page-draft:
 
 == Asciidoc 문법
 

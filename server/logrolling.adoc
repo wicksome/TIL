@@ -1,6 +1,7 @@
 = logrotate로 로그롤링하기
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2019-07-27
+:page-draft:
 
 == logrotate란?
 

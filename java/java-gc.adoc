@@ -2,6 +2,7 @@
 Yeongjun kim <opid911@gmail.com>
 v1.0, 2018-03-22
 :toc:
+:page-draft:
 
 == Generational Garbage Collection
 * 'stop-the-world'란 GC를 실행하기 위해 JVM이 애플리케이션 실행을 멈추는 것
