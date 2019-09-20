@@ -1,5 +1,5 @@
 = BEM, Block__Element--Modifier
-:page-dreft:
+:page-draft:
 
 CSS 네이밍 방법론
 

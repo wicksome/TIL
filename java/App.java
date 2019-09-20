@@ -1,3 +1,8 @@
+import java.lang.reflect.Method;
+
+import java.util.Arrays;
+import java.util.Optional;
+
 import java.util.stream.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -7,16 +12,39 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-class App {
+public class App {
     public static void main(String[] args) throws Exception {
-        // System.out.println("Hello world");
-        final App app = new App();
-        // app.fp();
-        // app.future();
-        app.completableFuture();
+        if (args.length == 0) {
+            System.out.println("usage: run <method> <arguments...>");
+            return;
+        }
+
+        System.out.println(Stream.of(args).collect(Collectors.joining(", ", "[", "]")));
+
+        Service obj = new Service();
+        Method method = obj.getClass().getDeclaredMethod(args[0]);
+        method.setAccessible(true);
+        method.invoke(obj);
+    }
+}
+
+class Service {
+    public void test1() {
+        Optional.ofNullable(null).orElse(new TestObject("1 "));
+        System.out.println();
+        Optional.ofNullable(new TestObject("2-1 ")).orElse(new TestObject("2-2 "));
+        System.out.println();
+        Optional.ofNullable(null).orElseGet(TestObject::new);
+        System.out.println();
+        Optional.ofNullable(new TestObject("4-1 ")).orElseGet(TestObject::new);
     }
 
-    private void fp() {
+    class TestObject {
+        TestObject() { System.out.print("new"); }
+        TestObject(String s) { System.out.print(s == null ? "new" : s); }
+    }
+
+    void fp() {
         Stream.of(1, 2, 3).forEach(System.out::println);
     }
 
@@ -58,5 +86,4 @@ class App {
         System.out.println("Thread#" + Thread.currentThread().getId());
         future.join();
     }
-
 }
