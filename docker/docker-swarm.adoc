@@ -1,6 +1,7 @@
 = Docker - swarm
-Yeongjun.kim <opid911@gmail.com>
+Yeongjun Kim <opid911@gmail.com>
 v1.0, 2019-08-27
+:page-draft:
 
 도커 스웜^swarm^ 은 도커에서 제공하는 오케스트레이션^Orchestration^ 도구이다.
 
