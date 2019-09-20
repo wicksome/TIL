@@ -636,10 +636,14 @@ int sum = Stream.of(1, 2, 3)
                     return (l + r);
                 }).get();
 System.out.println("sum:" + sum);
-// l=1, r= 2
-// l=3, r= 3
-// sum: 6
 ----
+
+.Output
+....
+l=1, r= 2
+l=3, r= 3
+sum: 6
+....
 
 [source, java]
 .Example, https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-[T reduce(T identity, BinaryOperator<T> accumulator)]
@@ -650,11 +654,14 @@ int sum = Stream.of(1, 2, 3)
                     return (l + r);
                 });
 System.out.println("sum:" + sum);
-// l=10, r= 1
-// l=11, r= 2
-// l=13, r= 3
-// sum: 16
 ----
+.Output
+....
+l=10, r= 1
+l=11, r= 2
+l=13, r= 3
+sum: 16
+....
 
 [IMPORTANT]
 .collect vs reduce
@@ -726,10 +733,12 @@ IntStream.of(1, 2, 3).noneMatch(a -> a == 4); // true
 Arrays.asList(1, 2, 3)
       .stream()
       .forEach(System.out::println);
-// 1
-// 2
-// 3
 ----
+....
+1
+2
+3
+....
 
 [IMPORTANT]
 .Stream.forEach vs Collection.forEach
@@ -745,9 +754,8 @@ Arrays.asList(1, 2, 3).forEach(System.out::println); // <2>
 <1> for-each Loop of _Stream_
 <2> for-each of _Iterable_
 
-*참고링크*
-
-* http://wonwoo.ml/index.php/post/1812[java의 몇가지 이야기]
+.참고링크
+* http://wonwoo.ml/index.php/post/1812[java의 몇 가지 이야기]
 * https://stackoverflow.com/questions/23218874/what-is-difference-between-collection-stream-foreach-and-collection-foreach[What is difference between Collection.stream().forEach() and Collection.forEach()?]
 ====
 
@@ -830,14 +838,18 @@ void futureTest() throws InterruptedException, ExecutionException {
     System.out.println("future done? " + future.isDone());
     System.out.println("result:" + result);
 }
-// Thread#1
-// future done? false
-// Thread#12
-// future done? true
-// result:123
 ----
 <1> Java5 에서 멀티스레드와 콜백 사용하기 위해 ExecutorService 사용
 <2> _get()_ 은 blocking 메서드이다.
+
+.Output
+....
+Thread#1
+future done? false
+Thread#12
+future done? true
+result:123
+....
 
 
 === ListenableFuture
@@ -868,9 +880,8 @@ void async() throws InterruptedException {
 <2> 실패시 실행할 callback 함수(https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/FailureCallback.html[_FailureCallback_] 인스턴스)
 <3> _sleep()_ 을 주지않으면 메인 스레드가 바로 종료되면서 HTTP 응답값을 확인 할 수 없다.
 
-[source, text]
 .Output
-----
+....
 DEBUG: Created asynchronous GET request for "https://httpbin.org/get" ... 
 DEBUG: Setting request Accept header to [application/json, application/*+json]
 test1 <1>
@@ -878,7 +889,7 @@ DEBUG: Async GET request for "https://httpbin.org/get" resulted in 200 (OK)
 DEBUG: Reading [interface java.util.Map] as "application/json" using [o.s.h.c.j.MappingJackson2HttpMessageConverter]
 200 <2>
 test2 <3>
-----
+....
 <1> 코드를 실행시키면 바로 출력
 <2> HTTP 응답을 받을 때 바로 출력(sleep와 무관하게 동작)
 <3> "test1" 출력하고 5초 이후에 출력
@@ -1116,19 +1127,22 @@ public void exceptionallyExample1() throws InterruptedException, ExecutionExcept
 
     System.out.println(result);
 }
-// Output:
-//   1
-//   2
-//   4
-//   21:11:10.349 [main] ERROR com.example.demo.LocalTest - catch error
-//   java.util.concurrent.CompletionException: java.lang.RuntimeException
-//     at java.base/java.u.c.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
-//     at java.base/java.u.c.CompletableFuture.uniApplyNow(CompletableFuture.java:683)
-//     at java.base/java.u.c.CompletableFuture.uniApplyStage(CompletableFuture.java:658)
-//     at java.base/java.u.c.CompletableFuture.thenApply(CompletableFuture.java:2094)
-//     ...
-//   exception!!!
 ----
+
+.Output
+....
+1
+2
+4
+21:11:10.349 [main] ERROR com.example.demo.LocalTest - catch error
+java.util.concurrent.CompletionException: java.lang.RuntimeException
+  at java.base/java.u.c.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
+  at java.base/java.u.c.CompletableFuture.uniApplyNow(CompletableFuture.java:683)
+  at java.base/java.u.c.CompletableFuture.uniApplyStage(CompletableFuture.java:658)
+  at java.base/java.u.c.CompletableFuture.thenApply(CompletableFuture.java:2094)
+  ...
+exception!!!
+....
 
 ==== _allOf_
 :java-all-of: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture...-
@@ -1188,14 +1202,17 @@ public void completableFutureExample() throws InterruptedException, ExecutionExc
     TimeUnit.SECONDS.sleep(3);
     print.accept("6");
 }
-// Output:
-//   Thread#1: 1
-//   Thread#1: 3 <1>
-//   Thread#1: 4
-//   Thread#12: 2 <2>
-//   Thread#1: 5
-//   Thread#1: 6 <3>
 ----
+
+.Output
+....
+Thread#1: 1
+Thread#1: 3 <1>
+Thread#1: 4
+Thread#12: 2 <2>
+Thread#1: 5
+Thread#1: 6 <3>
+....
 <1> 실행되면 메인 스레드에서 "1", "3", "4" 가 출력된다.
 <2> 1초 뒤 "2"가 출력되면서 `combinedFuture.get()` 아래의 "5"도 출력된다.
 <3> "4"가 출력되고 3초 뒤 "5"가 출력되면서 프포그램이 종료된다.
@@ -1246,8 +1263,49 @@ public T join() { ... }
 *References*
 
 * https://stackoverflow.com/a/47463228[completablefuture join vs get]
-
 ====
+
+=== RestTemplate with @Async 
+
+주로 배치성 프로젝트에서 컨트롤러에 비동기적으로 동작시키기 위해 `@Async` 을 사용했었다. 이 때, 대부분(내가 본 프로젝트) `void` 를 반환하였다.
+하지만 _Async_ 문서를 보면 `void` 혹은 `Future` 를 반환시킬 수 있다. 즉, `CompletableFuture` 를 활용할 수 있게 된다.
+
+[quote, 'Spring Framework, https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/annotation/Async.html[Annotation Type Async]']
+However, the return type is constrained to either void or Future.
+
+[source, java]
+.ReceiptService.java
+----
+@Service
+public class ReceiptService {
+    @Async
+    public CompletableFuture<Receipt> getAsync(@NotNull String paymentId) {
+        final Receipt receipt = restTemplate.getForObject(url, Receipt.class);
+
+        return CompletableFuture.completableFuture(receipt);
+    }
+}
+----
+
+[source, java]
+.ReceiptController.java
+----
+@RestController
+public class ReceiptController {
+    @GetMapping("/")
+    public List<Receipt> getReceipts() {
+        CompletableFuture<Receipt> receipt1 = receiptService.getAsync(id);
+        ...
+        CompletableFuture.allOf(receipt1, ...);
+
+        return ...;
+    }
+}
+----
+
+TODO: 실제 동작하는 코드인지 테스트해보고 수정할 것
+
+참고: https://github.com/OsoriAndOmori/book-shelf/blob/master/programming/spring-maven/%5BSpring%5D%20HttpRequest%20Async%EB%A1%9C%20%EB%B3%B4%EB%82%B4%EB%8A%94%20%EB%B0%A9%EB%B2%95%EC%97%90%20%EA%B4%80%ED%95%98%EC%97%AC.md[HttpRequest Async로 보내는 방법에 관하여]
 
 ==== References
 
@@ -1311,10 +1369,13 @@ public void webClientExample() {
     System.out.println(user1);
     System.out.println(user2);
 }
-// Output:
-//   User(id=1, name=User 1, password=Password1)
-//   User(id=2, name=User 2, password=Password2)
 ----
+
+.Output
+....
+User(id=1, name=User 1, password=Password1)
+User(id=2, name=User 2, password=Password2)
+....
 
 * http://tech.kakao.com/2018/05/29/reactor-programming/[사용하면서 알게 된 Reactor, 예제 코드로 살펴보기]
 
@@ -1414,12 +1475,14 @@ private List<User> restTemplateWithParallel(List<String> ids) {
         .collect(Collectors.toList());
     return users;
 }
-
-// Output:
-//   asyncRestTemplateElapsedTime: 3,746ms
-//   restTemplateWithParallelElapsedTime: 8,353ms
-//   restTemplateElapsedTime: 25,067ms
 ----
+
+.Output
+....
+asyncRestTemplateElapsedTime: 3,746ms
+restTemplateWithParallelElapsedTime: 8,353ms
+restTemplateElapsedTime: 25,067ms
+....
 
 === Example 2: getUser
 
