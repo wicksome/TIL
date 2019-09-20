@@ -2,7 +2,7 @@
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2018-03-25
 :toc:
-:homepage: https://wickso.me
+:page-draft:
 
 == Description
 이 옵션은 Java HotSpot Virtual Machine에 특정한 범용 옵션이다.

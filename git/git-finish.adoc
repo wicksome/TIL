@@ -1,6 +1,7 @@
 = git-finish
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2019-09-04
+:page-draft:
 
 release/hotfix 처리하는 명령어
 

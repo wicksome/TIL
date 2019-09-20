@@ -1,7 +1,9 @@
-= robots.txt
+= 크롤링 거절하기
 Yeongjun Kim <opid911.gmail.com>
+:page-keyword: seo, crawling, robots
+:page-draft:
 
-== 크롤링 거절하기
+== robots.txt
 
 급한대로 `nginx.conf` 만으로 모두 거절하는 방법
 
