@@ -1,7 +1,10 @@
-= Docker - 기본
+= Docker 기본
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2019-08-11
 :toc:
+:page-tags: docker
+
+== 도커
 
 * 애플리케이션의 실행에 필요한 환경을 하나의 이미지로 모아두고, 그 이미지를 사용하여 다양한 환경에서 애플리케이션 실행 환경을 구축 및 운용하기위한 오픈소스 플랫폼
 * 인프라 환경을 컨테이너로 관리
@@ -9,7 +12,7 @@ v1.0, 2019-08-11
 애플리케이션의 이식성(portability)::
 한 번 만들면 어디서든지 움직이는 소프트웨어의 특성을 portability 라고 한다. Docker 컨테이너의 바탕이 되는 Docker 이미지만 있으면 애플리케이션을 동일한 환경에서 가동시킬 수 있습니다.
 
-== 기능
+== 도커의 기능
 
 - Docker 이미지를 만드는 기능(Build)
 - Docker 이미지를 공유하는 기능(Ship)
@@ -185,7 +188,7 @@ Copy on Write 방식::
 
 == Docker 명령어
 
-* Docker는 클라이언트/서버 아키텍처를 채택하고 있음. 따라서 docker 명령은 서버로 보내져 처리
+Docker는 클라이언트/서버 아키텍처를 채택하고 있음. 따라서 docker 명령은 서버로 보내져 처리
 
 === Docker
 
@@ -264,7 +267,6 @@ docker network inspect [options] <network>
 docker network rm [option] <network>
 ----
 
-
 [source, bash]
 ----
 docker container run \
@@ -278,9 +280,10 @@ docker container run \
 <3> 포트
 <4> 이미지명
 
+<<<
+
 * 로컬 환경에 다운로드된 Docker 이미지를 로컬 캐시라고 한다
 * `--link` 옵션을 지정하면 컨테이너 안의 /etc/hosts/ 파일에 컨테이너명과 컨테이너에 할당된 IP 주소가 등록된다.
-
 
 [source, bash]
 ----

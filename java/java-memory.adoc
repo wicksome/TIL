@@ -2,7 +2,7 @@
 Yeongjun.kim <opid911@gmail.com>
 v1.0, 2018-03-14
 :toc:
-:homepage: https://wickso.me
+:page-draft:
 
 .Java Memory Structure(위 구조처럼 생기지는 않았다)
 image::https://dzone.com/storage/temp/7590038-javamemory12.jpg[]
