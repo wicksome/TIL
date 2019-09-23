@@ -1,0 +1,148 @@
+= 결제 시스템 관련 용어 정리
+Yeongjun Kim <opid911@gmail.com>
+:revdate: 2019-09-23T15:57:00+09:00
+:toc:
+:page-draft:
+
+<<<
+
+== Payments Ecosystem
+
+[link="https://davidraudales.com/davidraudales/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets/"]
+image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets.png[The Payments Industry Ecosystem]
+
+:wiki-ecommerce: https://ko.wikipedia.org/wiki/전자_상거래
+:wiki-visa: https://en.wikipedia.org/wiki/Visa_Inc
+:wiki-mastercard: https://en.wikipedia.org/wiki/Mastercard
+:wiki-unionpay: https://en.wikipedia.org/wiki/UnionPay
+:wiki-acquirer: https://en.wikipedia.org/wiki/Acquiring_bank
+:wiki-pcidss: https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard
+
+== Acquirer
+
+{wiki-acquirer}[Acquirer](전표매입사). 가맹점을 대신하여 신용 또는 직불 카드 결제를 처리하는 은행 또는 금융 기관을 말한다. 대표적인 예로 국내footnote:disclaimer[BC Global은 해외결제도 가능하다.]에선 BCcard가 있다.
+
+[NOTE]
+====
+BC 카드의 경우에는 전표매입사의 역할과 함께 발급사의 역할도 하고 있다. 
+
+.See also
+https://www.bccard.com/app/card/OnlineCardIssue.do[BC바로카드]
+====
+
+.See Also
+* https://chargebacks911.com/knowledge-base/difference-between-acquiring-bank-and-issuing-bank/[Difference Between ‘Acquiring Bank’ and ‘Issuing Bank’]
+
+Issuer
+카드발급사. 카드를 재정적으로 지원하는 은행 또는 신용 조합^credit{sp}unions^이다. 이는 _Issuing Bank_ 혹은 _Credit Card Company_ 라고도 불린다.
+
+Visa나 Mastercard는 실제로 소비자에게 신용 카드를 발급하지 않는다. 대신 Issuer(은행이나 신용 조합)가 credit card network와 협력하여 카드를 발급한다.
+
+카카오뱅크 같은 경우에는 발급사는 카카오뱅크지만 매입사는 국민카드이다. 그러므로 KB국민카드의 결제망을 쓴다. 이는 기업은행이 BC카드 결제망을 사용하는 것과 동일하다.
+(그래서 국민카드 중단시 카카오뱅크 카드도 중단되는 걸까?footnote:disclaimer[See https://www.hankyung.com/economy/article/201909127021Y])
+
+== Card Scheme
+
+카드 스킴^Card{sp}scheme^은 직불^debit^ 또는 신용^credit^ 카드와 같은 지불 카드^payment{sp}cards^의 "brand"이며, 지불 카드에 연결된 payment networks를 말한다.
+
+3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠지며, 한국와 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
+
+{wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], DISCOVER, American express 등이 있다.
+
+
+=== Three-party scheme(or closed scheme), 3-당사자 거래구조
+
+[ditaa, align="center"]
+.Three-party scheme
+....
+         +------------+                      1. Payment +----------+
+         |            +-------------------------------->+          |
+         | Cardholder | 2. Product/Service              | Merchant |
+         |            +<--------------------------------+          |
+         +--+-----+-+-+                                 +--------+-+
+  Invoicing ^     : |                                      |
+            |     | |                                      |
+            |     | | Payment +-------------------+        |
+            |     | +-------->+                   |        | 카드대금지급(가맹점수수로 포함) service-fee
+            |     +---------->+    Franchisee     +<-------+
+            |   Cardholder fee| Issuer & Acquirer |           |
+            +-----------------+                   +-----------+ Settlement of funds
+                              +---------+---------+
+                                        |
+                                        |
+                                        v License fee
+                                   +----------+ 
+                                   | Licensor | 
+                                   +----------+ 
+....
+<1> Payment: 카드결제(신용구매)
+<2> Product/Service: 상품 및 서비스 제공(신용판매)
+<3> Invoicing: 
+<2> Cardholder-fee
+<4> Settlement of funds
+<5> Service-fee
+<6> License fee
+
+카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사의^Franchisee/Issure{sp}&{sp}Acuirer^ 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조이다. +
+3-당사자 거래구조의 거래과정은 카드회원이 카드로 물건을 구매하는 경우 카드사가 회원을 대신하여 가맹점에 결제대금(가맹점수수료 공제 후)을 먼저 지급하고, 나중에 회원에게 결제대금을 청구하여 회수하게 된다.
+
+한국은 3당사자 거래구조이면서 VAN^Valud-Added{sp}Network^사가 카드사와 가맹점의 중간에서 카드거래의 승인업무 등을 중계하고 거맹점을 모집 관리하는 역할을 한다.
+
+=== Four-party scheme(or open scheme), 4 당사자 거래구조
+3 당사자 거래구조에서 카드사가 카드발급사^Issuer^, 전표매입사^Acquirer^로 분업화돼 총 4개 당사자 중심으로 신용카드 거래가 이뤄지는 구조
+
+대표적으로 Visa, MasterCard, UnionPay가 4-당사자 거래구조에 속한다.
+
+
+=== References
+
+* https://en.wikipedia.org/wiki/Card_scheme[Card scheme - Wikipedia]
+* https://www.clearhaus.com/blog/a-quick-guide-to-payments-in-e-commerce-four-party-scheme/[A quick guide to payments in e-Commerce]
+
+
+
+== VAN vs PG
+PG 시스템은 VAN 을 타고 카드사 시스템에 접속하여 결제가 이루어짐
+
+== 기타 용어 정리
+
+{wiki-ecommerce}[E-Commerce], Electronic Commerce::
+전자 상거래
+
+PG, Payment Gateway::
+인터넷 상에서 금융 기관과 하는 거래를 대행해 주는 서비스.
+
+VAN, Value-Added Network::
+가맹점과 카드사간 네트워크망을 구축해 카드사용 승인중계 및 카드전표 매입 업무를 하는 부가통신사업자.
+(국내 VAN사는 KICC 한국정보통신, NICE 등이 있다)
++
+____
+매장과 카드사를 연결해주는 회사
+____
++
+* 신용카드사를 대신해 가맹점을 모집하고 단말기를 제공 
+* 고객이 카드결제할 때 카드사로부터 해당회원의 카드결제승인을 받을 수 있도록 단말기를 통해 승인중계업무 진행
+* 카드결제 후 가맹점이 카드사에 대해 카드결제대금을 청구해 받을 수 있도록 카드매출데이터를 정치, 제출하는 카드전표 매입 업무 대행
+
+Cardholder (or Customer)::
+카드 회원. 개인 또는 사업자일 수 있다.
+
+Merchant::
+가맹점. 물건을 판매하는 부분이면서 결제 처리 후 지불이 끝나는 지점이다.
+
+Credit Union::
+크레딧 유니온^Credit{sp}Union^은 비영리 금융기관으로 회원들이 소유/운영하는 일종의 협동금융기관이다.
++
+.References
+* http://www.koreadaily.com/news/read.asp?art_id=175952[크레딧 유니온이란?]
+
+Gateway::
+The gateway is in charge of the technical payment setup in the online shop. For example, they provide the payment window in which the cardholder will enter his card details. The gateway also enables different payment methods and security features in the shop.
++
+Their job is to collect payment and card information and forward this (in an encrypted manner) to the acquirer.
+
+{wiki-pcidss}[PCI DSS], Payment Card Industry Data Security Standards::
+신용카드업계 데이터보안 표준
++
+"The PCI DSS is an #information security standard# for organizations that handle branded credit cards from the major card schemes."
+-- Wikipedia
