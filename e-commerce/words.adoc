@@ -15,6 +15,8 @@ image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry
 :wiki-visa: https://en.wikipedia.org/wiki/Visa_Inc
 :wiki-mastercard: https://en.wikipedia.org/wiki/Mastercard
 :wiki-unionpay: https://en.wikipedia.org/wiki/UnionPay
+:wiki-discover: https://en.wikipedia.org/wiki/Discover_Card
+:wiki-amex: https://en.wikipedia.org/wiki/American_Express
 :wiki-acquirer: https://en.wikipedia.org/wiki/Acquiring_bank
 :wiki-pcidss: https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard
 
@@ -55,10 +57,10 @@ Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 �
 
 카드 스킴^Card{sp}scheme^은 직불^debit^ 또는 신용^credit^ 카드와 같은 지불 카드^payment{sp}cards^의 "brand"이며, 지불 카드에 연결된 payment networks를 말한다.
 
-3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠지며, 한국와 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
+3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠지며, 한국과 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
 
-{wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], DISCOVER, American express 등이 있다.
-
+Card Network(or Card Scheme Network, Brand)::
+{wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], {wiki-discover}[DISCOVER], {wiki-amex}[American express] 등이 있다.
 
 === Three-party scheme(or closed scheme)
 
@@ -151,5 +153,5 @@ Their job is to collect payment and card information and forward this (in an enc
 "The PCI DSS is an #information security standard# for organizations that handle branded credit cards from the major card schemes."
 -- Wikipedia
 
-Card network, Card Scheme Network, Brand::
-Visa, MasterCard 등 
+FDS, Fraud Detection System::
+이상금융거래탐지 시스템
