@@ -1,0 +1,5 @@
+= 서버에서 자주 쓰이는 쉘 스크립트
+:revdate: 2019-09-25T18:20:00+09:00
+:toc: left
+:page-toc: left
+:page-draft:
