@@ -12,7 +12,8 @@ Yeongjun Kim <opid911@gmail.com>
 - Joshua Bloch, 이병준(옮긴이), Effective Java, 2/E, 인사이트, 2015.
 ****
 
-'이펙티브 자바 2판'을 공부하고, 3판이 나왔다는 얘기를 듣고 다시 보면서 정리한 내용을 보완하고자 한다.
+2017년 2월, '이펙티브 자바 2판'을 공부하고 정리한 내용들을 블로그에 올리지 못했는데, 
+3판이 나왔다는 얘기를 듣고 다시 공부하면서 나를 위해 블로그에 정리하여 남긴다.
 
 // 2/e 2017-02-10T00:00:00+09:00
 // 3/e 2019-09-20T01:28:00+09:00
@@ -339,7 +340,41 @@ include::02.adoc[]
 // 2017-02-12 10:00:00
 include::03.adoc[]
 
-include::04.adoc[]
+[#item4]
+== 규칙 4. 인스턴스화를 막으려거든 private 생성자를 사용하라
+
+생성자를 생략하면 컴파일러는 자동으로 인자없는 `public` 생성자를 만든다.
+이 생성자를 직접 선언하고 접근자를 `private` 바꾸어 인스턴스화를 막을 수 있다.
+또한, 구현부에 `AssertionError()` 를 던져 혹시나 클래스내에서 생성자를 사용할 경우를 방지한다.
+
+[source, java]
+----
+public class Utils {
+    private Utils() {
+        throw new AssertionError();
+    }
+}
+----
+
+[NOTE]
+.https://projectlombok.org/features/experimental/UtilityClass.html[Lombok - @UtilityClass]
+====
+유틸리티성 클래스는 인스턴스를 만들 필요가 없기 때문에 static 메서드와 상수만 가지게 된다.
+lombok에서 `@UtilityClass`는 어노테이션을 붙힌 클래스 내에 모든 메서드를 static으로, 필드를 상수로 만든다.
+그리고 생성자를 private 으로 변경해 인스턴스화를 막는다.
+
+[source, java]
+----
+@UtilityClass
+public class Utils {
+	private final int VERSION  = 1;
+
+	public void getVersion() {
+		return VERSION;
+	}
+}
+----
+====
 
 [#item5]
 == 규칙 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
@@ -348,7 +383,62 @@ include::06.adoc[]
 
 // 2017-02-21 10:00:00
 
-include::07.adoc[]
+[#item7]
+== 규칙 7. 다 쓴 객체 참조는 해제하라
+
+아래 예제는 메모리 누수를 일으키는 코드이다.
+
+[source, java]
+----
+public class Stack {
+	private Object[] element = new Object[16];
+	private int size = 0;
+
+	public void push(Object e) {
+		ensureCapacity();
+		elements[size++] = e;
+	}
+
+	public Object pop() {
+		if (size == 0) throw new EmptyStackException();
+		return elements[--size];
+	}
+
+	private void ensureCapacity() {
+		if (elements.length == size) {
+			elements = Arrays.copyOf(elements, 2 * size + 1);
+		}
+	}
+}
+----
+
+스택이 커졌다가 줄어들 때, index 값이 size보다 큰 곳에 있는 요소들(쓰레기 값)은 GC가 처리하지 못한다. 
+스택이 그런 객체에 대한 만기 참조^obsolete{sp}reference^를 제거하지 않기 때문이다. 
+만기 참조란 다시 이용되지 않을 참조^reference^를 말한다.
+
+자동적으로 쓰레기 객체를 수집하는 언어에서 발생하는 메모리 누수 문제(≒ 의도치 않은 객체 보유~unintentional object retention~)는 찾아내기 어렵다.
+
+#### 해결방안
+
+만기 참조를 제거하는 가장 좋은 방법은, 해당 참조가 보관된 변수의 유효범위~socpe~를 최대한 좁게 만들어 벗어나게 두는 것이다([규칙 45](#item45)).
+
+위 예제 Stack과 같이 자체적으로 메모리는 관리하는 경우에는, 쓸 일이 없는 객체 참조는 반드시 null로 바꿔준다.
+
+```java
+public Object pop() {
+	if (size == 0)
+		throw new EmptyStackException();
+	Object result = elements[--size];
+	elements[size] = null;
+	return result;
+}
+```
+
+#### 흔히 메모리 누수가 발견되는 곳
+
+- 자체적으로 관리하는 메모리가 있는 클래스
+- 캐시~cache~: 객체 참조를 캐시 안에 넣어 놓고 잊어버리는 일이 많기 때문. (수명이 키에 대한 외부 참조의 수명에 따라 결정되는 상황에는 *WeakHashMap* 활용)
+- 리스너~listener~등의 역호출자~callback~ - 콜백을 명시적으로 제거하지 않을 경우, 적절한 조치를 취하기 전까지 메모리는 점유된 상태. 해결방안으로 콜백에 대한 약한 참조~weak reference~만 저장하는 것(WeakHashMap)
 
 include::08.adoc[]
 
