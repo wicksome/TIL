@@ -439,15 +439,21 @@ fx.go(
 
 ===== _collect_
 
+아마 가장 많이 사용하는 Terminal Operation은 `collect()` 일 것 같다. 
+이 메서드와 `Collectors` 클래스의 static 메서드를 활용하여 스트림을 여러 결과로 반환할 수 있다.
+`Collectors` 는 컬렉션의 요소^element^를 다양한 기준에 따라 summarizing 하거나 모으는 등 유용한 리덕션 연산을 static 메서드로 구현해둔 클래스이다.
+
+
+
 [NOTE]
 ====
 일부 메서드에는 Java 8 이전의 코드스타일과 스트림을 사용한 코드와 비교하기 위해 `Before` 코드와 `After` 코드를 추가하였다.
 ====
 
-* _Collectors.toList()_
-+
-결과를 `List` 로 변환해주는 메서드이다. 내 경험상 terminal optional 중 가장 자주 사용하는 메서드인 것 같다.
-+
+====== _Collectors.toList()_
+
+결과를 `List` 로 변환해주는 메서드이다. 내 경험상 Terminal Operation 내에서 가장 자주 사용하는 메서드인 것 같다.
+
 [source, java]
 ----
 // as-is
@@ -456,7 +462,7 @@ final List<String> list = Arrays.asList("a", "b", "c");
 // to-be
 // [A, B, C]
 ----
-+
+
 [source, java]
 .Before
 ----
@@ -465,7 +471,7 @@ for (String str : list) {
     upperCaseList.add(str.toUpperCase());
 }
 ----
-+
+
 [source, java]
 .After
 ----
@@ -474,10 +480,10 @@ list.stream()
     .collect(Collectors.toList())
 ----
 
-* _Collectors.toMap()_
-+
+====== _Collectors.toMap()_
+
 `List<T>` 에서 특정 값을 key로 사용하여 `Map` 으로 변환하는 메서드이다.
-+
+
 [source, java]
 ----
 // as-is
@@ -489,7 +495,7 @@ final List<Payment> payments = Arrays.asList(
 // to-be
 // {p01=10000, p03=50100, p02=20000}
 ----
-+
+
 [source, java]
 .Before
 ----
@@ -499,7 +505,7 @@ for (Payment payment : payments) {
     map.put(payment.getId(), payment);
 }
 ----
-+
+
 [source, java]
 .After
 ----
@@ -507,8 +513,8 @@ final Map<String, Payment> map = payments.stream()
     .collect(Collectors.toMap(Payment::getId, payment -> payment));
 ----
 
-* _Collectors.joining()_
-+
+====== _Collectors.joining()_
+
 [source, java]
 ----
 Stream.of("a", "b", "c")
@@ -522,8 +528,8 @@ Stream.of("a", "b", "c")
 // <A, B, C>
 ----
 
-* _Collectors.groupingBy()_
-+
+====== _Collectors.groupingBy()_
+
 [source, java]
 ----
 Map<Integer, List<User>> u1 = Stream.of(
@@ -534,7 +540,7 @@ Map<Integer, List<User>> u1 = Stream.of(
     User.builder().name("e").age(39).build()
 ).collect(Collectors.groupingBy(User::getAge));
 ----
-+
+
 [source]
 ----
 {
@@ -543,7 +549,7 @@ Map<Integer, List<User>> u1 = Stream.of(
   29=[User(name=a, age=29), User(name=c, age=29)]
 }
 ----
-+
+
 [NOTE]
 ._groupingBy_ 로 chunk 구현하기
 ====
@@ -590,8 +596,8 @@ https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/[Divid
 
 ====
 
-* _Collectors.partitioningBy()_
-+
+====== _Collectors.partitioningBy()_
+
 [source, java]
 ----
 
@@ -600,7 +606,7 @@ result = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
                .collect(Collectors.partitioningBy(n -> n > 3));
 // {false=[1, 2, 3], true=[4, 5, 6, 7, 8, 9, 10]}
 ----
-+
+
 [source, java]
 ----
 Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -608,10 +614,10 @@ Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 // {false=3, true=7}
 ----
 
-* _Collectors.collectingAndThen()_
-+
+====== _Collectors.collectingAndThen()_
+
 _collect_ 한 이후에 필요한 작업을 추가한다.
-+
+
 [source, java]
 ----
 Set<Product> unmodifiableSet = productList.stream()
@@ -620,8 +626,8 @@ Set<Product> unmodifiableSet = productList.stream()
                                               Collections::unmodifiableSet));
 ----
 
-* _Collectors.averageingInt()_
-+
+====== _Collectors.averageingInt()_
+
 [source, java]
 ----
 // average
@@ -629,8 +635,8 @@ Integer averageAge = Stream.of(user1, user2, user2)
                            .collect(Collectors.averageingInt(User::getAge));
 ----
 
-* _Collectors.summingInt()_
-+
+====== _Collectors.summingInt()_
+
 [source, java]
 ----
 // 1. sum
@@ -642,8 +648,8 @@ Integer sumAge2 = Stream.of(user1, user2, user2)
                         .sum();
 ----
 
-* _Collectors.summarizingInt()_
-+
+====== _Collectors.summarizingInt()_
+
 [source, java]
 ----
 Stream<BigDecimal> s = Stream.iterate(BigDecimal.ONE, n -> n.add(BigDecimal.ONE))
@@ -652,10 +658,10 @@ IntSummaryStatistics i = s.collect(Collectors.summarizingInt(BigDecimal::intValu
 // IntSummaryStatistics{count=10, sum=55, min=1, average=5.500000, max=10}
 ----
 
-* _Collectors.of()_
-+
+====== _Collectors.of()_
+
 collector를 직접 만들어서 사용하고자 할 경우 _of()_ 를 활용할 수 있다.
-+
+
 [source, java]
 ----
 List<Integer> c = Arrays.asList(1, 2, 3, 4, 5, 6, 7).stream()
@@ -668,7 +674,7 @@ List<Integer> c = Arrays.asList(1, 2, 3, 4, 5, 6, 7).stream()
                             }));
 // [1, 2, 3, 4, 5, 6, 7]
 ----
-+
+
 {javadoc-collectors-of}[Java Document - _Interface Collector<T,A,R>_]
 
 ===== _toArray_
