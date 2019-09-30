@@ -1,6 +1,6 @@
 = 크롤링 거절하기
 Yeongjun Kim <opid911.gmail.com>
-:page-keyword: seo, crawling, robots
+:page-tags: seo, crawling, robots
 :page-draft:
 
 == robots.txt
