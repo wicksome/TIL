@@ -1,0 +1,100 @@
+= jenv로 java 버전 관리하기
+:revdate: 2019-09-28T13:10:00+09:00
+:page-tags: java, jenv
+
+<<<
+
+https://www.jenv.be[jEnv]는 Java 환경을 관리하기 위한 커맨드라인 툴이다.
+
+== 설치하기
+
+[source, bash]
+----
+# install by brew
+$ brew install jenv
+# zsh
+$ echo 'export PATH="$HOME/.jenv/bin:$PATH"' >> ~/.zshrc
+$ echo 'if which jenv > /dev/null; then eval "$(jenv init -)"; fi' >> ~/.zshrc
+# bash
+$ echo 'export PATH="$HOME/.jenv/bin:$PATH"' >> ~/.bash_profile
+$ echo 'if which jenv > /dev/null; then eval "$(jenv init -)"; fi' >> ~/.bash_profile
+----
+
+== 설정하기
+
+설치되어 있는 java를 `jenv add` 를 통해 추가한다.
+
+[source, bash]
+----
+# Add open jdk 1.9
+$ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-9.jdk/Contents/Home
+openjdk64-9 added
+9 added
+# Add oracle jdk 1.8
+$ jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home
+oracle64-1.8.0.221 added
+1.8.0.221 added
+1.8 added
+----
+
+[TIP]
+.java 경로 확인하기
+====
+`/usr/libexec/java_home` 의 `-V` 옵션을 통해 현재 설치되어 있는 java를 확인할 수 있다.
+
+[source, java]
+----
+$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (2):
+    9, x86_64:	"AdoptOpenJDK 9"	/Library/Java/JavaVirtualMachines/adoptopenjdk-9.jdk/Contents/Home
+    1.8.0_221, x86_64:	"Java SE 8"	/Library/Java/JavaVirtualMachines/jdk1.8.0_221.jdk/Contents/Home
+
+/Library/Java/JavaVirtualMachines/adoptopenjdk-9.jdk/Contents/Home
+----
+====
+
+== 버전 확인하기
+
+`versions` 명령어를 통해 `jenv` 에 등록된 java 버전을 확인 할 수 있다.
+앞에 `{asterisk}` 가 추가된 줄이 현재 _JAVA_HOME_ 으로 설정된 버전을 가르킨다.
+
+[source, bash]
+----
+$ jenv versions
+* system (set by /Users/user/.jenv/version)
+  1.8
+  1.8.0.221
+  9
+  openjdk64-9
+  oracle64-1.8.0.221
+----
+
+== 자바 버전 변경하기
+
+=== 시스템 전역적(global)으로 java 버전 설정하기
+
+[source, bash]
+----
+$ jenv global 1.8
+$ jenv versions
+  system
+* 1.8 (set by /Users/user/.jenv/version)
+  1.8.0.221
+  9
+  openjdk64-9
+  oracle64-1.8.0.221
+----
+
+=== 디렉토리 내에 java 버전 설정하기
+
+[source, bash]
+----
+$ jenv local 1.8
+$ jenv versions
+  system
+* 1.8 (set by /Users/user/.jenv/version)
+  1.8.0.221
+  9
+  openjdk64-9
+  oracle64-1.8.0.221
+----

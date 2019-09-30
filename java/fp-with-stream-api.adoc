@@ -1,6 +1,6 @@
 = Getting Started the Stream API
 Yeongjun Kim <opid911@gmail.com>
-v1.0, 2019-08-13
+:revdate: 2019-08-13
 :toc: right
 :page-toc: right
 

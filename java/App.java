@@ -12,6 +12,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class App {
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
@@ -86,4 +89,16 @@ class Service {
         System.out.println("Thread#" + Thread.currentThread().getId());
         future.join();
     }
+
+    public void reference() {
+		List<String> list1 = Arrays.asList("a", "b");
+		System.out.println(list1);
+
+		List<String> list2 = list1;
+		System.out.println(list2);
+
+		list2.add("c");
+		System.out.println(list1);
+		System.out.println(list2);
+	}
 }
