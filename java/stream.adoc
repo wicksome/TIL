@@ -439,14 +439,72 @@ fx.go(
 
 ===== _collect_
 
+[NOTE]
+====
+일부 메서드에는 Java 8 이전의 코드스타일과 스트림을 사용한 코드와 비교하기 위해 `Before` 코드와 `After` 코드를 추가하였다.
+====
+
 * _Collectors.toList()_
++
+결과를 `List` 로 변환해주는 메서드이다. 내 경험상 terminal optional 중 가장 자주 사용하는 메서드인 것 같다.
 +
 [source, java]
 ----
-Stream.of("a", "b", "c")
-      .map(String::toUpperCase)
-      .collect(Collectors.toList())
+// as-is
+final List<String> list = Arrays.asList("a", "b", "c");
+
+// to-be
 // [A, B, C]
+----
++
+[source, java]
+.Before
+----
+List<String> upperCaseList = new ArrayList<>();
+for (String str : list) {
+    upperCaseList.add(str.toUpperCase());
+}
+----
++
+[source, java]
+.After
+----
+list.stream()
+    .map(String::toUpperCase)
+    .collect(Collectors.toList())
+----
+
+* _Collectors.toMap()_
++
+`List<T>` 에서 특정 값을 key로 사용하여 `Map` 으로 변환하는 메서드이다.
++
+[source, java]
+----
+// as-is
+final List<Payment> payments = Arrays.asList(
+    new Payment("p01", 10_000),
+    new Payment("p02", 20_000),
+    new Payment("p03", 50_100));
+
+// to-be
+// {p01=10000, p03=50100, p02=20000}
+----
++
+[source, java]
+.Before
+----
+Map<String, Payment> map = new HashMap<>();
+
+for (Payment payment : payments) {
+    map.put(payment.getId(), payment);
+}
+----
++
+[source, java]
+.After
+----
+final Map<String, Payment> map = payments.stream()
+    .collect(Collectors.toMap(Payment::getId, payment -> payment));
 ----
 
 * _Collectors.joining()_
@@ -454,13 +512,13 @@ Stream.of("a", "b", "c")
 [source, java]
 ----
 Stream.of("a", "b", "c")
-      .map(String::toUpperCase)
-      .collect(Collectors.joining(", "))
+    .map(String::toUpperCase)
+    .collect(Collectors.joining(", "))
 // A, B, C
 
 Stream.of("a", "b", "c")
-	.map(String::toUpperCase)
-	.collect(Collectors.joining(", ", "<", ">"))
+    .map(String::toUpperCase)
+    .collect(Collectors.joining(", ", "<", ">"))
 // <A, B, C>
 ----
 
