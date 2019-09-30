@@ -1270,6 +1270,11 @@ public T join() { ... }
 주로 배치성 프로젝트에서 컨트롤러에 비동기적으로 동작시키기 위해 `@Async` 을 사용했었다. 이 때, 대부분(내가 본 프로젝트) `void` 를 반환하였다.
 하지만 _Async_ 문서를 보면 `void` 혹은 `Future` 를 반환시킬 수 있다. 즉, `CompletableFuture` 를 활용할 수 있게 된다.
 
+[WARNING]
+====
+메서드에 `@Async` 사용시 반드시 `public` 접근자이어야 한다.
+====
+
 [quote, 'Spring Framework, https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/annotation/Async.html[Annotation Type Async]']
 However, the return type is constrained to either void or Future.
 

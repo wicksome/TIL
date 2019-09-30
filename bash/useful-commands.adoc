@@ -68,3 +68,35 @@ $ scp [OPTION] [[user@]host1:]file1 ... [[user@]host2:]file2
 
 
 https://zetawiki.com/wiki/리눅스_scp_사용법
+
+
+
+== Process
+
+=== jps
+
+[source, bash]
+----
+jps [-q] [-mlvV] [<hostid>]
+----
+
+java 프로세스 확인하기 위한 명령어, 이전에 `ps -ef | grep tomcat` 과 같이 사용하던 명령어를 우하하게 사용해보자
+
+.Example
+[source, bash]
+----
+jps -v
+jps -l
+----
+
+.옵션
+|===
+| option | desc
+
+| - | 묶기
+| x | 풀기
+| v | 풀고 있는 파일 표시
+| z | gzip 필터
+| f | 파일 지정
+|===
+
