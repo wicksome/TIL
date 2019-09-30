@@ -3,6 +3,7 @@ Yeongjun Kim <opid911@gmail.com>
 :revdate: 2019-08-13
 :toc: right
 :page-toc: right
+:page-tags: java, stream
 
 == Stream API
 :javadoc-stream-package: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
