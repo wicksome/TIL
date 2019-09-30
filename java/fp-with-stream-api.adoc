@@ -152,6 +152,15 @@ DoubleStream s4 = new Random().doubles(3)
 Stream<Integer> s5 = IntStream.range(1, 5).boxed();
 ----
 
+원시 스트림^primitive{sp}stream^을 객체 스트림으로 변환하려면 `mapToObj()` 를  사용한다.
+
+[source, java]
+----
+IntStream.rangeClosed(2, 12) // 2 ~ 12
+         .mapToObj(month -> new Month(month))
+         .collect(Collectors.toList());
+----
+
 === String to Stream
 
 [source, java]
