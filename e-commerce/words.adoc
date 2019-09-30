@@ -105,6 +105,11 @@ Card Network(or Card Scheme Network, Brand)::
 
 대표적으로 Visa, MasterCard, UnionPay가 이 구조에 속한다.
 
+.유니온페이 QR 결제 플로우(CPM)
+[link="https://developer.unionpayintl.com/cjweb/api/detail?apiSvcId=16#api-flowChart"]
+image::https://developer.unionpayintl.com/upload/cj/image/1526349102018026242.jpg[UPI QR Code Acceptance]
+
+(TODO) 4당사자구조일때 누가 어떻게 돈을 버는가?
 
 === References
 
@@ -155,3 +160,20 @@ Their job is to collect payment and card information and forward this (in an enc
 
 FDS, Fraud Detection System::
 이상금융거래탐지 시스템
+
+CPM, Customer Presented Mode::
+QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스캔해 통신하는 방식
+
+MPM, Merchant Presented Mode::
+QR 코드를 가맹점이 생성하는 방식으로 이를 소비자가 자신의 휴대폰으로 읽어내는 방식. MPM은 다시 '고정형'과 '변동형'으로 구분된다.
+
+CDCVM, Consumer Device Cardholder Verification Method::
+카드 소유자 확인 방법 : 카드 네트워크에서 지원하는 소비자 인증 방법 (CVM)의 한 유형으로, 사용자가 결제 단말기 대신 모바일 장치에서 인증 할 수 있습니다.
++
+* https://support.google.com/pay/merchants/answer/7381753?hl=en
+* https://support.apple.com/en-us/HT202527
+
+EMV::
+EMV는 칩 카드 기술을 기반으로 한 신용 카드 및 직불 카드의 글로벌 표준으로, 카드 체계^Card{sp}Network^인 Europay, MasterCard, Visa에서 이름을 따온 것이다.
++
+EMV Card는 스마트 카드, 칩 카드^chip{sp}card^ 혹은 IC 카드라고 부른다.
