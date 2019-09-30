@@ -2,6 +2,7 @@
 Yeongjun Kim <opid911@gmail.com> 
 :revdate: 2019-09-27
 :toc:
+:page-draft:
 
 [#item02]
 == 규칙 2. 생성자에 매개변수가 많다면 빌더를 고려하라
