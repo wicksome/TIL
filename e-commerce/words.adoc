@@ -6,11 +6,6 @@ Yeongjun Kim <opid911@gmail.com>
 
 <<<
 
-== Payments Ecosystem
-
-[link="https://davidraudales.com/davidraudales/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets/"]
-image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets.png[The Payments Industry Ecosystem]
-
 :wiki-ecommerce: https://ko.wikipedia.org/wiki/전자_상거래
 :wiki-visa: https://en.wikipedia.org/wiki/Visa_Inc
 :wiki-mastercard: https://en.wikipedia.org/wiki/Mastercard
@@ -19,6 +14,14 @@ image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry
 :wiki-amex: https://en.wikipedia.org/wiki/American_Express
 :wiki-acquirer: https://en.wikipedia.org/wiki/Acquiring_bank
 :wiki-pcidss: https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard
+
+== Payments Ecosystem
+
+[link="https://davidraudales.com/davidraudales/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets/"]
+image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets.png[The Payments Industry Ecosystem]
+
+Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리더 기업을 중심으로 경쟁과 협력을 통해 공생하고 함께 발전해나가는 모습이라고 할 수 있다.
+여기서 '몇 개의 리더 기업'은 카드 네크워크^Card{sp}Network^를 말하는 것이 아닐까 싶다.
 
 == Card Scheme
 
@@ -47,6 +50,7 @@ https://www.bccard.com/app/card/OnlineCardIssue.do[BC바로카드]
 === Issuer
 
 Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 소비자에게 신용 카드를 발급하는 금융 기관(재정적으로 지원하는 은행 혹은 신용 조합^credit{sp}unions^)이다. _Issuing Bank_ 혹은 _Credit Card Company_ 라고도 불린다.
+발급사는 소지자에게 비용을 청구한다.
 
 실제로 Visa나 Mastercard는 소비자에게 신용 카드를 발급하지 않는다. 대신 Issuer가 credit card network와 협력하여 카드를 발급한다.
 
@@ -62,7 +66,14 @@ Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 �
 Card Network(or Card Scheme Network, Brand)::
 {wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], {wiki-discover}[DISCOVER], {wiki-amex}[American express] 등이 있다.
 
+=== 우리나라 신용카드 거래 구조
+
+[link="https://www.slideshare.net/nceo/4-output"]
+image::https://image.slidesharecdn.com/4-120519123139-phpapp02/95/4-output-4-728.jpg?cb=1337430796[]
+
 === Three-party scheme(or closed scheme)
+
+image::https://www.brimstone-consulting.com/images/pic_three_party_scheme.jpg[three party scheme]
 
 [ditaa, align="center"]
 .Three-party scheme
@@ -95,12 +106,15 @@ Card Network(or Card Scheme Network, Brand)::
 <5> Service-fee
 <6> License fee
 
-카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사의^Franchisee/Issure{sp}&{sp}Acuirer^ 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조이다. +
+카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사^Franchisee/Issure{sp}&{sp}Acuirer^의 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조이다. +
 3-당사자 거래구조의 거래과정은 카드회원이 카드로 물건을 구매하는 경우 카드사가 회원을 대신하여 가맹점에 결제대금(가맹점수수료 공제 후)을 먼저 지급하고, 나중에 회원에게 결제대금을 청구하여 회수하게 된다.
 
 한국은 3당사자 거래구조이면서 VAN^Valud-Added{sp}Network^사가 카드사와 가맹점의 중간에서 카드거래의 승인업무 등을 중계하고 거맹점을 모집 관리하는 역할을 한다.
 
 === Four-party scheme(or open scheme)
+
+image::https://www.brimstone-consulting.com/images/pic_four_party_scheme.jpg[four party card scheme]
+
 3 당사자 거래구조에서 카드사가 카드발급사^Issuer^, 전표매입사^Acquirer^로 분업화돼 총 4개 당사자 중심으로 신용카드 거래가 이뤄지는 구조
 
 대표적으로 Visa, MasterCard, UnionPay가 이 구조에 속한다.
@@ -108,6 +122,8 @@ Card Network(or Card Scheme Network, Brand)::
 .유니온페이 QR 결제 플로우(CPM)
 [link="https://developer.unionpayintl.com/cjweb/api/detail?apiSvcId=16#api-flowChart"]
 image::https://developer.unionpayintl.com/upload/cj/image/1526349102018026242.jpg[UPI QR Code Acceptance]
+
+image::https://qph.fs.quoracdn.net/main-qimg-3c63ca1f1808ae69660f6718858f0676[]
 
 (TODO) 4당사자구조일때 누가 어떻게 돈을 버는가?
 

@@ -1,4 +1,7 @@
-# First Class Collection
+= First Class Collection
+Yeongjun Kim <opid911@gmail.com>
+:revdate: 2019-04-08T11:05:00+09:00
+
 > "콜렉션을 포함한 클래스는 반드시 다른 맴버 변수가 없어야 한다."
 
 - The ThourghtWorks Anthology의 객체지향 생활체조 파트 규칙 8에서 언급
