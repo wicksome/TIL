@@ -1,6 +1,7 @@
 = First Class Collection
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2019-04-08T11:05:00+09:00
+:page-tags: java
 
 > "콜렉션을 포함한 클래스는 반드시 다른 맴버 변수가 없어야 한다."
 
