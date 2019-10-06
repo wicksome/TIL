@@ -1,10 +1,15 @@
-# log4j
+= log4j xml로 log 롤링하기
+Yeongjun kim <opid911@gmail.com>
+:revdate: 2019-08-05T09:00:00+09:00
 
-> Log Rolling
+<<<
 
-**파일 사이즈로 롤링하기**
+로그 롤링^Log{sp}Rolling^
 
-```xml
+== 파일 사이즈로 롤링하기
+
+[source, xml]
+----
 <appender name="withdrawAppender" class="org.apache.log4j.RollingFileAppender">
 	<param name="File" value="/path/rolling.log" />
 	<param name="Append" value="true" />
@@ -14,10 +19,12 @@
 		<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p](%F:%L) %m%n" />
 	</layout>
 </appender>
-```
-**날짜별로 롤링하기**
+----
 
-```xml
+== 날짜별로 롤링하기
+
+[source, xml]
+----
 <appender name="memoSync" class="org.apache.log4j.DailyRollingFileAppender">
 	<param name="Threshold" value="INFO"/>
 	<param name="file" value="/logs/rolling.log"/>
@@ -27,4 +34,4 @@
 		<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}] [%-5p](%F:%L) %m%n"/>
 	</layout>
 </appender>	
-```
+----
