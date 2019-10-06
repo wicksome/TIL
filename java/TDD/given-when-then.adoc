@@ -12,3 +12,5 @@ The given part describes the state of the world before you begin the behavior yo
 The when section is that behavior that you're specifying.
 Finally the then section describes the changes you expect due to the specified behavior.
 ```
+
+https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler
