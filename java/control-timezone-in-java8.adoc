@@ -207,26 +207,42 @@ System.out.println(nextMeeting);
 2018-05-17T09:00-04:00[America/Santiago]
 ----
 
+== 더 알아볼 것
+
+- 왜 타임존 업데이트가 되지 않았는가?
+- java 타임존을 업데이트 하는 방법 - oracle jdk, openjdk
+
+== 추가 정보
+
+=== `Europe/Istanbul` 타임존
+
+* 터키는 타임존을 사용하지 않는다.
+** 사용중인 타임존: https://www.timeanddate.com/time/zone/turkey/istanbul
+** 사용하지 않는 타임존: https://www.timeanddate.com/time/zone/turkey
+* `Europe/Istanbul` 사용함
+* `ZoneId.of("Turkey")` 은 Deprecated. https://en.wikipedia.org/wiki/List_of_tz_database_time_zones[wiki]
+* Tzdata 버전은 tzdata2016g이 반영되야함. https://www.oracle.com/technetwork/java/javase/tzdata-versions-138805.html[오라클 문서]
+* https://stackoverflow.com/questions/40400793/java-timezone-in-turkey-rejected-daylight-saving
+
+
 == References
 
 ++++
 <details><summary>참고 링크</summary>
-<br/>
-<dif class="ulist">
-    <ul>
-        <li><p><a href="https://www.timeanddate.com/time/time-zones.html">What is a Time Zone?</a></p></li>
-        <li><p><a href="https://www.timeanddate.com/time/utc-abbreviation.html">Why is it Called UTC - not CUT?</a></p></li>
-        <li><p><a href="https://www.timeanddate.com/time/dst/">Daylight Saving Time - DST - Summer Time</a></p></li>
-        <li><p><a href="https://www.timeanddate.com/time/dst/summer-time.html">Summer Time Is Daylight Saving Time</a></p></li>
-        <li><p><a href="https://www.timeanddate.com/time/gmt-utc-time.html">The Difference Between GMT and UTC</a></p></li>
-        <li><p><a href="https://ko.wikipedia.org/wiki/시간대">위키피디아 - 시간대</a></p></li>
-        <li><p><a href="https://greenwichmeantime.com/what-is-gmt/">What is Greenwich Mean Time (GMT)?</a></p></li>
-        <li><p><a href="https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html">Java Docs - Class ZoneId</a></p></li>
-        <li><p><a href="http://d2.naver.com/helloworld/645609">Java의 날짜와 시간 API - Naver D2</a></p></li>
-        <li><p><a href="https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/">Java 8 이전 버전에서 시간 다루기</a></p></li>
-        <li><p><a href="http://meetup.toast.com/posts/125">자바스크립트에서 타임존 다루기 (1) - Toast</a></p></li>
-    </ul>
-</div>
-</details>
 ++++
 
+* https://www.timeanddate.com/time/time-zones.html[What is a Time Zone?]
+* https://www.timeanddate.com/time/utc-abbreviation.html[Why is it Called UTC - not CUT?]
+* https://www.timeanddate.com/time/dst/[Daylight Saving Time - DST - Summer Time]
+* https://www.timeanddate.com/time/dst/summer-time.html[Summer Time Is Daylight Saving Time]
+* https://www.timeanddate.com/time/gmt-utc-time.html[The Difference Between GMT and UTC]
+* https://ko.wikipedia.org/wiki/시간대[위키피디아 - 시간대]
+* https://greenwichmeantime.com/what-is-gmt/[What is Greenwich Mean Time (GMT)?]
+* https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html[Java Docs - Class ZoneId]
+* http://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API - Naver D2]
+* https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/[Java 8 이전 버전에서 시간 다루기]
+* http://meetup.toast.com/posts/125[자바스크립트에서 타임존 다루기 (1) - Toast]
+
+++++
+</details>
+++++

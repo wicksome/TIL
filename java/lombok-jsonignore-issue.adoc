@@ -1,8 +1,13 @@
-# 문제점
+= lombok 사용시 @JsonIgnore 동작안하는 이슈
+:revdate: 2017-02-25T09:00:00+09:00
+:page-tags: java, lombok, jackson
 
-클래스에 `@AllArgsConstructor` 적용하고, 필드에 `@JsonIgnore`하면 ignore 안되는 문제.
+== 문제점
 
-```java
+클래스에 `@AllArgsConstructor` 적용하고, 필드에 `@JsonIgnore` 하면 ignore 안되는 문제.
+
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,17 +16,19 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {"ignoredValue":null,"jsonValue":null}
-```
+----
 
-# 원인
+== 원인
 
-컴파일하면 생성자에 `@ConstructorProperties`가 붙어서 ignore 취소.
+컴파일하면 생성자에 `@ConstructorProperties` 가 붙어서 ignore 취소.
 
-```java
+[source, java]
+----
 import java.beans.ConstructorProperties;
 public class Obj {
 	@ConstructorProperties({"ignoredValue", "jsonValue"})
@@ -31,19 +38,20 @@ public class Obj {
 	}
 	...
 } 
-```
+----
 
-# 해결방안
+== 해결방안
 
-lombok 1.14 이상 버전에서는 프로젝트 루트 디렉토리에 `lombok.config` 파일 생성하고, 아래 옵션 추가([Configuration system-lombok](https://projectlombok.org/features/configuration.html)).
+lombok 1.14 이상 버전에서는 프로젝트 루트 디렉토리에 `lombok.config` 파일 생성하고, 아래 옵션 추가(https://projectlombok.org/features/configuration.html[Configuration system-lombok]).
 
-```
+----
 lombok.anyConstructor.suppressConstructorProperties=true
-```
+----
 
-다른 방법으로는, `@AllArgsConstructor`에 *suppressConstructorProperties* 옵션값으로 적용할 수 있지만, Deprecated 됨.
+다른 방법으로는, `@AllArgsConstructor` 에 **suppressConstructorProperties** 옵션값으로 적용할 수 있지만, Deprecated 됨.
 
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor(suppressConstructorProperties = true)
 @NoArgsConstructor
@@ -52,9 +60,10 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```java
+[source, java]
+----
 public @interface AllArgsConstructor {
 	/**
 	 * Constructors are generated with the {@link java.beans.ConstructorProperties} annotation.
@@ -67,25 +76,26 @@ public @interface AllArgsConstructor {
 	boolean suppressConstructorProperties() default false;
 	...
 }
-```
+----
 
-(+ 2017.02.25) inner 클래스에서는 적용이 안되므로 @AllArgsConstructor 지양한다.
+(+ 2017.02.25) inner 클래스에서는 적용이 안되므로 `@AllArgsConstructor` 지양한다.
 
-# 그외 다른 방법
+== 그외 다른 방법
 
-테스트 코드
-
-```java
+[source, java]
+.테스트 코드
+----
 @Test
 public void jsonIgnoreTest() throws JsonProcessingException {
 	Obj obj = new Obj();
 	System.out.println(new ObjectMapper().writeValueAsString(obj));
 }
-```
+----
 
-### Use *@JsonIgnore* to custom getter
+=== Use `@JsonIgnore` to custom getter
 
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -98,15 +108,17 @@ class Obj {
 		return ignoredValue;
 	}
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":null}
-```
+----
 
-### Use *@JsonIgnoreProperties*
+=== Use `@JsonIgnoreProperties`
 
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -115,15 +127,17 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":null}
-```
+----
 
-### Use *@JsonProperty*
+=== Use `@JsonProperty`
 
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -132,16 +146,17 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":null}
+----
 
-```
+=== Use `@Getter(onMethod)` to Field
 
-### Use *@Getter(onMethod)* to Field
-
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -150,15 +165,17 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":null}
-```
+----
 
-### Use *@Build* instead of *@AllArgsConstructor* 
+=== Use `@Build` instead of `@AllArgsConstructor`
 
-```java
+[source, java]
+----
 @Data
 @Build
 @NoArgsConstructor
@@ -167,32 +184,36 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":null}
-```
+----
 
-### Use *@Value*
+=== Use `@Value`
 
 `@Data` 안쓰고, `@Value` 사용(이건 해결방법이 아닌 듯..)
 
-```java
+[source, java]
+----
 @Value
 class Obj {
 	@JsonIgnore
 	private String ignoredValue = "a";
 	private String jsonValue = "t";
 }
-```
+----
 
-```json
+[source, json]
+----
 {"jsonValue":"t"}
-```
+----
 
-### ~~Use *@JsonAutoDetect*~~
+=== [.line-through]#Use `@JsonAutoDetect`#
 
-```java
+[source, java]
+----
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -201,15 +222,16 @@ class Obj {
 	private String ignoredValue;
 	private String jsonValue;
 }
-```
+----
 
-```json
+[source, json]
+----
 {}
-```
+----
 
-# 참고
+== 참고
 
-- [@JsonIgnore with @Getter Annotation](http://stackoverflow.com/questions/24466464/jsonignore-with-getter-annotation)
-- [@JsonIgnore ignored when Lombok's @AllArgsConstructor is present](https://jira.spring.io/browse/DATAREST-884)
-- [@JsonIgnore has no effect when using Lombok @Getter](https://github.com/FasterXML/jackson-databind/issues/1226)
-- ['@JsonIgnore' annotation not working with creator properties, serialization](https://github.com/FasterXML/jackson-databind/issues/1317)
+* http://stackoverflow.com/questions/24466464/jsonignore-with-getter-annotation[@JsonIgnore with @Getter Annotation]
+* https://jira.spring.io/browse/DATAREST-884[@JsonIgnore ignored when Lombok's @AllArgsConstructor is present]
+* https://github.com/FasterXML/jackson-databind/issues/1226[@JsonIgnore has no effect when using Lombok @Getter]
+* https://github.com/FasterXML/jackson-databind/issues/1317['@JsonIgnore' annotation not working with creator properties, serialization]

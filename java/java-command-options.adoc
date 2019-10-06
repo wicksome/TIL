@@ -1,6 +1,7 @@
 = Java command option of JDK8 for Linux
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2018-03-25T00:00:00+09:00
+:page-draft:
 
 <<<
 
