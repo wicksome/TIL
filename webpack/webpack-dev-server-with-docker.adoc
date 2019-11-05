@@ -1,0 +1,51 @@
+= webpack-dev-server with docker
+:revdate: 2019-10-08T14:50:00+09:00
+
+[source, yml]
+.docker-compose.yml
+----
+version: "3.7"
+services:
+  react:
+    build: .
+    ports:
+      - "80:3001"   # HTTP port for browser access
+      - "3002:3001" # socket port of devServer for client
+    command: "yarn start:web-mobile"
+    volumes:
+      - ".:/usr/src/app/"
+    tty: true
+----
+
+[source, js]
+.webpack.config.dev.js
+----
+module.exports = {
+  devServer: {
+    host: '0.0.0.0', // 사용될 호스트
+    port: 3001,
+    sockPort: 3002,
+    compress: true, // gzip 압축
+    disableHostCheck: true,
+    contentBase: paths.publicPath, // 콘텐츠를 제공할 경로, 정적파일 제공하는 경우 사용
+    historyApiFallback: true,
+    clientLogLevel: 'none',
+    watchContentBase: true,
+    hot: true, // HMR 모드 활성화, 수정된 부분 모듈 리로딩
+    inline: true, // 전체 페이지 실시간 리로딩
+    overlay: true, // 에러 화면에 노출
+    quiet: true
+  }
+----
+
+[source, js]
+.start.js
+----
+...
+webpackConfig.entry.unshift(`webpack-dev-server/client?http://${HOST}:80/`)
+...
+----
+
+## Conclusion
+
+* entry 에는 

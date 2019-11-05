@@ -1,0 +1,24 @@
+= git clone 실패: HTTP request failed
+:revdate: 2019-10-21T16:12:00+09:00
+:page-tags: git, centos
+
+[source]
+----
+$ git clone https://...
+Initialized empty Git repository in /home/user/repo/.git/
+error: The requested URL returned error: 403 Forbidden while accessing https://github.com/user/repo.git/info/refs
+----
+
+[source]
+----
+$ git push origin master
+Initialized empty Git repository in /home/user/repo/.git/
+error: The requested URL returned error: 403 Forbidden while accessing https://github.com/user/repo.git/info/refs
+----
+
+* CentOS 6에서 git 1.7.x 버전대에서 발생한다 함.
+* 1.8 이상으로 업그레이드 권장
+* https://stackoverflow.com/questions/21820715/how-to-install-latest-version-of-git-on-centos-7-x-6-x[How to install latest version of git on CentOS 7.x/6.x]
+
+
+

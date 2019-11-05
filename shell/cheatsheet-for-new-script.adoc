@@ -1,0 +1,156 @@
+= 쉘스크립트 짤 때 자주 쓰이는 스크립트
+:revdate: 2019-10-16T15:15:00+09:00
+:toc: left
+:page-toc: left
+:page-draft:
+
+== 서버 확인
+
+[source, bash]
+----
+cat /etc/centos-release
+----
+
+== 인자 받기
+
+필수로 인자 받기
+
+[source, bash]
+----
+# Check branch name
+if [ -z "$1" ]; then
+  echo "usage: git-finish <refspec>"; exit 1
+fi
+----
+
+[source, bash]
+----
+IP=$1
+# 없으면 클립보드 확인
+if [ -z "$IP" ] && [ -t 0 ]; then
+  IP="$(pbpaste)"
+fi
+# 없으면 파이프라인
+if [ -z "$IP" ]; then
+  IP=$(</dev/stdin)
+fi
+----
+
+인자 값이 비어있으면 종료하기
+
+[source, bash]
+----
+if [ -z "$centos_version" ] || [ -z "$nginx_version" ] || [ -z "$nvauth_version" ]; then
+  echo
+  echo "Please enter a valid version."
+  exit 1
+fi
+----
+
+== 파일 존재 확인
+
+https://linuxize.com/post/bash-check-if-file-exists/
+
+== 컬러풀한 프롬프트
+
+[source, bash]
+----
+echo '$(tput bold)git$(tput sgr0)'
+----
+
+== 실행가는한지 확인
+
+[source, bash]
+----
+if test ! $(which brew); then
+  echo "  Installing Homebrew for you."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /tmp/homebrew-install.log
+fi
+----
+
+== 함수 선언하기
+
+[source, bash]
+----
+function print_download_link() {
+  echo "Please check the version"
+  echo "  nginx: http://nginx.org/en/download.html"
+  echo "  nvauth: https://yobi.navercorp.com/devcafe_naverauth/posts?boardId=0a71728a-64ad-1823-8164-add757612fc7"
+  echo
+}
+
+print_download_link
+----
+
+== 응답코드 확인후 종료하기
+
+[source, bash]
+----
+if [ $? -ne 0 ]; then
+  echo "Login failed"; exit 1
+fi
+
+if [ $? -eq 0 ]; then
+  echo "Login succeeded"; exit 1
+fi
+
+# 응답값이 0이 아니면 종료
+[ $? -eq 0 ]  || exit 1
+----
+
+https://www.tldp.org/LDP/abs/html/comparison-ops.html
+
+== 계속 진행할꺼면 엔터
+
+[source, bash]
+----
+echo Install all AppStore Apps at first!
+read -p "Press any key to continue... " -n1 -s
+echo ""
+----
+
+== 사용자로부터 yn 받기 
+
+[source, bash]
+----
+read -r -p "Do you wanna install git? [y/n] " res
+if [[ "$res" =~ ^(yes|y)$ ]]; then
+  ln -sfv "$DOTFILES_DIR/git/.gitconfig" ~
+  ln -sfv "$DOTFILES_DIR/git/.gitignore_global" ~
+fi
+----
+
+[source, bash]
+----
+read -p "Are you sure? " -n 1
+[[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+----
+
+https://stackoverflow.com/questions/1885525/how-do-i-prompt-a-user-for-confirmation-in-bash-script
+
+== 환경변수 있는지 확인
+
+[source, bash]
+----
+if [ -z "$DOTFILES_DIR" ]; then
+    echo -e "$(tput setaf 1)$(tput bold)DOTFILES_DIR doesn't exist.$(tput sgr0)" && exit 1
+fi
+----
+
+== #!/bin/sh vs #!/usr/bin/env bash
+
+..
+
+== sudo 권한 미리 받기
+
+[source, bash]
+----
+sudo -v
+----
+
+== 링크 만들기(이미 있으면 복사해두기)
+
+[source, bash]
+----
+ln -sfv "$DOTFILES_DIR/.npmrc" ~
+----
