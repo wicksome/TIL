@@ -1,0 +1,22 @@
+= Ansible 정리
+:revdate: 2019-11-05T14:14:00+09:00
+:page-tags: ansible, IaC, infrastructure
+
+* IaaS, Infrastructure as a Service
+* DevOps
+* IaC, Infrastructure as Code
+
+
+= Ansible 이란
+
+* 레드햇사가 제공
+* 파이썬으로 기술
+* "모든 사람을 위한 자동화(Automation for Everyone)"를 지향하는 구성 관리 도구
+* yml을 통해 코드로써 인프라스트럭처를 관리
+* NASA와 같은 대규모 조직에서도 도입하는 등 빠르게 확산
+
+== 구성
+
+* Inventory
+* Module
+* Playbook
