@@ -50,6 +50,8 @@ DevOps::
 
 === 앤서블의 특징
 
+image::https://miro.medium.com/max/1656/1*PPM4yvx7gx1-6yRVss0IPg.png[Ansible deployment architecture]
+
 ==== Agentless
 
 기존에 존재하던 구성 관리 도구인 Chef와 Puppet은 루비로 작성되었고, 작업 대상 머신에 전용 에이전트가 중앙 서버에 접근해 코드를 취득한 다음 에이전트가 스스로 해당 머신에 적합한 상태를 설정한다. 이렇게 중앙서버에서 설정을 가져오는 것을 pull type 아키텍처라고 한다.
