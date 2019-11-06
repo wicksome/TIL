@@ -74,3 +74,8 @@ image::https://miro.medium.com/max/1656/1*PPM4yvx7gx1-6yRVss0IPg.png[Ansible dep
 ==== Reusability
 
 재사용성. "높은 재사용성" 즉, 범용성을 유지할 수 있으면 앤서블을 계속 사용함에 따라 구현 등에 따른 시간이 줄어들 것이다. 모듈 이외에도 플레이북 측에서도 재사용을 위한 구조로 https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html[Role]이 있다.
+
+
+== Reference
+
+* http://www.yes24.com/Product/goods/55227544[앤서블 철저 입문]
