@@ -47,6 +47,30 @@ if [ -z "$centos_version" ] || [ -z "$nginx_version" ] || [ -z "$nvauth_version"
 fi
 ----
 
+select 값 받기
+
+[source, bash]
+----
+isNginx=false
+isNginxWithNVAuth=false
+
+# https://askubuntu.com/a/1716
+PS3='Please enter your choice: '
+options=("Nginx" "Nginx(nvextauth)")
+select opt in "${options[@]}"; do
+  case $opt in
+    "Nginx") isNginx=true; break;; 
+    "Nginx(nvextauth)") isNginxWithNVAuth=true; break;; 
+    *) echo "invalid option $REPLY";;
+  esac
+done
+
+echo $isNginx
+echo $isNginxWithNVAuth
+
+exit;
+----
+
 == 파일 존재 확인
 
 https://linuxize.com/post/bash-check-if-file-exists/
