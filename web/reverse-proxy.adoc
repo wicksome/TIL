@@ -1,0 +1,25 @@
+= Reverse Proxy vs Forward Proxy
+:revdate: 2019-11-09T21:55:00+09:00
+:page-tags: proxy
+
+== Proxy
+
+프록시란 사전적 의미로 '대리인'을 뜻하며, 일반적으로 다른 무언가와 이어지는 인터페이스의 역할을 한다.
+
+== Proxy Server
+
+프록시 서버란 클라이언트와 서버 사이에서 중계 역할을 하는 서버를 말한다. 서버의 위치에 따라 크게 두 가지로 나눠진다.
+
+* https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
+
+== Forward Proxy Server
+
+== Reverse Proxy Server
+
+== Proxy Pattern
+
+image:https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Proxy_pattern_diagram.svg/1280px-Proxy_pattern_diagram.svg.png[proxy-pattern-diagram]
+
+=== Vertual Proxy
+
+=== Protection Proxy
