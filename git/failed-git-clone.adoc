@@ -1,6 +1,6 @@
 = git clone 실패: HTTP request failed
 :revdate: 2019-10-21T16:12:00+09:00
-:page-tags: git, centos
+:page-tags: git, centos, troubleshooting
 
 [source]
 ----
