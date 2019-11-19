@@ -1,6 +1,7 @@
 = 스프링 컴포넌트 내에 been 선언은 어디에 해야 할까?
 :revdate: 2019-10-10T23:36:00+09:00
 :page-tags: java, spring-boot, spring-framework, been
+:page-draft:
 
 which is the best been declaration top or bottom in spring framework?
 
