@@ -2,24 +2,40 @@
 :revdate: 2019-11-09T21:55:00+09:00
 :page-tags: proxy
 
-== Proxy
-
+Proxy::
 프록시란 사전적 의미로 '대리인'을 뜻하며, 일반적으로 다른 무언가와 이어지는 인터페이스의 역할을 한다.
 
 == Proxy Server
 
-프록시 서버란 클라이언트와 서버 사이에서 중계 역할을 하는 서버를 말한다. 서버의 위치에 따라 크게 두 가지로 나눠진다.
+프록시 서버란 클라이언트와 서버 사이에서 중계 역할을 하는 서버를 말한다. 서버의 위치에 따라 크게 **forward Proxy** 와 **reverse Proxy** 로 나눠진다.
+이 둘의 주요 차이점은 웹 브라우저 같은 client가 Forward Proxy를 사용하고 웹 서버와 같은 server가 Reverse Proxy를 사용한다는 것이다.
 
-* https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
 
 == Forward Proxy Server
 
+Forward Proxy(Proxy, Proxy Server, Web Proxy)는 클라이언트 컴퓨터 그룹 앞에 있는 서버이다. 해당 컴퓨터가 인터엣의 사이트 및 서비스에 요청하면 프록시 서버는
+해당 요청을 가로채고 중개인처럼 해당 클라이언트를 대신하여 웹 서버와 통신한다. 즉, 원본 서버가 해당 특정 클라이언트와 직접 통신하지 않도록 하는 것이다.
+
+image:https://www.thesecuritybuddy.com/wordpress/bdr/uploads/2018/02/ForwardProxyw.jpg[Forward Proxy, 800]
+
 == Reverse Proxy Server
 
-== Proxy Pattern
+Reverse Proxy는 일반적으로 보안, 성능 및 안정성을 높이기 위해 구현되며, 주로 서버 관리자가 로드 밸런싱과 가용성(high availability)를 얻기위해 사용한다.
+Reverse Proxy는 하나 이상의 웹 서버 앞에 위치하며, 인터넷에서 요청을 가져와서 해당 웹 서버로 전달하는 역할(대리자)을 한다. 즉, 클라이언트가 해당 origin 서버와 직접 통신하지 않도록한다.
+대부분의 방문자는 웹 사이트가 Reverse Proxy를 사용하고 있다는 것을 알지 못한다. 대개 웹 사이트를 detect하는 데 필요한 지식과 도구가 없거나 단순히 신경쓰지 않고, 신경쓰지 않아도 되기 때문이다.
+https://www.nginx.com/[Nginx]는 웹 서버와 Reverse Proxy를 동시에 사용할 수 있다. 잘 알려진 오픈소스 Reverse Proxy는 http://www.haProxy.org[HAProxy]가 있다.
 
-image:https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Proxy_pattern_diagram.svg/1280px-Proxy_pattern_diagram.svg.png[proxy-pattern-diagram]
+[link=https://www.linuxbabe.com/it-knowledge/differences-between-forward-Proxy-and-reverse-Proxy]
+image:https://www.linuxbabe.com/wp-content/uploads/2016/01/reverse-proxy-1.png[Reverse Proxy, 800]
 
-=== Vertual Proxy
+리버스 프록시의 장점은 아래와 같다.
 
-=== Protection Proxy
+* Load balancing
+* Protection from attacks
+* Global Server Load Balancing(GSLB)
+* Caching
+* SSL encryption
+
+== References
+* https://www.linuxbabe.com/it-knowledge/differences-between-forward-Proxy-and-reverse-Proxy[Differences Between Forward Proxy and Reverse Proxy]
+* https://www.cloudflare.com/learning/cdn/glossary/reverse-Proxy/[What Is A Reverse Proxy? - Cloudflare]
