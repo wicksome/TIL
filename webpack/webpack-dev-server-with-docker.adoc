@@ -1,5 +1,6 @@
 = webpack-dev-server with docker
 :revdate: 2019-10-08T14:50:00+09:00
+:page-draft:
 
 [source, yml]
 .docker-compose.yml

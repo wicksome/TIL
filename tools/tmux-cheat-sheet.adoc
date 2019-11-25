@@ -1,6 +1,7 @@
 = 자주 사용하는 tmux
 :revdate: 2019-10-31T14:57:00+09:00
 :page-tags: terminal, tmux
+:page-draft:
 
 <<<
 
