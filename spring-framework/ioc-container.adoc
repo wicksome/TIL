@@ -67,15 +67,20 @@ image:https://t1.daumcdn.net/cfile/tistory/99D9B34B5C9C5B501C[spring overview]
 
 === 웹 애플리케이션의 컨텍스트 구성 방법
 
-* 서블릿 컨텍스트와 루트 애플리케이션 컨텍스트 계층구조
+* *서블릿 컨텍스트와 루트 애플리케이션 컨텍스트 계층구조*
 ** 컨텍스트 계층구조를 만드는 것
 ** 스프링 웹 기능을 사용하는 경우 적용 가능
-* 루트 애플리케이션 컨텍스트 단일구조
+* *루트 애플리케이션 컨텍스트 단일구조*
 ** 컨텍스트를 하나만 사용하는 방법
 ** 스프링 웹 기술을 사용하지 않을 때 적용 가능한 방법
-* 서블릿 컨텍스트 단일구조
+* *서블릿 컨텍스트 단일구조*
 ** 컨텍스트를 하나만 사용하는 방법
 ** 스프링 웹 기능을 사용하는 경우 적용 가능
+** 루트 애플리케이션 컨텍스트를 생략하는 경우도 있음
+** 서블릿에서 만들어지는 컨텍스트에 모든 빈을 다 등록하면 됨
+** 계층구조를 사용하면서 발생할 수 있는 혼란을 근본적으로 피하고 단순한 설정을 선호한다면 이 방법을 선택할 수 있음
+** 이때는 서블릿 안에 만들어지는 애플리케이션 컨텍스트가 부모 컨테스트를 갖지 않기 때문에 스스로 *루트 컨텍스트* 가 됨
+** 이렇게 만들어지는 서블릿 컨텍스트는 컨텍스트 계층 관점에서 보자면 루트 컨텍스트이지만 웹 애플리케이션 레벨에 두는 공유 가능한 루트 컨텍스트와는 구별됨
 
 === 루트 애플리케이션 컨텍스트 등록하기
 
@@ -130,3 +135,41 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 현재 프로젝트뿐만 아니라 상위 classloader를 모두 검색하여 참조
 
 참고: https://stackoverflow.com/a/3294506/3793078
+
+=== 서블릿 애플리케이션 컨텍스트 등록하기
+
+[source, xml]
+.web.xml
+----
+<servlet>
+    <servlet-name>spring</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+----
+
+* 스프링의 웹 기능을 지원하는 프론트 컨트롤러 서블릿은 `DispatcherServlet`
+* `web.xml` 에 등록해서 사용할 수 있는 서블릿
+* 이름을 다르게 지정해주면 하나의 웹 애플리케이션에 여러 개의 `DispatcherServlet` 등록 가능
+* 각 `DispatcherServlet` 은 서블릿이 초기화될 때 자신만의 컨텍스트를 생성하고 초기화함, 동시에 웹 애플리케이션 레벨에 등록된 루트 애플리케이션 컨텍스트를 찾아서 이를 자신의 부모 컨텍스트로 사용
+* `DispatcherServlet` 의 컨텍스트에 대한 디폴트 설정을 변경하고 싶다면 루트 애플리케이션 컨텍스트와 마찬가지로 `contextConfigLocation` 과 `contextClass` 를 지정해줄 수 있음
+
+[source, xml]
+----
+<servlet>
+    <servlet-name>spring</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/applicationContext.xml
+            /WEB-INF/spring-servlet.xml
+        </param-value>
+    </init-param>
+</servlet>
+----
+
+* 서블릿 컨텍스트의 파라미터 선언 방법은 루트 컨텍스트와 거의 비슷함, `<context-param>` 대신 `<servlet>` 안에 있는 `<init-param>` 을 이용한다는 점
+* 서블릿 설정파일을 디폴트를 쓰지 않고 여러 개로 분리해야 할 경우
+** 루트 애플리케이션 컨텍스트를 사용하지 않고 모든 계층의 빈을 서블릿 컨텍스트 안에 등록하는 *단일 서블릿 컨텍스트 구성* 방법을 사용하는 경우
+* 웹 계층 외의 빈을 정의한 _applicationContext.xml_ 과 웹 계층을 위한 _spring-servlet.xml_ 을 서블릿 컨텍스트가 모두 사용하게 하면 리스너를 통한 루트 컨텍스트의 등록은 생량할 수 있음
