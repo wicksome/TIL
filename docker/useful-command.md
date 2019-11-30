@@ -1,7 +1,11 @@
 이미지에 bash 바로 접근하기
 
 ```
-docker run -it -rm --entrypoint /bin/bash nginx:latest
+docker run -it --rm --entrypoint /bin/bash nginx:latest
+```
+
+```
+docker pull ansible/ansible:default
 ```
 
 
