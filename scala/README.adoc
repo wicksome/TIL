@@ -121,8 +121,16 @@ res0: String = coffie, tea, muck
 scala> val input = "Enjoying this apple 3.14159 times today"
 input: String = Enjoying this apple 3.14159 times today
 
-scala> val pattern = """.* apple ([\d.]+) times .*""".r
-pattern: scala.util.matching.Regex = .* apple ([\d.]+) times .*
+scala> val pattern = """.* apple ([\d.]+) times .*""".r <1>
+pattern: scala.util.matching.Regex = .* apple ([\d.]+) times .* <2>
 
-scala> 
+scala> val pattern(amountText) = input
+amountText: String = 3.14159 <3>
+
+scala> val amount = amountText.toDouble
+amount: Double = 3.14159 <4>
 ----
+<1> `.r` 을 붙혀 Regex 인스턴스를 반환 받음
+<2> 정규표현식 타입은 `scala.util.matching.Regex` 또는 간단히 `util.matching.Regex`
+<3> `val <regex value>(<name>) = <input string>`
+<4> Convert String type to Double type
