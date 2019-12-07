@@ -1,0 +1,32 @@
+= Scala 시작하기
+
+== Scala
+
+* 확장 가능한 언어(**SCA**lable **LA**nguage)의 약자
+* 2003년 마틴 오더스키(Martin Odersky) 교수와 EPFL(로잔 공과 대학)의 연구진이 JVM 플랫폼에서 
+  FP와 OOP를 동시에 지원하는, 성능이 우수한 환경을 제공하기 위해 이 언어를 만듬
+* JVM 언어로 자바 런타임을 사용
+* REPL(Real-Eval-Print-Loop) 셸 제공
+* Value(값) 정의: `val <name>[: <type>] = <literal>`
++
+[source, scala]
+----
+scala> val x: Int = 5
+x: Int = 5
+
+scala> x = 3
+         ^
+       error: reassignment to val
+----
+** 데이터를 통해 타입 추론(type inference)이 가능하여 type을 생략할 수 있음
+* Variable(변수) 정의: `var <name>: <type> = <literal>`
++
+[source, scala]
+----
+scala> var x: Int = 5
+x: Int = 5
+
+scala> x = 3
+x: Int = 3
+----
+** 변수에 재할당은 가능하지만 지정된 타입을 바꿀 수는 없음
