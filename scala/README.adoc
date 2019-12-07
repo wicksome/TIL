@@ -70,3 +70,59 @@ res0: String = How do you like them apples?
 scala> s"Fish n chips n vinegar, ${"pepper " * 3}salt"
 res1: String = Fish n chips n vinegar, pepper pepper pepper salt
 ----
+** 문자열 보간의 또 다른 포맷은 printf 표기법을 사용하는 것(접두사 `f` 사용)
++
+[source, scala]
+----
+scala> val item = "apple"
+item: String = apple
+
+scala> f"I wrote a new $item%.3s today"
+res0: String = I wrote a new app today
+
+scala> f"Enjoying this $item ${355/113.0}%.5f times today"
+res1: String = Enjoying this apple 3.14159 times today
+----
+*** printf 표기법이 읽기는 다소 어렵지만, 출력을 근본적으로 제어할 수 있는 장점
+** Regular Expression
+*** 자바 클래스 `java.util.regex.Pattern` 에 기반함
+*** String 타입은 정규 표현식을 지원하는 built-in 연산을 제공
+.... matches
++
+[source, scala]
+----
+scala> "Froggy went a' courting" matches ".*courting"
+res0: Boolean = true
+----
+.... replaceAll
++
+[source, scala]
+----
+scala> "milk, tea, muck" replaceAll ("m[^ ]+k", "coffie")
+res0: String = coffie, tea, coffie
+----
+.... replaceFirst
++
+[source, scala]
+----
+scala> "milk, tea, muck" replaceFirst ("m[^ ]+k", "coffie")
+res0: String = coffie, tea, muck
+----
+*** 정규표현식으로 값 캡쳐하기
+**** `r` 연산자를 호출하여 문자열을 정규 표현식 타입으로 전환
+**** Regex 인스턴스를 반환
+**** Capture Group은 정규 표현식 패턴을 기반으로 주어진 문자열에서 항목을 선택하고 이를 로컬 값으로
+     전환할 수 있게 해줌
+**** 패턴은 최소 하나의 괄호로 정의된 캡처 그룹을 포함해야 함
+**** 역슬래시를 인식하기 위해 multiline string을 사용
++
+[source, scala]
+----
+scala> val input = "Enjoying this apple 3.14159 times today"
+input: String = Enjoying this apple 3.14159 times today
+
+scala> val pattern = """.* apple ([\d.]+) times .*""".r
+pattern: scala.util.matching.Regex = .* apple ([\d.]+) times .*
+
+scala> 
+----
