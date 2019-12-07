@@ -30,3 +30,43 @@ scala> x = 3
 x: Int = 3
 ----
 ** 변수에 재할당은 가능하지만 지정된 타입을 바꿀 수는 없음
+* Naming
+** 문자, 숫자, 연산자 기호 사용 가능
++
+연산자(operator):: 
+\u0020에서 \u007F 사이의 문자와 유니코드 Sm[Symbol/Math] 카테고리에서 대괄호와 마침표를 제외한 모든 문자
+** 값과 변수는 관례상 소문자로 시작 -> camelCase
+* Type
+** 스칼라에는 원시(primitive) 데이터 타입 개념 없음
+* Type: String
+** multiline literal, interpolation(보간) 기능 추가
+** 자바와 달리 등호 연산자(`==`)는 객체 참조가 같은지 검사하지 않고 실제 값이 같은지 검사하사
+** 여러 줄의 String인 double quoter 세 개를 이용하여 생성
++
+[source, scala]
+----
+// 특수 문자의 시작을 나타내는 역슬래시를 인지하지 못함
+scala> val str = """She suggested reformatting the file
+    | by replacing tabs(\t) with newlines (\n);
+    | "Why do that?", he asked. """
+str: String =
+"She suggested reformatting the file
+by replacing tabs(\t) with newlines (\n);
+"Why do that?", he asked. "
+----
+** 문자열 보간(string interpolation)은 첫 큰 따옴표 전에 접두사 `s` 를 추가하여 표기.
++
+[source, scala]
+----
+scala> println(s"Pi, using 355/113, is about $approx.")
+Pi, using 355/113, is about 3.141593.
+
+scala> val item = "apple"
+item: String = apple
+
+scala> s"How do you like them ${item}s?"
+res0: String = How do you like them apples?
+
+scala> s"Fish n chips n vinegar, ${"pepper " * 3}salt"
+res1: String = Fish n chips n vinegar, pepper pepper pepper salt
+----
