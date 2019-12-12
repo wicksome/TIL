@@ -2,6 +2,11 @@
 :revdate: 2019-11-29T02:42:00+09:00
 :page-tags: spark
 
+== 들어가기
+
+빅데이터::
+크키(Volume), 다양성(Variety), 속도(Velocity) 세 가지 속성을 통해 정의.
+
 == 설치하기
 
 [source, bash]

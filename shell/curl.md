@@ -24,6 +24,39 @@ curl -XPOST http://jenkins.io:9090 \
 ```
 
 ```bash
+TRIGGER_STR="code review plz\r\n"
+
+generate_post_data()
+{
+  # convert message
+  if [[ $ghprbCommentBody == "code review plz" ]]; then
+    local message=""
+  else
+    local message="\n\n${ghprbCommentBody#"$TRIGGER_STR"}"
+  fi
+
+  # create json data
+  cat <<EOF
+{
+  "to": ["""],
+  "content": {
+  	"type": "link",
+    "contentText": "🙏 코드리뷰 요청 ($ghprbSourceBranch)\n\n$ghprbPullTitle by $ghprbPullAuthorLogin$message",
+    "linkText": "🔎 $ghprbGhRepository#$ghprbPullId",
+    "link": "$ghprbPullLink"
+  }
+}
+EOF
+}
+
+curl -XPOST http://dev-nsp-jenkins-ncl.nfra.io:9090 \
+-H "Content-Type: application/json" \
+--data "$(generate_post_data)"
+
+```
+
+
+```bash
 curl -X POST 'https://url...' \
      -H 'Content-Type: application/json' \
      -H 'Authorization: Basic ZDk3NGU...=' \

@@ -1,8 +1,13 @@
-= Java8 에서 TimeZone 다루기
+= Java8 에서 시간 다루기 with 타임존
 Yeongjun.kim <opid911@gmail.com>
 v1.0
 :revdate: 2018-02-21T17:50:00+09:00
+:page-tags: java8, timezone, zoneId, date, time, datetime
 :toc:
+
+== JAVA8 이전의 시간 다루기
+
+TODO
 
 == 타임존?
 
@@ -11,9 +16,12 @@ Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://
 `ZoneId`, `ZonedDateTime`, `LocalDateTime` 등이 추가되었다. 이용할 수 있는 Time-Zone은 `ZoneId.getAvilableIds()` 로 확인할 수 있으며,
 현재 시점 등록된 ID는 600개이다.
 
-.TimeZone과 관련된 Java 클래스
+.시간과 관련된 Java8 클래스
 |===
 | Class |Desc
+
+| `Instant`
+| 타임 스탬프
 
 | `ZoneId`            
 | 시간대를 나타낸다.
@@ -34,6 +42,7 @@ Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://
 [NOTE]
 .타임존 관련 용어 설명
 ====
+
 비슷하지만 다른 용어들을 설명한다.
 
 ____
@@ -63,7 +72,80 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 
 == 예제코드
 
-=== 사용자에게 타임존(+offset)을 표시할 때 어떻게 보여줄 것인가?
+=== Date to LocalDate, LocalDateTime
+
+[source, java]
+----
+final Date date = Date.from(Instant.now());
+
+// LocalDate
+LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+// LocalDateTime
+LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+// ZonedDateTime
+ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
+ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+----
+
+=== Calendar to LocalDate, LocalDateTime, ZonedDateTime
+
+[source, java]
+----
+final Calendar cal = Calendar.getInstance();
+final TimeZone timeZone = Optional.ofNullable(cal.getTimeZone()).orElse(TimeZone.getDefault());
+
+// LocalDate
+LocalDate localDate = LocalDateTime.ofInstant(cal.toInstant(), timeZone.toZoneId()).toLocalDate();
+
+// LocalDateTime
+LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), timeZone.toZoneId());
+
+// ZonedDateTime
+ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(cal.toInstant(), timeZone.toZoneId());
+----
+
+=== String to DateTime
+
+[source, java]
+----
+LocalDateTime.parse(str);
+LocalDateTime.parse(str, DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"));
+----
+
+=== 어제 00:00:00 구하기
+
+[source, java]
+----
+final String actual = LocalDateTime.now()
+    .minus(1, DAYS)
+    .truncatedTo(DAYS)
+    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+// 20191204000000
+----
+
+[source, java]
+----
+final String actual = LocalDate.now()
+    .atTime(LocalTime.MIN)
+    .minus(1, DAYS)
+    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+// 20191204000000
+----
+
+=== 어제 23:59:59 구하기
+
+[source, java]
+----
+final String actual = LocalDateTime.now()
+    .minus(1, DAYS)
+    .truncatedTo(DAYS)
+    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+// 20191204235959
+----
+
+=== 타임존과 오프셋 커스텀하게 출력하기
 
 [source]
 ----
@@ -144,7 +226,7 @@ final LocalDateTime localDateTime1 = localDateTime.atZone(seoul).toLocalDateTime
 final LocalDateTime localDateTime2 = localDateTime.atZone(utc).toLocalDateTime();
 ```
 
-=== 특정 구역 시간의 다른 구역 시간 구하기
+=== LA 시간 기준으로 서울시간 구하기
 
 예를 들어, 로스앤젤레스 시간으로 오전 9시가 서울 시간으로 몇시일지 확인하려고 하려고 한다. 아래와 같이 `withZoneSameInstant(ZoneId)` 를 사용하여 시간을 구할 수 있다.
 
@@ -155,7 +237,7 @@ final ZonedDateTime seoul = losAngeles.withZoneSameInstant(ZoneId.of("Asia/Seoul
 System.out.println(seoul.toLocalDateTime());
 ```
 
-=== 시간대 변경하기
+=== 같은 시간에서 타임존만 변경하기
 
 시간대(`ZoneId`)만 변경하고자할 땐, `withZoneSameLocal(ZoneId)` 를 사용한다. 즉, 아래 코드에서 _Los_Angeles_ 와 _seoul_ 의 `localDateTime` 은 같다.
 
@@ -174,7 +256,7 @@ System.out.println(seoul);
 2017-10-18T09:00+09:00[Asia/Seoul]
 ----
 
-=== 1주일뒤 회의시간 예약하기
+=== 특정 시간 기준으로 1주일 지난 시간 구하기
 
 예를 들어, Santiago에서 2018년 5월 10일 10시 기준으로 7주일 이후에 회의를 잡으려고 한다. 이 경우에는 `Period.ofDays(int)` 을 사용한다.
 
@@ -212,6 +294,10 @@ System.out.println(nextMeeting);
 - 왜 타임존 업데이트가 되지 않았는가?
 - java 타임존을 업데이트 하는 방법 - oracle jdk, openjdk
 
+== 타임존 DB 업데이트하기
+
+TODO
+
 == 추가 정보
 
 === `Europe/Istanbul` 타임존
@@ -223,7 +309,6 @@ System.out.println(nextMeeting);
 * `ZoneId.of("Turkey")` 은 Deprecated. https://en.wikipedia.org/wiki/List_of_tz_database_time_zones[wiki]
 * Tzdata 버전은 tzdata2016g이 반영되야함. https://www.oracle.com/technetwork/java/javase/tzdata-versions-138805.html[오라클 문서]
 * https://stackoverflow.com/questions/40400793/java-timezone-in-turkey-rejected-daylight-saving
-
 
 == References
 
@@ -242,6 +327,7 @@ System.out.println(nextMeeting);
 * http://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API - Naver D2]
 * https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/[Java 8 이전 버전에서 시간 다루기]
 * http://meetup.toast.com/posts/125[자바스크립트에서 타임존 다루기 (1) - Toast]
+* https://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html[Java 8 Date Time - 20 Examples of LocalDate, LocalTime, LocalDateTime]
 
 ++++
 </details>

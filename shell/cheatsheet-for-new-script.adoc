@@ -4,13 +4,15 @@
 :page-toc: left
 :page-draft:
 
-== 서버 확인
+[#check-os]
+== OS 확인
 
 [source, bash]
 ----
 cat /etc/centos-release
 ----
 
+[#get-arguments]
 == 인자 받기
 
 필수로 인자 받기
@@ -71,10 +73,12 @@ echo $isNginxWithNVAuth
 exit;
 ----
 
+[#check-exist-file]
 == 파일 존재 확인
 
 https://linuxize.com/post/bash-check-if-file-exists/
 
+[#colorful-prompt]
 == 컬러풀한 프롬프트
 
 [source, bash]
@@ -82,7 +86,8 @@ https://linuxize.com/post/bash-check-if-file-exists/
 echo '$(tput bold)git$(tput sgr0)'
 ----
 
-== 실행가는한지 확인
+[#check-executable-command]
+== 실행 가능한 명령어인지 확인
 
 [source, bash]
 ----
@@ -92,6 +97,22 @@ if test ! $(which brew); then
 fi
 ----
 
+[source, bash]
+----
+is_executable() {
+    local bin=$(command -v "$1" 2>/dev/null)
+    if [[ ! $bin == "" && -x $bin ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+if is_executable $1 ; then echo "true"; else echo "false"; fi
+----
+
+[#declare-function]
 == 함수 선언하기
 
 [source, bash]
@@ -106,6 +127,19 @@ function print_download_link() {
 print_download_link
 ----
 
+[source, bash]
+----
+function isExist(){
+    local path=$1
+    if [ -f $path ]; then
+        return 0 # true
+    else
+        return 1 # false
+    fi
+}
+----
+
+[#check-return-value]
 == 응답코드 확인후 종료하기
 
 [source, bash]
@@ -124,6 +158,7 @@ fi
 
 https://www.tldp.org/LDP/abs/html/comparison-ops.html
 
+[#enter-continue]
 == 계속 진행할꺼면 엔터
 
 [source, bash]
@@ -133,6 +168,7 @@ read -p "Press any key to continue... " -n1 -s
 echo ""
 ----
 
+[#input-yn]
 == 사용자로부터 yn 받기 
 
 [source, bash]
@@ -152,6 +188,7 @@ read -p "Are you sure? " -n 1
 
 https://stackoverflow.com/questions/1885525/how-do-i-prompt-a-user-for-confirmation-in-bash-script
 
+[#check-env]
 == 환경변수 있는지 확인
 
 [source, bash]
@@ -163,8 +200,9 @@ fi
 
 == #!/bin/sh vs #!/usr/bin/env bash
 
-..
+...aa
 
+[#prepare-sudo]
 == sudo 권한 미리 받기
 
 [source, bash]
@@ -172,9 +210,150 @@ fi
 sudo -v
 ----
 
+[#create-link]
 == 링크 만들기(이미 있으면 복사해두기)
 
 [source, bash]
 ----
 ln -sfv "$DOTFILES_DIR/.npmrc" ~
 ----
+
+[#conditional]
+== 조건문
+
+[source, bash]
+----
+if [ 조건식 ]; then
+    echo "case 1"
+elif [ $val -eq 12 ]; then # val == 12
+    echo "case 2"
+else
+    echo "case 3"
+fi
+
+# if 조건안에 사용자 함수 2개 사용하는 경우
+if isExist $path && ! isEmpty $path; then
+    echo "test"
+fi
+----
+
+[#test-operation]
+== test 명령어 연산자 
+
+WARNING: 조건식 앞뒤에 빈칸 반드시 넣어야 함
+
+* `man test` 로 다른 연산자도 확인
+* `T` is true, `F` is false.
+
+.`test` 명령어 주요 연산자
+|===
+|예 |설명
+
+|`str = str`       | str == str
+|`str != str`      | str != str
+|`-z str`          | str.length == 0
+|`-n str`          | str.length != 0
+|`str`             | str != NULL
+|`val1 -eq val2`   | val1 == val2
+|`val1 -ne val2`   | val1 != val2
+|`val1 -gt val2`   | val1 {gt} val2
+|`val1 -ge val2`   | val1 {gt}= val2
+|`val1 -lt val2`   | val1 {lt} val2
+|`val1 -le val2`   | val1 {lt}= val2
+|`val1 -a val2`    | val1 && val2
+|`val1 -o val2`    | val1 {vbar}{vbar} val2
+|`-d file`         | 디렉토리라면 true
+|`-e file`         | 파일이 존재하면 true
+|`-f file`         | 보통 파일이면 true
+|`-L file`         | 심볼릭 링크면 true
+|`-r file`         | 읽기 가능이면 true
+|`-w file`         | 쓰기 가능이면 ture
+|`-x file`         | 실행 가능이면 true
+|`-s file`         | file size {gt} 0
+|`file1 -nt file2` | file1이 더 최신이면 T(newer then)
+|`file1 -ot file2` | file1이 예전 파일이면 T(older then)
+|`file1 -ef file2` | size가 같으면 T
+|===
+
+[#loop]
+== 반복문
+
+[source, bash]
+----
+ITEMS=("item1" "item2" "item3")
+for item in "${ITEMS[@]}"
+do
+    echo $item
+done
+----
+
+[source, bash]
+----
+ITEMS=("item1" "item2" "item3")
+for (( index=0; index<${#ITEMS[*]}; index++ ))
+do
+    echo ${ITEMS[$index]}
+done
+----
+
+[#set-var-by-command-result]
+== 커맨드 실행 결과를 변수로 사용하기
+
+`$()`
+
+[source, bash]
+----
+NGINX_PID=$(cat $DIR_NGINX/logs/nginx.pid)
+----
+
+* 산술연산: `$(())`
++
+[source, bash]
+----
+$((3 * 3))
+----
+
+== import
+
+[source, bash]
+----
+source ./common.sh
+. ./common.sh
+----
+
+[#clipboard]
+== 클립보드 값을 파일로 저장하기
+
+[source, bash]
+----
+# for macos
+$ pbpaste > file.md
+----
+
+== Shell Parameter Expansion
+
+[source, bash]
+----
+"${parameter}"
+----
+
+* https://www.gnu.org/software/bash/manual/bashref.html#Shell-Parameter-Expansion[Bash Reference Manual - 3.5.3 Shell Parameter Expansion]
+* Relations(shellcheck)
+** https://github.com/koalaman/shellcheck/wiki/SC2006[SC2006] - Use $(STATEMENT) instead of legacy \`STATEMENT\`
+** https://github.com/koalaman/shellcheck/wiki/SC2086[SC2086] - Double quote to prevent globbing and word splitting.
+
+<<<
+
+* `${param-$default}`: param이 정의되지 않았을 때, default 사용 
+* `${param:-$default}`: param이 정의되지 않았거나 null일 경우, default 사용 
+* `${param=$default}`: param이 정의되지 않았을 때, param에 default값 대입
+* `${param:=$default}`: param이 정의되지 않았거나 null일 경우, param에 default 대입
+* `${param+$default}`: param이 선언되었고 값이 정의되어 있을 때, default 사용
+* `${param:+$default}`: param이 선언되었고 값이 null일 때, default 사용
+* `${param?error_msg}`: param이 없을 경우 error_msg 표시하고 리턴 코드 1을 내며 스크립트 즉시 종료
+
+
+
+== References
+
+* Shell Style Guide: https://google.github.io/styleguide/shell.xml
