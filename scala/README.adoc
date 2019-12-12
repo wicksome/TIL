@@ -1,0 +1,136 @@
+= Scala 시작하기
+
+== Scala
+
+* 확장 가능한 언어(**SCA**lable **LA**nguage)의 약자
+* 2003년 마틴 오더스키(Martin Odersky) 교수와 EPFL(로잔 공과 대학)의 연구진이 JVM 플랫폼에서 
+  FP와 OOP를 동시에 지원하는, 성능이 우수한 환경을 제공하기 위해 이 언어를 만듬
+* JVM 언어로 자바 런타임을 사용
+* REPL(Real-Eval-Print-Loop) 셸 제공
+* Value(값) 정의: `val <name>[: <type>] = <literal>`
++
+[source, scala]
+----
+scala> val x: Int = 5
+x: Int = 5
+
+scala> x = 3
+         ^
+       error: reassignment to val
+----
+** 데이터를 통해 타입 추론(type inference)이 가능하여 type을 생략할 수 있음
+* Variable(변수) 정의: `var <name>: <type> = <literal>`
++
+[source, scala]
+----
+scala> var x: Int = 5
+x: Int = 5
+
+scala> x = 3
+x: Int = 3
+----
+** 변수에 재할당은 가능하지만 지정된 타입을 바꿀 수는 없음
+* Naming
+** 문자, 숫자, 연산자 기호 사용 가능
++
+연산자(operator):: 
+\u0020에서 \u007F 사이의 문자와 유니코드 Sm[Symbol/Math] 카테고리에서 대괄호와 마침표를 제외한 모든 문자
+** 값과 변수는 관례상 소문자로 시작 -> camelCase
+* Type
+** 스칼라에는 원시(primitive) 데이터 타입 개념 없음
+* Type: String
+** multiline literal, interpolation(보간) 기능 추가
+** 자바와 달리 등호 연산자(`==`)는 객체 참조가 같은지 검사하지 않고 실제 값이 같은지 검사하사
+** 여러 줄의 String인 double quoter 세 개를 이용하여 생성
++
+[source, scala]
+----
+// 특수 문자의 시작을 나타내는 역슬래시를 인지하지 못함
+scala> val str = """She suggested reformatting the file
+    | by replacing tabs(\t) with newlines (\n);
+    | "Why do that?", he asked. """
+str: String =
+"She suggested reformatting the file
+by replacing tabs(\t) with newlines (\n);
+"Why do that?", he asked. "
+----
+** 문자열 보간(string interpolation)은 첫 큰 따옴표 전에 접두사 `s` 를 추가하여 표기.
++
+[source, scala]
+----
+scala> println(s"Pi, using 355/113, is about $approx.")
+Pi, using 355/113, is about 3.141593.
+
+scala> val item = "apple"
+item: String = apple
+
+scala> s"How do you like them ${item}s?"
+res0: String = How do you like them apples?
+
+scala> s"Fish n chips n vinegar, ${"pepper " * 3}salt"
+res1: String = Fish n chips n vinegar, pepper pepper pepper salt
+----
+** 문자열 보간의 또 다른 포맷은 printf 표기법을 사용하는 것(접두사 `f` 사용)
++
+[source, scala]
+----
+scala> val item = "apple"
+item: String = apple
+
+scala> f"I wrote a new $item%.3s today"
+res0: String = I wrote a new app today
+
+scala> f"Enjoying this $item ${355/113.0}%.5f times today"
+res1: String = Enjoying this apple 3.14159 times today
+----
+*** printf 표기법이 읽기는 다소 어렵지만, 출력을 근본적으로 제어할 수 있는 장점
+** Regular Expression
+*** 자바 클래스 `java.util.regex.Pattern` 에 기반함
+*** String 타입은 정규 표현식을 지원하는 built-in 연산을 제공
+.... matches
++
+[source, scala]
+----
+scala> "Froggy went a' courting" matches ".*courting"
+res0: Boolean = true
+----
+.... replaceAll
++
+[source, scala]
+----
+scala> "milk, tea, muck" replaceAll ("m[^ ]+k", "coffie")
+res0: String = coffie, tea, coffie
+----
+.... replaceFirst
++
+[source, scala]
+----
+scala> "milk, tea, muck" replaceFirst ("m[^ ]+k", "coffie")
+res0: String = coffie, tea, muck
+----
+*** 정규표현식으로 값 캡쳐하기
+**** `r` 연산자를 호출하여 문자열을 정규 표현식 타입으로 전환
+**** Regex 인스턴스를 반환
+**** Capture Group은 정규 표현식 패턴을 기반으로 주어진 문자열에서 항목을 선택하고 이를 로컬 값으로
+     전환할 수 있게 해줌
+**** 패턴은 최소 하나의 괄호로 정의된 캡처 그룹을 포함해야 함
+**** 역슬래시를 인식하기 위해 multiline string을 사용
++
+[source, scala]
+----
+scala> val input = "Enjoying this apple 3.14159 times today"
+input: String = Enjoying this apple 3.14159 times today
+
+scala> val pattern = """.* apple ([\d.]+) times .*""".r <1>
+pattern: scala.util.matching.Regex = .* apple ([\d.]+) times .* <2>
+
+scala> val pattern(amountText) = input
+amountText: String = 3.14159 <3>
+
+scala> val amount = amountText.toDouble
+amount: Double = 3.14159 <4>
+----
+<1> `.r` 을 붙혀 Regex 인스턴스를 반환 받음
+<2> 정규표현식 타입은 `scala.util.matching.Regex` 또는 간단히 `util.matching.Regex`
+<3> `val <regex value>(<name>) = <input string>`
+<4> Convert String type to Double type
