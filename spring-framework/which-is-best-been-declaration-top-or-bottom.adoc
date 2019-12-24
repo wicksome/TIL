@@ -20,6 +20,11 @@ which is the best been declaration top or bottom in spring framework?
 
 `@Autowired` -> constructor inject
 
+== conventions
+
+* checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.DeclarationOrderCheck
+* squid:S1213
+
 
 == Conclusion
 

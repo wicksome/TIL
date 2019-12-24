@@ -237,6 +237,27 @@ if isExist $path && ! isEmpty $path; then
 fi
 ----
 
+문자열 비교할 때 아래와 같이 사용해야 함
+
+[source, bash]
+----
+# https://stackoverflow.com/questions/13617843/unary-operator-expected
+
+if [ "$env" = "real" ]; then
+  echo ""
+fi
+
+if [[ $env = "real" ]]; then
+  echo ""
+fi
+
+if [ "$BUILD_ENV" = "real" ] || [ "$BUILD_ENV" = "beta" ]; then
+  npm run build-prod
+else
+  npm run build
+fi
+----
+
 [#test-operation]
 == test 명령어 연산자 
 

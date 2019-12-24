@@ -9,7 +9,7 @@ v1.0
 
 TODO
 
-== 타임존?
+== 타임존
 
 Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://www.iana.org/time-zones:[IANA 데이터베이스]를 사용하고, 따로 버전업 없이
 독립적으로 시간대 데이터베이스를 업데이트 한다. 즉, 하드코딩으로 관리하지 않아도 된다. 또한, Java8에서는 타임존, DST를 좀 더 편하게 사용하기 위해
@@ -70,9 +70,10 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 "winter time"이라고 사용되기도 한다. DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
 ====
 
-== 예제코드
+== 시간 변환하기
 
-=== Date to LocalDate, LocalDateTime
+[#date-to-java8-datetime]
+=== `Date` 에서 `LocalDate`, `LocalDateTime` 으로 전환하기
 
 [source, java]
 ----
@@ -89,7 +90,8 @@ ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
 ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 ----
 
-=== Calendar to LocalDate, LocalDateTime, ZonedDateTime
+[#calendar-to-java8-datetime]
+=== `Calendar` 에서 `LocalDate`, `LocalDateTime`, `ZonedDateTime` 으로 전환하기
 
 [source, java]
 ----
@@ -106,7 +108,8 @@ LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), timeZone.
 ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(cal.toInstant(), timeZone.toZoneId());
 ----
 
-=== String to DateTime
+[#convert-string-to-java8-datetime]
+=== `String` 에서 `LocalDate`, `LocalDateTime`, `ZonedDateTime` 으로 전환하기
 
 [source, java]
 ----
@@ -114,26 +117,50 @@ LocalDateTime.parse(str);
 LocalDateTime.parse(str, DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"));
 ----
 
+[#convert-localdate]
+=== `LocalDate` 에서 `LocalDateTime`, `ZonedDateTime` 으로 변환하기
+
+[source, java]
+----
+
+----
+
+[#convert-zoneddatetime]
+=== `ZonedDateTime` 에서 `LocalDateTime`, `LocalDate` 으로 변환하기
+
+[source, java]
+----
+
+----
+
+== 실용 예제
+
+[#get-yesterday-start]
 === 어제 00:00:00 구하기
 
 [source, java]
 ----
-final String actual = LocalDateTime.now()
-    .minus(1, DAYS)
-    .truncatedTo(DAYS)
-    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-// 20191204000000
+LocalDateTime dateTime1 = LocalDate.now()
+    .atTime(LocalTime.MIN)
+    .minus(1, ChronoUnit.DAYS);
+
+LocalDateTime dateTime2 = LocalDate.now()
+    .atStartOfDay()
+    .minus(1, ChronoUnit.DAYS);
+
+LocalDateTime dateTime3 = LocalDateTime.now()
+    .truncatedTo(ChronoUnit.DAYS)
+    .minus(1, ChronoUnit.DAYS);
 ----
 
 [source, java]
 ----
-final String actual = LocalDate.now()
-    .atTime(LocalTime.MIN)
-    .minus(1, DAYS)
-    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-// 20191204000000
+ZonedDateTime zonedDateTime = LocalDate.now()
+    .minus(1, ChronoUnit.DAYS)
+    .atStartOfDay(ZoneId.of("Asia/Seoul"));
 ----
 
+[#get-yesterday-last]
 === 어제 23:59:59 구하기
 
 [source, java]
@@ -226,35 +253,46 @@ final LocalDateTime localDateTime1 = localDateTime.atZone(seoul).toLocalDateTime
 final LocalDateTime localDateTime2 = localDateTime.atZone(utc).toLocalDateTime();
 ```
 
-=== LA 시간 기준으로 서울시간 구하기
+[#change-timezone]
+=== 타임존 변경하기
+
+==== 다른 타임존의 시간으로 변경하기(e.g. LA 시간 기준으로 서울시간 구하기)
 
 예를 들어, 로스앤젤레스 시간으로 오전 9시가 서울 시간으로 몇시일지 확인하려고 하려고 한다. 아래와 같이 `withZoneSameInstant(ZoneId)` 를 사용하여 시간을 구할 수 있다.
 
-```java
+[source, java]
+----
+// given
 final LocalDateTime localDateTime = LocalDateTime.of(2017, Month.OCTOBER, 18, 9, 0);
-final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Angeles"));
-final ZonedDateTime seoul = losAngeles.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
-System.out.println(seoul.toLocalDateTime());
-```
 
-=== 같은 시간에서 타임존만 변경하기
+// when
+final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Angeles")); // <1>
+final ZonedDateTime seoul = losAngeles.withZoneSameInstant(ZoneId.of("Asia/Seoul")); // <2>
+
+// then
+assertEquals(losAngeles.toInstant(), seoul.toInstant());
+----
+<1> 출력 결과: _2017-10-18T09:00-07:00[America/Los_Angeles]_
+<2> 출력 결과: _2017-10-19T01:00+09:00[Asia/Seoul]_
+
+==== 시간은 그대로 두고 타임존만 변경하기
 
 시간대(`ZoneId`)만 변경하고자할 땐, `withZoneSameLocal(ZoneId)` 를 사용한다. 즉, 아래 코드에서 _Los_Angeles_ 와 _seoul_ 의 `localDateTime` 은 같다.
 
 [source,java]
 ----
+// given
 final LocalDateTime localDateTime = LocalDateTime.of(2017, Month.OCTOBER, 18, 9, 0);
-final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Angeles"));
-final ZonedDateTime seoul = losAngeles.withZoneSameLocal(ZoneId.of("Asia/Seoul"));
-System.out.println(losAngeles);
-System.out.println(seoul);
-----
 
-[source]
+// when
+final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Angeles")); // <1>
+final ZonedDateTime seoul = losAngeles.withZoneSameLocal(ZoneId.of("Asia/Seoul")); // <2>
+
+// then
+assertEquals(losAngeles.toLocalDateTime(), seoul.toLocalDateTime());
 ----
-2017-10-18T09:00-07:00[America/Los_Angeles]
-2017-10-18T09:00+09:00[Asia/Seoul]
-----
+<1> 출력 결과: _2017-10-18T09:00-07:00[America/Los_Angeles]_
+<2> 출력 결과: _2017-10-18T09:00+09:00[Asia/Seoul]_ 
 
 === 특정 시간 기준으로 1주일 지난 시간 구하기
 
