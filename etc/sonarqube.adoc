@@ -1,0 +1,361 @@
+= SonarQube
+:revdate: 2019-12-20T18:37:00+09:00
+
+== Requirements
+* Docker 설치
+** Docker ROOT 디렉토리 경로 설정
+* Docker Compose 설치
+
+== AS-IS 
+
+====
+* SonarQube Version: 7.7
+* SonarQube Database: MySQL
+====
+
+이전 상태는 소나큐브 7.7 버전에 따로 설치한 MySQL을 연동시켜 놓은 상황이다. 소나큐브 설정 파일을 유지시키기 위해 `sonar` 볼륨을 추가했고, DB 연결하기 위한 값만 추가해서 `docker-compose.xml` 를 만들었다.
+
+.Create a volume for SonarQube config
+[source, bash]
+----
+$ docker volume create sonar
+----
+
+.`docker-compose.yml`
+[source, yml]
+----
+version: "3.7"
+services:
+  sonarqube:
+    image: sonarqube:7.7-community
+    ports:
+      - "80:9000"
+    environment:
+      - sonar.jdbc.url=jdbc:mysql://localhost:13306/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    volumes:
+      - type: volume
+        source: sonar
+        target: /opt/sonarqube
+volumes:
+  sonar:
+    external: true
+----
+
+== TO-BE
+
+====
+* SonarQube Version: 7.9
+* SonarQube Database: PostgreSQL 10
+====
+
+소나큐브 7.8부터는 MySQL을 지원하지 않고, 7.9부터는 JDK 8도 지원하지 않는다(https://docs.sonarqube.org/7.8/requirements/requirements/[SonarQube Docs 7.8 참고]). 
+JDK는 Docker 컨테이너로 띄워서 상관 없지만, DB는 MySQL에서 PostgreSQL로 전환 작업이 필요한 상황이다(Oracle 혹은 MS SQL로도 가능).
+
+=== Migrate MySQL to PostgreSQL
+
+DB 마이그레이션은 SonarSource에서 제공하는 https://github.com/SonarSource/mysql-migrator[mysql-migrator]를 사용하고자 한다.
+(이 글을 작성하는 당시에) mysql-migrator는 MySQL을 다른 DB로 전환할 수 있도록 도와주며, 아래와 같이 진행된다.
+
+.마이그레이션 작업
+. migrator 파일을 다운받는다.
+. 마이그레이션할 소나큐브(source)의 같은 버전으로 이관할 소나큐브(target)을 실행시킨 후 중지한다.
+** source는 MySQL일테고, target은 PostgreSQL을 사용할 것이다.
+. target 소나큐브 인스턴스에 Elasticsearch data 폴더를 제거한다: `data/es5`(SonarQube 6.7-7.6) 혹은 `data/es6`(SonarQube 7.7 이상)
+. 다운받은 migrator 파일을 사용해 마이그레이션을 진행한다.
+
+자세한 내용은 https://github.com/SonarSource/mysql-migrator 를 확인하기 바라며, 실제 버전업을 해보도록 한다.
+
+먼저 PostgreSQL을 모니터링 하기 위한 https://www.pgadmin.org/[pgadmin]을 띄워두자. 
+(굳이 띄울 필요는 없지만 UI에서 확인하는 것이 보기 편할 것 같아 추가한다)
+
+[source, bash]
+----
+$ docker run -p 5555:80 -e 'PGADMIN_DEFAULT_EMAIL=opid911@gmail.com' -e 'PGADMIN_DEFAULT_PASSWORD=pgadmin!23' -d dpage/pgadmin4
+----
+
+PostgreSQL을 Docker 컨테이너로 띄우기 때문에, 실질적인 데이터는 컨테이너에 둘 수 없으므로 볼륨을 추가한다.
+
+[source, bash]
+----
+$ docker volume create postgresql # for database to use by sonarqube
+----
+
+같은 버전의 소나큐브 인스턴스를 띄우기 위해 `docker-compose.yml` 을 수정한다. 
+
+[source, yml]
+----
+version: "3.7"
+services:
+  sonarqube:
+    image: sonarqube:7.7-community
+    networks:
+      - sonarnet
+    ports:
+      - "80:9000"
+    environment:
+      - sonar.jdbc.url=jdbc:mysql://localhost:13306/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    volumes:
+      - type: volume
+        source: sonar
+        target: /opt/sonarqube
+  sonarqube_new:
+    image: sonarqube:7.7-community
+    networks:
+      - sonarnet
+    ports:
+      - "81:9000"
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://postgresql:5432/sonarqube
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+  postgresql:
+    image: postgres:10.11
+    container_name: postgres
+    restart: always
+    networks:
+      - sonarnet
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - type: volume
+        source: postgresql
+        target: /var/lib/postgresql/data
+volumes:
+  sonar:
+    external: true
+  postgresql:
+    external: true
+networks:
+  sonarnet: # <1>
+    driver: bridge
+----
+<1> 컨테이너간 통신을 위해 네트워크를 추가하였다.
+
+위 `docker-compose.yml` 을 보면 신규로 추가한 소나큐브는 PostgreSQL에 _sonarqube_ 데이터베이스에 연결하도록 추가하였다.
+하지만 데이터베이스를 생성한 적이 없으므로 도커 컴포즈를 바로 실행하면 정상 동작하지 않는다.
+먼저 postgres에 _sonarqube_ 데이터베이스를 먼저 추가해보자.
+
+[source, bash]
+----
+$ docker-compose up -d postgresql
+$ docker-compose exec postgresql /bin/bash # connect docker container
+$ createdb -U sonar sonarqube # create database in postgresql
+----
+
+이제 마이그레이션 작업에 얘기한대로 SonarQube(target)를 중단시켜 놓는다.
+
+[source, bash]
+----
+$ docker-compose up -d # create and start all services
+$ docker-compose stop sonarqube_new # stop sonarqube instance(target)
+$ docker-compose ps
+  Name                     Command              State             Ports
+----------------------------------------------------------------------------------
+sonarqube       ./bin/run.sh                    Up         0.0.0.0:80->9000/tcp
+sonarqube_new   ./bin/run.sh                    Exit 143
+postgres        docker-entrypoint.sh postgres   Up         0.0.0.0:5432->5432/tcp
+----
+
+준비작업이 완료되었으니 https://github.com/SonarSource/mysql-migrator[mysql-migrator]를 다운받고 마이그레이션 작업을 진행한다.
+
+[source, bash]
+----
+# download and unzip
+$ curl -LO https://binaries.sonarsource.com/Distribution/mysql-migrator/mysql-migrator-1.1.0.119.zip
+$ unzip mysql-migrator-1.1.0.119.zip
+$ cd mysql-migrator-1.1.0.119/bin
+
+# create a source.properties (MySQL)
+$ cat >> source.properties <<EOL
+sonar.jdbc.url = jdbc:mysql://localhost:13306/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+sonar.jdbc.username = sonar
+sonar.jdbc.password = sonar
+EOL
+
+# create a target.properties (PostgreSQL)
+$ cat >> target.properties <<EOL
+sonar.jdbc.url = jdbc:postgresql://localhost:5432/sonarqube
+sonar.jdbc.username = sonar
+sonar.jdbc.password = sonar
+EOL
+
+# migration
+$ ./mysql-migrator -source source.properties -target target.properties
+----
+
+마이그레이션이 완료되었으면 `docker-compose.yml` 을 정리해서 이전 소나큐브를 신규 소나큐브로 전환하면 된다.
+
+[source, yml]
+----
+version: "3.7"
+services:
+  sonarqube:
+    image: sonarqube:7.7-community
+    container_name: sonarqube
+    networks:
+      - sonarnet
+    ports:
+      - "80:9000"
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://postgresql:5432/sonarqube
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    volumes:
+      - type: volume
+        source: sonar
+        target: /opt/sonarqube
+  postgresql:
+    image: postgres:10.11
+    container_name: postgresql
+    restart: always
+    networks:
+      - sonarnet
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
+      - type: volume
+        source: postgresql
+        target: /var/lib/postgresql/data
+volumes:
+  sonar:
+    external: true
+  postgresql:
+    external: true
+networks:
+  sonarnet:
+    driver: bridge
+----
+
+여기까지 MySQL에서 PostgreSQL로 전환작업이다. Docker 컨테이너로 띄워져 있으므로 소나큐브 버전업은 그리 어렵지 않다.
+
+=== SonarQube version up
+
+버전업을 하려고 하니 그 전의 `docker-compose.yml` 에 문제점이 있었다. 소나큐브 경로를 전체 마운트해서 도커 이미지 안에 lib 디렉토리까지 마운트된 것인데, 이 상황에서 버전을 변경해서 컨테이너를 띄우면 다음과 같은 에러가 발생한다.
+
+----
+Error: Unable to access jarfile lib/sonar-application-7.9.2.jar
+----
+
+마운트할 디렉토리를 분리하는 작업을 추가한다.
+
+[source, bash]
+----
+# create volumes
+$ docker volume create --name=sonar_conf
+$ docker volume create --name=sonar_data
+$ docker volume create --name=sonar_extensions
+
+# get path of sonar volume
+$ docker volume inspect sonar
+[
+    {
+        "CreatedAt": "2019-12-23T13:36:18+09:00",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/home/user/docker_root/volumes/sonar/_data",
+        "Name": "sonar",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+# copy sonarqube files
+$ cd /home/user/docker_root/volumes/sonar/_data
+$ cp -r conf/* ../../sonar_conf/_data/
+$ cp -r data/* ../../sonar_data/_data/
+$ cp -r extensions/* ../../sonar_extensions/_data/
+----
+
+각종 설정파일 이관이 끝났으면 docker compose를 통해 컨테이너를 실행한다.
+
+[source, yml]
+----
+version: "3.7"
+services:
+  sonarqube:
+    image: sonarqube:7.9.2-community # <1>
+    container_name: sonarqube
+    networks:
+      - sonarnet
+    ports:
+      - "80:9000"
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://postgresql:5432/sonarqube
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    volumes:
+      - type: volume
+        source: sonar_conf
+        target: /opt/sonarqube/conf
+      - type: volume
+        source: sonar_data
+        target: /opt/sonarqube/data
+      - type: volume
+        source: sonar_extensions
+        target: /opt/sonarqube/extensions
+  postgresql:
+    image: postgres:10.11
+    container_name: postgres
+    restart: always
+    networks:
+      - sonarnet
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - type: volume
+        source: postgresql
+        target: /var/lib/postgresql/data
+volumes:
+  sonar_conf:
+    external: true
+  sonar_data:
+    external: true
+  sonar_extensions:
+    external: true
+  postgresql:
+    external: true
+networks:
+  sonarnet:
+    driver: bridge
+----
+<1> 7.7에서 7.9로 버전 변경하였다.
+
+[source, bash]
+----
+$ docker-compose up -d
+----
+
+소나큐브가 실행되면 데이터베이스 마이그레이션을 위해 `<sonarqube_url>/setup` 에 들어가서 업그레이드 작업을 하면 버전업 작업이 완료된다.
+
+
+== Troubleshooting
+
+* See the https://github.com/dimitri/pgloader/wiki/Running-in-Docker-(SBCL-warning)[link] if you get a error: `Couldn't re-execute SBCL with proper personality flags`
+* `vm.max_map_count` 에러: https://docs.sonarqube.org/7.9/requirements/requirements/
++
+[source, bash]
+----
+$ sysctl -w vm.max_map_count=262144
+$ sysctl -w fs.file-max=65536
+$ ulimit -n 65536
+$ ulimit -u 4096
+----
+
+== References
+
+* https://docs.sonarqube.org/[SonarQube Document]
+* https://github.com/SonarSource/mysql-migrator[mysql-migrator]
