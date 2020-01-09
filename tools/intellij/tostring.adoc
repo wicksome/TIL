@@ -1,0 +1,23 @@
+= tostring
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-08-27
+:page-draft:
+
+1. ctrl+enter를 통해 Generate를 띄워 바로 toString 메서드 작성
+2. Template을 추가하여 활용
+
+[source, java]
+.ToStringStyle.JSON_STYLE (Apache commons-lang3)
+----
+public java.lang.String toString() {
+  return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE);
+}
+----
+
+[source, java]
+.ToStringStyle.MULTI_LINE_STYLE (Apache commons-lang3)
+----
+public java.lang.String toString() {
+  return org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString(this, org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE);
+}
+----

@@ -1,0 +1,447 @@
+= Effective Java - 객체 생성과 파괴
+Yeongjun Kim <opid911@gmail.com>
+:revdate: 2017-02-10T00:00:00+09:00
+:page-tags: java, effective-java 
+:toc:
+
+[NOTE]
+****
+아래 책를 참고하여 학습한 내용을 정리/기록한 포스트입니다. 자세한 내용은 책을 참고하시기 바라며, 문제가 있을 경우 연락 부탁드립니다.
+
+- Joshua Bloch, 개앞맵시(옮긴이), Effective Java, 3/E, 인사이트, 2018.
+- Joshua Bloch, 이병준(옮긴이), Effective Java, 2/E, 인사이트, 2015.
+****
+
+2017년 2월, '이펙티브 자바 2판'을 공부하고 정리한 내용들을 블로그에 올리지 못했는데, 
+3판이 나왔다는 얘기를 듣고 다시 공부하면서 나를 위해 블로그에 정리하여 남긴다.
+
+// 2/e 2017-02-10T00:00:00+09:00
+// 3/e 2019-09-20T01:28:00+09:00
+
+[#item01]
+== 규칙 1. 생성자 대신 정적 팩터리 메서드를 고려하라
+:source-enumset: http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/7d1d5f4d019a/src/share/classes/java/util/EnumSet.java#l109
+:dp-factory-method: https://wickso.me/java/design-pattern/factory-method-pattern
+:dp-flyweight: https://wickso.me/java/design-pattern/flyweight-pattern
+:item3: https://wickso.me/java/effective-java/03
+:item4: https://wickso.me/java/effective-java/01-09#03
+:item17: https://wickso.me/java/effective-java/01-09#03
+:item18: https://wickso.me/java/effective-java/01-09#enum
+:item20: https://wickso.me/java/effective-java/01-09#enum
+:item34: https://wickso.me/java/effective-java/01-09#enum
+
+**정적 팩터리 메서드(static factory method)**란 클래스의 인스턴스를 반환하는 단순한 static method를 말한다. {dp-factory-method}[팩토리 메서드 패턴]과 다르다.
+
+[TIP]
+.객체? 인스턴스? 인스턴스화?
+====
+비슷한 개념이지만 정확히 구별하면 **인스턴스(instance)**가 **객체(object)**보다 큰 의미이다. 
+객체는 어떤 클래스를 사용해서 만들어진 것을 의미한다.
+그리고 그 객체가 메모리에 할당되어 실제 메모리를 차지하는 것을 인스턴스라고 한다.  
+
+아래 코드에서 객체와 인스턴스를 구별해보자.
+
+[source, java]
+----
+String str; // <1>
+str = new String("Hello world"); // <2>
+----
+<1> `str` 은 String 클래스를 사용하여 객체를 선언한 것이다. 아직 `str` 에 문자열이 할당되어 있지 않은 상태이다. 
+<2> _new_ 키워드를 사용하여 JVM(Java Virtual Machine)에 데이터가 생성된 것을 보여준다. 
+다시 말해, 객체 `str` 에 "Hello world"라는 문자열을 할당하였다(instantiate).
+이렇게 객체를 실제로 메모리에 할당하는 과정을 **인스턴스화(instantiate)**라고 한다.
+그리고 이렇게 인스턴스화된 객체를 인스턴스라고 부른다.
+====
+
+
+.클래스의 인스턴스를 얻는 방법
+* public 생성자
++
+[source, java]
+----
+public Boolean(String str) {
+    this.value = "true".equalsIgnoreCase(str); 
+}
+----
++
+[TIP]
+.NPE를 피하는 방법
+====
+위 코드를 보면 `str` 의 _equalsIgnoreCase_ 가 아닌 문자 이터럴의 equalsIgnoreCase 를 사용한다.
+이와 같은 방법은 `str` 이 null 일 경우 발생할 NPE(NullPointException)를 피할 수 있다.
+====
+* 정적 팩터리 메서드
++
+[source, java]
+----
+public static Boolean valueOf(boolean b) {
+    return b ? Boolean.TRUE : Boolean.FALSE;
+}
+----
+
+[NOTE]
+.boxing 과 unboxing
+====
+Java에서 primitive type과 wrapper class는 서로 boxing/unboxing이 가능하다. [.line-through gray]#`Boolean` 클래스를 보다가 궁금해서 추가한다.#
+[source, java]
+----
+// primitive
+boolean b = (boolean)Boolean.TRUE; // <1>
+// reference type
+Boolean b = (Boolean)true; // <2>
+Boolean b = true; // <3>
+Boolean b = Boolean.valueOf(true);
+----
+<1> unboxing
+<2> boxing
+<3> auto boxing
+====
+
+[#advantage-of-static-factory-method]
+=== 정적 팩터리 메서드 장점
+
+`java.utils.Collections` 클래스에서 정적 팩터리 메서드의 장점이 많이 보여 코드의 일부를 추가하였다.
+
+==== 이름을 가질 수 있다
+
+[source, java]
+----
+public static final <K,V> Map<K,V> emptyMap() { ... }
+----
+
+생성자와 달리 반환되는 객체의 특성을 잘 설명한 메서드명을 통해 이해하기 쉬운 코드를 작성할 수 있다.
+
+==== 호출될 때마다 인스턴스를 새로 생성하지 않아도 된다
+
+[source, java]
+----
+public class Collections {
+    public static final Map EMPTY_MAP = new EmptyMap<>();
+
+    // static factory method
+    public static final <K,V> Map<K,V> emptyMap() {
+        return (Map<K,V>) EMPTY_MAP;
+    }
+}
+----
+
+인스턴스를 미리 만들어 놓거나 이미 만든 인스턴스를 캐싱하여 재사용하면서 불필요한 인스턴스화를 피할 수 있다. 
+(특히 인스턴스화 비용이 큰) 동일한 객체가 요청되는 일이 잦을 때 적용하면 성능을 크게 개선할 수 있다.
+이 기법을 활용한 좋은 사례로 `Boolean.value(boolean)` 를 둘 수 있으며 {dp-flyweight}[Flyweight 패턴]과 유사하다. 
+
+===== 인스턴스 통제(instance-controlled) 클래스
+반복적인 요청에도 같은 인스터스를 반환하는 정적 팩터리 방식의 클래스는 어떤 시점에 어떤 객체가 얼마나 존재할지를 정밀하게 제어할 수 있다. 
+인스턴스 통제는 플라이웨이트 패턴의 근간이 되며, enum은 인스턴스가 하나만 만들어짐을 보장한다.
+이런 클래스를 _인스턴스 통제 클래스_ 라고 부른다. 인스턴스를 통제하는 이유는 아래와 같다.
+
+* {item3}[Singleton pattern] 적용 가능
+* {item4}[Non-instantiable class] 생성 가능
++
+[source, java]
+.Example. Utility class
+----
+public class UtilityClass {
+    private UtilityClass() { throw new AssertionError(); }
+}
+----
+* {item17}[Immutable Class]
++
+[source, java,highlight=1;3-7;!]
+----
+public class Complex {
+    private final double re;
+    private final double im;
+
+    private Complex(double re, double im) {
+        this.re = re;
+        this.im = im;
+    }
+
+    public static Complex valueOf(double re, double im) {
+        return new Complex(re, im);
+    }
+}
+----
+** {item34}[enum]이 이 기법을 사용
+** `equals()` 대신 `==` 연산자 사용 가능
+
+==== 자신의 인스턴스만 반환하는 생성자와는 달리, 서브타입 객체도 반환 가능하다
+
+이러한 유연성을 응용하면 구현 세부사항을 감출 수 있으므로 아주 간결한 API가 가능하다. 
+{item20}[인터페이스 기반 프레임워크(interface-based framework)] 구현에 핵심 기술로, 이 프레임워크에서 인터페이스는 정적 팩터리 메서드의 반환값 자료형으로 이용된다.
+
+[source, java]
+----
+public class Collections {
+    public static final Map EMPTY_MAP = new EmptyMap<>();
+
+    public static final <K,V> Map<K,V> emptyMap() {
+        return (Map<K,V>) EMPTY_MAP;
+    }
+
+    private static class EmptyMap<K,V> extends AbstractMap<K,V> implements Serializable { ... }
+}
+----
+
+==== 입력 매개변수에 따라 매번 다른 클래스의 객체를 반환할 수 있다
+
+[source, java]
+.{source-enumset}[java.util.EnumSet] of OpenJDK
+----
+public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
+    Enum<?>[] universe = getUniverse(elementType);
+    if (universe == null)
+        throw new ClassCastException(elementType + " not an enum");
+
+    if (universe.length <= 64)
+        return new RegularEnumSet<>(elementType, universe);
+    else
+        return new JumboEnumSet<>(elementType, universe);
+}
+----
+
+`EnumSet` 클래스를 보면 원소의 수에 따라 두 가지 하위 클래스 중 하나의 인스턴스를 반환한다.
+사용자는 어떤 것이 반환되던지 알 필요가 없으며, 단지 `EnumSet` 의 하위 클래스를 반환해주기만 하면 된다.
+
+==== 정적 팩터리 메서드를 작성하는 시점에는 반환할 객체의 클래스가 존재하지 않아도 된다
+
+TODO: 이 부분은 읽어도 모르겠다.. 다음번 다시 읽을 때 추가로 정리해야겠다.
+
+==== 제네릭 클래스의 인스턴스를 생성하는 코드를 간결하게 해준다.
+
+정적 팩토리 메서드를 사용하면 컴파일러가 타입 추론(type inference)으로 제네릭 클래스의 인스턴스화를 간결하게 해준다.
+
+[source, java]
+----
+// before
+Map<String, List<String>> m = new HashMap<String, List<String>>();
+
+// after: >= 1.6
+Map<String, List<String>> m = HahsMap.newInstance();
+
+public static <K, V> HashMap<K, V> newInstance() {
+    return new HashMap<K, V>();
+}
+----
+
+하지만, jdk7에서 제공된 다이아몬드 연산자를 사용하면 아래와 작성할 수 있다. 
+
+[source, java]
+----
+Map<String, List<String>> m = new HashMap<>();
+----
+
+[.line-through gray]#더이상 장점이라 할 수 없으므로 3판에서는 이 내용이 제거된 것 같다.#
+
+[#disadvantage-of-static-factory-method]
+=== 정적 팩터리 메서드 단점
+
+. 정적 팩터리 메서드만 제공하는 클래스는 public 이나 protected로 선언된 생성자가 없으므로 하위 클래스를 만들 수 없다.
++
+어찌보면 {item18}[상속(inheritance)보다 합성(composition)을 사용]하도록 유도하므로 장점으로 받아들일 수도 있다.
++
+[source, java]
+----
+// 정적 팩터리 메서드만 가진 클래스
+public class Collections {
+    Collections() {}
+}
+
+// 상속을 통한 하위 클래스
+public class CustomCollections extends Collections {
+    public CustomCollections() {
+        super(); // 불가능
+    }
+}
+
+// "Favor object composition over class inheritance"
+public class CustomCollections {
+	private Collections collections;
+}
+----
++
+[TIP]
+.언제 상속? 합성?
+====
+* 상속(inheritance)을 사용하는 경우: `is-a` 관계
+* 합성(composition)을 사용하는 경우: `has-a` 관계
+====
+
+. 개발자가 찾기 어렵다.
++
+생성자와는 달리 정적 팩터리 메서드는 다른 메서드와 섞여 잘 구분되지 않고 어떤 정적 팩터리 메서드가 있는지 개발자가 알아야한다. 
+대안으로 흔히 사용되는 네이밍을 통해 구별하기 쉽게 할 수 있다.
++
+.정적 팩터리 메서드에 흔히 사용하는 네이밍
+[cols="1, 4"]
+|===
+| Naming | Description
+
+| **from**
+a| 인자를 하나 받아서 해당 타입의 인스턴스를 반환하는 형변환 메서드
+[source, java]
+----
+Date d = Date.from(instant);
+----
+
+| **of**
+a| 여러 인자를 받아 적합한 타입의 인스턴스를 반환하는 집계 메서드
+[source, java]
+----
+Set<Rank> faceCards = EnumSet.of(JACK, QUEEN, KING);
+----
+
+| **valueOf**
+a| `from` 과 `of` 의 더 자세한 버전, 자신의 매개변수와 같은 값을 갖는 인스턴스를 반환
+[source, java]
+----
+BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);
+----
+
+| **getInstance** or **instance** 
+a| 매개변수에 맞는 인스턴스 반환. 싱글톤인 경우 하나의 인스턴스 반환. 
+[source, java]
+----
+StackWalker luke = StackWalker.getInstance(options);
+----
+
+| **newInstance** or **create** 
+a| 매번 새로운 인스턴스를 반환하는 것을 보장
+[source, java]
+----
+Object newArray = Array.newInstance(classObject, arrayLen);
+----
+
+| **get**_**Type**_ 
+a| `getInstance` 와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용
+[source, java]
+----
+FileStore fs = Files.getFileStore(path);
+----
+
+| **new**_**Type**_ 
+a| `newInstance` 와 유사하나 팩토리 메서드가 다른 클래스에 있을 때 사용
+[source, java]
+----
+BufferedReader br = Files.newBufferedReader(path);
+----
+
+| **type**
+a| _getType_ 과 _newType_ 의 간결한 버전
+[source, java]
+----
+List<Item> items = Collections.list();
+----
+
+|===
+
+include::02.adoc[]
+
+// 2017-02-12 10:00:00
+include::03.adoc[]
+
+[#item4]
+== 규칙 4. 인스턴스화를 막으려거든 private 생성자를 사용하라
+
+생성자를 생략하면 컴파일러는 자동으로 인자없는 `public` 생성자를 만든다.
+이 생성자를 직접 선언하고 접근자를 `private` 바꾸어 인스턴스화를 막을 수 있다.
+또한, 구현부에 `AssertionError()` 를 던져 혹시나 클래스내에서 생성자를 사용할 경우를 방지한다.
+
+[source, java]
+----
+public class Utils {
+    private Utils() {
+        throw new AssertionError();
+    }
+}
+----
+
+[NOTE]
+.https://projectlombok.org/features/experimental/UtilityClass.html[Lombok - @UtilityClass]
+====
+유틸리티성 클래스는 인스턴스를 만들 필요가 없기 때문에 static 메서드와 상수만 가지게 된다.
+lombok에서 `@UtilityClass`는 어노테이션을 붙힌 클래스 내에 모든 메서드를 static으로, 필드를 상수로 만든다.
+그리고 생성자를 private 으로 변경해 인스턴스화를 막는다.
+
+[source, java]
+----
+@UtilityClass
+public class Utils {
+	private final int VERSION  = 1;
+
+	public void getVersion() {
+		return VERSION;
+	}
+}
+----
+====
+
+[#item5]
+== 규칙 5. 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
+
+include::06.adoc[]
+
+// 2017-02-21 10:00:00
+
+[#item7]
+== 규칙 7. 다 쓴 객체 참조는 해제하라
+
+아래 예제는 메모리 누수를 일으키는 코드이다.
+
+[source, java]
+----
+public class Stack {
+	private Object[] element = new Object[16];
+	private int size = 0;
+
+	public void push(Object e) {
+		ensureCapacity();
+		elements[size++] = e;
+	}
+
+	public Object pop() {
+		if (size == 0) throw new EmptyStackException();
+		return elements[--size];
+	}
+
+	private void ensureCapacity() {
+		if (elements.length == size) {
+			elements = Arrays.copyOf(elements, 2 * size + 1);
+		}
+	}
+}
+----
+
+스택이 커졌다가 줄어들 때, index 값이 size보다 큰 곳에 있는 요소들(쓰레기 값)은 GC가 처리하지 못한다. 
+스택이 그런 객체에 대한 만기 참조^obsolete{sp}reference^를 제거하지 않기 때문이다. 
+만기 참조란 다시 이용되지 않을 참조^reference^를 말한다.
+
+자동적으로 쓰레기 객체를 수집하는 언어에서 발생하는 메모리 누수 문제(≒ 의도치 않은 객체 보유~unintentional object retention~)는 찾아내기 어렵다.
+
+#### 해결방안
+
+만기 참조를 제거하는 가장 좋은 방법은, 해당 참조가 보관된 변수의 유효범위~socpe~를 최대한 좁게 만들어 벗어나게 두는 것이다([규칙 45](#item45)).
+
+위 예제 Stack과 같이 자체적으로 메모리는 관리하는 경우에는, 쓸 일이 없는 객체 참조는 반드시 null로 바꿔준다.
+
+```java
+public Object pop() {
+	if (size == 0)
+		throw new EmptyStackException();
+	Object result = elements[--size];
+	elements[size] = null;
+	return result;
+}
+```
+
+#### 흔히 메모리 누수가 발견되는 곳
+
+- 자체적으로 관리하는 메모리가 있는 클래스
+- 캐시~cache~: 객체 참조를 캐시 안에 넣어 놓고 잊어버리는 일이 많기 때문. (수명이 키에 대한 외부 참조의 수명에 따라 결정되는 상황에는 *WeakHashMap* 활용)
+- 리스너~listener~등의 역호출자~callback~ - 콜백을 명시적으로 제거하지 않을 경우, 적절한 조치를 취하기 전까지 메모리는 점유된 상태. 해결방안으로 콜백에 대한 약한 참조~weak reference~만 저장하는 것(WeakHashMap)
+
+include::08.adoc[]
+
+[#item9]
+== 규칙 9. try-finally 보다는 try-with-resources를 사용하라
+

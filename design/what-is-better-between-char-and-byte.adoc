@@ -1,0 +1,18 @@
+= What's better between characters and bytes in the API specification?
+:page-draft:
+
+[source, java]
+.example
+----
+@Byte(min=1, max=100)
+private String name;
+
+@Size(min=1, max=100)
+private String name;
+----
+
+== Character
+
+== Byte
+
+== Conclusion

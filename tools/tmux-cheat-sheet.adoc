@@ -1,0 +1,36 @@
+= 자주 사용하는 tmux
+:revdate: 2019-10-31T14:57:00+09:00
+:page-tags: terminal, tmux
+:page-draft:
+
+<<<
+
+image::https://camo.githubusercontent.com/d559d2e46c5484e8c978e75a0c2823c554312d72/687474703a2f2f692e696d6775722e636f6d2f4d6b54415a4a702e706e67[]
+
+
+== Panes
+
+|===
+|Shortcut |Purpose
+
+|Ctrl + b " | Split pane horizontally `⊟`
+|Ctrl + b % |Split pane vertically `⎅`
+|Ctrl + b { |Move pane left
+|Ctrl + b } |Move pane right
+|Ctrl + b ← ↑ → ↓ |Move pane
+|Ctrl + b x |Close pane
+|===
+
+`:setw synchronize-panes`
+`:setw synchronize-panes off`
+
+== .tmux.conf
+
+== tools
+
+xpanes: https://github.com/greymd/tmux-xpanes
+
+== References
+
+* https://gist.github.com/john2x/7541716
+* https://www.thehelpfulhacker.net/posts/2016/03/tmux-cheatsheet/

@@ -1,0 +1,5 @@
+= java는 call-by reference? value?
+Yeongjun Kim <opid911@gmail.com>
+:page-draft:
+
+call by value-reference 였나?

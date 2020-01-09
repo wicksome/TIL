@@ -1,4 +1,7 @@
 = Java Reactive Stream
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-08-16
+:page-draft:
 
 ____
 https://www.youtube.com/watch?v=8fenTR3KOJo&list=PLv-xDnFD-nnmof-yoZQN8Fs2kVljIuFyC&index=10

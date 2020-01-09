@@ -1,0 +1,16 @@
+= given-when-then
+:page-draft:
+
+TC 짤때 spy(?) when() 모키토 코드는 어디에 넣어야 하나?
+given? when?
+
+
+https://martinfowler.com/bliki/GivenWhenThen.html
+
+```
+The given part describes the state of the world before you begin the behavior you're specifying in this scenario. You can think of it as the pre-conditions to the test.
+The when section is that behavior that you're specifying.
+Finally the then section describes the changes you expect due to the specified behavior.
+```
+
+https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler

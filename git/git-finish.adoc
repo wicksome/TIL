@@ -1,0 +1,19 @@
+= git-finish
+Yeongjun.kim <opid911@gmail.com>
+v1.0, 2019-09-04
+:page-draft:
+
+release/hotfix 처리하는 명령어
+
+/usr/local/bin 에 아래 스크립트를 추가해두면 `git finish` 로 사용 가능
+
+참고: https://www.facebook.com/groups/codingeverybody/permalink/2548382661868921/
+
+++++
+<p>
+gist
+</p>
+
+<script src="https://gist.github.com/wicksome/1ae5dfcd42dbbce69daff80823951492.js">
+</script>
+++++

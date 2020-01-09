@@ -1,9 +1,0 @@
-https://github.com/asciidoctor/docker-asciidoctor
-
-```bash
-# docker run -it -v <your directory>:/documents/ asciidoctor/docker-asciidoctor
-docker run -it -v ~/workspace/til:/documents/ asciidoctor/docker-asciidoctor
-```
-
-- 한글 지원 안됨
-- 외부 이미지 첨부 안됨

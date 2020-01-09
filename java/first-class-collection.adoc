@@ -1,0 +1,187 @@
+= First Class Collection
+Yeongjun Kim <opid911@gmail.com>
+:revdate: 2019-04-08T11:05:00+09:00
+:page-tags: java
+
+"콜렉션을 포함한 클래스는 반드시 다른 맴버 변수가 없어야 한다."
+-- The ThourghtWorks Anthology, 객체지향 생활체조 파트 규칙 8에서 언급
+
+
+[source, java]
+.as-is
+----
+public class User {
+	private List<Email> emails;
+}
+
+public class Email {
+	private String local;
+	private String domain;
+}
+----
+
+[source, java]
+.to-be
+----
+public class User {
+	private Emails emails;
+}
+
+/* first class collection */
+public class Emails {
+	private List<Email> emails;
+}
+
+publc class Email {
+	private String local;
+	private String domain;
+}
+----
+
+== 이점
+
+=== 비지니스에 종속적인 자료구조
+
+이메일에 대해서 아래와 같은 조건이 있을 경우 구현은 다음과 같다.
+
+* 이메일은 중복 값이 없어야 한다.
+* 이메일은 최대 10개만 저장할 수 있다.
+
+[source, java]
+.as-is
+----
+public class User {
+	private static final int MAX_EMAIL = 10;
+	private List<Email> emails;
+
+	private void addEmail(Email email) {
+		if (emails.size() < MAX_EMAIL) {
+			throw new InvaliedException("A maximum of " + MAX_EMAIL + " Email addresses are allowed");
+		}
+		if (members.stream().anyMatch(email::equals)) {
+			throw new InvalidException(email.getContent() + " is already in ter emails");
+		}
+		emails.add(email);
+	}
+}
+----
+
+이처럼 이메일 관련 검증 로직과 최대 갯수에 대한 비지니스 요구사항까지 `User` 가 가지게 된다. 
+
+**일급 컬렉션**을 사용하면 이메일 관련 요구사항은 `Emails` 에서만 관리하게 되면서 응집도(Cohesion)를 높히고 `User` 와 `Email` 에 대한 커플링(Coupling)을 낮출 수 있다.
+
+[source, java]
+.to-be
+----
+public class User {
+	private Emails emails;
+}
+
+public class Emails {
+	private static final int MAX_EMAIL = 10;
+	private List<Email> emails;
+
+	private void addEmail(Email email) {
+		if (emails.size() < MAX_EMAIL) {
+			throw new InvaliedException("A maximum of " + MAX_EMAIL + " Email addresses are allowed");
+		}
+		if (members.stream().anyMatch(email::equals)) {
+			throw new InvalidException(email.getContent() + " is already in ter emails");
+		}
+		emails.add(email);
+	}
+}
+----
+
+=== Collection의 불변성을 보장
+
+일급 컬렉션은 컬렉션의 불변을 보장하는데, 단순히 `final` 을 사용하는 것이 아니라 캡슐화를 통해 이뤄진다. `final` 은 재할당만 금지할 뿐이다.
+
+`Emails` 클래스에 생성자와 getter 외에 다른 메소드가 없다. 즉, 아래와 같이 setter를 구현하지 않으면 불변 컬렉션이 된다.
+
+[source, java]
+----
+public class Emails {
+	private final List<Email> emails;
+
+	public Emails(List<Email> emails) {
+		this.emails = emails;
+	}
+
+	public Emails getEmail() {
+		return new Email(emails.stream()...);
+	}
+
+	private Optional<Email> getRepresentEmail() {
+		return new Email(emails.stream().filter(Email::isRepresent).findFirst());
+	}
+}
+----
+
+=== 상태와 행위를 한 곳에서 관리
+
+일급 컬렉션은 값과 로직이 함께 존재하기 때문에 응집도가 높아진다. 즉, `Emails` 컬렉션을 사용하면 똑같은 기능을 중복 생성하지 않고, 히스토리를 한곳에서 관리할 수 있다.
+
+[source, java]
+.as-is
+----
+public class User {
+	private List<Email> emails;
+
+	private Optional<Email> getRepresentEmail() {
+		return emails.stream().filter(Email::isRepresent).findFirst();
+	}
+}
+----
+
+[source, java]
+.to-be
+----
+public class User {
+	private Emails emails;
+}
+public class Group {
+	private Emails emails;
+}
+
+public class Emails {
+	private List<Email> emails;
+
+	private Optional<Email> getRepresentEmail() {
+		return emails.stream().filter(Email::isRepresent).findFirst();
+	}
+}
+----
+
+=== 이름이 있는 컬렉션
+
+예를 들어, NAVER Emails에 대한 요구사항을 검색하거나 선언할 경우 아래와 같은 문제점을 겪을 수 있다.
+
+* 담당자마다 변수명이 다르다.
+* 중요한 값이지만 명확하게 표현해둔 단어/변수명이 없다.
+
+일급 컬렉션을 사용한다면 NAVER Email에 대한 요구사항이 바뀌었을 경우 `NaverEmails` 만 검색하면 사용 코드를 모두 찾을 수 있다.
+
+[source, java]
+.as-is
+----
+@Test
+public void 이름이_있는_컬렉션() {
+	List<Email> googleEmails = createGoogleEmails();
+	List<Email> naverEmails = createNaverEmails();
+}
+----
+
+[source, java]
+.to-be
+----
+@Test
+public void 이름이_있는_컬렉션() {
+	private GoogleEmails googleEmails = new GoogleEmails(createGoogleEmails());
+	private NaverEmails naverEmails = new NaverEmails(createNaverEmails());
+}
+----
+
+== 참고
+
+* https://jojoldu.tistory.com/412[일급 컬렉션 (First Class Collection)의 소개와 써야할 이유]
