@@ -112,3 +112,8 @@ $ ssh-copy-id -i ansible_agent_rsa.pub user@host.infra.io
 ----
 
 
+
+
+=== 참고
+
+* https://subicura.com/2017/02/25/container-orchestration-with-docker-swarm.html
