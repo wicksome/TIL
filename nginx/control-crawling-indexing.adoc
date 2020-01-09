@@ -1,0 +1,22 @@
+= 크롤링 거절하기
+Yeongjun Kim <opid911.gmail.com>
+:page-tags: seo, crawling, robots
+:page-draft:
+
+== robots.txt
+
+급한대로 `nginx.conf` 만으로 모두 거절하는 방법
+
+[source]
+.nginx.conf
+----
+location /robots.txt {
+  return 200 "User-agent: *\nDisallow: /";
+}
+----
+
+추가 확인할 내용: http://www.seo-korea.com/robots-txt-%ED%8C%8C%EC%9D%BC%EA%B3%BC-meta-robots-%ED%83%9C%EA%B7%B8%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90/[robots.txt 파일과 meta robots 태그의 차이점]
+
+== 참고
+
+* https://www.twinword.co.kr/blog/basic-technical-seo/
