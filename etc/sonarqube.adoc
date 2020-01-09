@@ -1,5 +1,6 @@
-= SonarQube
+= SonarQube: MySQL, PostgreSQL 전환 및 버전 업
 :revdate: 2019-12-20T18:37:00+09:00
+:page-tags: sonarqube
 
 == Requirements
 * Docker 설치
@@ -13,7 +14,7 @@
 * SonarQube Database: MySQL
 ====
 
-이전 상태는 소나큐브 7.7 버전에 따로 설치한 MySQL을 연동시켜 놓은 상황이다. 소나큐브 설정 파일을 유지시키기 위해 `sonar` 볼륨을 추가했고, DB 연결하기 위한 값만 추가해서 `docker-compose.xml` 를 만들었다.
+이전 상태는 소나큐브 7.7 버전에 따로 설치한 MySQL을 연동시켜 놓은 상황이다. 소나큐브 설정 파일을 유지시키기 위해 `sonar` 볼륨을 추가했고, DB 연결하기 위한 값만 추가해서 `docker-compose.yml` 를 만들었다.
 
 .Create a volume for SonarQube config
 [source, bash]
@@ -353,6 +354,13 @@ $ sysctl -w vm.max_map_count=262144
 $ sysctl -w fs.file-max=65536
 $ ulimit -n 65536
 $ ulimit -u 4096
+----
+* 권한 없음: 볼륨을 나누면서 직접 파일 옮기면서 권한 문제 발생
++
+[source, bash]
+----
+$ cd sonar_conf
+$ chown -R polkitd:ssh_keys _data
 ----
 
 == References
