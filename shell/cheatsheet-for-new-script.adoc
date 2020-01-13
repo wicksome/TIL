@@ -13,7 +13,7 @@ cat /etc/centos-release
 ----
 
 [#get-arguments]
-== 인자 받기
+== 인자 받기, 체크
 
 필수로 인자 받기
 
@@ -71,6 +71,23 @@ echo $isNginx
 echo $isNginxWithNVAuth
 
 exit;
+----
+
+파라미터 체크
+
+[source, bash]
+----
+if [[ $1 =~ ^(local|alpha|beta)$ ]]; then
+  echo "env is valid(local, alpha, beta)"
+fi
+----
+
+[source, bash]
+----
+if [[ ! $1 =~ ^(local|alpha|beta)$ ]]; then
+  echo "not supported env: " $1
+  exit 1
+fi
 ----
 
 [#check-exist-file]
