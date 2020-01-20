@@ -5,12 +5,23 @@ Yeongjun.kim <opid911@gmail.com>
 :toc: left
 :page-toc: left
 
-WARNING: 기존 Java에서는 날짜와 시간을 `Date`, `Calendar` 그리고 `Timestamp` 클래스 등으로 다루고 있었다. 하지만 여러 문제점이 있으므로(https://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API] 참고) 이 포스팅에서는 JDK8 이후에 추가된 API를 기반으로 설명한다.
+<<<
+
+글로벌 서비스를 한다면 타임존에 대한 이해는 필수이다. 사용자가 어떤 기준으로 시간을 보는지 항상 고려해야한다.
+한번 고민 해보고 나면 크게 어려운 개념도 아니고 복잡한 계산도 아니지만, 처음에는 이 업무를 맡았을 때는 꽤나 고생했다. 
+이유는 기존의 코드들이 시간대를 고려하지 않았고, 문자열을 그대로 파싱하거나, 서비스하는 지역을 기준으로만 작성되어 있었기 때문이다.
+
+JDK8에서는 시간, 날짜 관련해서 유용한 API(`java.time` 패키지)를 제공한다. 훨씬 이해하기 쉽고 유용하다. 앞으로는 문자열을 파싱하고 직접 시간을 계산하지말고 이 API을 사용해보자.
+(직접 구현한 코드들에는 시간 계산에 관한 버그도 많고 잘 보이지도 않는다.)
+
+[NOTE]
+====
+Java8 이전에도 `Date`, `Calendar` 그리고 `Timestamp` 클래스 등 날짜와 시간을 다루는 API는 존재했다.
+하지만 여러 문제점을 가지고 있으므로(https://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API] 참고) Java8에 추가된 API를 사용하기를 권장하고, 어떠한 문제점이 있는지 알아두면 좋을 것 같다.
+====
 
 [link=http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.html]
 image:http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.png[]
-
-글로벌 서비스를 하면서 JDK8이 제공하는 `java.time` 패키지가 너무 유용해서 정리해보고자 한다. 앞으로는 문자열을 파싱해서 사용하는 것보다 이 API을 사용해보자. (직접 구현한 코드들에는 시간 계산에 관한 버그가 너무나도 많았다..)
 
 == 타임존
 
@@ -36,7 +47,7 @@ UTC는 국제 표준시를 뜻하며 타임존은 아니다. 즉, 공식적으�
 
 위에 말한 듯이 타임존은 정부에 의해 변경되는 경우가 종종 있다. 하지만 Java는 타임존 변경이 일어났더라도 따로 JDK 버전업 필요 없이 독립적으로 타임존 데이터베이스(https://www.iana.org/time-zones:[IANA 데이터베이스])를 업데이트한다. 즉, 하드코딩으로 관리하지 않아도 된다. 
 
-Java 8에서는 날짜와 시간을 좀 더 편리하게 하용하기 위해 여러 API가 추가되었으며, 타임존 또한 `ZoneId` 클래스를 통해 *DST* 가 적용된 시간도 편리하게 계산할 수 있다. `ZoneId.getAvailableZoneIds()` 를 통해 지원하는 지역별 타임존을 확인할 수 있다(현재 시점 등록된 ZoneId는 600개이다).
+Java 8에서는 타임존을 고려한 날짜와 시간까지도 더 명확하고 편리하게 사용할 수 있다. 타임존은 `ZoneId` 클래스를 통해 날짜/시간별 *DST* 이 반영되었는지 확인 할 수도 있다. `ZoneId.getAvailableZoneIds()` 를 통해 지원하는 지역별 타임존을 확인할 수 있다(현재 시점 등록된 ZoneId는 600개이다).
 
 [NOTE]
 .DST(Daylight Saving time)
@@ -48,34 +59,138 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 
 .Java8에서 개선된 날짜, 시간 관련 API
 |===
-| Java8 이전 | Java8 이후
-
-| `Timestamp`
-| `Instant`
-
-| `TimeZone`
-| `ZoneId`
-
-| `Date`     
-| `LocalDate`     
-
-
-| `Date`     
-| `LocalDateTime`     
-
-| `Calendar`
-| `ZonedDateTime`     
-
-| `TemporalAdjuster`  
-
-| `SimpleDateFormat`
-| `DateTimeFormatter` 
+| 클래스 혹은 인터페이스 | 설명
+| `Clock` | 타임존을 사용한 현재 순간, 날짜 및 시간에 접근할 수 있는 클래스
+| `Duration` | 34.5초와 같이 시간 기반의 시간(amount of time)
+| `Instant` | 타임라인의 순간을 나타내는 클래스
+| `LocalDate` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜(예: `2020-01-21`)
+| `LocalDateTime` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜와 시간(예: `2020-01-21 00:25:00`)
+| `LocalTime` | ISO-8601 캘린더 시스템에서 시간대가 없는 시간(예: `12:35:30`)
+| `MonthDay` | ISO-8601 캘린더 시스템의 월별 일(예: `--01-21`)
+| `OffsetDateTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 날짜와 시간(예: `2020-01-21T00:47:00+09:00`)
+| `OffsetTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 시간(예: `00:47:00+09:00`)
+| `Period` | ISO-8601 캘린더 시스템의 날짜 기반의 시간(예: `2년 3개월 4일`)
+| `Year` | ISO-8601 캘린더 시스템에서 연도년(예: `2020`)
+| `YearMonth` | ISO-8601 캘린더 시스템에서 연(year)과 월(month)(예: `2020-01`) 
+| `ZonedDateTime` | ISO-8601 캘린더 시스템에서 Asia//Seoul 같은 타임존이 포함된 날짜와 시간(예: `2020-01-21T00:53:30+09:00 Asia/Seoul`)
+| `ZoneId` | `Asia/Seoul` 과 같은 타임존 ID
+| `ZoneOffset` | GMT/UTC로부터 타임존 오프셋(예: `+09:00`)
+| `DayOfWeek` | 요일을 나타내는 열거타입
+| `Month` | 월을 나타내는 열거타입
+| `TemporalAdjuster` |
+| `DateTimeFormatter` |
 |===
+
+[NOTE]
+====
+[quote, ISO 8601]
+____
+ISO 8601 Data elements and interchange formats - Information interchange - Representation of dates and times은 날짜와 시간과 관련된 데이터 교환을 다루는 국제 표준이다. 
+이 표준은 국제 표준화 기구(ISO)에 의해 공포되었으며 1988년에 처음으로 공개되었다. 이 표준의 목적은 날짜와 시간을 표현함에 있어 명백하고 잘 정의된 방법을 제공함으로써, 
+날짜와 시간의 숫자 표현에 대한 오해를 줄이고자함에 있는데, 숫자로 된 날짜와 시간 작성에 있어 다른 관례를 가진 나라들간의 데이터가 오갈때 특히 그렇다.
+____
+====
+
+== 날짜, 시간 다루기
+
+JDK8에서는 날짜, 시간 관련된 코드들은 https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html[java.time] 패키지 하위에 있다. 
+
+=== `Instant`
+
+`TimeStamp` 와 달리 Immutable 하고 thread-safe하다.
+
+[source, java]
+----
+import static java.time.temporal.ChronoUnit.*;
+
+Instant today = Instant.now();
+Instant yesterday = today.minus(1, DAYS);
+Instant tomorrow = today.plus(1, DAYS);
+Instant midnight = Instant.now().truncatedTo(DAYS); 
+----
+
+=== `LocalDate`
+
+[source, java]
+----
+LocalDate today = LocalDate.now();
+LocalDate yesterday = today.minusDays(1);
+LocalDate tomorrow = today.plusDays(1);
+
+today.isBefore(tomorrow); // true
+today.isAfter(yesterday); // true
+----
+
+=== `LocalDateTime`
+
+[source, java]
+----
+LocalDateTime now = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
+LocalDateTime today = LocalDateTime.now();
+LocalDateTime lastWeek = today.minusWeeks(1);
+LocalDateTime nextWeek = today.plusWeeks(1);
+----
+
+=== `ZonedDateTime`
+
+[source, java]
+----
+ZonedDateTime now = ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
+ZonedDateTime midnight = ZonedDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT, ZoneId.systemDefault());
+ZonedDateTime zdt = ZonedDateTime.parse("2020-01-21T00:42:00+09:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+----
+
+=== `TemporalAdjuster`
+
+[source, java]
+----
+import static java.time.temporal.ChronoUnit.*;
+
+TemporalAdjuster addOneWeek = temporal -> temporal.plus(7, DAYS);
+ZonedDateTime nextWeek = ZonedDateTime.now().with(addOneWeek);
+----
+
+=== `TemporalAdjusters`
+
+자주 사용될 것 같은 시간과 날짜를 조절하는 `TemporalAdjuster` 인터페이스를 구현해둔 유틸성 클래스이다.
+
+위에 모든 클래스들이 `Temporal` 을 구현하고 있는데 이를 좀더 유틸로 만들어준거
+
+[source, java]
+----
+LocalDate today = LocalDate.now();
+
+today.with(TemporalAdjusters.firstDayOfYear());                      // 올해 1일
+today.with(TemporalAdjusters.firstDayOfNextYear());                  // 내년 1일
+today.with(TemporalAdjusters.firstDayOfMonth());                     // 이번달 1일
+today.with(TemporalAdjusters.firstDayOfNextMonth());                 // 다음달 1일
+today.with(TemporalAdjusters.firstInMonth(DayOfWeek.SUNDAY));        // 이번달 첫 번째 일요일
+today.with(TemporalAdjusters.lastDayOfYear());                       // 올해 마지막날
+today.with(TemporalAdjusters.lastDayOfMonth());                      // 이번달 마지막날
+today.with(TemporalAdjusters.lastInMonth(DayOfWeek.SUNDAY));         // 이번달 마지막 일요일
+today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));                // 다음 월요일
+today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));          // 다음 월요일(당일 포함)
+today.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));            // 지난 월요일
+today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));      // 지난 월요일(당일 포함)
+today.with(TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.SUNDAY)); // 이번달 2번째 일요일
+today.with(TemporalAdjusters.ofDateAdjuster(date -> date.minusMonths(2))); // 커스터마이징
+----
+
+=== `DateTimeFomatter`
+
 
 == 레거시 전환하기
 
 [#date-to-java8-datetime]
 === `Date`
+
+[source, java]
+.`Date` -> `Instant`
+----
+Date date = new Date();
+
+Instant now = date.toInstant();
+----
 
 [source, java]
 .`Date` -> `LocalDate`
@@ -110,11 +225,6 @@ LocalDate localDateTime3 = new java.sql.Date(date.getTime()).toLocalDateTime();
 ----
 
 [source, java]
-.`Date` -> `Instant`
-----
-----
-
-[source, java]
 .`Date` -> `String`
 ----
 ----
@@ -125,65 +235,6 @@ LocalDate localDateTime3 = new java.sql.Date(date.getTime()).toLocalDateTime();
 ----
 
 === `Calendar`
-
-=== `Timestamp`
-
-=== `SimpleDateFormat`
-
-
-== 시간 변환하기
-
-
-
-
-=== `Instant`
-
-`Instant` 는 Immutable 하고 thread-safe하다.
-
-=== `LocalDate`
-
-=== `LocalDateTime`
-
-=== `ZonedDateTime`
-
-=== `TemporalAdjuster`
-
-
-
-=== `TemporalAdjusters`
-
-자주 사용될 것 같은 시간과 날짜를 조절하는 `TemporalAdjuster` 인터페이스를 구현해둔 유틸성 클래스이다.
-
-위에 모든 클래스들이 `Temporal` 을 구현하고 있는데 이를 좀더 유틸로 만들어준거
-
-[source, java]
-----
-LocalDate today = LocalDate.now();
-
-today.with(TemporalAdjusters.firstDayOfYear());                      // 올해 1일
-today.with(TemporalAdjusters.firstDayOfNextYear());                  // 내년 1일
-today.with(TemporalAdjusters.firstDayOfMonth());                     // 이번달 1일
-today.with(TemporalAdjusters.firstDayOfNextMonth());                 // 다음달 1일
-today.with(TemporalAdjusters.firstInMonth(DayOfWeek.SUNDAY));        // 이번달 첫 번째 일요일
-today.with(TemporalAdjusters.lastDayOfYear());                       // 올해 마지막날
-today.with(TemporalAdjusters.lastDayOfMonth());                      // 이번달 마지막날
-today.with(TemporalAdjusters.lastInMonth(DayOfWeek.SUNDAY));         // 이번달 마지막 일요일
-today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));                // 다음 월요일
-today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));          // 다음 월요일(당일 포함)
-today.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));            // 지난 월요일
-today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));      // 지난 월요일(당일 포함)
-today.with(TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.SUNDAY)); // 이번달 2번째 일요일
-today.with(TemporalAdjusters.ofDateAdjuster(date -> date.minusMonths(2))); // 커스터마이징
-----
-
-=== `DateTimeFomatter`
-
-=== `Date` 에서 `LocalDate`, `LocalDateTime` 으로 전환하기
-
-
-
-[#calendar-to-java8-datetime]
-=== `Calendar` 에서 `LocalDate`, `LocalDateTime`, `ZonedDateTime` 으로 전환하기
 
 [source, java]
 ----
@@ -200,29 +251,14 @@ LocalDateTime localDateTime = LocalDateTime.ofInstant(cal.toInstant(), timeZone.
 ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(cal.toInstant(), timeZone.toZoneId());
 ----
 
-[#convert-string-to-java8-datetime]
-=== `String` 에서 `LocalDate`, `LocalDateTime`, `ZonedDateTime` 으로 전환하기
+=== `Timestamp`
+
+=== `SimpleDateFormat`
 
 [source, java]
 ----
 LocalDateTime.parse(str);
 LocalDateTime.parse(str, DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"));
-----
-
-[#convert-localdate]
-=== `LocalDate` 에서 `LocalDateTime`, `ZonedDateTime` 으로 변환하기
-
-[source, java]
-----
-
-----
-
-[#convert-zoneddatetime]
-=== `ZonedDateTime` 에서 `LocalDateTime`, `LocalDate` 으로 변환하기
-
-[source, java]
-----
-
 ----
 
 == 실용 예제
@@ -336,14 +372,18 @@ System.out.println(zonedDateTime2);
 2017-10-18T09:00+09:00[Asia/Seoul]
 ----
 
-**참고**
+[WARNING]
+.`LocalDateTime` 에서 `atZone()` 는 타임존을 추가하는 것이지, 다른 시간 계산을 하는 것은 아니다.
+====
 
-아래 코드와 같은 실수는 하지말자. `atZone()` 은 Zone 정보만 추가할뿐 시간을 변경하지 않는다. 그러므로 `localDateTime1` 과 `localDateTime2` 는 동일하다.
+아래 두 `LocalDateTime` 인스턴스는 동일하다.
 
-```java
+[source, java]
+----
 final LocalDateTime localDateTime1 = localDateTime.atZone(seoul).toLocalDateTime();
 final LocalDateTime localDateTime2 = localDateTime.atZone(utc).toLocalDateTime();
-```
+----
+====
 
 [#change-timezone]
 === 타임존 변경하기
@@ -406,7 +446,7 @@ System.out.println(nextMeeting);
 2018-05-17T10:00-04:00[America/Santiago]
 ----
 
-만약 `Duration` 을 사용했다면 Santiago의 DST가 적용되지 잘못된 시간에 회의를 예약하게 된다.
+만약 `Duration` 을 사용했다면 Santiago의 DST가 적용되지 않아 잘못된 시간에 회의를 예약하게 된다.
 
 [source, java]
 ----
