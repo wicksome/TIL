@@ -1,94 +1,178 @@
-= Java8 에서 시간 다루기 with 타임존
+= 날짜와 시간 API with Java8
 Yeongjun.kim <opid911@gmail.com>
-v1.0
 :revdate: 2018-02-21T17:50:00+09:00
 :page-tags: java8, timezone, zoneId, date, time, datetime
-:toc:
+:toc: left
+:page-toc: left
 
-== JAVA8 이전의 시간 다루기
+WARNING: 기존 Java에서는 날짜와 시간을 `Date`, `Calendar` 그리고 `Timestamp` 클래스 등으로 다루고 있었다. 하지만 여러 문제점이 있으므로(https://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API] 참고) 이 포스팅에서는 JDK8 이후에 추가된 API를 기반으로 설명한다.
 
-TODO
+[link=http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.html]
+image:http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.png[]
+
+글로벌 서비스를 하면서 JDK8이 제공하는 `java.time` 패키지가 너무 유용해서 정리해보고자 한다. 앞으로는 문자열을 파싱해서 사용하는 것보다 이 API을 사용해보자. (직접 구현한 코드들에는 시간 계산에 관한 버그가 너무나도 많았다..)
 
 == 타임존
 
-Time-Zone은 정부에 의해 변경되는 경우가 있는데, Java는 https://www.iana.org/time-zones:[IANA 데이터베이스]를 사용하고, 따로 버전업 없이
-독립적으로 시간대 데이터베이스를 업데이트 한다. 즉, 하드코딩으로 관리하지 않아도 된다. 또한, Java8에서는 타임존, DST를 좀 더 편하게 사용하기 위해
-`ZoneId`, `ZonedDateTime`, `LocalDateTime` 등이 추가되었다. 이용할 수 있는 Time-Zone은 `ZoneId.getAvilableIds()` 로 확인할 수 있으며,
-현재 시점 등록된 ID는 600개이다.
-
-.시간과 관련된 Java8 클래스
-|===
-| Class |Desc
-
-| `Instant`
-| 타임 스탬프
-
-| `ZoneId`            
-| 시간대를 나타낸다.
-
-| `LocalDateTime`     
-| 지역 시간을 나타낸다. 즉, 시간대 정보가 없다.
-
-| `ZonedDateTime`     
-| 구역 시간을 나타낸다.
-
-| `TemporalAdjuster`  
-| 달력 계산에 사용한다. (e.g. 다음 달의 첫번째 날)
-
-| `DateTimeFormatter` 
-| 날짜와 시간의 서식을 지정하기 위해 사용한다.
-|===
+Time-Zone(타임존)은 여러 가지 다른 것을 설명하는 데 사용할 수 있지만 대개 지역 또는 국가의 현지 시간을 나타내며, 주로 해당 국가에 의해 법적으로 지정된다. 
+*GMT* 와 *UTC* 는 같은 시간을 가르키면서 혼용되어 사용되지만, 엄밀히 구분하자면 다른 의미이다(https://ko.wikipedia.org/wiki/%ED%98%91%EC%A0%95_%EC%84%B8%EA%B3%84%EC%8B%9C[완전히 동일하진 않고 초의 소숫점 단위에서 차이가 난다]).
 
 [NOTE]
-.타임존 관련 용어 설명
 ====
 
-비슷하지만 다른 용어들을 설명한다.
-
+[quote, 'https://www.timeanddate.com/time/gmt-utc-time.html[The Difference Between GMT and UTC]']
 ____
 "GMT is a **time zone** and UTC is a **time standard**."
 ____
 
-TimeZone::
-타임존은 여러 가지 다른 것을 설명하는 데 사용할 수 있지만 대개 지역 또는 국가의 현지 시간을 나타내며, 주로 해당 국가에
-의해 법적으로 지정된다. GMT와 UTC는 같은 시간을 공유하고(동일하진 않고 초의 소숫점단위에서 차이가 난다) 혼용되서 사용되지만
-엄밀히 구분하자면 다르다.
+GMT(Greenwich Mean Time)::
+GMT는 경도 0도에 위치한 영국 런던 그리니치에 있는 왕립 천문대의 시간으로, 모든 시간대의 시작점을 나타내며, 일년내내 DST의 영향을 받지 않는다.
+GMT는 1925년 2월 5일부터 사용하기 시작했으며, 1972년 1월 1일까지 세계 표준시로 사용되었다.
 
-GMT: Greenwich Mean Time::
-GMT는 경도 0도에 위치한 영국 런던 그리니치에 있는 왕립 천문대의 시간으로, 모든 시간대의 시작점을 나타내며, 
-일년내내 DST의 영향을 받지 않는다. GMT는 1925년 2월 5일부터 사용하기 시작했으며, 1972년 1월 1일까지 
-세계 표준시로 사용되었다.
+UTC(협정 세계시, 協定世界時)::
+UTC는 국제 표준시를 뜻하며 타임존은 아니다. 즉, 공식적으로 UTC를 현지 시간으로 사용하는 국가나 지역은 없다. 
+협정 세계시를 영어권에서는 Coordinated Universal Time^CUT^라고, 프랑스어권에서는 Temps Universel Coordonné^TUC^라고 하는데, 혼돈을 방지하기 위해서 공식적으로 UTC라고 정해졌다.
+====
 
-UTC: 협정 세계시, 協定世界時::
-**UTC는 국제 표준시로 타임존이 아니다.** 즉, UTC를 공식적으로 현지 시간으로 사용하는 국가나 지역은 없다. 
-협정 세계시를 영어권에서는 Coordinated Universal Time^CUT^라고, 프랑스어권에서는 
-Temps Universel Coordonné^TUC^라고 하는데, 혼돈을 방지하기 위해서 공식적으로 UTC라고 정해졌다.
+위에 말한 듯이 타임존은 정부에 의해 변경되는 경우가 종종 있다. 하지만 Java는 타임존 변경이 일어났더라도 따로 JDK 버전업 필요 없이 독립적으로 타임존 데이터베이스(https://www.iana.org/time-zones:[IANA 데이터베이스])를 업데이트한다. 즉, 하드코딩으로 관리하지 않아도 된다. 
 
-DST: Daylight Saving time::
+Java 8에서는 날짜와 시간을 좀 더 편리하게 하용하기 위해 여러 API가 추가되었으며, 타임존 또한 `ZoneId` 클래스를 통해 *DST* 가 적용된 시간도 편리하게 계산할 수 있다. `ZoneId.getAvailableZoneIds()` 를 통해 지원하는 지역별 타임존을 확인할 수 있다(현재 시점 등록된 ZoneId는 600개이다).
+
+[NOTE]
+.DST(Daylight Saving time)
+====
 DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 시간에서 1시간 앞으로, 그리고 다시 가을에 시간을 1시간 전으로 설정하는
 것을 말한다. DST와 "summer time"은 같은 말을 뜻하며 특정 나라에서 주로 불린다. 영국에서 썸머타임이라고 많이 사용하며, DST가 적용되지 않는 표준시는
 "winter time"이라고 사용되기도 한다. DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
 ====
 
-== 시간 변환하기
+.Java8에서 개선된 날짜, 시간 관련 API
+|===
+| Java8 이전 | Java8 이후
+
+| `Timestamp`
+| `Instant`
+
+| `TimeZone`
+| `ZoneId`
+
+| `Date`     
+| `LocalDate`     
+
+
+| `Date`     
+| `LocalDateTime`     
+
+| `Calendar`
+| `ZonedDateTime`     
+
+| `TemporalAdjuster`  
+
+| `SimpleDateFormat`
+| `DateTimeFormatter` 
+|===
+
+== 레거시 전환하기
 
 [#date-to-java8-datetime]
-=== `Date` 에서 `LocalDate`, `LocalDateTime` 으로 전환하기
+=== `Date`
 
 [source, java]
+.`Date` -> `LocalDate`
 ----
-final Date date = Date.from(Instant.now());
+Date date = new Date();
+LocalDate localDate = LocalDate.from(date.toInstant());
+----
 
-// LocalDate
-LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-// LocalDateTime
+[source, java]
+.`Date` -> `LocalDateTime`
+----
+Date date = new Date();
+Date date = Date.from(Instant.now());
 LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+----
 
+[source, java]
+.`Date` -> `Instant`
+----
 // ZonedDateTime
 ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
 ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 ----
+
+[source, java]
+.`Date` -> `String`
+----
+// ZonedDateTime
+ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
+ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+----
+
+[source, java]
+.`Date` -> `ZonedDateTime`
+----
+// ZonedDateTime
+ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
+ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+----
+
+=== `Calendar`
+
+=== `Timestamp`
+
+=== `SimpleDateFormat`
+
+
+== 시간 변환하기
+
+
+
+
+=== `Instant`
+
+`Instant` 는 Immutable 하고 thread-safe하다.
+
+=== `LocalDate`
+
+=== `LocalDateTime`
+
+=== `ZonedDateTime`
+
+=== `TemporalAdjuster`
+
+
+
+=== `TemporalAdjusters`
+
+자주 사용될 것 같은 시간과 날짜를 조절하는 `TemporalAdjuster` 인터페이스를 구현해둔 유틸성 클래스이다.
+
+위에 모든 클래스들이 `Temporal` 을 구현하고 있는데 이를 좀더 유틸로 만들어준거
+
+[source, java]
+----
+LocalDate today = LocalDate.now();
+
+today.with(TemporalAdjusters.firstDayOfYear());                      // 올해 1일
+today.with(TemporalAdjusters.firstDayOfNextYear());                  // 내년 1일
+today.with(TemporalAdjusters.firstDayOfMonth());                     // 이번달 1일
+today.with(TemporalAdjusters.firstDayOfNextMonth());                 // 다음달 1일
+today.with(TemporalAdjusters.firstInMonth(DayOfWeek.SUNDAY));        // 이번달 첫 번째 일요일
+today.with(TemporalAdjusters.lastDayOfYear());                       // 올해 마지막날
+today.with(TemporalAdjusters.lastDayOfMonth());                      // 이번달 마지막날
+today.with(TemporalAdjusters.lastInMonth(DayOfWeek.SUNDAY));         // 이번달 마지막 일요일
+today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));                // 다음 월요일
+today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));          // 다음 월요일(당일 포함)
+today.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));            // 지난 월요일
+today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));      // 지난 월요일(당일 포함)
+today.with(TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.SUNDAY)); // 이번달 2번째 일요일
+today.with(TemporalAdjusters.ofDateAdjuster(date -> date.minusMonths(2))); // 커스터마이징
+----
+
+=== `DateTimeFomatter`
+
+=== `Date` 에서 `LocalDate`, `LocalDateTime` 으로 전환하기
+
+
 
 [#calendar-to-java8-datetime]
 === `Calendar` 에서 `LocalDate`, `LocalDateTime`, `ZonedDateTime` 으로 전환하기
@@ -366,6 +450,7 @@ TODO
 * https://www.mkyong.com/java/java-convert-date-and-time-between-timezone/[Java 8 이전 버전에서 시간 다루기]
 * http://meetup.toast.com/posts/125[자바스크립트에서 타임존 다루기 (1) - Toast]
 * https://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html[Java 8 Date Time - 20 Examples of LocalDate, LocalTime, LocalDateTime]
+* https://jekalmin.tistory.com/entry/%EC%9E%90%EB%B0%94-18-%EB%82%A0%EC%A7%9C-%EC%A0%95%EB%A6%AC[Java 1.8 날짜 정리]
 
 ++++
 </details>
