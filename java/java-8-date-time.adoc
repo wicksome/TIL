@@ -81,39 +81,47 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 .`Date` -> `LocalDate`
 ----
 Date date = new Date();
-LocalDate localDate = LocalDate.from(date.toInstant());
+
+LocalDate localDate1 = date.toInstant()
+  .atZone(ZoneId.systemDefault())
+  .toLocalDate();
+
+LocalDate localDate2 = Instant.ofEpochMilli(date.getTime())
+  .atZone(ZoneId.systemDefault())
+  .toLocalDate();
+
+LocalDate localDate3 = new java.sql.Date(date.getTime()).toLocalDate();
 ----
 
 [source, java]
 .`Date` -> `LocalDateTime`
 ----
 Date date = new Date();
-Date date = Date.from(Instant.now());
-LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+LocalDate localDateTime1 = date.toInstant()
+  .atZone(ZoneId.systemDefault())
+  .toLocalDate();
+
+LocalDate localDateTime2 = Instant.ofEpochMilli(date.getTime())
+  .atZone(ZoneId.systemDefault())
+  .toLocalDateTime();
+
+LocalDate localDateTime3 = new java.sql.Date(date.getTime()).toLocalDateTime();
 ----
 
 [source, java]
 .`Date` -> `Instant`
 ----
-// ZonedDateTime
-ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
-ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 ----
 
 [source, java]
 .`Date` -> `String`
 ----
-// ZonedDateTime
-ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
-ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 ----
 
 [source, java]
 .`Date` -> `ZonedDateTime`
 ----
-// ZonedDateTime
-ZonedDateTime zonedDateTime1 = date.toInstant().atZone(ZoneId.systemDefault());
-ZonedDateTime zonedDateTime2 = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 ----
 
 === `Calendar`
