@@ -1,8 +1,7 @@
-= 쉘스크립트 짤 때 자주 쓰이는 스크립트
+= CheatSheet for a new shell script 
 :revdate: 2019-10-16T15:15:00+09:00
 :toc: left
 :page-toc: left
-:page-draft:
 
 [#check-os]
 == OS 확인
@@ -14,6 +13,14 @@ cat /etc/centos-release
 
 [#get-arguments]
 == 인자 받기, 체크
+
+[source, bash]
+.인자 변수 할당하기
+----
+env_file="./.env.$1"
+shift
+args=$@ # 나머지는 arg에 할당
+----
 
 필수로 인자 받기
 
@@ -275,6 +282,37 @@ else
 fi
 ----
 
+[#if-exist-file]
+=== 파일이 존재하는지 확인
+
+[source, bash]
+----
+BASEDIR=$(dirname "$0")
+
+if [ -f "$BASEDIR/nginx.conf" ]; then
+  echo "exist nginx.conf"
+fi
+----
+
+[#if-empty-value]
+=== 값이 있는지/없는지 확인
+
+[source, bash]
+----
+if [ ! -z "$value" ]; then
+  echo "not empty"
+fi
+
+if [ -n "$value"]; then
+  echo "not empty"
+fi
+
+if [ -z "$value" ]; then
+  echo "empty"
+fi
+----
+
+
 [#test-operation]
 == test 명령어 연산자 
 
@@ -351,12 +389,45 @@ NGINX_PID=$(cat $DIR_NGINX/logs/nginx.pid)
 $((3 * 3))
 ----
 
-== import
+[#import-env]
+== import, env 읽어오기
 
 [source, bash]
 ----
 source ./common.sh
 . ./common.sh
+----
+
+[source, bash]
+.env 읽어오기
+----
+BASEDIR=$(dirname "$0")
+env_file="$BASEDIR/.env.$1"
+
+# Import the env_file
+set -a
+source $env_file
+set +a
+----
+
+=== 특정 env 만 읽어오기
+
+[source, bash]
+.`env` 명령어로 변수 읽어오기
+----
+BASEDIR=$(dirname "$0")
+env_file="$BASEDIR/.env.$1"
+nginx_env_names=$(grep "^NGINX\_" $env_file | cut -d '=' -f1 | paste -sd "$" -)
+if [ ! -z "$nginx_env_names" ]; then 
+  nginx_env_names="\$$nginx_env_names" 
+fi
+
+# Import the env_file
+set -a
+source $env_file
+set +a
+
+envsubst $usable_envs < $BASEDIR/nginx.conf.template > $BASEDIR/nginx.conf
 ----
 
 [#clipboard]
