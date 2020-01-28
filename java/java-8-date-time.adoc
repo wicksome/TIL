@@ -8,17 +8,27 @@ Yeongjun.kim <opid911@gmail.com>
 <<<
 
 글로벌 서비스를 한다면 타임존에 대한 이해는 필수이다. 사용자가 어떤 기준으로 시간을 보는지 항상 고려해야한다.
-한번 고민 해보고 나면 크게 어려운 개념도 아니고 복잡한 계산도 아니지만, 처음에는 이 업무를 맡았을 때는 꽤나 고생했다. 
-이유는 기존의 코드들이 시간대를 고려하지 않았고, 문자열을 그대로 파싱하거나, 서비스하는 지역을 기준으로만 작성되어 있었기 때문이다.
+한번 고민 해보고 나면 크게 어려운 개념도 아니고 복잡한 계산도 아니지만, 이 업무를 처음 맡았을 때는 꽤나 고생했다. 
+시간에 대해서 고민해 본 적이 없던 것도 있었지만, 기존의 코드들이 특정 시간대를 기준으로만 개발되었거나(보통 개발자의 서버 시간을 기준으로 작성되었고, 요구사항이 없으므로 시간대를 고려하지 않은 상태이다), 문자열을 그대로 파싱하도록 작성되어 있었기 때문에 손 볼 곳이 많았다.
 
 JDK8에서는 시간, 날짜 관련해서 유용한 API(`java.time` 패키지)를 제공한다. 훨씬 이해하기 쉽고 유용하다. 앞으로는 문자열을 파싱하고 직접 시간을 계산하지말고 이 API을 사용해보자.
-(직접 구현한 코드들에는 시간 계산에 관한 버그도 많고 잘 보이지도 않는다.)
+(직접 구현한 코드들에는 시간 계산에 관한 버그도 많고 잘 보이지도 않는다)
 
 [NOTE]
 ====
 Java8 이전에도 `Date`, `Calendar` 그리고 `Timestamp` 클래스 등 날짜와 시간을 다루는 API는 존재했다.
 하지만 여러 문제점을 가지고 있으므로(https://d2.naver.com/helloworld/645609[Java의 날짜와 시간 API] 참고) Java8에 추가된 API를 사용하기를 권장하고, 어떠한 문제점이 있는지 알아두면 좋을 것 같다.
+
+.간략하게 정리한 JDK의 기본 날짜 클래스의 문제점
+* 불변객체가 아니여서 side-effect에 안전하지 않다.
+* int 상수 필드가 많아서 잘못 입력하더라도 컴파일 시점에 오류를 확인할 수 없다.
+* JDK 1.0 Date 클래스에서 1월을 0으로 표현하면서 누구나 크리티컬할 수 있는 실수를 반복한다.
+* Date와 Calendar의 역할 분담이 다소 명확하지 않다.
+* 잘못 시간대를 지정해도 오류를 발견하기 어렵다.
+* Date를 상속한 하위 클래스들에도 문제가 많다.
 ====
+
+이 포스트에서 설명하는 대부분의 날짜, 시간 관련 API는 https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html[java.time] 패키지 하위에 있다. 
 
 [link=http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.html]
 image:http://www.falkhausen.de/Java-8/java.time/Temporal-Hierarchy.png[]
@@ -58,34 +68,40 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 ====
 
 .Java8에서 개선된 날짜, 시간 관련 API
+[cols="4,10"]
 |===
 | 클래스 혹은 인터페이스 | 설명
-| `Clock` | 타임존을 사용한 현재 순간, 날짜 및 시간에 접근할 수 있는 클래스
-| `Duration` | 34.5초와 같이 시간 기반의 시간(amount of time)
-| `Instant` | 타임라인의 순간을 나타내는 클래스
-| `LocalDate` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜(예: `2020-01-21`)
-| `LocalDateTime` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜와 시간(예: `2020-01-21 00:25:00`)
-| `LocalTime` | ISO-8601 캘린더 시스템에서 시간대가 없는 시간(예: `12:35:30`)
-| `MonthDay` | ISO-8601 캘린더 시스템의 월별 일(예: `--01-21`)
-| `OffsetDateTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 날짜와 시간(예: `2020-01-21T00:47:00+09:00`)
-| `OffsetTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 시간(예: `00:47:00+09:00`)
-| `Period` | ISO-8601 캘린더 시스템의 날짜 기반의 시간(예: `2년 3개월 4일`)
-| `Year` | ISO-8601 캘린더 시스템에서 연도년(예: `2020`)
-| `YearMonth` | ISO-8601 캘린더 시스템에서 연(year)과 월(month)(예: `2020-01`) 
-| `ZonedDateTime` | ISO-8601 캘린더 시스템에서 Asia//Seoul 같은 타임존이 포함된 날짜와 시간(예: `2020-01-21T00:53:30+09:00 Asia/Seoul`)
-| `ZoneId` | `Asia/Seoul` 과 같은 타임존 ID
-| `ZoneOffset` | GMT/UTC로부터 타임존 오프셋(예: `+09:00`)
-| `DayOfWeek` | 요일을 나타내는 열거타입
-| `Month` | 월을 나타내는 열거타입
-| `TemporalAdjuster` |
-| `DateTimeFormatter` |
+
+2+| https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html[__java.time 패키지__]
+| {nbsp}{nbsp}{nbsp}{nbsp} `Clock` | 타임존을 사용한 현재 순간, 날짜 및 시간에 접근할 수 있는 클래스
+| {nbsp}{nbsp}{nbsp}{nbsp} `Duration` | 34.5초와 같이 시간 기반의 시간(amount of time)
+| {nbsp}{nbsp}{nbsp}{nbsp} `Instant` | 타임라인의 순간을 나타내는 클래스
+| {nbsp}{nbsp}{nbsp}{nbsp} `LocalDate` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜(예: `2020-01-21`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `LocalDateTime` | ISO-8601 캘린더 시스템에서 타임존이 없는 날짜와 시간(예: `2020-01-21 00:25:00`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `LocalTime` | ISO-8601 캘린더 시스템에서 시간대가 없는 시간(예: `12:35:30`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `MonthDay` | ISO-8601 캘린더 시스템의 월별 일(예: `--01-21`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `OffsetDateTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 날짜와 시간(예: `2020-01-21T00:47:00+09:00`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `OffsetTime` | ISO-8601 캘린더 시스템에서 UTC로부터 offset이 포함된 시간(예: `00:47:00+09:00`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `Period` | ISO-8601 캘린더 시스템의 날짜 기반의 시간(예: `2년 3개월 4일`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `Year` | ISO-8601 캘린더 시스템에서 연도년(예: `2020`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `YearMonth` | ISO-8601 캘린더 시스템에서 연(year)과 월(month)(예: `2020-01`) 
+| {nbsp}{nbsp}{nbsp}{nbsp} `ZonedDateTime` | ISO-8601 캘린더 시스템에서 Asia//Seoul 같은 타임존이 포함된 날짜와 시간(예: `2020-01-21T00:53:30+09:00 Asia/Seoul`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `ZoneId` | `Asia/Seoul` 과 같은 타임존 ID
+| {nbsp}{nbsp}{nbsp}{nbsp} `ZoneOffset` | GMT/UTC로부터 타임존 오프셋(예: `+09:00`)
+| {nbsp}{nbsp}{nbsp}{nbsp} `DayOfWeek` | 요일을 나타내는 열거타입
+| {nbsp}{nbsp}{nbsp}{nbsp} `Month` | 월을 나타내는 열거타입
+2+| https://docs.oracle.com/javase/8/docs/api/java/time/temporal/TemporalAdjuster.html[__java.time.temporal 패키지__]
+| {nbsp}{nbsp}{nbsp}{nbsp} `TemporalAdjuster` | `Temporal` 객체들을 조절하기 위한 함수형 인터페이스
+| {nbsp}{nbsp}{nbsp}{nbsp} `ChronoUnit` | 날짜/시간의 period를 나타내는 표준 셋을 가진 열거타입
+2+| https://docs.oracle.com/javase/8/docs/api/java/time/format/package-summary.html[__java.time.format 패키지__]
+| {nbsp}{nbsp}{nbsp}{nbsp} `DateTimeFormatter` | date-time 객체를 파싱하거나 출력하기 위한 포맷터
 |===
 
 [NOTE]
 ====
-[quote, ISO 8601]
+[quote, 'https://ko.wikipedia.org/wiki/ISO_8601[ISO 8601 - 위키피디아]']
 ____
-ISO 8601 Data elements and interchange formats - Information interchange - Representation of dates and times은 날짜와 시간과 관련된 데이터 교환을 다루는 국제 표준이다. 
+**https://www.iso.org/iso-8601-date-and-time-format.html[ISO 8601] Data elements and interchange formats - Information interchange - Representation of dates and times은 날짜와 시간과 관련된 데이터 교환을 다루는 국제 표준이다.**
 이 표준은 국제 표준화 기구(ISO)에 의해 공포되었으며 1988년에 처음으로 공개되었다. 이 표준의 목적은 날짜와 시간을 표현함에 있어 명백하고 잘 정의된 방법을 제공함으로써, 
 날짜와 시간의 숫자 표현에 대한 오해를 줄이고자함에 있는데, 숫자로 된 날짜와 시간 작성에 있어 다른 관례를 가진 나라들간의 데이터가 오갈때 특히 그렇다.
 ____
@@ -93,11 +109,9 @@ ____
 
 == 날짜, 시간 다루기
 
-JDK8에서는 날짜, 시간 관련된 코드들은 https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html[java.time] 패키지 하위에 있다. 
-
 === `Instant`
 
-`TimeStamp` 와 달리 Immutable 하고 thread-safe하다.
+타임라인의 특정 순간을 나타내는 클래스로, `TimeStamp` 와 달리 Immutable 하고 thread-safe하다.
 
 [source, java]
 ----
@@ -111,6 +125,8 @@ Instant midnight = Instant.now().truncatedTo(DAYS);
 
 === `LocalDate`
 
+ISO-8601에서 타임존이 없는 날짜(예: `2020-01-21`)를 나타낸다.
+
 [source, java]
 ----
 LocalDate today = LocalDate.now();
@@ -123,6 +139,8 @@ today.isAfter(yesterday); // true
 
 === `LocalDateTime`
 
+ISO-8601에서 타임존이 없는 날짜와 시간(예: `2020-01-21 00:25:00`)을 나타낸다.
+
 [source, java]
 ----
 LocalDateTime now = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
@@ -133,6 +151,8 @@ LocalDateTime nextWeek = today.plusWeeks(1);
 
 === `ZonedDateTime`
 
+ISO-8601에서 `Asia/Seoul` 같은 타임존이 포함된 날짜와 시간(예: `2020-01-21T00:53:30+09:00 Asia/Seoul`)을 나타낸다.
+
 [source, java]
 ----
 ZonedDateTime now = ZonedDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
@@ -142,6 +162,8 @@ ZonedDateTime zdt = ZonedDateTime.parse("2020-01-21T00:42:00+09:00", DateTimeFor
 
 === `TemporalAdjuster`
 
+시간과 관련된 객체(`Temporal` 을 구현하고 있는 클래스)를 조절하기 위한 전략을 나타내는 함수형 인터페이스다.
+
 [source, java]
 ----
 import static java.time.temporal.ChronoUnit.*;
@@ -150,11 +172,12 @@ TemporalAdjuster addOneWeek = temporal -> temporal.plus(7, DAYS);
 ZonedDateTime nextWeek = ZonedDateTime.now().with(addOneWeek);
 ----
 
+`Temporal` 인터페이스를 구현한 객체에는 `with(TemporalAdjuster)` 메서드를 모두 가지고 있으며, 이 메서드를 통해 시간을 조절한다.
+시간 조절하는 방법에는 두 가지가 있는데, javadoc에서는 `Temporal.with(TemporalAdjuster)` 사용을 권장한다.
+
 === `TemporalAdjusters`
 
-자주 사용될 것 같은 시간과 날짜를 조절하는 `TemporalAdjuster` 인터페이스를 구현해둔 유틸성 클래스이다.
-
-위에 모든 클래스들이 `Temporal` 을 구현하고 있는데 이를 좀더 유틸로 만들어준거
+시간과 날짜 조절에 자주 사용될 것 같은 전략들(`TemporalAdjuster` 인터페이스 구현체)을 모아 놓은 유틸성 클래스이다.
 
 [source, java]
 ----
@@ -176,7 +199,32 @@ today.with(TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.SUNDAY)); // 이번�
 today.with(TemporalAdjusters.ofDateAdjuster(date -> date.minusMonths(2))); // 커스터마이징
 ----
 
-=== `DateTimeFomatter`
+=== `DateTimeFormatter`
+
+날짜/시간 객체를 파싱하거나 출력하기 위한 포맷터이다.
+
+[source, java]
+----
+LocalDate date = LocalDate.now();
+String text = date.format(formatter);
+LocalDate parsedDate = LocalDate.parse(text, formatter);
+----
+
+이 클래스는 `DateTimeFormatter` 를 구현한 주요 포맷터를 제공하며, 좀 더 복잡한 포맷터는 https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatterBuilder.html[DateTimeFormatterBuilder]를 통해 구현할 수 있다.
+
+
+[source, java]
+----
+LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); // 2020-01-28
+LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy MM dd HH:mm:ss")); // <1>
+LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);        // 2020-01-28T17:38:36.856
+ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);        // 2020-01-28T17:41:12.319+09:00[Asia/Seoul]
+ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME);  // 2020-01-28T17:41:12.319+09:00[Asia/Seoul]
+ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE);      // 2020-01-28+09:00
+ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_TIME);      // 17:41:12.32+09:00
+ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME); // 2020-01-28T17:41:12.32+09:00
+----
+<1> 표현할 수 없으므로 __java.time.temporal.UnsupportedTemporalTypeException: Unsupported field: HourOfDay__ 예외 발생
 
 
 == 레거시 전환하기
@@ -197,15 +245,18 @@ Instant now = date.toInstant();
 ----
 Date date = new Date();
 
-LocalDate localDate1 = date.toInstant()
+LocalDate ld1 = date.toInstant()
   .atZone(ZoneId.systemDefault())
   .toLocalDate();
 
-LocalDate localDate2 = Instant.ofEpochMilli(date.getTime())
+LocalDate ld2 = Instant.ofEpochMilli(date.getTime())
   .atZone(ZoneId.systemDefault())
   .toLocalDate();
 
-LocalDate localDate3 = new java.sql.Date(date.getTime()).toLocalDate();
+LocalDate ld3 = new java.sql.Date(date.getTime()).toLocalDate();
+
+// LocalDate to Date
+date = java.sql.Date.valueOf(LocalDate.now());
 ----
 
 [source, java]
@@ -213,25 +264,34 @@ LocalDate localDate3 = new java.sql.Date(date.getTime()).toLocalDate();
 ----
 Date date = new Date();
 
-LocalDate localDateTime1 = date.toInstant()
+LocalDate ldt1 = date.toInstant()
   .atZone(ZoneId.systemDefault())
   .toLocalDate();
 
-LocalDate localDateTime2 = Instant.ofEpochMilli(date.getTime())
+LocalDate ldt2 = Instant.ofEpochMilli(date.getTime())
   .atZone(ZoneId.systemDefault())
   .toLocalDateTime();
 
-LocalDate localDateTime3 = new java.sql.Date(date.getTime()).toLocalDateTime();
-----
-
-[source, java]
-.`Date` -> `String`
-----
+LocalDate ldt3 = new java.sql.Date(date.getTime()).toLocalDateTime();
 ----
 
 [source, java]
 .`Date` -> `ZonedDateTime`
 ----
+Date date = new Date();
+
+ZonedDateTime zdt = date.toInstant()
+   .atZone(ZoneId.systemDefault());
+----
+
+[source, java]
+.`Date` -> `String`
+----
+Date date = new Date();
+
+String yyyyMMdd = now.toInstant()
+    .atZone(ZoneId.systemDefault())
+    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 ----
 
 === `Calendar`
@@ -253,15 +313,30 @@ ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(cal.toInstant(), timeZone.
 
 === `Timestamp`
 
+[source, java]
+----
+import java.sql.Timestamp;
+
+Timestamp ts = Timestamp.from(Instant.now());
+Instant now = ts.toInstant();
+----
+
 === `SimpleDateFormat`
+
+https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns[_DateTimeFormatter_] 와 https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html[_SimpleDateFormat_] 의 패턴이 완전히 동일하지 않으므로 리팩토링시 문서를 꼭 참고해야 한다.
 
 [source, java]
 ----
-LocalDateTime.parse(str);
-LocalDateTime.parse(str, DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss"));
+SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+System.out.println(simpleDateFormat.format(new Date()));
+System.out.println(LocalDate.now().format(formatter));
 ----
 
 == 실용 예제
+
+아래 예제들은 실제 개발하면서 작성한 코드들이다. 앞으로도 시간 관련된 코드를 작성할 때 이곳에 추가하고 수정해나갈 예정이다.
 
 [#get-yesterday-start]
 === 어제 00:00:00 구하기
@@ -299,6 +374,43 @@ final String actual = LocalDateTime.now()
     .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 // 20191204235959
 ----
+
+=== 1주일 이후 시간 구하기
+
+예를 들어, Santiago에서 2018년 5월 10일 10시 기준으로 7주일 이후에 회의를 잡으려고 한다. 이 경우에는 `Period.ofDays(int)` 을 사용한다.
+
+[source, java]
+----
+// santiago 2018/05/13 00:00:00 이후로 DST 적용
+final ZonedDateTime now = ZonedDateTime.of(2018, 5, 10, 10, 0, 0, 0, ZoneId.of("America/Santiago"));
+final ZonedDateTime nextMeeting = now.plus(Period.ofDays(7));
+
+System.out.println(now);
+System.out.println(nextMeeting);
+----
+
+[source]
+----
+2018-05-10T10:00-03:00[America/Santiago]
+2018-05-17T10:00-04:00[America/Santiago]
+----
+
+[WARNING]
+====
+만약 `Duration` 을 사용했다면 Santiago의 DST가 적용되지 않아 잘못된 시간에 회의를 예약하게 된다.
+
+[source, java]
+----
+final ZonedDateTime nextMeeting = now.plus(Duration.ofDays(7));
+System.out.println(nextMeeting);
+----
+
+[source]
+----
+2018-05-17T09:00-04:00[America/Santiago]
+----
+====
+
 
 === 타임존과 오프셋 커스텀하게 출력하기
 
@@ -345,7 +457,8 @@ final ZoneOffset offset = LocalDateTime.now().atZone(zoneId).getOffset();
 구글 캘린더에서는 `(GMT-03:00) 산티아고` 라고 DST를 적용한 GMT시간을 보여준다.
 ====
 
-=== LocalDateTime 에 ZoneId 설정하기
+[#add-timezone-to-localdatetime]
+=== LocalDateTime에 ZoneId 설정하기
 
 특정 지역 시간(localDateTime)에 Zone-ID를 추가하려면 아래와 같다.
 
@@ -373,24 +486,28 @@ System.out.println(zonedDateTime2);
 ----
 
 [WARNING]
-.`LocalDateTime` 에서 `atZone()` 는 타임존을 추가하는 것이지, 다른 시간 계산을 하는 것은 아니다.
+.헷갈릴 수 있는 코드
 ====
 
-아래 두 `LocalDateTime` 인스턴스는 동일하다.
+`LocalDateTime` 에서 `atZone()` 는 날짜/시간 값에 타임존 정보를 추가하는 것이지 타임존으로부터 시간 계산을 하는 것이 아니다.
+그러므로 아래 `LocalDateTime` 인스턴스는 동일하다.
 
 [source, java]
 ----
-final LocalDateTime localDateTime1 = localDateTime.atZone(seoul).toLocalDateTime();
-final LocalDateTime localDateTime2 = localDateTime.atZone(utc).toLocalDateTime();
+LocalDateTime dateTime1 = localDateTime.atZone(seoul).toLocalDateTime();
+LocalDateTime dateTime2 = localDateTime.atZone(utc).toLocalDateTime();
+
+assertEquals(dateTime1, dateTime2); // true
 ----
 ====
 
-[#change-timezone]
-=== 타임존 변경하기
+[#convert-datetime-with-timezone]
+=== 다른 시간대의 시간으로 변경하기
 
-==== 다른 타임존의 시간으로 변경하기(e.g. LA 시간 기준으로 서울시간 구하기)
+LA의 오전 9시를 서울 시간으로 변경하고자 할 땐 어떻게 해야할까? 절대적인 시간을 그대로 두려는 이 경우엔 `zonedDateTime.withZoneSameInstant(ZoneId)` 를 사용한다.
 
-예를 들어, 로스앤젤레스 시간으로 오전 9시가 서울 시간으로 몇시일지 확인하려고 하려고 한다. 아래와 같이 `withZoneSameInstant(ZoneId)` 를 사용하여 시간을 구할 수 있다.
+* 도쿄 타임존으로 캘린더 일정 생성시 서울 시간으로 변경해서 표시해주고자 할 때
+* 시스템 타임존을 보고 있는 사용자가 LA에서 예약 결제를 한 경우 서울에 와서 언제 결제를 처리할 것인지 확인할 때
 
 [source, java]
 ----
@@ -402,14 +519,17 @@ final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Ang
 final ZonedDateTime seoul = losAngeles.withZoneSameInstant(ZoneId.of("Asia/Seoul")); // <2>
 
 // then
-assertEquals(losAngeles.toInstant(), seoul.toInstant());
+assertEquals(losAngeles.toInstant(), seoul.toInstant()); // true
 ----
 <1> 출력 결과: _2017-10-18T09:00-07:00[America/Los_Angeles]_
 <2> 출력 결과: _2017-10-19T01:00+09:00[Asia/Seoul]_
 
-==== 시간은 그대로 두고 타임존만 변경하기
+[#change-timezone]
+=== 시간은 그대로 두고 시간대만 변경하기
 
-시간대(`ZoneId`)만 변경하고자할 땐, `withZoneSameLocal(ZoneId)` 를 사용한다. 즉, 아래 코드에서 _Los_Angeles_ 와 _seoul_ 의 `localDateTime` 은 같다.
+시간대를 잘못 설정해서 변경하고자 할 땐 `withZoneSameLocal(ZoneId)` 를 사용한다. 이 메서드를 통해 변경하는 경우에는 절대적인 시간이 서로 달라진다. 
+
+* 시간대를 잘못 설정해서 변경해야할 때
 
 [source,java]
 ----
@@ -421,52 +541,34 @@ final ZonedDateTime losAngeles = localDateTime.atZone(ZoneId.of("America/Los_Ang
 final ZonedDateTime seoul = losAngeles.withZoneSameLocal(ZoneId.of("Asia/Seoul")); // <2>
 
 // then
-assertEquals(losAngeles.toLocalDateTime(), seoul.toLocalDateTime());
+assertEquals(losAngeles.toLocalDateTime(), seoul.toLocalDateTime()); // true
+assertEquals(losAngeles.toInstant(), seoul.toInstant()); // false
 ----
 <1> 출력 결과: _2017-10-18T09:00-07:00[America/Los_Angeles]_
 <2> 출력 결과: _2017-10-18T09:00+09:00[Asia/Seoul]_ 
 
-=== 특정 시간 기준으로 1주일 지난 시간 구하기
-
-예를 들어, Santiago에서 2018년 5월 10일 10시 기준으로 7주일 이후에 회의를 잡으려고 한다. 이 경우에는 `Period.ofDays(int)` 을 사용한다.
-
-[source, java]
-----
-// santiago 2018/05/13 00:00:00 이후로 DST 적용
-final ZonedDateTime now = ZonedDateTime.of(2018, 5, 10, 10, 0, 0, 0, ZoneId.of("America/Santiago"));
-final ZonedDateTime nextMeeting = now.plus(Period.ofDays(7));
-
-System.out.println(now);
-System.out.println(nextMeeting);
-----
-
-[source]
-----
-2018-05-10T10:00-03:00[America/Santiago]
-2018-05-17T10:00-04:00[America/Santiago]
-----
-
-만약 `Duration` 을 사용했다면 Santiago의 DST가 적용되지 않아 잘못된 시간에 회의를 예약하게 된다.
-
-[source, java]
-----
-final ZonedDateTime nextMeeting = now.plus(Duration.ofDays(7));
-System.out.println(nextMeeting);
-----
-
-[source]
-----
-2018-05-17T09:00-04:00[America/Santiago]
-----
-
 == 더 알아볼 것
 
-- 왜 타임존 업데이트가 되지 않았는가?
-- java 타임존을 업데이트 하는 방법 - oracle jdk, openjdk
+[WARNING]
+====
+이 섹션은 작성중인 섹션이다.
+
+.참고 및 확인해볼 것
+* 왜 타임존 업데이트가 되지 않았는가?
+* java 타임존을 업데이트 하는 방법 - oracle jdk, openjdk
+====
+
 
 == 타임존 DB 업데이트하기
 
-TODO
+[WARNING]
+====
+이 섹션은 작성중인 섹션이다.
+
+.참고 및 확인해볼 것
+* https://www.oracle.com/technetwork/java/javase/documentation/tzupdater-readme-136440.html
+* openjdk에서는 지원하지 않는 이슈 파악하기
+====
 
 == 추가 정보
 
