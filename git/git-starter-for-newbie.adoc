@@ -1,0 +1,27 @@
+= git basic
+:revdate: 2020-01-31T10:54:00+09:00
+:page-draft:
+
+. git?
+. init
+.. git init
+.. git clone
+. git add
+. git commit
+. remote
+.. git fetch
+.. git push
+.. git pull 
+... git rebase
+. rollback
+.. git reset
+.. git revert
+.. revert vs reset
+. Precautions
+.. git push --force
+. work
+.. git을 통해 어떻게 개발이 이뤄지는가?
+... git flow
+.. git을 통해 어떻게 협업이 되고있는가?
+... github enterprise
+.. git을 어떻게 활용하는가?
