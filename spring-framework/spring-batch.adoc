@@ -188,6 +188,17 @@ Job이 정상적으로 수행됬는지, 실패됬는지에 대한 정보를 기�
 
 애플리케이션을 실행시킬 때 전달한 Job Parameter 정보를 기록한다.
 
+== 필요한 bean만 로드하기
+
+`@ConditionalOnProperty` 어노테이션을 통해서 필요한 빈만 로드하기
+
+[source, java]
+----
+@ConditionalOnProperty(name = "job.name", havingValue = SampleJobConfig.JOB_NAME) // <1>
+----
+<1> `job.name` 은 실행시킬 job 이름을 저장하는 값이다. `spring.batch.job.name` 을 사용할 수도 있다.
+<1> `job.name` 프로퍼티에 `SampleJobConfig.JOB_NAME` 이 있을 경우에 해당 컴포넌트를 생성하는 어노테이션이다.
+
 == 참고
 * https://kwonnam.pe.kr/wiki/springframework/batch/commandlinejobrunner
 * https://kwonnam.pe.kr/wiki/springframework/batch
