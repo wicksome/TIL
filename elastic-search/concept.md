@@ -44,11 +44,3 @@ es에서 데이터를 저장하기 위한 장소로, RDBMS의 데이터베이스
 실제 소스 코드나 참조 문서에는 indice라는 용어가 사용되는데 index는 검색에서 포괄적인 의미인 색인 또는 색인 파일이고, indice는 es 내에서 물리적으로 사용되는 색인 또는 색인 파일이라고 보면 된다. 가존 검색엔진의 collection과 같은 의미가 indice다.
 
 # Shard
-
-# Mapping
-
-# Type
-
-# Document
-
-# Field
