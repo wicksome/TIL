@@ -65,7 +65,7 @@ image:https://dpzbhybb2pdcj.cloudfront.net/hinman/Figures/02fig02_alt.jpg[Logica
 ==== Document
 
 * ES에서 데이터의 가장 작은 단위
-** ≒ row(database)
+** ≒ row(rdbms)
 * 보통 데이터의 JSON 표현
 * 유연한 구조로 미리 정의한 스키마에 의존하지 않음
 ** ES에서 document는 스키마가 없다고 말함. 
@@ -78,6 +78,7 @@ image:https://dpzbhybb2pdcj.cloudfront.net/hinman/Figures/02fig02_alt.jpg[Logica
 
 * 문서에 대한 논리적인 컨테이너
 * 각 type에서 field의 정의를 mapping이라고 부름
+* ES 7.0에서 Type은 완전히 사라졌다.
 
 [NOTE]
 .ES에서 스키마가 없다면 왜 document는 type에 속해 있으며, 각 type은 스키마와 같은 mapping을 포함하는가?
@@ -94,6 +95,7 @@ image:https://dpzbhybb2pdcj.cloudfront.net/hinman/Figures/02fig02_alt.jpg[Logica
 ==== Index
 
 * 색인은 mapping 타입의 컨테이너이다.
+** ≒ database(rdbms)
 * 색인은 shard라는 chunks로 나뉜다.
 ** 하나의 shard는 하나의 루씬 색인이다.
 ** 색인은 여러개의 루씬 색인으로 구성된다.
@@ -137,6 +139,16 @@ image:https://dpzbhybb2pdcj.cloudfront.net/hinman/Figures/02fig03_alt.jpg[A tree
 * 하나의 shard는 하나의 루씬 색인이다.
 * 루씬 색인은 역 색인^inverted{sp}indexing^을 포함하는 파일들의 모음^a{sp}directory{sp}of{sp}files^이다.
 * 역 색인은 ES가 전체 document를 찾아보지 않고도 하나의 텀(혹은 단어)을 포함하는 문서를 찾도록 해주는 구조다.
+* shard는 primary 또는 replica shard일 수 있다.
+* replica shard는 primary shard의 정확한 복제본이다.
+* replica shard는 검색을 위해 사용되거나 장애대응용으로 사용 할 수 있다.
+* ES 색인은 하나 이상의 primary shard와 0개 이상의 replica shard로 구성된다.
+* replica는 언제나 변경 가능하지만, primary shard는 불가능 하므로 색인을 생성하기 전에 샤드의 수를 결정해야 한다.
 
+[TIP]
+====
+Elasticsearch-head 모니터링 툴은 크롬 확장프로그램으로도 지원된다.
+https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm/related
+====
 
 
