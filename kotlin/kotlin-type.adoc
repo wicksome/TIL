@@ -1,0 +1,60 @@
+= type
+
+== File
+
+== Class
+* 하나의 파일에 하나 이상의 클래스를 정의할 수 있음
+* 가급적 하나의 파일에 하나의 클래스를 정의하는 것이 좋음
+* 클래스에는 행동(behavior)과 데이터(data)를 정의함
+** behavior -> _class{sp}function_
+** data -> _property_
+* 클래스 내부에 정의된 함수를 클래스 함수(class function)이라고 함
+* 클래스 함수나 속성에 가시성 제한자(visibility modifier)를 지정하지 않으면 기본적으로 `public`
+** `public`: 외부에서 사용 가능, default
+** `private`: 함수나 속성이 정의된 클래스 내부에서만 사용 가능
+** `protected`: 함수나 속성의 정의된 클래스 내부 또는 서브 클래스에서만 사용 가능
+** `internal`: 함수나 속성이 정의된 클래스가 포함된 module에서 사용 가능
+
+[source, kotlin]
+.Player.kt
+----
+class Player
+----
+
+[source, kt]
+----
+val player = Player() // create a instance of Player using primary constructor
+----
+
+[source, kt]
+.Player.kt
+----
+class Player {
+  val name = "madrigal" // property
+  
+  fun castFireball(numFireballs: Int = 2) { // class function
+    priuntln("한 덩어리의 파이어볼이 나타난다. (x$numFireballs)")
+  }
+}
+----
+
+[source, kt]
+----
+class Player {
+  var name = "madrigal"
+      get() = field.capitalize() // overriding <1>
+      set(value) { // <2>
+        field = value.trim() // <3>
+      }
+}
+----
+<1> `field` 키워드는 코틀린이 자동으로 관리해주는 backing field를 
+
+
+
+
+== Interface
+
+== Enum class
+
+== Object
