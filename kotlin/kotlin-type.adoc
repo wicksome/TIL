@@ -92,6 +92,34 @@ class Dice() {
 * 산출 속성^computed{sp}property^은 다른 속성이나 변수 등의 값을 사용해서 자신의 값을 산출하는 속성
 * 값을 저장할 필요가 없으므로 코틀린 컴파일러가 후원 필드를 생성하지 않음
 
+=== data class
+
+* 데이터만 담기 위한 클래스
+* `data class Player` 와 같이 `data` 키워드 사용
+* 자동으로 몇가지 기능 지원
+** getter/setter
+** `equals()`, `hashCode()`, `copy()`, `toString()`, `componentN()`
+* 좋은 data class의 조건
+** 기본 생성자에 1개 이상의 파라미터
+** 기본 생성자의 파라미터가 var, val로 생성
+** data class는 abstract, open, sealed, inner 클래스일 수 없음
+
+== enum class
+
+[source, kt]
+----
+enum class So {sorin, sochang}
+
+enum class So(var var1: Int, var var2: Int) {
+  soring(10, 20),
+  sochang(10, 20)
+}
+----
+
+== sealed class
+
+* enum class를 확장한 개념을 가진 한정 클래스^sealed{sp}class^
+
 == Interface
 
 * 인터페이스는 어떻게(how)가 아닌 무엇(what)을 구현해야 하는지를 명시하는 것
@@ -124,8 +152,6 @@ class Player(
 ----
 <1> 오버라이드할 속성은 `override` 키워드를 사용한다.
 <2> 콜론(`:`)을 통해 구현한다.
-
-== Enum class
 
 == Object
 
