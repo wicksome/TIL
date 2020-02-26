@@ -1,0 +1,16 @@
+= Null-Safety and Platform Types
+
+== `String!` vs `String`, `String?`
+
+* Java의 타입들을 Kotlin에서는 따로 취급되며 platform types라고 부른다.
+
+[source, kt]
+----
+val nullable: String? = item // allowed, always works
+val notNull: String = item // allowed, may fail at runtime
+----
+
+== References
+
+* https://kotlinlang.org/docs/reference/java-interop.html#nullability-annotations
+* https://kotlinlang.org/docs/reference/java-interop.html#null-safety-and-platform-types
