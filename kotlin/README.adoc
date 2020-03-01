@@ -3,8 +3,13 @@ Yeongjun Kim <opid911@gmail.com>
 :revdate: 2020-03-01T15:09:00+09:00
 :toc:
 
-kotlin 실습으로 배우기: https://plugins.jetbrains.com/plugin/10081-edutools
+====
+'빅 너드 랜치의 코틀린 프로그래밍' 교재를 공부한 내용을 정리한 공간입니다.
+====
 
+* 2011년 JetBrains는 JVM에서 실행되는 Kotlin 프로그래밍 언어의 개발을 발표하였다.
+** 그로부터 6년후 구글에서는 Kotlin을 Android 시스템 공식 개발 언어로 발표하였다.
+** Spring Framework 5부터는 Kotlin을 정식으로 지원한다. (https://spring.io/blog/2017/01/04/introducing-kotlin-support-in-spring-framework-5-0[링크])
 * Kotlin은 JVM 위에서 동작한다. Kotlin code를 compile하면 JVM에서 실행할 수 있는 bytecode로 변환된다.
 ** Java는 최초의 JVM 언어이다.
 ** Kotlin, Scala와 같이 다른 JVM 언어들은 Java으 단점을 보왼하기 위해 출현하였다.
@@ -164,7 +169,7 @@ if (a) b else c
 ====
 * `..` 키워드를 사용하면 범위(range)를 나타낼 수 있다.
 +
-[source. kt]
+[source, kt]
 ----
 val healthStatus = if (healthPoints == 100) {
   "BEST"
@@ -248,13 +253,14 @@ private fun getHealthStatus(healthPoint: Int): String {
 ----
 fun main(args: Array<String>) {
   getPoint(50)
-  getPoint()
+  getPoint() // function overloading
 }
 
 private fun getPoint(defaultPoint: Int = 100) {
   return defaultPoint;
 }
 ----
+* Kotlin은 함수 오버로딩(function overloading)을 지원한다.
 * Kotlin은 하나의 표현식만 갖는 함수는 대입 연산자(`=`)를 통해 단일 표현식 함수로 표현할 수 있다.
 +
 [source, kt]
@@ -280,3 +286,475 @@ printlnPlayerStatus(
   name = "yeongjun",
   isAdult = true)
 ----
+* Kotlin은 함수 타입도 반환 타입에 사용될 수 있다. 즉, 함수를 반환하는 함수를 정의할 수 있다.
+** 다른 함수를 인자로 받거나 반환하는 함수를 **고차 함수(higher-order function)**라고도 한다.
++
+[source, kt]
+----
+fun main(args: Array<String>) {
+  runSimulation()
+  // output:
+  //   >> year에 1 추가됨
+  //   Hello yeongjun! (year: 2020)
+  //   >> year에 2 추가됨
+  //   Hello 0jun! (year: 2021)
+}
+
+fun runSimulation() {
+  val getMessage = configureGettingMessage()
+  println(getMessage("yeongjun"))
+  println(getMessage("0jun"))
+}
+
+fun configureGettingMessage(): (String) -> String {
+  val hello = "Hello" // <1>
+  var addYear = 0 // <2>
+  return { name: String ->
+    val currentYear = 2019
+    addYear += 1 // <3>
+    println(">> year에 $addYear 추가됨")
+    "$hello $name! (year: ${currentYear + addYear})"
+  }
+}
+----
+<1> 외부 함수에 `val` 로 선언된 변수를 그것을 사용하는 람다식 코드에서 그 값이 바로 저장된다.
+<2> 외부 함수에 `var` 로 선언된 변수는 그 값이 별도의 객체로 저장되며, 그 객체의 참조값이 람다식 코드에 저장되어 값을 변경할 때 사용된다.
+<3> Kotlin에서 익명 함수가 자신의 범위 밖에 정의된 변수를 변경하고 참조할 수 있다.
+
+[NOTE]
+.Unit 타입 vs Noting 타입
+====
+Noting 타입도 Unit 타입처럼 값을 반환하지 않는 함수를 나타나는대 사용한다. 
+하지만 함수의 실행이 끝나더라도 호출 코드로 제어가 복귀되지 않는다.
+
+[source. kt]
+----
+/**
+ * Always throws [NotImplementedError] stating that operation is not implemented.
+*/
+@Kotlin.internal.InlineOnly
+public inline fun TODO(): Noting = throw NotImplementedError()
+----
+
+[source, kt]
+----
+fun shouldReturnAString(): String {
+  TODO("문자열 반환하는 코드를 여기에 구현해야 함")
+}
+----
+
+`TODO` 함수는 예외를 발생시키며, Noting 타입을 반환한다. 
+
+개발자는 `shouldReturnAString` 함수가 String 타입의 문자열을 반환해햐 한다는 것을 알고 있다.
+그러나 이 함수를 구현하는 데 필요한 다른 기능이 아직 완성되지 않아서 개발을 보류하고 `TODO` 함수를 호출함으로 나중에 할 일을 알 수 있도록 한 것이다.
+
+`shouldReturnAString` 함수는 String 반환타입으로 선언되었지만, 현재 어떤 것도 반환하지 않으므로 
+컴파일러가 에러로 처리해야 할 것이다. 하지만 그렇지 않다. Noting 타일을 반환하는 `TODO` 함수가 예외를 
+발생시킨 후 `shouldReturnAString` 함수로 제어가 복귀되지 않도록 보장하기 때문이다.
+
+코드를 개발할 때 Noting 타입을 사용하면 또 다른 장점이 있다. 
+제어가 복귀되지 않기 때문에 이 함수의 다음 코드는 절대 실핼될 수 없다는 것을 컴파일러는 알고 있다.
+그러므로 컴파일러는 절대 실행될 수 없는(unreachable) 코드임을 나타내는 경고를 알려준다.
+====
+
+=== backtick
+
+[source, kt]
+----
+fun main(args: Array<String>) {
+  `**~prolly not a good idea!~**`()
+}
+
+fun `**~prolly not a good idea!~**`() {
+  ...
+}
+----
+
+* Kotlin에는 함수명이 백틱(backtick) 기호(`{backtick}`)로 감싸인 함수를 정의할 수 있다.
+* Java와 Kotlin 의 예약어(reserved keyword)는 다르므로, Java와의 상호운용 시에 생길 수 있는 함수 이름 충돌을 피하기 위함이다.
+* 코드를 테스트하는 파일에서 사용되는 함수 이름을 더 알기 쉽게 나타내기 위함이다.
+** JUnit5에서는 `@DisplayName` 어노테이션 지원하는데 Kotlin에서는 백틱을 이용하면 된다.
+
+=== Anonymous function
+
+* 중괄호를 통해 익명함수를 사용할 수 있다.
++
+[source, kt]
+----
+val numLetters = "Mississippi".count({ letter -> letter == 's' })
+----
+* 익명함수의 닫는 중괄호 다음에 빈 괄호(`()`)를 사용하여 함수를 호출할 수 있다.
++
+[source, kt]
+----
+println({
+  val year = 2020
+  "Hello $year"
+}())
+----
+* 익명함수도 타입을 가지며 이를 **함수 타입**이라고 한다.
+** 익명함수는 변수명 다음에 콜론(`:`)과 함수 타입 정의를 통해 선언할 수 있다.
+** 함수 타입은 콜론 다음에는 매개변수와 화살표 뒤에 반환 타입을 지정할 수 있다.
++
+[source, kt]
+----
+val greetingFunction: () -> String = { // <1>
+  val year = 2020
+  "Hello $year" // <2>
+}
+
+println(greetingFunction())
+----
+<1> 익명 함수 및 함수 타입 정의
+<2> return 키워드가 없지만 익명함수는 암시적으로 또는 자동으로 함수 정의의 마지막 코드를 결과로 반환한다.
+* 익명함수도 함수처럼 인자를 받을 수 있으며, 함수명은 함수 내부에 지정한다.
++
+[source, kt]
+----
+val greetingFunction: (Int) -> String = { year ->
+  "Hello $year"
+}
+----
+* 하나의 인자만 받는 익명 함수에는 매개변수 이름을 지정하는 대신 편리하게 it 키워드를 사용할 수 있다.
++
+[source, kt]
+----
+val greetingFunction: (Int) -> String = {
+  "Hello $it"
+}
+----
++
+[source, kt]
+----
+// as-is
+val numLetters = "Mississippi".count({ letter -> letter == 's' })
+// to-be
+val numLetters = "Mississippi".count({ it == 's' })
+----
+* 익명함수에도 타입 추론(type inference)이 적용된다.
++
+[source, kt]
+----
+val greetingFunction = {
+  val year = 2020
+  "Hello $year"
+}
+
+val greetingFunction = { year: Int -> // <1>
+  "Hello $year"
+}
+----
+<1> 타입 추론을 통해 함수 타입인 `: (String) -> String` 을 생략할 수 있다.
+
+=== Lambda
+
+[IMPORTANT]
+.Lambda 관련 용어
+====
+* 익명 함수를 **람다(lambda)**라고 한다.
+* 익명 함수 정의를 **람다 표현식(lambda expression, 또는 줄여서 람다식)**이라고 한다.
+* 익명 함수의 반환 결과를 **람다 결과(lambda result)**라고 한다.
+====
+
+* 함수에서 마지막 매개변수로 함수 타입을 받을 때는 람다 인자를 둘러싼 괄호를 생략할 수 있다.
++
+[source, kt]
+----
+// as-is
+"Mississippi".count({ it == 's' })
+// to-be
+"Mississippi".count { it == 's' }
+----
++
+[source, kt]
+.as-is
+----
+fun runSimulation(name: String, getMessage: (String, Int) -> String) {
+  val year = (2019..2020).shuffled().last()
+  println(getMessage(name, year))
+}
+
+fun main(args: Array<String>) {
+  val func = { name: String, year: Int -> 
+    println("Hello $year, $name")
+  }
+  runSimulation("yeongjun", func)
+}
+----
++
+[source, kt]
+.to-be
+----
+fun runSimulation(name: String, getMessage: (String, Int) -> String) {
+  val year = (2019..2020).shuffled().last()
+  println(getMessage(name, year))
+}
+
+fun main(args: Array<String>) {
+  runSimulation("yeongjun") { name: String, year: Int -> 
+    println("Hello $year, $name")
+  }
+}
+----
+** 이러한 단축 문법으로 코드를 더 깔끔하게 작성할 수 있고, 함수 호출의 핵심부분을 더 빨리 파악할 수 있다.
+** (내 생각) `runSimulation` 이 일인수(single-argument) 함수가 된 것 같다. 커링된 결과라고 볼 수 있을까?
+
+[TIP]
+.람다 최적화 방법: `inline` 키워드
+====
+람다를 정의하면 JVM에서 객체로 생성된다. 또한, JVM은 람다를 사용하는 모든 변수의 메모리 할당을 수행하므로 메모리가 많이 사용된다.
+결국 람다는 성능에 영향을 줄 수 있는 메모리 부담을 초래할 수 있다.
+
+Kotlin은 다른 함수의 인자로 람다를 사용할 때 부담을 없앨 수 있는 인라인(inline)이라는 최적화 방법을 제공한다.
+인라인을 사용하면 람다의 객체 사용과 변수의 메모리 할당을 JVM이 하지 않아도 된다.
+
+[source, kt]
+----
+inline fun runSimulation(name: String, getMessage: (String, Int) -> String) {
+  val year = (2019..2020).shuffled().last()
+  println(getMessage(name, year)
+}
+----
+
+위처럼 `inline` 키워드를 추가하면 `runSimulation` 함수가 호출될 때 람다가 객체로 전달되지 않는다. 
+왜냐하면 Kotlin Compiler가 bytecode를 생성할 때 람다 코드가 포함된 `runSimulation` 함수 몸체 전체 코드를
+복사한 후 이 함수를 호출하는 코드에 붙여넣기 하기 때문이다.
+
+[source, java]
+.`inline` 키워드가 없을 경우 디컴파일된 코드
+----
+...
+public static final void main(@NotNull String[] args) {
+  LocalTestKt.runSimulation("yeongjun", (Function2)null.INSTANCE);
+}
+...
+----
+
+[source, java]
+.`inline` 키워드가 있을 경우 디컴파일된 코드
+----
+public static final void main(@NotNull String[] args) {
+  String name$iv = "yeongjun";
+  int $i$f$runSimulation = false;
+  short var3 = 2019;
+  int year$iv = ((Number)CollectionsKt.last(CollectionsKt.shuffled((Iterable)(new IntRange(var3, 2020))))).intValue();
+  int var7 = false;
+  String var8 = "Hello " + year$iv + ", Hello " + name$iv;
+  boolean var6 = false;
+  System.out.println(var8);
+}
+----
+
+그러나 이렇게 할 수 없는 경우가 더러 있다. 예를 들어 람다를 인자로 받는 재귀 함수(recursive function)의 경우다.
+재귀 함수는 자신의 몸체 코드를 여러 번 반복 호출하여 실행하므로 이것을 인라인 처리하면 같은 코드가 무수히 많이 복사 및 붙여넣기 된다.
+따라서 Kotlin Compiler는 재귀 함수를 단순히 인라인 처리하지 않고 효율성이 좋은 루트 형태로 변경한다.
+
+(+)
+
+TODO: scala랑 동일한 기능인지 찾아볼 것 +
+Scala에는 `@inline` 과 `@noinline` 어노테이션이 있다.
+====
+
+=== Function reference
+
+* 함수 참조(function reference)는 이름이 있는 함수가 인자로 전달될 수 있게 한다.
+* 람다 표현식을 사용할 수 있는 곳이라면 어디든 함수 참조를 사용할 수 있다.
+
+[source, kt]
+----
+fun main(args: Array<String>) {
+  runSimulation("yeongjun", ::printYear) { name, year -> // <1>
+    "Hello $year, Hello $name"
+  }
+}
+
+fun printYear(year: Int) {
+  println("Hello $year")
+}
+
+fun runSimulation(
+  name: String,
+  yearPrinter: (Int) -> Unit,
+  getMessage: (String, Int) -> String
+) {
+  val year = (2019..2020).shuffled().last()
+  yearPrinter(year)
+  println(getMessage(name, year))
+}
+----
+<1> 함수 참조를 얻을 때는 참조하고자 하는 함수 이름 앞에 `::` 연산자를 사용한다.
+
+=== Closure
+
+* Kotlin의 Lambda는 클로저(closure)다.
+** 클로저는 'close over'가 합쳐진 용어이다.
+** 다른 함수에 포함된 함수에서 자신을 포함하는 함수의 매개변수와 변수를 사용할 수 있는 것을 말한다.
+
+.References
+* https://kotlinlang.org/docs/reference/lambdas.html#higher-order-functions-and-lambdas[Higher-Order Functions and Lambdas - Kotlin Programming Language]
+
+== Null-Safety
+
+[source, kt]
+.readLine()
+----
+public fun readLine(): String?
+----
+
+* Kotlin은 null 값을 가질 수 있다고 지정하지 않으면 null 값을 가질 수 없다.
+** 따라서 null 값으로 생기는 문제를 런타임이 아닌 컴파일 시점에 방지할 수 있다.
+* `?` 키워드를 통해 변수가 nullable 하다는 것을 나타낼 수 있다.
++
+[source, kt]
+----
+val nullable: String? = item // allowed, always works
+val notNull: String = item // allowed, may fail at runtime
+----
+
+=== safe call operator
+
+[source, kt]
+----
+var name = readLine()?.capitalize()
+----
+
+* 컴파일/런타임 에러 없이 항상 실행되도록 해야 할 경우 사용된다.
+* 컴파일러가 안전 호출 연산자(`?.`)를 발견하면 null 값을 검사하는 코드를 자동으로 추가해준다.
+* null이 아니면 `capitalize` 함수를 호출하고, null이면 다른 코드를 수행한다.
+** 이 경우 `println(name)` 의 결과는 null이 출력된다.
+* 안전 호출 연산자를 연속적으로 사용할 수 있다.
++
+[source, kt]
+----
+name?.capitalize()?.plus(", hello")
+----
+* null일 때 샐행되는 코드가 복잡해진다면 if / `!=` 연산자를 사용해서 null 검사를 하자.
++
+[source, kt]
+----
+var name = readLine()
+
+if (name != null) {
+  name = name.capitalize()
+} else {
+  // create user with default name
+  // get readLine
+  // set name
+  // ...
+}
+----
+
+[TIP]
+.safe call operator with let function
+====
+[source, kt]
+----
+var name = readLine?.let { // <1>
+  if (it.isNotBlank()) { // <2>
+    it.capitalize() // <3>
+  } else {
+    "Yeongjun"
+  }
+}
+----
+<1> let 함수는 어떤 값에 대해서도 호출될 수 있으며, 주어진 scope에 국한하여 원하는 코드를 실행시킬 수 있다.
+<2> `?.` 연산자에서 이미 null이 아닐 경우에만 let 함수가 호출되었기 때문에 null이 아님을 보장한다.
+<3> null이 아닌 값을 익명 함수 내부의 it 키워드로 접근할 수 있다.
+====
+
+=== non-null assertion operator
+
+[source, kt]
+----
+var name = readLine()!!.capitalize()
+----
+
+* non-null 단언 연산자(assertion operator)인 `!!` 는 null이 될 수 없다는 것을 단언하는 연산자다.
+** 이 연산자는 double-bang 연산자라고도 한다.
+* 왼쪽의 피연산자 값이 null이 아니면 정상적으로 코드를 수행하고, null이면 런타임시에 NPE 예외를 발생시킨다.
+* 한 함수에서 단언 연산자를 통해 non-null이라는 것을 확인한다면, 이 값을 받아 사용하는 함수들에서는 null checking을 할 필요가 없을 것이다.
+* null 가능 변수에 `!!` 연산자를 사용하는 것은 위험하다.
+
+=== null coalescing operator
+
+[source, kt]
+----
+// var name = if (name == null) "Yeongjun" else name
+var name = name ?: "Yeongjun"
+----
+
+[source, kt]
+----
+var name = readLine()
+
+name?.let {
+  name = it.capitalize()
+} ?: println("name is null")
+----
+
+* null 복합 연산자(null coalescing operator)인 `?:` 는 왼쪽 피연산자의 값이 null이면 오른쪽 피연산자를 실행하고, null이 아니면 왼쪽 피연산자의 결과를 반환한다.
+
+[NOTE]
+.Elvis operator
+====
+null 복합 연산자인 `?:` 는 로큰롤의 왕이라 불렸던 엘비스 프레슬리의 상징적인 헤어스타일과 유사하다고 해서 
+엘비르 연산자(Elvis operator)라고도 한다.
+====
+
+.References
+* https://kotlinlang.org/docs/reference/java-interop.html#nullability-annotations
+* https://kotlinlang.org/docs/reference/java-interop.html#null-safety-and-platform-types
+
+[NOTE]
+.Platform Types
+====
+Java의 타입들을 Kotlin에서는 따로 취급되며 platform types라고 부른다.
+====
+
+== Exception
+
+* Kotlin에서는 모든 예외가 unchecked 예외다.
+* 처리되지 않은 예외를 미처리 예외(unhandled exception)이라고 한다.
+* 프로그램 실행이 중단되는 것을 크래시(crash)라고 한다.
+* `throw` 키워드를 사용하며, 예외를 발생시키는 것을 **예외를 던진다(throw)**고 한다.
+* `IllegalStateException` 예외는 프로그램이 정상적이 아닌 상태가 되었다는 것을 뜻한다.
+
+
+
+== Number
+
+== Standard Functions
+
+== Collection
+
+=== List
+
+=== Set
+
+=== Map
+
+== Class
+
+== Initialization
+
+== Inheritance
+
+== Object
+
+== Interface
+
+== Abstract Class
+
+== Generic
+
+== Extend
+
+== Functional Programming
+
+== With Java
+
+== Coroutine
+
+== Tip
+
+* https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
