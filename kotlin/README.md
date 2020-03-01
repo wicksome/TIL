@@ -1,1 +1,0 @@
-kotlin 실습으로 배우기: https://plugins.jetbrains.com/plugin/10081-edutools
