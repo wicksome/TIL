@@ -1,0 +1,26 @@
+= WebClient
+:revdate: 2020-03-03T16:04:00+09:00
+
+====
+https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-client
+====
+
+Spring WebFlux는 HTTP 요청를 위해 리액티브, 논-블록킹 `WebClient` 를 포함하고 있다. 클라이언트는 
+선언적 구성^declarative{sp}composition^을 위한 리액티브 타입의 functional, fluent API를 가지고 있다. 
+WebFlux 클라이언트와 서버는 동일한 논-블록킹 https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-codecs[codecs]을 사용하여 요청^request^과 응답^response^ 값을 인코딩/디코딩한다.
+
+[NOTE]
+.Fluent API
+====
+Fluent API란 함수들을 작성하고 나면, 마치 그 문장이 영어 문장처럼 읽히는 API를 말한다.
+
+* https://www.martinfowler.com/bliki/FluentInterface.html
+* https://ko.wikipedia.org/wiki/플루언트_인터페이스
+====
+
+내부적으로 `WebClient` 는 HTTP 클라이언트 라이브러리에 위임(delegate)한다. 기본적으로는 
+https://github.com/reactor/reactor-netty[Reactor Netty]를 사용하고, Jetty의 
+https://github.com/jetty-project/jetty-reactive-httpclient[reactive HttpClient]가 
+빌드인으로 지원되며, 다른 클라이언트는 `ClientHttpConnector` 를 통해 연결할 수 있다.
+
+`spring-webflux` 는 `reactor-core` 디펜던시가 있으며, WebFlux API들은 `Flux` 혹은 `Mono` 를 반환한다.
