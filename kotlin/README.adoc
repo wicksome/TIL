@@ -2,7 +2,7 @@
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2020-03-01T15:09:00+09:00
 :toc:
-:source-highlighter:
+:source-highlighter: highlight.js
 
 ====
 '빅 너드 랜치의 코틀린 프로그래밍' 교재를 공부한 내용을 정리한 공간입니다.
