@@ -715,12 +715,46 @@ Java의 타입들을 Kotlin에서는 따로 취급되며 platform types라고 �
 == Exception
 
 * Kotlin에서는 모든 예외가 unchecked 예외다.
+** 대부분의 checked 에러는 발생하더라도 우리가 특별히 할 것이 없다. `catch (e: IOException) { }` 
+   와 같이 작성하는 경우가 많다.
+** checked 예외는 문제를 해결하기보다는 오히려 더 많은 문제를 야기하므로, Kotlin을 포함한 현대 
+   언어에서는 unchecked 예외를 지원한다. +
+   (코드 중복, 이해하기 어려운 에러 복구 로직, 예외를 기록없이 무시)
 * 처리되지 않은 예외를 미처리 예외(unhandled exception)이라고 한다.
 * 프로그램 실행이 중단되는 것을 크래시(crash)라고 한다.
 * `throw` 키워드를 사용하며, 예외를 발생시키는 것을 **예외를 던진다(throw)**고 한다.
 * `IllegalStateException` 예외는 프로그램이 정상적이 아닌 상태가 되었다는 것을 뜻한다.
 
+[source, kt]
+----
+fun test(num: Int?) {
+  try {
+    num ?: throw CustomException() // <1>
+  } catch (e: Exception) {
+    println(e)
+  }
+}
 
+class CustomException() : IllegalStateException("custom exception") // <2>
+----
+<1> `num` 이 null일 경우 커스텀 예외를 던진다.
+<2> 커스텀 예외를 만들 수 있다.
+
+=== Precondition function
+
+* 코틀린은 편의를 위해 전제 조건 함수^precondition{sp}function^를 제공한다.
+* 코드가 실행되기 전에 충족되어야 하는 전제 조건을 정의하는 함수이다.
+
+[cols="2,8"]
+|===
+| Function | Description
+
+| `checkNotNull` | 첫번째 인자가 null이면 `IllegalStateException` 을 던지며, 그렇지 않으면 번환한다.
+| `requireNotNull` | 첫번째 인자가 null이면 `IllegalArgumentException` 을 던지며, 그렇지 않으면 번환한다.
+| `require` | 첫번째 인자가 false면 `IllegalArgumentException` 을 던진다.
+| `error` | 첫번째 인자가 null이면 제공된 메시지와 함께 `IllegalStateException` 을 던지며, 그렇지 않으면 반환한다.
+| `assert` | 인자가 false면 `AssertionError` 를 던진다. 그리고 컴파일러의 assertion 플래그가 활성화된다.
+|===
 
 == Number
 
