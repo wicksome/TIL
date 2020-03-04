@@ -85,21 +85,6 @@ IntelliJ에서 Kotlin 코드에서 Action 검색(⌘⇧A)에 "Show Kotlin byteco
 * https://stackoverflow.com/a/35538539/3793078[Kotlin Bytecode - How to analyze in IntelliJ IDEA?]
 ====
 
-=== Strings
-
-[source, kt]
-----
-println("Hello " + name) // <1>
-println("Hello $name") // <2>
-println("Hello ${if (isUpperCase) "YEONGJUN" else "yeongjun"}") // <3>
-----
-<1> 문자열값에 `+` 를 사용하는 것을 문자열 결합(string concatenation)이라고 한다.
-<2> `$` 은 string template을 나타낸다.
-<3> 중괄호로 묶으면 내부에 표현식을 사용할 수 있다.
-
-.References
-* https://kotlinlang.org/docs/tutorials/kotlin-for-py/strings.html[Strings - Kotlin Programming Language]
-
 == Conditionals
 
 === if/else
@@ -755,6 +740,106 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 | `error` | 첫번째 인자가 null이면 제공된 메시지와 함께 `IllegalStateException` 을 던지며, 그렇지 않으면 반환한다.
 | `assert` | 인자가 false면 `AssertionError` 를 던진다. 그리고 컴파일러의 assertion 플래그가 활성화된다.
 |===
+
+== Strings
+* Kotlin에서는 var이나 val 중 어느것으로 정의되든 모든 문자열은 불변이다.
+* `==` 을 통해 문자열 비교가 가능하다.
+** 이 연산자가 문자열의 비교에 사용될 때는 문자열의 각 문자를 같은 순서로 하나씩 비교한다.
+** Java에서는 문자열 비교에 `equals` 메서드를 사용해야 한다.
+* `===` 연산자를 통해 참조 동등^referential{sp}equality^ 비교가 가능하다.
+** 힙 메모리영역에 있는 같은 객체를 참조하는지 검사한다.
+
+[source, kt]
+.String Template
+----
+println("Hello " + name) // <1>
+println("Hello $name") // <2>
+println("Hello ${if (isUpperCase) "YEONGJUN" else "yeongjun"}") // <3>
+----
+<1> 문자열값에 `+` 를 사용하는 것을 문자열 결합(string concatenation)이라고 한다.
+<2> `$` 은 string template을 나타낸다.
+<3> 중괄호로 묶으면 내부에 표현식을 사용할 수 있다.
+
+[source, kt]
+.substring
+----
+val str = "hello world! hello yeongjun!"
+val indexOfFirstSpace = str.indexOf(' ') // <1>
+val result = str.substring(0 until indexOfFirstSpace) // <2>
+println(result) // "hello"
+----
+<1> `indexOf` 는 문자열에서 첫번째로 찾고자하는 `Char` 타입의 문자를 인자로 받는다.
+<2> `substring` 은 `IntRange` 를 인자로 받는다.
+
+[source, kt]
+.split
+----
+val str = "1,2"
+var data = str.split(',') // <1>
+val first = data[0] // <2>
+val second = data[1]
+
+val (f, s) = str.split(',') // <3>
+----
+<1> `split` 는 delimiter로 문자열을 추출한다.
+<2> 각 요소는 indexed operator 라고 불리는 대괄호 안에 인덱스를 지정해서 가져올 수 있다.
+<3> List가 반환되므로 해체 선언^destructuring{sp}declaration^을 활용할 수 있다.
+
+[source, kt]
+.replace
+----
+var str = "abcd"
+var result = str.replace(Regex("[abcd]")) { // <1>
+  when (it.value) {
+    "a" -> "1"
+    "b" -> "2"
+    "c" -> "3"
+    "d" -> "4"
+    else -> it.value
+----
+<1> `replace` 의 두번째 인자로 익명함수를 받는다.
+
+[source, kt]
+.forEach
+----
+"abc".forEach {
+  println("$it\n")
+}
+----
+
+=== Unicode
+* `Char` 타입은 유니코드 문자다.
+* 이스케이프 시퀀스인 `\u` 를 통해 유니코드는 나타낼 수 있다.
++
+[source, kt]
+----
+val capitalA: Char = 'A'
+val unicodeCapitalA: Char = '\u0041'
+----
+
+[NOTE]
+.Escape Sequence
+====
+컴파일러에게 특별한 의미를 갖은 문자라는 것을 알려주는 데 사용된다.
+
+[cols="2,8"]
+|===
+| Escape Sequence | Description
+
+| `\t` | tab
+| `\b` | backspace
+| `\n` | newline
+| `\r` | carriage return
+| `\"` | double quotation mark
+| `\'` | single quotation mark/apostrophe
+| `\\` | backslash
+| `\$` | dollar sigh
+| `\u` | unicode
+|===
+====
+
+.References
+* https://kotlinlang.org/docs/tutorials/kotlin-for-py/strings.html[Strings - Kotlin Programming Language]
 
 == Number
 
