@@ -76,6 +76,48 @@ fun main(args: Array<String>) {
 ----
 <1> 파일 수준 변수는 프로젝트 어디서든 사용할 수 있다(단, 제한자를 사용하면 범위를 변경할 수 있다).
 
+[NOTE]
+.다양한 Constant 선언 방법
+====
+
+Kotlin에는 `static` 키워드가 없으며, 상수를 정의하려면 `const` 키워드를 사용하면 된다. 그럼 어느 위치에 선언해야할까?
+
+[source, kt]
+.Companion objects
+----
+class Constants {
+  companion object {
+    val FOO = "foo"
+  }
+}
+----
+
+[source, java]
+----
+
+----
+
+[source, kt]
+.const vals
+----
+class Constants {
+  companion object {
+    const val FOO = "foo"
+  }
+}
+----
+
+[source, java]
+----
+
+----
+
+
+
+.References
+* https://blog.egorand.me/where-do-i-put-my-constants-in-kotlin/
+====
+
 [TIP]
 .Kotlin Bytecode로 살펴보기
 ====
@@ -451,6 +493,15 @@ fun configureGettingMessage(): (String) -> String {
 <1> 외부 함수에 `val` 로 선언된 변수를 그것을 사용하는 람다식 코드에서 그 값이 바로 저장된다.
 <2> 외부 함수에 `var` 로 선언된 변수는 그 값이 별도의 객체로 저장되며, 그 객체의 참조값이 람다식 코드에 저장되어 값을 변경할 때 사용된다.
 <3> Kotlin에서 익명 함수가 자신의 범위 밖에 정의된 변수를 변경하고 참조할 수 있다.
+* Kotlin은 `vararg` 키워드로 가변인자^variable{sp}arguments^를 지원한다.
++
+[source, kt]
+----
+fun toArray(vararg ids: String) = toArray2(ids)
+fun toArray2(ids: Array<out String>) = ids // <1>
+----
+<1> `out` 키워드는 오른쪽 타입을 포함해서 서브 타입도 타입 인자가 될 수 있다는 것을 뜻한다. +
+(제네릭 타입의 슈퍼-서브 타입 관계를 나타낸다).
 
 [NOTE]
 .Unit 타입 vs Noting 타입
@@ -895,6 +946,28 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 == Collection
 
 === List
+
+[NOTE]
+.`chunked()` vs `windowed()`
+====
+[source, kt]
+----
+val numbers1 = listOf("one", "two", "three", "four", "five")
+println(numbers1.windowed(3))
+// [[one, two, three], [two, three, four], [three, four, five]]
+println(numbers1.chunked(3))
+// [[one, two, three], [four, five]]
+
+val numbers2 = (0..13).toList()
+println(numbers2.windowed(3))
+// [[0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8], [7, 8, 9], [8, 9, 10], [9, 10, 11], [10, 11, 12], [11, 12, 13]]
+println(numbers2.chunked(3))
+// [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11], [12, 13]]
+----
+
+.References
+* https://kotlinlang.org/docs/reference/collection-parts.html
+====
 
 === Set
 
