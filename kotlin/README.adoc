@@ -1128,6 +1128,7 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 == Collection
 
 * Kotlin의 collection에는 mutable 타입과 read-only 타입이 있다.
+* Kotlin 컬렉션은 기본적으로 read-only이다.
 
 [NOTE]
 .Immutable vs ReadOnly
@@ -1301,6 +1302,38 @@ TODO: Webflux의 `Flux.window` 는 동작이 조금 다른것 같다.
 ** 사용하고자 하는 자료구조에 맞는 컬렉션을 사용하자.
 
 === Map
+
+* Map은 Key와 Value의 쌍(`Pair`)으로 데이터(이것을 entry라고 한다)를 저장한다.
+** Map의 Key는 고유하다.
+* `mapOf`, `mutableMapOf` 함수를 통해 생성할 수 있다.
++
+[source, kt]
+----
+mapOf(
+  "Eli" to 10.5, // <1>
+  "Mordoc" to 8.0
+)
+----
+<1> `to` 는 키워드 처럼 보이지만 내부적으로는 컴파일러가 `"Eli".to(10.5)` 와 같은 코드로 변환한다. +
+    `to` 는 `Pair` 를 반환하는 함수이며, `Tuples.kt` 에 있다. 이 파일에는 `Pair`, `Triple` 클래스를 포함한다. +
+    (`to` 연산자를 overloading 한것이다.)
+
+* 다양한 함수를 제공한다.
++
+[source, kt]
+----
+val map = mapOf(
+  "ab" to 10,
+  "cd" to 20
+)
+
+map["ab"] // 10
+map["xx"] // null
+map.getValue("xx") // throw NoSuchElementException
+map.getOfElse("xx") { 30 } // 30
+map.getOrDefault("xx", 30) // 30
+map.getOrPut("xx") { 30 } // 30
+----
 
 == Class
 
