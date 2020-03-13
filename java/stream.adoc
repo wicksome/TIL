@@ -1077,6 +1077,17 @@ public void completableFutureExample() throws InterruptedException, ExecutionExc
 <4> 1초간 멈춰있던 Thread#12가 동작하며 "2"를 출력한다.
 <5> blocking 되어 있던 _get_ 이 동작하면서 "Hello World"를 출력하고 나머지 작업을 진행한다.
 
+==== _runAsync_
+
+_CompletableFuture_ 를 생성하는 팩토리 메서드로 _Runnable_ 을 인자로 받기 떄문에 반환값이 없다.
+
+[source, java]
+----
+CompletableFuture.runAsync(() -> {
+    log.info("test");
+}).get();
+----
+
 ==== _thenApply_
 :java-then-apply: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenApply-java.util.function.Function-
 :java-function-interface: https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html
