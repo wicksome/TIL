@@ -1129,6 +1129,14 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 
 * Kotlin의 collection에는 mutable 타입과 read-only 타입이 있다.
 * Kotlin 컬렉션은 기본적으로 read-only이다.
+* Kotlin의 표준 라이브러리의 모든 클래스나 함수 등은 `import` 를 지정하지 않아도 바로 사용할 수 있다.
+** 다른 패키지에 같은 이름의 클래스나 함수 등을 사용할 때는 `as` 키워드로 alias를 지정해 충돌을 해결할 수 있다.
++
+[source, kt]
+----
+import com.util.Value
+import com.utils2.Value as Value2
+----
 
 [NOTE]
 .Immutable vs ReadOnly
@@ -1337,7 +1345,208 @@ map.getOrPut("xx") { 30 } // 30
 
 == Class
 
+[source, kotlin]
+.Player.kt 클래스를 정의하는 여러 방법
+----
+class Player
+class Player()
+class Player { }
+class Player() { }
+----
+
+[source, kt]
+----
+val player = Player() // create a instance of Player using primary constructor
+----
+
+* 하나의 파일에 하나 이상의 클래스를 정의할 수 있다.
+** 어플리케이션에 규모가 커지는 데 따른 기능 추가나 유지보수 용이성을 고려하려 **가급적 하나의 클래스를 
+   하나의 파일에 정의**하는 것이 좋다.
+* 클래스에는 행동^behavior^과 데이터^data^를 정의한다.
++
+[source, kt]
+.Player.kt
+----
+class Player {
+  val name = "madrigal" // property
+  
+  fun castFireball(numFireballs: Int = 2) { // class function
+    priuntln("한 덩어리의 파이어볼이 나타난다. (x$numFireballs)")
+  }
+}
+----
+** behavior -> _class{sp}function_
+*** 클래스 내부에 정의된 함수를 클래스 함수^class{sp}function^이라고 한다.
+** data -> _property_
+*** 클래스의 데이터는 속성^property^라고 한다.
+
+=== Visibility
+
+* 가시성 제한자를 통해 정보은닉^information{sp}hiding^, 캡슐화^encapsulation^가 가능하다.
+* Kotlin은 클래스 함수나 속성에 가시성 제한자^visibility{sp}modifier^를 지정하지 않으면 기본적으로 `public` 이다.
+** `public`: 외부에서 사용 가능 (default)
+** `private`: 함수나 속성이 정의된 클래스 내부에서만 사용 가능
+** `protected`: 함수나 속성의 정의된 클래스 내부 또는 서브 클래스에서만 사용 가능
+** `internal`: 함수나 속성이 정의된 클래스가 포함된 module에서 사용 가능
+* 속성의 가시성이 `public` 이라면 getter/setter도 `public` 이다.
+
+[source, kt]
+----
+class Player {
+  var name = "madrigal"
+      get() = field.capitalize()
+      private set(value) { // <1>
+        field = value.trim()
+      }
+}
+----
+<1> Getter/Setter의 가시성은 기본적으로 동일하지만, 이처럼 Setter의 가시성만 변경할 수도 있다.
+
+=== Property
+
+* 클래스 속성은 클래스의 데이터, 즉 상태나 특정을 나타낸다.
+* Kotlin은 Getter를 통해 값을 가져오고, Setter를 통해 값이 설정한다.
+* Kotlin에서 **클래스의 필드^field^는** 속성^property^의 데이터가 저장되는 곳이며, **우리가 직접 정의할 수 없다.**
+** 필드를 캡슐화하여 필드의 데이터를 보호하고, Getter와 Setter를 통해서만 외부에 노출시키기 위함이다.
+
+[source, kt]
+----
+class Player {
+  var name = "madrigal" // <1>
+      get() = field.capitalize() // <2>
+      private set(value) {
+        field = value.trim() // <3>
+      }
+}
+----
+<1> name은 우리가 정의한 **속성**이다.
+<2> 후원 필드^backing{sp}field^인 `field` 는 Getter/Setter가 사용하는 속성 데이터다.
+<3> name 속성의 데이터를 저장한 후원 필드값을 변경한다. 즉, 자신이 선언된 속성의 후원 필드값을 변경한다.
+
+[NOTE]
+.후원 필드(backing field)
+====
+후원 필드는 Getter와 Setter가 사용하는 속성 데이터다. 해당 속성을 사용하는 코드에서는 후원 필드를 직접 참조할 
+수 없고, 자동 실행되는 게터를 통해서만 속성 데이터를 받을 수 있다.
+====
+
+[NOTE]
+.산출 속성(computed property)
+====
+
+[source, kt]
+----
+class Dice {
+  val rolledValue
+      get() = (1..6).shuffled().first()
+}
+----
+
+클래스 속성을 정의하면 후원 필드를 생성하는데, 산출 속성^computed{sp}property^의 경우에는 다르다.
+산출 속성은 다른 속성이나 변수 등의 값으로 자신의 값을 산출하는 속성이다. 즉, 값을 저장할 필요가 없으므로 코틀린 컴파일러는 후원 필드를 생성하지 않는다.
+====
+
+==== Getter/Setter
+
+* Kotlin은 우리가 정의한 속성에 대해 필드^field^와 게터^Getter^/세터^Setter^가 자동 생성된다.
+* 속성의 데이터를 읽거나 쓰는 방법을 우리가 지정하기 원할 때는 커스텀 Getter와 Setter를 정의할 수 있다.
+** 이를 Getter와 Setter의 오버라이딩^overriding^이라고 한다.
++
+[source, kt]
+.Override Getter/Setter
+----
+class Player {
+  var name = "madrigal"
+      get() = field.capitalize() // overriding <1>
+      set(value) { // <2>
+        field = value.trim() // <3>
+      }
+}
+----
+<1> `field` 키워드는 Kotlin이 자동으로 관리해주는 후원 필드^backing{sp}field^를 참조한다.
+<2> Setter는 속성이 `var` 일 때만 정의할 수 있다.
+
+===== Getter
+
+[source, kt]
+----
+val player = Player()
+player.name = "estragon" // <1>
+----
+<1> setter는 대입 연산자를 사용해서 속성에 값을 지정할 때 자동 호출된다.
+
+<<<
+
+* Getter는 모든 속성에 대해 자동 생성된다.
+* Getter는 속성을 참조할 때 자동 호출된다.
+
+===== Setter
+
+[source, kt]
+----
+val player = Player()
+println(player.name + "TheBrave") // <1>
+----
+<1> getter는 속성을 참조할 떄 자동 호출된다.
+
+<<<
+
+* Setter는 속성이 `var` 일 때만 자동 생성된다.
+* Setter는 대입 연산자를 사용해서 속성에 값을 지정할 때 자동 호출된다.
+
+=== Race Condition
+
+[source, kt]
+----
+var weapon: Weapon?
+
+fun printWeaponName() {
+  if (weapon != null) {
+    println(weapon.name) // smart casting is impossible
+  }
+}
+----
+
+* 위 코드는 보면 weapon은 nullable한 속성이지만 조건문을 통해 null이 발생할 수 없다. 
+* 하지만 스마트 캐스팅^smart{sp}casting^이 일어나지 않는다. 
+** 스마트 캐스팅이란 상황에 맞게 컴파일러가 똑똑하게 타입을 변환해 주는 것을 말한다.
+* null 체크하는 코드와 println 코드 사이에 weapon 속성 값이 변경될 가능성이 여전히 있으므로 에러가 된다.
+** 이러한 상황을 경합 상태^race{sp}condition^라고 한다.
+** 경합 상태는 특정 코드의 데이터를 프로그램의 다른 코드에서 동시에 변경할 때 발생하며, 이로 인해 예기치 않은 결과를 초래할 수 있다. 
+
+=== Package
+
+* Java는 기본적으로 패키지 가시성을 사용한다.
+** 가시성 제한자가 없는 메서드, 필드, 클래스는 같은 패키지에 있는 클래스에서만 사용하능하다는 뜻이다.
+* Kotlin은 패키지 가시성이 없다.
+** 같은 패키지에 있는 클래스, 함스, 속성 등은 기본적으로 상호할 수 있어서 굳이 별도의 가시성을 가질 필요가 없다.
+* Kotlin은 Java에 없는 `internal` 가시성을 지원한다.
+** 이것은 같은 모듈^module^에 있는 클래스, 함수, 속성끼리 상호 사용할 수 있다는 것을 뜻한다.
+** `internal` 이 지정된 클래스와 이 클래스의 함수나 속성은 bytecode 파일에서 `public` 이 된다.
+
+=== Enum
+
+[source, kt]
+----
+enum class CurrencyLocation { RIGHT, LEFT }
+
+enum class CurrencyCode(
+  val currency: String,
+  val symbol: String,
+  var locale: Locale,
+  val loc: CurrencyLocation = CurrencyLocation.LEFT
+) {
+  JPY("yen", "¥", Locale.JAPAN, CurrencyLocation.RIGHT),
+  USD("dollar", "$", Locale.US),
+  KRW("원", "₩", Locale.KOREA)
+}
+----
+
+* `enum class`
+
 == Initialization
+
+
 
 == Inheritance
 
@@ -1360,3 +1569,7 @@ map.getOrPut("xx") { 30 } // 30
 == Tip
 
 * https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
+
+== TODO
+
+* return label

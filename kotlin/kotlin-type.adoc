@@ -3,81 +3,8 @@
 
 == File
 
-== Class
 
-[source, kotlin]
-.Player.kt
-----
-class Player
-----
 
-[source, kt]
-----
-val player = Player() // create a instance of Player using primary constructor
-----
-
-* 하나의 파일에 하나 이상의 클래스를 정의할 수 있음
-* 가급적 하나의 파일에 하나의 클래스를 정의하는 것이 좋음
-* 클래스에는 행동(behavior)과 데이터(data)를 정의함
-** behavior -> _class{sp}function_
-** data -> _property_
-* 클래스 내부에 정의된 함수를 클래스 함수(class function)이라고 함
-+
-[source, kt]
-.Player.kt
-----
-class Player {
-  val name = "madrigal" // property
-  
-  fun castFireball(numFireballs: Int = 2) { // class function
-    priuntln("한 덩어리의 파이어볼이 나타난다. (x$numFireballs)")
-  }
-}
-----
-
-=== Getter/Setter
-
-[source, kt]
-----
-class Player {
-  var name = "madrigal"
-      get() = field.capitalize() // overriding <1>
-      set(value) { // <2>
-        field = value.trim()
-      }
-}
-----
-<1> `field` 키워드는 코틀린이 자동으로 관리해주는 backing field를 참조한다.
-<2> setter는 속성이 `var` 일 때만 정의할 수 있다.
-
-[source, kt]
-----
-val player = Player()
-player.name = "estragon" // <1>
-println(player.name + "TheBrave") // <2>
-----
-<1> setter는 대입 연산자를 사용해서 속성에 값을 지정할 때 자동 호출된다.
-<2> getter는 속성을 참조할 떄 자동 호출된다.
-
-=== Visibility
-
-* 클래스 함수나 속성에 가시성 제한자(visibility modifier)를 지정하지 않으면 기본적으로 `public`
-** `public`: 외부에서 사용 가능, default
-** `private`: 함수나 속성이 정의된 클래스 내부에서만 사용 가능
-** `protected`: 함수나 속성의 정의된 클래스 내부 또는 서브 클래스에서만 사용 가능
-** `internal`: 함수나 속성이 정의된 클래스가 포함된 module에서 사용 가능
-* 속성의 가시성이 public이라면 getter/setter도 public
-
-[source, kt]
-----
-class Player {
-  var name = "madrigal"
-      get() = field.capitalize()
-      private set(value) {
-        field = value.trim()
-      }
-}
-----
 
 === Computed property
 
@@ -104,17 +31,7 @@ class Dice() {
 ** 기본 생성자의 파라미터가 var, val로 생성
 ** data class는 abstract, open, sealed, inner 클래스일 수 없음
 
-== enum class
 
-[source, kt]
-----
-enum class So {sorin, sochang}
-
-enum class So(var var1: Int, var var2: Int) {
-  soring(10, 20),
-  sochang(10, 20)
-}
-----
 
 == sealed class
 
