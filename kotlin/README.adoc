@@ -33,13 +33,13 @@ var nickname: String = "jun" // variable
 [source, kt]
 .Kotlin Code
 ----
-var point: Int = 5
+var price: Int = 5
 ----
 +
 [source, java]
 .Decompile 된 bytecode
 ----
-int point = 5;
+int price = 5;
 ----
 * Kotlin은 static type system을 사용한다.
 ** static type checking를 통해 컴파일하기 전에 타입 오류를 알려준다.
@@ -70,6 +70,7 @@ const val MAX_LENGTH: Int = 5000
 [source, kt]
 ----
 const val MAX_LENGTH: Int = 5000 // <1>
+
 fun main(args: Array<String>) {
   ...
 }
@@ -111,8 +112,6 @@ class Constants {
 ----
 
 ----
-
-
 
 .References
 * https://blog.egorand.me/where-do-i-put-my-constants-in-kotlin/
@@ -1546,7 +1545,247 @@ enum class CurrencyCode(
 
 == Initialization
 
+=== Constructor
 
+==== Primary constructor
+
+[source, kt]
+.Defining a primary constructor
+----
+class Payment(
+  _productName: String, // <1>
+  _unitPrice: Int,
+  _count: Int,
+  _isUsingPoint: Boolean
+) {
+  val name = _productName
+      get() = field.capitalize()
+
+  val total = _unitPrice * _count
+
+  private val isUsingPoint = _isUsingPoint
+}
+----
+<1> 밑줄이 있는 변수는 임시 변수를 나타낸다. 임시 변수는 한 번 이상 참조될 필요가 없는 변수이며, 1회용이라는
+    것을 나타내기 위해 이름 앞에 밑줄을 붙힌다. +
+    * https://kotlinlang.org/docs/reference/coding-conventions.html#names-for-backing-properties[Names for backing properties - Kotlin docs]
+    * https://bit.ly/2Qt2WpM[Kotlin Programming: The Big Nerd Ranch Guide 일부]
+
+
+[source, kt]
+.Defining properties in a primary constructor
+----
+class Payment(
+  _productName: String,
+  _unitPrice: Int,
+  _count: Int,
+  private val isUsingPoint: Boolean // <1>
+) {
+  val name = _productName
+      get() = field.capitalize()
+
+  var total = _unitPrice * _count
+}
+----
+<1> 기본 생성자에 속성을 정의할 수 있으며, var나 val을 추가해야 한다. 이러한 코드는 클래스 속성과 
+    생성자 매개변수의 두 가지 역할을 모두 하게 되므로 코드의 중복도 줄여 준다.
+
+==== Secondary constructor
+
+* 보조 생성자에서는 속성을 정의할 수 없다.
+
+[source, kt]
+.Defining a secondary constructor
+----
+class Payment(
+  _productName: String,
+  _unitPrice: Int,
+  _count: Int,
+  private var isUsingPoint: Boolean
+) {
+  val name = _productName
+    get() = field.capitalize()
+
+  var total = _unitPrice * _count
+
+  constructor(name: String) : this( // <1>
+    name,
+    0,
+    1,
+    isUsingPoint = false // <2>
+  )
+
+  constructor(name: String, price: Int) : this(
+    name,
+    price,
+    1,
+    isUsingPoint = false
+  ) {
+    if (name == "포인트테스트상품") isUsingPoint = true // <3>
+  }
+}
+----
+<1> `this` 키워드는 다른 생성자를 말하며, 여기서는 기본 생성자를 뜻한다.
+<2> 인자를 그대로 넘기지 않고 `isUsingPoint` 를 설정해서 전달했는데, 이러한 방법을 지명 인자^named{sp}argument^라고 한다. +
+    (속성에만 적용이 가능하며, 임시 변수는 지명 인자 사용이 불가능하다)
+<3> 속성을 초기화하는 대안으로 보조 생성자를 사용하면 편리하다. 
+    (속성을 변경하려면 `var` 로 선언되어 있어야 한다)
+
+[TIP]
+.Named arguments
+====
+* 보조 생성자 외에도 생성자를 호출할 때에도 지명 인자를 사용할 수 있다.
+* 지명 인자를 사용하면 매개변수가 정의된 순서와 다르게 인자를 전달 할 수 있다.
+
+[source, kt]
+----
+class Payment(
+  val name: String,
+  val price: Int,
+  val count: Int,
+  private var isUsingPoint: Boolean
+)
+----
+
+[source, kt]
+----
+ val payment = Payment(
+  name = "상품",
+  isUsingPoint = true,
+  price = 100,
+  count = 0
+)
+----
+====
+
+=== Property initialization
+
+* 생성자에 기본 인자 설정이 가능하다.
++
+[source, kt]
+.Default properties
+----
+class Payment(
+  _productName: String
+  _unitPrice: Int,
+  _count: Int = 1, // <1>
+  private val isUsingPoint: Boolean
+) {
+  val name = _productName
+      get() = field.capitalize()
+
+  var total = _unitPrice * _count
+
+  constructor(name: String) : this(
+    name,
+    0,
+    isUsingPoint = false)
+}
+----
+<1> 생성자를 정의할 때 인자의 기본값을 지정할 수 있다.
+
+* 기본 인자 설정은 기본 생성자, 보조 생성자 모두 가능하다.
+* 클래스의 속성에 기본값 설정이 가능하다.
++
+[source, kt]
+----
+class Payment(
+  val name: String
+  val price: Int = 0
+) {
+  val receipt = getRecentReceipt() // <1>
+
+  private fun getRecentReceipt() = File("data/receipt.txt")
+    .readText()
+    .split("\r\n")
+    .first()
+}
+----
+<1> 인스턴스가 생성될 때 가장 최근 영수증 정보를 가져온다.
+
+
+=== Initializer block
+
+* Kotlin에서는 `init` 키워드를 통해 클래스의 초기화 블록^initializer{sp}block^을 정의할 수 있다.
+* 전제 조건 검사는 생성자나 속성보다는 초기화 블록에서 하는 것이 좋다. 초기화 블록은 어떤 생성자를 통해 
+  호출되든 인스턴스가 생성될 때마다 자동으로 호출되어 실행된다.
+
+[source, kt]
+----
+class Product(
+  val name: String,
+  val price: Int
+) {
+  init {
+    require(price > 0, { "가격은 0보다 커야 합니다." }) // <1>
+  }
+
+  constructor(name: String) : this(name, 1) 
+}
+----
+<1> 사전 조건이 false가 되면 `IllegalArgumentException` 이 발생된다.
+
+=== Initializer order
+
+* 여러 가지의 초기화 코드(기본 생성자, 보조 생성자, 초기화 블록)에서 같은 속성이 참조될 때, 초기화가 처리되는 순서가 중요하다.
+* 아래 코드를 디컴파일된 바이트 코드를 보면 다음과 같다.
++
+[source, kt]
+----
+class Player(_name: String, val health: Int) { // <1>
+  val race = "DWARF" // <2>
+  var town = "Bavaria"
+  val name = _name
+  val alignment: String
+  private var age = 0
+
+  init {
+    println("initializaing player") // <3>
+    alignment = "GOOD"
+  }
+
+  constructor(_name: String) : this(_name, 100) {
+    town = "The shire" // <4>
+  }
+}
+----
++
+[source, java]
+----
+public final class Player {
+  @NotNull private final String race;
+  @NotNull private String town;
+  @NotNull private final String name;
+  @NotNull private final String alignment;
+  private int age;
+  private final int health;
+
+  public Player(@NotNull String _name, int health) {
+    super();
+    this.health = health; // <1>
+    this.race = "DWARF"; // <2>
+    this.town = "Bavaria";
+    this.name = _name;
+    String var3 = "initializaing player"; // <3>
+    boolean var4 = false;
+    System.out.println(var3);
+    this.alignment = "GOOD";
+  }
+
+  public Player(@NotNull String _name) {
+    this(_name, 100);
+    this.town = "The shire"; // <4>
+  }
+}
+----
+<1> 기본 생성자에 정의된 속성의 인자값 지정
+<2> 클래스 내부에 정의된 속성의 초깃값 지정
+<3> 초기화 블럭에서 속성에 초깃값 지정 및 함수 호출/실행
+<4> 보조 생성자에서 속성의 초깃값 지정 및 기본 생성자 호출/생성
+
+=== Late initialization
+
+* by lazy vs lateinit: https://stackoverflow.com/questions/36623177/kotlin-property-initialization-using-by-lazy-vs-lateinit
 
 == Inheritance
 
@@ -1573,3 +1812,4 @@ enum class CurrencyCode(
 == TODO
 
 * return label
+* sealed
