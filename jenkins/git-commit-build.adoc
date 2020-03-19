@@ -1,0 +1,166 @@
+= GitHub commit 빌드/테스트
+
+== GitHub에 Webhook 설정
+
+. GitHub에 webhook 등록
++
+image::https://user-images.githubusercontent.com/5036939/77083175-6ef19a00-6a40-11ea-9c3f-7cd4bd08bcf5.png[Hooks]
+.. repo에 `Settings-Hooks` 에서 `Add webhook` 으로 추가
++
+image::https://user-images.githubusercontent.com/5036939/77083054-3baf0b00-6a40-11ea-928d-3a4129849cf2.png[Add webhook]
+* Payload URL에 `$JENKINS_BASE_URL/github-webhook/` 을 입력한다. +
+  (URL은 반드시 슬래시(`/`)로 끝나야 한다)
+.. webhook을 호출할 이벤트를 선택한다.
++
+image::https://user-images.githubusercontent.com/5036939/77083561-11aa1880-6a41-11ea-8451-b3d4cdf8104f.png[Set pushes event]
++
+여기서는 remote에 push 이벤트를 받기위해 `Pushes` 만 선택하였다.
+
+== Jenkins에 pipeline 설정
+
+. Jenkins에 https://plugins.jenkins.io/github/[GitHub plugin] 설치
+. Jenkins에 실행시킬 pipeline을 추가한다.
++
+image::https://user-images.githubusercontent.com/5036939/77084032-bb89a500-6a41-11ea-98b9-ae94651387c6.png[Add new item]
+. webhook을 받기 위한 repo를 `General` 에 `GitHub project-Project url` 에 추가해준다.
++
+image::https://user-images.githubusercontent.com/5036939/77090760-f3e1b100-6a4a-11ea-9ef3-8715715b16ed.png[Set github project url]
+. 해당 작업를 실행시키기 위해 `Build Triggers` 설정을 한다.
++
+image::https://user-images.githubusercontent.com/5036939/77083785-62ba0c80-6a41-11ea-95c9-7e952a6b7d73.png[Check build trigger]
++
+[WARN]
+.Webhook 설정 관련 경고
+====
+`Project url` 설정을 한 뒤에 아래와 같이 트리거 설정에 경고문이 추가되었다.
+
+image::https://user-images.githubusercontent.com/5036939/77092408-268ca900-6a4d-11ea-843b-9b2a5cbee715.png[warn message]
+
+아래 링크를 통해 자세한 에러 메시지를 확인할 수 있다.
+
+http://jenkins_url/administrativeMonitor/GitHubHookRegisterProblemMonitor/
+
+```
+There are no credentials with admin access to manage hooks on GitHubRepositoryName
+```
+
+위와 같은 에러 메시지가 나왔는데, 우선 webhook을 받는데는 문제 없으니 다음 스텝을 진행하였다.
+====
+. Pipeline 스크립트 설정
++
+image::https://user-images.githubusercontent.com/5036939/77086135-b37f3480-6a44-11ea-87a3-7422270274e2.png[pipeline script]
++
+[NOTE]
+.Jenkinsfile 작성법
+====
+https://jenkins.io/doc/book/pipeline/syntax/
+
+Declarative Pipeline :: `pipeline` : 보다 쉽게 작성 할 수 있게, 커스텀 되어 있음. Groovy-syntax기반 - Groovy 문법을 잘 몰라도 작성 가능
+Scripted Pipeline :: `node` : Groovy기반, Declarative보다 효과적으로 많은 기능을 포함하여 작성 가능. 하지만 작성 난이도가 높음 - Groovy 문법을 잘 알아야 함
+
+.참고 링크
+* https://bob-full.tistory.com/10
+* https://jojoldu.tistory.com/356
+====
+
+[source, groovy]
+.Jenkinsfile
+----
+void setBuildStatus(String message, String state) {
+  step([
+    $class: "GitHubCommitStatusSetter",
+    reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github_url/org/your_repo"],
+    contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+    errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+    statusResultSource: [ 
+      $class: "ConditionalStatusResultSource", 
+      results: [
+        [$class: "AnyBuildResult", message: message, state: state]] 
+      ]
+  ]);
+}
+
+pipeline {
+  agent {
+    docker { image 'openjdk:11' }
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        git branch: 'feature/your_branch',
+            credentialsId: 'credentials_id',
+            url: 'git@github_url:org/your_repo.git'
+      }
+    }
+
+    stage('Environment') {
+      steps {
+        sh 'chmod 755 ./gradlew'
+        sh 'java -version'
+        sh 'printenv|sort'
+      }
+    }
+
+    stage('Clean') {
+       steps {
+         sh './gradlew clean'
+       }
+    }
+
+    stage('Test') {
+       steps {
+         sh './gradlew test' // unit test
+       }
+    }
+
+    stage('Build') {
+       steps {
+         sh './gradlew build -x test'
+       }
+    }
+  }
+
+  post {
+    success {
+      setBuildStatus("Build succeeded", "SUCCESS");
+    }
+    failure {
+      setBuildStatus("Build failed", "FAILURE");
+    }
+  }
+}
+----
+
+== 참고할 사항
+
+. `Build Now` 버튼을 통해 한번 실행하여 webhook을 받을 수 있도록 해준다.
+. checkout 받은 마지막 브랜치가 설정되고, 이 브랜치에 변경이 없으면 빌드가 실행되지 않는다.
+
+== 트러블슈팅
+
+* `ERROR: [GitHub Commit Status Setter]` 에러
+** state를 설정하는 계정에 권한이 없어서 발생한 이슈.
+** `Settings-Collaborators & teams` 에서 계정 추가 및 Write 권한 설정
+
+== 기타 Jenkins 설정
+
+=== Jenkins GitHub 서버 설정
+
+[NOTE]
+====
+Webhook을 받으려면 서버 설정 및 `Manage hooks` 설정이 필요한 줄 알았지만, 해당 item에 GitHub url 설정해주면 해결되므로 이곳에 남겨둔다.
+====
+
+. Jenkins에 https://plugins.jenkins.io/github/[GitHub plugin] 설치
+. Jenkins 설정에서 GitHub Credentials 및 Manage hook 설정을 한다.
+.. GitHub 탭안에서 `고급` 을 선택하면 `Additional action` 설정이 노출된다.
+.. `Convert login and password to token` 을 선택하여 Credentials 을 추가한다.
++
+image::https://user-images.githubusercontent.com/5036939/77088601-0a3a3d80-6a48-11ea-9ead-dba8e113d3ee.png[Create credentials]
+.. GitHub Server에 등록하려는 서버와 Credentials을 설정한다.
++
+image::https://user-images.githubusercontent.com/5036939/77088608-0dcdc480-6a48-11ea-8ed1-98085fa383e0.png[Credentials added]
+.. `GitHub Server` 에 `Manage hooks` 를 체크한다.
++
+image::https://user-images.githubusercontent.com/5036939/77089520-45893c00-6a49-11ea-9cd8-2f693e80ad1d.png[Check manage hook checkbox]
