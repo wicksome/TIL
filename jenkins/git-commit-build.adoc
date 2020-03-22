@@ -166,7 +166,7 @@ Webhook을 받으려면 서버 설정 및 `Manage hooks` 설정이 필요한 줄
 . Jenkins에 https://plugins.jenkins.io/github/[GitHub plugin] 설치
 . Jenkins 설정에서 GitHub Credentials 및 Manage hook 설정을 한다.
 .. GitHub 탭안에서 `고급` 을 선택하면 `Additional action` 설정이 노출된다.
-.. `Convert login and password to token` 을 선택하여 Credentials 을 추가한다.
+.. `Convert login and password to token` 을 선택하여 Credentials 을 추가한다. (github_url/settings/tokens 에 추가된다)
 +
 image::https://user-images.githubusercontent.com/5036939/77088601-0a3a3d80-6a48-11ea-9ead-dba8e113d3ee.png[Create credentials]
 .. GitHub Server에 등록하려는 서버와 Credentials을 설정한다.
