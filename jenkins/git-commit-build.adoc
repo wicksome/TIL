@@ -143,6 +143,17 @@ pipeline {
 ** state를 설정하는 계정에 권한이 없어서 발생한 이슈.
 ** `Settings-Collaborators & teams` 에서 계정 추가 및 Write 권한 설정
 
+=== 성공하지만 git status 안 생기는 이슈
+
+아래와 같이 repos에 아무런 정보가 들어가지 않는 경우.
+
+[source]
+----
+[Set GitHub commit status (universal)] SUCCESS on repos [] (sha:baf9f33) with context:ci/jenkins/build-status
+----
+
+**Manage Jenkins > Configure System > GitHub > GitHub Servers** 설정이 있어야 함 
+
 == 기타 Jenkins 설정
 
 === Jenkins GitHub 서버 설정
