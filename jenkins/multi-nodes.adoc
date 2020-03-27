@@ -1,0 +1,44 @@
+= Add multi-nodes
+
+== Node 추가
+
+. ssh key 생성
++
+[source, bash]
+----
+$ ssh <server>
+$ mkdir ~/.ssh && chmod 700 ~/.ssh
+$ cd ~/.ssh
+
+$ ssh-keygen -t rsa -C "Jenkins agent key" -f "jenkinsAgent_rsa"
+$ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
+----
+
+. credentials 생성
+.. `Add Credentials` 로 추가
+*** Username: 접속하고자 하는 서버의 계정
+*** Private Key: 서버에서 생성한 private key
+*** Passphrase: ssh key 생성시 입력한 passphrase
+
+. node 추가
+** `# of executors` 갯수는 전체 코어 갯수보다 적게 설정해야 한다. -> `lscpu` 명령어로 cpu 정보 확인 가능
+
+
+. ssh key 생성
++
+[source, bash]
+----
+$ ssh-keygen -t rsa -C "jenkins agent" -f "jenkins_agent_rsa"
+----
+. pub 키는 노드 서버에 저장
++
+[source, bash]
+----
+# 현재 서버의 public key를 특정서버의 authorized_keys에 추가
+$ ssh-copy-id -i jenkins_agent_rsa.pub irteam@dev-nsp-jenkins-ncl
+# $ ssh-copy-id -i ansible_agent_rsa.pub irteam@dev-nsp-spa01-ncl.nfra.io
+----
+. private 키는 master jenkins에 credentials로 저장
+.. Username: 접속하고자 하는 dev-contact-build-001-ncl의 계정
+.. Passphrase: ssh key 생성시 입력한 passphrase
+. launcher agent로 설치
