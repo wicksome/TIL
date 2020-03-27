@@ -2028,9 +2028,233 @@ fun print(any: Any) {
   스마트 캐스팅^smart{sp}casting^이라는 타입 변환이 일어난다.
 * 즉, 우리가 직접 타입 변환을 하지 않아도 된다.
 
-== Object
+== Another type of Class
 
+=== Object
 
+* `object` 키워드를 사용하여 싱글톤^singleton^ 객체를 정의할 수 있다.
+** 프로그램이 실행되는 내내 수시로 변하는 상태 정보를 지속적으로 유지 관리할 필요가 있다면 싱글톤 사용을 고려하자
+** 싱글톤은 하나의 인스턴스만 생성되는 것을 말한다.
+** 싱글톤은 시스템의 자원 사용과 부담을 줄이고 같은 객체를 공유할 수 있다는 장점이 있다.
+** 다중 스레드^multi-thread^로 실행될 때는 반드시 하나의 객체만 생성되도록 동기화 처리를 해주어야 한다.
+* `object` 키워드를 사용하는 세 가지 방법이 있다.
+** 객체 선언^object{sp}declaration^
+** 객체 표현식^object{sp}expression^
+** 동반 객체^companion{sp}object^
+
+==== Object declaration
+
+[source, kt]
+----
+object Game { // object declaration
+  init {
+    println("Game init")
+  }
+}
+----
+
+* 객체 선언은 상태 관리에 유용하다.
+* 객체 선언에는 초기화 블록이 포함될 수 있지만 생성자는 가질 수 없다.
+* 최초로 사용되는 시점에 하나의 객체가 자동으로 생성되어 초기화된다.
+
+==== Object expression
+
+[source, kt]
+----
+val abandonedTownSquare = object : TownSquare() {
+  override fun load() = "empty"
+}
+----
+
+* 기존 클래스의 서브 클래스를 우리가 원하는 코드 안에 익명 클래스로 정의한 후 바로 인스턴스를 생성해서 사용할 수 있다.
+* 위 코드를 보면 생성된 인스턴스가 val 변수에 저장하므로 싱글톤 객체가 된다. 해당 변수가 존재하는 동안만 사용 가능하다.
+
+==== Companion object
+
+[source, kt]
+----
+class Job {
+  companion object {
+    private const JOB_NAME = "DailyJob"
+
+    fun getJobName() = JOB_NAME
+  }
+}
+----
+
+* 동반 객체는 최상위 수준에서는 사용할 수 없고, 클래스 내부에 정의하여 사용한다.
+* 클래스 내부에 정의된 객체 선언이라고 생각할 수 있다.
+* 단 하나의 클래스에는 하나의 동반 객체만 포함될 수 있다.
+* 포함 클래스의 인스턴스가 얼마나 많이 생성되든 동반 객체의 인스턴스는 하나만 생성된다.
+* 동반 객체는 자신을 포함하는 클래스가 메모리에 로드될 때 같이 생성되며, 자신의 속성과 함수 중 하나가 사용될 때 초기화된다.
+
+=== Nested Class
+
+[source, kt]
+----
+object Game {
+  private class GameInput(arg: String?) {
+    private val input arg ?: ""
+  }
+}
+----
+
+* 다른 클래스 내부에 중첩된 클래스를 정의할 수 있다.
+* 특정 객체에서만 필요하고 다른 코드에서는 사용하지 않을 때 활용할 수 있다.
+* 외곽 클래스에서는 중첩된 클래스의 속성과 함수를 사용할 수 없다.
+* 위 코드는 Java 코드로 디컴파일하면 클래스 내부에 `private static final class GameInput` 로 정의된다.
+
+=== Data Class
+
+* 데이터를 저장하기 위해 특별히 설계된 클래스이다.
+* 다음과 같은 요구사항이 충족되야 한다.
+** 최소한 하나의 매개변수를 갖는 기본 생성자를 가져야 한다.
+** 기본 생성자의 매개변수에는 val 이나 var이 지정되어야 한다. 그래야만 속성이 생성되기 때문이다.
+** `abstract`, `open`, `sealed`, `inner` 키워드를 지정할 수 없다.
+*** 예를 들어 `open` 클래스로 정의한 객체가 있다면 equals와 hashCode를 구현해야 한다. 그렇지 않으면 `==` 연산자를 사용할 때 객체 참조만 비교하게 된다.
+* 데이터 클래스를 정의하면 속성에 맞게 처리되는 `toString`, `equals`, `hashCode` 함수들이 자동으로 생성된다.
+** `copy` 함수도 생성해 준다.
+** componentN 함수들도 생성해준다. 이를 통해 해체 선언^destructuring{sp}declaration^을 사용할 수 있다.
++
+[source, kt]
+----
+data class Grade(val name: String, val rate: Double)
+
+fun getNames(val grades: List<Grade>) = grades
+  .map { (name, _) -> name }
+  .toList()
+----
+
+[TIP]
+.componentN 함수
+====
+* componentN이란 예를 들어 첫번째 속성은 component1, 두번째 속성은 component2 라는 이름의 함수를 말한다.
+* 데이터 클래스는 기본 생성자에 정의된 속성과 정의 순서를 기준으로 componentN 함수들을 자동 생성하고 호출해준다.
+* 데이터 클래스가 아닌 일반 클래스의 경우에도 `operator` 키워드(연산자 오버로딩)를 사용하여 componentN 함수들을 추가하면
+  해페 선언을 지원할 수 있다.
++
+[source, kt]
+----
+class Grade(val name: String, val rate: Double) {
+  operator fun component1() = name
+  operator fun component2() = rate
+}
+----
+====
+
+=== Enum
+
+[source, kt]
+----
+enum class Grade {
+  GOLD, SILVER
+}
+
+fun getRate(grade: Grade) = when (grade) {
+  GOLD -> 4.5
+  SILVER -> 2.0
+}
+----
+
+* 열거형^enumerated{sp}type^은 enum 클래스로 정의할 수 있다.
+* Kotlin에서 enum 클래스의 각 항목에 대해 내부적으로 name과 ordinal 속성을 갖는다.
+** Java 클래스의 ordinal과 동일하다면.. 이펙티브 자바(item 35)에서는 ordinal 메서드 사용을 지양한다.
+
+=== Sealed Class
+
+* ADT(Algebraic data type, 대수적 데이터 타입)는 지정된 타입과 연관될 수 있는 서브 타입들의 폐집합(closed set)을 나타낼 수 있다.
+** enum 클래스도 ADT의 간단한 형태다.
+* enum 클래스를 포함해서 ADT의 장점은 우리가 모든 타입을 처리했는지 컴파일러가 검사할 수 있다는 것이다.
++
+[source, kt]
+----
+enum class Grade {
+  GOLD, SILVER
+}
+
+fun getRate(grade: Grade) = when (grade) { // compile error
+  GOLD -> 4.5
+}
+----
+
+* sealed 클래스는 자신의 서브 클래스 종류를 제한하기 위해 사용된다. +
+  (sealed: 봉인을 한, 봉인하다, 밀봉하다.)
+* sealed 클래스에 속하는 서브 클래스들은 일반 클래스이므로 인스턴스 갯수에 제한이 없다.
+** enum 클래스의 각 항목은 하나의 인스턴스만 생성된다.
+* sealed 클래스는 두 가지 형태로 사용할 수 있다.
+** 첫번째 방법은 모든 서브 클래스들을 독립적으로 정의하고, sealed 클래스와 같은 코틀린 파일(.kt) 안에 둔다.
++
+[source, kt]
+----
+sealed class StudentStatus
+object NotEnrolled : StudentStatus()
+class Active(val courseId: String) : StudentStatus()
+object Graduated : StudentStatus()
+----
++
+[source, kt]
+----
+val active = Active("kotlin01")
+----
+** 두번째 방법은 모든 서브 클래스들을 sealed 클래스 내부에 중첩된 클래스로 정의하는 방법이다.
++
+[source, kt]
+----
+sealed class StudentStatus {
+  object NotEnrolled : StudentStatus()
+  class Active(val courseId: String) : StudentStatus()
+  object Graduated : StudentStatus()
+}
+----
++
+[source, kt]
+----
+var active = StudentStatus.Active("Kotlin01")
+----
+** 두 예제 코드를 모두 제한된 수의 서브 클래스를 가지며, enum 클래스보다 더 다양한 처리를 할 수 있다.
+** `object` 로 선언된 객체는 인스턴스가 하나만 있으면 되기 때문이며, `Active` 클래스는 여러 인스턴스를 가질 수 있다.
++
+[source, kt]
+----
+fun main(args: Array<String>) {
+  val student = Student(StudentStatus.Active("Kotlin01")) // smart casting
+  println(studentMessage(student.status))
+}
+
+fun studentMessage(status: StudentStatus): String = when (status) {
+  is StudentStatus.NotEnrolled -> "과정에 등록하세요."
+  is StudentStatus.Active -> "${status.courseId} 과정에 등록하셨습니다."
+  is StudentStatus.Graduated -> "졸업을 축하합니다."
+}
+
+class Student(var status: StudentStatue)
+
+sealed class StudentStatus {
+  object NotEnrolled : StudentStatus()
+  class Active(val courseId: String) : StudentStatus()
+  object Graduated : StudentStatus()
+}
+----
+
+=== Operator overloading
+
+* Kotlin에는 여러가지 연산자가 있다.
+* Kotlin 컴파일러는 `a + b` 를 컴파일하여 `a.plus(b)` 를 실행하도록 바이트코드로 생성한다.
+* Kotlin의 연산자들을 함수이므로 오버로딩이 가능하다.
++
+[cols="1,2,7"]
+.오버로딩 가능한 연산자
+|===
+| 연산자 | 오버로딩 함수명 | 기능
+
+|+ |plus |두 객체를 더한다.
+|+= |plusAssign |다른 객체와 더한 후 결과를 왼쪽 피연산자의 객체에 저장한다.
+|== |equals |두 객체가 같으면 ture, 아니면 false를 반환한다.
+|> |compareTo |왼쪽 객체가 오른쪽 객체보다 크면 true, 아니면 false를 반환한다.
+|[] |get |지정된 인덱스의 컬렉션 요소를 반환한다.
+|.. |rangeTo |범위 객체를 생성한다.
+|in |contains |객체가 컬렉션에 있으면 true를 반환한다.
+|===
 
 == Interface
 
@@ -2053,4 +2277,11 @@ fun print(any: Any) {
 == TODO
 
 * return label
-* sealed
+
+== Spring Framework in Kotlin
+
+=== Validation
+
+* Kotlin에서 속성과 Java의 필드는 다르므로, 어노테이션을 필드에 추가하려면 `@field:` 을 활용해야 한다.
+* val, var 모두 적용 가능하다.
+* https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
