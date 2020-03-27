@@ -1875,7 +1875,162 @@ Kotlin에서 위임한다는 것을 나타낼 때는 `by` 키워드를 사용한
 
 == Inheritance
 
+* 상속^Inheritance^은 타입 간의 계층적인 관계를 정의하기 위해 사용할 수 있는 객체지향 원리다.
+* subclass는 상속해주는 클래스(superclass)의 모든 속성과 함수를 공유한다.
+* Kotlin의 클래스는 기본적으로 서브 클래스를 만들 수 없게 되어 있다.
++
+[source, kt]
+----
+// kotlin
+class Room 
+// java
+public final class Room {} 
+----
+
+** 서브 클래스를 가질 수 있게 하려면 해당 클래스에 `open` 키워드를 지정해야 한다.
++
+[source, kt]
+----
+open class Room
+----
+
+* 서브 클래스를 정의할 때는 클래스 이름 다음에 콜론을 추가하고 슈퍼 클래스의 생성자를 호출한다.
++
+[source, kt]
+----
+open class Room(val name: String)
+
+class TownSquare : Room("Town Square")
+----
+
+* `override` 키워드를 사용하여 상속받은 속성이나 함수를 오버라이딩^overriding^할 수 있다.
++
+[source, kt]
+----
+open class Room(val name: String) {
+  open fun load() = "empty" // <1>
+}
+
+class TownSquare : Room("Town Square") {
+  override fun load() = "not empty" // <2>
+}
+----
+<1> Kotlin에서는 서브 클래스에서 오버라이딩하는 슈퍼 클래스의 함수에도 `open` 키워드를 지정해야 한다.
+<2> `override` 키워드를 사용하여 슈퍼 클래스의 함수를 오버라이딩 할 수 있다.
+
+* 서브 클래스의 오버라이딩 함수나 속성은 기본적으로 `open` 이 되므로, 서브 클래스에서는 언제든 오버라이딩이 가능하다.
++
+[source, kt]
+----
+open class Room(val name: String) {
+  open fun load() = "empty"
+}
+
+open class TownSquare : Room("Town Square") { // <1>
+  final override fun load() = "not empty" // <2>
+}
+----
+<1> 서브 클래스의 서브 클래스를 만들기 위해서는 클래스에 `open` 이 필요하다.
+<2> `final` 키워드를 통해 하위 클래스에서 오버라이딩을 막을 수 있다.
+
+* `protected` 키워드를 사용하여 가시성을 지정할 수 있다.
+* `super` 키워드를 통해 슈퍼 클래스의 속성을 참조할 수 있다.
++
+[source, kt]
+----
+open class Room(val name: String) {
+  protected open val level = 1
+}
+
+class TownSquare : Room("Town Square") {
+  override val level = super.level + 2
+}
+----
+
+* 상속을 통해 다형성^polymorphism^을 구현할 수 있다.
++
+[source, kt]
+----
+val room: Room = TownSquare()
+----
+
+* Kotlin에서는 오버라이딩 하기 위해 `open`, `override` 키워드를 사용해야 한다.
+  어찌 보면 번거롭게 생각될 수도 있겠지만, 이렇게 함으로써 무의미하게 서브 클래스를 생성하고 속성과 
+  함수를 오버라이딩 당하는 것을 막을 수 있다.
+
+=== Type check
+
+* `is` 키워드를 통해 현재 객체가 특정 타입인지 검사할 수 있다.
++
+[source, kt]
+----
+val room = Room("Foyer")
+room is Room // true
+room is TownSquare // false
+
+val townSquare = TownSquare()
+townSquare is Room // true <1>
+townSquare is TownSquare // true
+----
+<1> 서브 클래스의 인스턴스는 슈퍼 클래스의 타입도 된다. (다형성)
+
+* Kotlin의 모든 non-null 클래스는 자동으로 `Any` 라는 최상위 슈퍼 클래스로부터 상속받는다.
+** 타입 변환^type{sp}casting^을 사용하면 우리가 지정한 타입으로 객체를 사용 할 수 있다. +
+   (변환된 타입의 속성 참조나 함수 호출을 할 수 있는 것이지 해당 객체가 갖는 값을 변환하는 것이 아니다)
+* `as` 키워드를 통해 타입 변환이 가능하다.
++
+[source, kt]
+----
+fun print(any: Any) {
+  val isPlayerAOrMyRoom = if (any is Player) {
+    true
+  } else {
+    (any as Room).name == "MyRoom"
+  }
+}
+----
+
+* 타입 변환은 유용하지만 우리가 안전하게 사용해야 한다.
+
+[TIP]
+.Any 클래스
+====
+* `Any` 클래스는 모든 non-null 클래스에 공통적으로 필요한 `equals`, `hashCode`, `toString` 함수를 정의하고 있다.
+* `Any` 는 non-null 타입이고, `Any?` 는 nullable 타입이다.
+** 모든 non-null 타입은 `Any` 의 서브 타입이다.
+** 모든 nullable 타입은 `Any?` 의 서브 타입이다.
+** 모든 non-null 타입은 각각의 nullable 타입의 서브 타입이다.
+* non-null 타입은 실제 클래스로 존재하지만, nullable 타입은 클래스로 존재하지 않고 컴파일러가 인지하고 처리한다.
+
+Kotlin을 사용하면 서로 다른 플랫폼의 애플리케이션을 만들 수 있다. 즉, JVM에서 실행되는 애플리케이션이나 
+JVM 없이 실행되는 네이티브 애플리케이션, 자바스크립트, Http 서블릿 등으로 만들 수 있다.
+
+`Any` 클래스는 그런 다양한 플랫폼에 독립적인 애플리케이션을 생성할 수 있게 해주는 방법 중 하나다. 즉,
+각 플랫폼에 공통적으로 사용할 수 있는 최상위 슈퍼클래스인 것이다. JVM으로 컴파일하면 `Any` 클래스는 
+`java.lang.Object` 로 바이트 코드에 구현되지만, 다른 플랫폼에서는 해당 플랫폼에 맞게 다른 편태로 구현된다.
+====
+
+=== Smart Casting
+
+[source, kt]
+----
+fun print(any: Any) {
+  val isPlayerAOrMyRoom = if (any is Player) {
+    any.name == "A" // smart casting
+  } else {
+    (any as Room).name == "MyRoom"
+  }
+}
+----
+
+* 위 코드를 보면 `any.name == "A"` 에 타입 변환없이 name 속성을 참조했다.
+* Kotlin 컴파일러는 any 객체 타입이 Player 타입 비교 이후에 Player 인 것을 알고 있으므로 
+  스마트 캐스팅^smart{sp}casting^이라는 타입 변환이 일어난다.
+* 즉, 우리가 직접 타입 변환을 하지 않아도 된다.
+
 == Object
+
+
 
 == Interface
 
