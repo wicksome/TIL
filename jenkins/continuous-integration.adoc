@@ -141,9 +141,31 @@ pipeline {
 
 == 트러블슈팅
 
-* `ERROR: [GitHub Commit Status Setter]` 에러
-** state를 설정하는 계정에 권한이 없어서 발생한 이슈.
-** `Settings-Collaborators & teams` 에서 계정 추가 및 Write 권한 설정
+=== GitHub Commit Status Setter 실패
+
+[source]
+----
+ERROR: [GitHub Commit Status Setter] ...
+----
+
+* state를 설정하는 계정에 권한이 없어서 발생한 이슈.
+* `Settings-Collaborators & teams` 에서 계정 추가 및 Write 권한 설정
+
+=== GitHub commit Status Setter 성공 응답은 받았지만 git status 안 생기는 이슈
+
+아래와 같이 repos에 아무런 정보가 들어가지 않는 경우.
+
+[source]
+----
+[Set GitHub commit status (universal)] SUCCESS on repos [] (sha:baf9f33) with context:ci/jenkins/build-status
+----
+
+**Manage Jenkins > Configure System > GitHub > GitHub Servers** 설정이 있어야 함 
+
+=== Polling has not run yet.
+
+
+
 
 == 기타 Jenkins 설정
 
@@ -179,7 +201,7 @@ Webhook을 받으려면 서버 설정 및 `Manage hooks` 설정이 필요한 줄
 . Jenkins에 https://plugins.jenkins.io/github/[GitHub plugin] 설치
 . Jenkins 설정에서 GitHub Credentials 및 Manage hook 설정을 한다.
 .. GitHub 탭안에서 `고급` 을 선택하면 `Additional action` 설정이 노출된다.
-.. `Convert login and password to token` 을 선택하여 Credentials 을 추가한다.
+.. `Convert login and password to token` 을 선택하여 Credentials 을 추가한다. (github_url/settings/tokens 에 추가된다)
 +
 image::https://user-images.githubusercontent.com/5036939/77088601-0a3a3d80-6a48-11ea-9ead-dba8e113d3ee.png[Create credentials]
 .. GitHub Server에 등록하려는 서버와 Credentials을 설정한다.
