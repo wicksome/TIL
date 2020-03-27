@@ -1783,9 +1783,95 @@ public final class Player {
 <3> 초기화 블럭에서 속성에 초깃값 지정 및 함수 호출/실행
 <4> 보조 생성자에서 속성의 초깃값 지정 및 기본 생성자 호출/생성
 
+* 초기화 블록에서 사용되는 모든 속성은 소스 코드에서 초기화 블록이 정의되기 전에 초기화되어야 한다.
++
+[source, kt]
+----
+class Player {
+  init {
+    val healthBonus = health.times(3) // <1>
+  }
+  val health = 100
+}
+----
+<1> health 초기화 코드는 아랫줄에 있으므로 컴파일 에러가 발생한다.
+
+* 컴파일러는 초기화 블록에서 속성을 사용하는 함수와 비교하면서까지 속성의 초기화 순서를 검사하지 않는다.
++
+[source, kt]
+----
+class Player {
+  val name: String
+
+  private fun firstLetter() = name[0]
+
+  init {
+    println(firstLetter()) // <1>
+    name = "Madrigal" // <2>
+  }
+}
+----
+<1> 에러 없이 정상적으로 컴파일된다.
+<2> Player를 초기화 할 때, name이 초기화가 되지 않으므로 `println` 에서 NPE가 발생한다.
+
 === Late initialization
 
 * by lazy vs lateinit: https://stackoverflow.com/questions/36623177/kotlin-property-initialization-using-by-lazy-vs-lateinit
+
+==== Late initialization property
+
+* 인스턴스의 생성 시점에 속성을 초기화 할 수 없을 땐 지연 초기화를 활용할 수 있다.
+* `lateinit` 키워드를 사용한다.
+** 이 키워드는 우리 스스로가 책임지고 해당 속성을 사용하기 전에 초기화해야 한다는 것을 뜻한다.
+** 초기화되기 전에 사용된다면 `UninitializedPropertyAccessException` 이 발행된다.
+** 다른 타입의 객체를 참조하므로 기본 타입(예, `Int`)이 될 수 없다.
+** `var` 이면서 non-null 타입이어야 한다.
+** 커스텀 게터/세터를 정의할 수 없다
+* Kotlin의 표준 라이브러리인 `isInitialized` 함수를 사용하여 초기화 되었는지 확인할 수 있다.
+* 대안으로 nullable 타입의 속성을 사용할 수 있지만, 모든 코드에서 null 체크를 해야하므로 코드 작성이 번거로울 수 있다.
+* `lateinit` 키워드는 클래스 속성 외에 최상의 수준 속성과 함수의 지역 변수에도 사용될 수 있다.
+
+[source, kt]
+----
+class Wheel {
+  lateinit var alignment: String // <1>
+
+  fun initAlignment() {
+    alignment = "Good"
+  }
+
+  fun printAlignment() {
+    if (::alignment.isInitialized) println(alignment) // <2>
+  }
+}
+----
+<1> 선언시점에 초기화하지 않아도 컴파일 에러가 발생하지 않는다.
+<2> 속성의 값이 아니라 참조를 전달해야 하므로 `::` 를 붙혀야 한다.
+
+==== Lazy initialization
+
+* 변수나 속성이 최초 사용될 때까지 초기화를 연기할 수 있다.
+* Kotlin에서 늦 초기화^lazy{sp}initialization^는 위임^delegation^ 메커니즘을 사용해서 구현한다.
+* Kotlin 표준 라이브러리인 `lazy` 함수를 대리자로 사용하여 초기화를 위임한다.
+
+[source, kt]
+----
+val hometown by lazy { selectHometown() }
+
+private fun selectHometown() = File("towns.txt")
+  .readText()
+  .split("\r\n")
+  .first()
+----
+
+[NOTE]
+.위임, Delegation
+====
+Kotlin에서 위임한다는 것을 나타낼 때는 `by` 키워드를 사용한다. `by` 다음에 위임받을 일을 처리하는 
+대리자^delegate^를 지정한다. 대리자로는 커스텀 함수나 코틀린 표준 라이브러리 함수를 사용할 수 있다.
+
+참고: https://kotlinlang.org/docs/reference/delegated-properties.html
+====
 
 == Inheritance
 
