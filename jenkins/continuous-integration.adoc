@@ -1,4 +1,4 @@
-= GitHub commit 빌드/테스트
+= Jenkins CI 구축
 
 == GitHub에 Webhook 설정
 
@@ -72,6 +72,8 @@ void setBuildStatus(String message, String state) {
     reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github_url/org/your_repo"],
     contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
     errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+    // 아래 값을 Display URL for Blue Ocean 플러그인 설치 후 활성화 한다.
+    // statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${env.RUN_DISPLAY_URL}"],
     statusResultSource: [ 
       $class: "ConditionalStatusResultSource", 
       results: [
@@ -144,6 +146,28 @@ pipeline {
 ** `Settings-Collaborators & teams` 에서 계정 추가 및 Write 권한 설정
 
 == 기타 Jenkins 설정
+
+=== PR 생성시 빌드하기
+
+기존 Github Pull Request Builder Plugin은 deprecated 되었으므로, Github Branch Source Plugin을 사용할 것
+
+.참고 링크
+* https://umbum.dev/868
+
+=== 블루오션 URL 설정
+
+. https://plugins.jenkins.io/blueocean-display-url/[Display URL for Blue Ocean] 플러그인 설치
+** 설치되면 빌드시에 `RUN_DISPLAY_URL`, `RUN_CHANGES_DISPLAY_URL`, `JOB_DISPLAY_URL` 환경변수가 추가된다.
+** `RUN_DISPLAY_URL` 환경변수에 블루오션 빌드 결과 화면이므로 이 값을 사용한다.
+. `setBuildStatus` 안에 아래 설정 값 추가
++
+[source]
+----
+statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: "${env.RUN_DISPLAY_URL}"],
+----
+
+.참고 링크
+* https://embeddedartistry.com/blog/2017/12/28/jenkins-generating-blue-ocean-urls/
 
 === Jenkins GitHub 서버 설정
 
