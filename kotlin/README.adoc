@@ -1523,26 +1523,6 @@ fun printWeaponName() {
 ** 이것은 같은 모듈^module^에 있는 클래스, 함수, 속성끼리 상호 사용할 수 있다는 것을 뜻한다.
 ** `internal` 이 지정된 클래스와 이 클래스의 함수나 속성은 bytecode 파일에서 `public` 이 된다.
 
-=== Enum
-
-[source, kt]
-----
-enum class CurrencyLocation { RIGHT, LEFT }
-
-enum class CurrencyCode(
-  val currency: String,
-  val symbol: String,
-  var locale: Locale,
-  val loc: CurrencyLocation = CurrencyLocation.LEFT
-) {
-  JPY("yen", "¥", Locale.JAPAN, CurrencyLocation.RIGHT),
-  USD("dollar", "$", Locale.US),
-  KRW("원", "₩", Locale.KOREA)
-}
-----
-
-* `enum class`
-
 == Initialization
 
 === Constructor
@@ -2159,6 +2139,37 @@ fun getRate(grade: Grade) = when (grade) {
 * 열거형^enumerated{sp}type^은 enum 클래스로 정의할 수 있다.
 * Kotlin에서 enum 클래스의 각 항목에 대해 내부적으로 name과 ordinal 속성을 갖는다.
 ** Java 클래스의 ordinal과 동일하다면.. 이펙티브 자바(item 35)에서는 ordinal 메서드 사용을 지양한다.
+
+[source, kt]
+----
+enum class CurrencyLocation { RIGHT, LEFT }
+
+enum class CurrencyCode(
+  val currency: String,
+  val symbol: String,
+  var locale: Locale,
+  val loc: CurrencyLocation = CurrencyLocation.LEFT
+) {
+  JPY("yen", "¥", Locale.JAPAN, CurrencyLocation.RIGHT),
+  USD("dollar", "$", Locale.US),
+  KRW("원", "₩", Locale.KOREA)
+}
+----
+
+[NOTE]
+.Enum naming convention
+====
+Java에서는 열거형 타입에 대해서 대문자 네이밍을 권장한다. 열거형 타입은 싱글톤으로 상수와 같이 사용되기 때문이다.
+하지만 Kotlin에서는 상수 표기법 외에도 사용법에 따라 PascalCase도 괜찮다고 얘기한다. 
+
+처음에는 혼란스럽게 왜 이렇게 가이드했을까 생각하고 상수 표기법으로만 작성했는데, 코드를 작성하다가 Sealed Class를 만들면서 새로운 고민에 봉착했다.
+`object` 로 만들어진 sealed class는 상수의 개념인데, `class` 로 만들면 상수가 아니다. 또한 예제에서는 PascalCase를 사용한다. (나도 PascalCase를 사용했다)
+그럼 Sealed Class는 상수로 봐야할까? 인스턴스화가 가능한 객체로 봐야할까? 이런 이유 때문에 Kotlin 컨벤션에 네이밍을 열어둔 게 아닐까 생각한다.
+
+* https://kotlinlang.org/docs/reference/coding-conventions.html#property-names[Coding Conventions]
+* https://kotlinlang.org/docs/reference/sealed-classes.html[Sealed Classes]
+* java:S115
+====
 
 === Sealed Class
 
