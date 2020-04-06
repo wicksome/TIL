@@ -164,8 +164,14 @@ ERROR: [GitHub Commit Status Setter] ...
 
 === Polling has not run yet.
 
+- GitHub에서 Webhook이 제대로 오는가 확인
 
+=== Method POST required
 
+- GitHub Webhook에 Service Timeout 발생
+- `/github-webhook/` URL 접속하니 `Method POST required` 에러 스택트레이스 발생
+- GitHub 플러그인 설치 필요
+- 20001 포트로 되어 있었는데 Jenkins를 80 포트로 열고 GitHub에 payload url 변경하니 동작함
 
 == 기타 Jenkins 설정
 
