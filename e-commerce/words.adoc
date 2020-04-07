@@ -18,19 +18,10 @@ Yeongjun Kim <opid911@gmail.com>
 == Payments Ecosystem
 
 [link="https://davidraudales.com/davidraudales/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets/"]
-image::https://davidraudales.com/wp-content/uploads/2019/05/the-payment-industry-ecosystem-the-trend-towards-digital-payments-and-key-players-moving-markets.png[The Payments Industry Ecosystem]
+image::https://i.insider.com/5e39a5425bc79c6f194dd01a?width=2500&format=jpeg&auto=webp[The Payments Industry Ecosystem]
 
 Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리더 기업을 중심으로 경쟁과 협력을 통해 공생하고 함께 발전해나가는 모습이라고 할 수 있다.
 여기서 '몇 개의 리더 기업'은 카드 네크워크^Card{sp}Network^를 말하는 것이 아닐까 싶다.
-
-== Card Scheme
-
-=== Cardholder
-
-금융 기관^financial{sp}institution^에서 발행한 직불^debit^, 신용^credit^ 혹은 청구^charge^ 카드를 소지한 개인 또는 사업자를 말한다. (or Customer)
-
-=== Merchant
-상품 혹은 서비스를 고객에게 판매하는 **가맹점**을 말한다.
 
 === Acquirer
 
@@ -47,7 +38,12 @@ https://www.bccard.com/app/card/OnlineCardIssue.do[BC바로카드]
 .See Also
 * https://chargebacks911.com/knowledge-base/difference-between-acquiring-bank-and-issuing-bank/[Difference Between ‘Acquiring Bank’ and ‘Issuing Bank’]
 
-=== Issuer
+=== Card Network
+
+Card Network(or Card Scheme Network, Brand)::
+{wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], {wiki-discover}[DISCOVER], {wiki-amex}[American express] 등이 있다.
+
+=== Issuers
 
 Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 소비자에게 신용 카드를 발급하는 금융 기관(재정적으로 지원하는 은행 혹은 신용 조합^credit{sp}unions^)이다. _Issuing Bank_ 혹은 _Credit Card Company_ 라고도 불린다.
 발급사는 소지자에게 비용을 청구한다.
@@ -57,59 +53,189 @@ Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 �
 카카오뱅크의 경우에는 발급사는 카카오뱅크지만 매입사는 국민카드이다. 그러므로 KB국민카드의 결제망을 쓴다. 이는 기업은행이 BC카드 결제망을 사용하는 것과 동일하다.
 (그래서 국민카드 중단시 카카오뱅크 카드도 중단되는 걸까?footnote:disclaimer[See https://www.hankyung.com/economy/article/201909127021Y])
 
+=== Gateways
+
+=== ISOs/MSPs
+
+=== NonCard Payments
+
 == Card Scheme
 
 카드 스킴^Card{sp}scheme^은 직불^debit^ 또는 신용^credit^ 카드와 같은 지불 카드^payment{sp}cards^의 "brand"이며, 지불 카드에 연결된 payment networks를 말한다.
 
-3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠지며, 한국과 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
+3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠진다.
 
-Card Network(or Card Scheme Network, Brand)::
-{wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], {wiki-discover}[DISCOVER], {wiki-amex}[American express] 등이 있다.
-
-=== 우리나라 신용카드 거래 구조
-
-[link="https://www.slideshare.net/nceo/4-output"]
-image::https://image.slidesharecdn.com/4-120519123139-phpapp02/95/4-output-4-728.jpg?cb=1337430796[]
+한국과 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
 
 === Three-party scheme(or closed scheme)
-
-image::https://www.brimstone-consulting.com/images/pic_three_party_scheme.jpg[three party scheme]
 
 [ditaa, align="center"]
 .Three-party scheme
 ....
-         +------------+                      1. Payment +----------+
-         |            +-------------------------------->+          |
-         | Cardholder | 2. Product/Service              | Merchant |
-         |            +<--------------------------------+          |
-         +--+-----+-+-+                                 +--------+-+
-  Invoicing ^     : |                                      |
-            |     | |                                      |
-            |     | | Payment +-------------------+        |
-            |     | +-------->+                   |        | 카드대금지급(가맹점수수로 포함) service-fee
-            |     +---------->+    Franchisee     +<-------+
-            |   Cardholder fee| Issuer & Acquirer |           |
-            +-----------------+                   +-----------+ Settlement of funds
-                              +---------+---------+
-                                        |
-                                        |
-                                        v License fee
-                                   +----------+ 
-                                   | Licensor | 
-                                   +----------+ 
+ +------------+ Payment                         +----------+
+ |cGRE        +-------------------------------->+cGRE      |
+ | Cardholder |                 Product/Service | Merchant |
+ |            +<--------------------------------+          |
+ +--+-----+---+                                 +--+----+--+
+    |     ^                                        ^    | Merchant service charge
+    |     |                                        |    |
+    |     |                    Settlement of funds |    |
+    |     | Invoicing +-------------------+        |    |
+    |     +---------->+cGRE               +--------+    |
+    |                 | Issuer & Acquirer |             |
+    +---------------->+                   +<------------+
+    Cardholder fee    +---------+---------+
+                                |
+                                | License fee
+                                v
+                           +----------+ 
+                           | Licensor | 
+                           +----------+ 
 ....
-<1> Payment: 카드결제(신용구매)
-<2> Product/Service: 상품 및 서비스 제공(신용판매)
-<3> Invoicing: 
-<2> Cardholder-fee
-<4> Settlement of funds
-<5> Service-fee
-<6> License fee
 
-카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사^Franchisee/Issure{sp}&{sp}Acuirer^의 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조이다. +
-3-당사자 거래구조의 거래과정은 카드회원이 카드로 물건을 구매하는 경우 카드사가 회원을 대신하여 가맹점에 결제대금(가맹점수수료 공제 후)을 먼저 지급하고, 나중에 회원에게 결제대금을 청구하여 회수하게 된다.
 
-한국은 3당사자 거래구조이면서 VAN^Valud-Added{sp}Network^사가 카드사와 가맹점의 중간에서 카드거래의 승인업무 등을 중계하고 거맹점을 모집 관리하는 역할을 한다.
+3-당사자 구조는 카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사^Issuer{sp}&{sp}Acquirer^의 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조를 말한다.
+
+신용카드사는 카드회원을 대상으로 [.underline]#카드발급 업무와# 가맹점(Merchant)을 대상으로 [.underline]#'매출전표 매입업무'를# 동시에 수행한다.
+
+한국은 주로 3당사자 거래구조이면서 VAN^Valud-Added{sp}Network^사가 카드사와 가맹점의 중간에서 카드거래의 승인업무 등을 중계하고 거맹점을 모집 관리하는 역할을 한다.
+
+(우리나라의 신용카드사 중에서 비씨카드는 4-당사자 구조로 영업한다.)
+
+[link="https://www.slideshare.net/nceo/4-output"]
+.국내 신용카드 거래 구조
+image::https://image.slidesharecdn.com/4-120519123139-phpapp02/95/4-output-4-728.jpg?cb=1337430796[]
+
+Cardholder::
+금융 기관^financial{sp}institution^에서 발행한 직불^debit^, 신용^credit^ 혹은 청구^charge^ 카드를 소지한 개인 또는 사업자를 말한다.
+
+Merchant::
+상품 혹은 서비스를 고객에게 판매하는 **가맹점**을 말한다.
+
+매출전표(賣出傳票, Sales Slip)::
+매출이 발생한 거래를 정리하는 양식 및 그 기록물이다. 신용카드 매출전표를 익숙하게 볼 수 있다.
+
+매출전표 매입업무::
+가맹점은 고객이 서명한 매출전표(매출Data)를 VAN사를 통해 카드사에 전송하고 카드사는 가맹점으로부터 받은 매출전표를 심사하여 정상적으로 처리된 것이면 신용판매대금을 가맹점의 은행계좌에 입금시켜준다. 이러한 일련의 과정을 '매출전표 매입업무'라고 한다.
+
+==== Use Case
+
+3-당사자 구조에서 VAN사를 포함하여 오프라인 카드결제 및 정산이 어떻게 일어나는지 단계별로 보자.
+
+* **김모씨**는 Customer, Cardholder, 신용카드 회원, 소비자이다.
+* **A매장**은 Merchant, 신용카드 가맹점, 판매자이다.
+* **신용카드사**는 Acquirer/Issuer이다.
+* **Licensor**는 Card scheme, Franchisee이다.
+
+===== Create a credit card
+
+[ditaa, align="center"]
+....
+         +----------+
+         |cGRE      |
+         | Customer |
+         |          |
+         +--+---+---+
+            |   ^ 
+            |   |
+            |   |
+            |   | 3. Issue a card
+            |   |  +-----------------+
+            |   +--+cGRE             |
+            |      | Acquirer/Issuer |
+            +----->+                 |
+ 1. Cardholder fee +--------+--------+
+                            | 2. Licensing fee
+                            v
+                      +-----+----+
+                      | Licensor |
+                      +----------+
+....
+<1> 김모씨는 카드 발급을 위해 신용카드사로 연회비를 지불한다.
+<2> 신용카드사는 카드 스킴 혹은 프랜차이즈에 라이센스 비용을 지불한다.
+<3> 신용카드사는 김모씨에게 카드를 받급해준다.
+
+
+===== Purchase product or services.
+
+[ditaa, align="center"]
+....
+ +----------+ 1. Payment          +----------+
+ |cGRE      +-------------------->+cGRE      |
+ | Customer |                     | Merchant |
+ |          +<--------------------+          |
+ +----------+   4.Product/Service +---+--+---+
+                                      ^  |
+                                      |  | 2. Request approval
+                                      |  |
+                                    +-+--+--+
+                                    |  VAN  |
+                                    +-+--+--+
+                           3. Approve |  |
+              +-----------------+     |  |
+              |cGRE             +-----+  |
+              | Acquirer/Issuer |        |
+              |                 +<-------+
+              +-----------------+
+....
+<1> 김모씨는 A매장에서 상품을 구입하기 위해 결제(카드결제, 신용구매)를 한다. (**Payment**)
+<2> A매장은 VAN사로 승인요청을 한다.
+<3> VAN사는 신용카드사로부터 카드 확인 후 결제를 진행시킨다. 이 때 매출전표가 만들어진다.
+<4> A매장은 김모씨에세 상품 및 서비스를 제공(신용판매)한다. (**Product/Service**)
+
+
+
+===== Settlement of funds
+
+카드사가 회원을 대신하여 가맹점에 결제대금(가맹점수수료 공제 후)을 먼저 지급하고, 나중에 회원에게 결제대금을 청구하여 회수하게 된다.
+
+[ditaa, align="center"]
+....
+                                +----------+
+                                |cGRE      |
+                                | Merchant |
+                                |          |
+                                +---+---+--+
+                                    ^   |1. Request Settlement of funds through VAN
+                                    |   |
+                                    | +-+---+
+                                    | | VAN |<-+
+             2. Settlement of funds | +-+---+  |
+(excluding Merchant service charge) |   |      |
+             +-----------------+    |   |      |
+             |cGRE             +----+   |      |
+             + Acquirer/Issuer |        |      |
+             |                 +<-------+      |
+             +-----------------+               |
+                             :                 |
+                             +-----------------+
+                               VAN charge
+....
+<1> A매장은 VAN를 통해 구매대금 입금을 요청한다. (매출전표 매입업무)
+<1> 신용카드사는 A매장에게 구매대금을 지급한다. (이 때, 가맹점 수수료를 제외한 카드대금을 지급) +
+    그리고 신용카드사는 VAN사에게 VAN charge 지급한다.
+
+===== Make a card payment
+
+[ditaa, align="center"]
+....
+         +----------+
+         |cGRE      |
+         | Customer |
+         |          |
+         +--+---+---+
+ 2. Payment |   ^ 
+            |   |
+            |   |
+            |   | 1. Invoicing
+            |   |  +-----------------+
+            |   +--+cGRE             |
+            |      | Acquirer/Issuer |
+            +----->+                 |
+                   +--------+--------+
+....
+<1> 신용카드사는 김모씨에게 구매대금을 청구한다.
+<2> 김모씨는 신용카드사로 구매대금을 납부한다.
 
 === Four-party scheme(or open scheme)
 
@@ -137,31 +263,79 @@ image::https://qph.fs.quoracdn.net/main-qimg-3c63ca1f1808ae69660f6718858f0676[]
 == VAN vs PG
 PG 시스템은 VAN 을 타고 카드사 시스템에 접속하여 결제가 이루어짐
 
-== 기타 용어 정리
+=== VAN, Value-Added Network
 
-{wiki-ecommerce}[E-Commerce], Electronic Commerce::
-전자 상거래
-
-PG, Payment Gateway::
-인터넷 상에서 금융 기관과 하는 거래를 대행해 주는 서비스.
-
-VAN, Value-Added Network::
-가맹점과 카드사간 네트워크망을 구축해 카드사용 승인중계 및 카드전표 매입 업무를 하는 부가통신사업자.
-(국내 VAN사는 KICC 한국정보통신, NICE 등이 있다)
-+
 ____
 매장과 카드사를 연결해주는 회사
 ____
-+
+
+VAN사는 오프라인 결제시스템을 관리하고 신청받는 업체를 말한다. 대표적으로 한국신용정보(KICC), 금융결제원(KFTC), 케이에스밴(KSVAN), KIS, 나이스정보통신(NICE) 등이 있다.
+
+* 카드사의 가맹점 모집을 대행, 가맹점에 거래승인용 단말기를 설치하며 가맹점계약까지 중개해준다.
+* VAN사에서는 가맹점의 거래승인 중개 시 건당 수수료를 받기 때문에 가급적 많은 가맹점을 유치하고 많은 카드사와 관계를 형성하려고 하고 있어 VAN사와 카드사는 공생의 관계로 볼 수 있다.
+* 가맹점과 카드사간 네트워크망을 구축해 카드사용 승인중계 및 카드전표 매입 업무를 하는 부가통신사업자.
+* 부가가치 통신망 사업자
+* 마그네틱을 직접 단말기에 긁었을 때 일어나는 결제를 관리한다.
+* 고객이 카드를 사용할 때 단말기를 통해 승인중계업무를 한다.
 * 신용카드사를 대신해 가맹점을 모집하고 단말기를 제공 
 * 고객이 카드결제할 때 카드사로부터 해당회원의 카드결제승인을 받을 수 있도록 단말기를 통해 승인중계업무 진행
 * 카드결제 후 가맹점이 카드사에 대해 카드결제대금을 청구해 받을 수 있도록 카드매출데이터를 정치, 제출하는 카드전표 매입 업무 대행
+
+[NOTE]
+.NHN 한국사이버결제(KCP)
+====
+PG와 온라인/오프라인VAN 사업을 영위하고 있다. KCP가 온라인 VAN 시장의 약 50%를 점유하고 있는것으로 추정하며, 오프라인 VAN으로는 7% 가량 점유하고 있는 것으로 추정한다.
+
+.References
+* https://lonelyinvest.com/886
+====
+
+=== PG, Payment Gateway(or gate)
+
+PG사는 전자지불대행회사로 온라인 결제를 관리하고 신청받는 업체를 말한다. 대표적으로 KSNET, 이니시스, KCP, 모빌리언스, 다날 등이 있다.
+
+* PG사가 생겨난 이유는 중소형 쇼핑몰의 경우 카드사와 직접 계약을 맺는 것이 어렵기 때문에 PG사가 대표 가맹점 역할을 해주고, 쇼필몰은 PG사만 계약을 맺고 PG를 통해 대금 결제를 하도록 하기 위함이다.
+* 온라인 업체들의 경우 오프라인 업체처럼 카드사에서 안정성을 확신하기 어렵기 때문에 PG사가 대신해서 리스크를 지고 각 쇼핑몰과 계약하는 구조
+* 온라인 쇼핑몰들의 대표 가맹점
+* PG사의 핵심 경쟁력은 확보 온라인 가맹점 숫자
+* 인터넷 상에서 금융 기관과 하는 거래를 대행해 주는 서비스.
+* 온라인상에서 상품과 서비스를 판매하고 고객이 이에 대한 대금을 신용카드 및 기타 결제수단을 이용하여 안전하고 편리하게 결제할 수 있도록 하는 전자지불 서비스
+* 신용카드사, 은행, 통신 등 결제사와 온라인상점 사이에서 결제를 대행해 주는 결제 대행사
+
+== MPM vs CPM
+
+=== MPM, Merchant Presented Mode
+
+QR 코드를 가맹점이 생성하는 방식으로 이를 소비자가 자신의 휴대폰으로 읽어내는 방식. MPM은 다시 '고정형'과 '변동형'으로 구분된다.
+
+=== CPM, Customer Presented Mode
+
+QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스캔해 통신하는 방식
+
+== 기타 용어
+
+CDCVM, Consumer Device Cardholder Verification Method::
+카드 소유자 확인 방법 : 카드 네트워크에서 지원하는 소비자 인증 방법 (CVM)의 한 유형으로, 사용자가 결제 단말기 대신 모바일 장치에서 인증 할 수 있습니다.
++
+* https://support.google.com/pay/merchants/answer/7381753?hl=en
+* https://support.apple.com/en-us/HT202527
 
 Credit Union::
 크레딧 유니온^Credit{sp}Union^은 비영리 금융기관으로 회원들이 소유/운영하는 일종의 협동금융기관이다.
 +
 .References
 * http://www.koreadaily.com/news/read.asp?art_id=175952[크레딧 유니온이란?]
+
+EMV::
+EMV는 칩 카드 기술을 기반으로 한 신용 카드 및 직불 카드의 글로벌 표준으로, 카드 체계^Card{sp}Network^인 Europay, MasterCard, Visa에서 이름을 따온 것이다.
++
+EMV Card는 스마트 카드, 칩 카드^chip{sp}card^ 혹은 IC 카드라고 부른다.
+
+{wiki-ecommerce}[E-Commerce], Electronic Commerce::
+전자 상거래
+
+FDS, Fraud Detection System::
+이상금융거래탐지 시스템
 
 Gateway::
 The gateway is in charge of the technical payment setup in the online shop. For example, they provide the payment window in which the cardholder will enter his card details. The gateway also enables different payment methods and security features in the shop.
@@ -174,22 +348,13 @@ Their job is to collect payment and card information and forward this (in an enc
 "The PCI DSS is an #information security standard# for organizations that handle branded credit cards from the major card schemes."
 -- Wikipedia
 
-FDS, Fraud Detection System::
-이상금융거래탐지 시스템
-
-CPM, Customer Presented Mode::
-QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스캔해 통신하는 방식
-
-MPM, Merchant Presented Mode::
-QR 코드를 가맹점이 생성하는 방식으로 이를 소비자가 자신의 휴대폰으로 읽어내는 방식. MPM은 다시 '고정형'과 '변동형'으로 구분된다.
-
-CDCVM, Consumer Device Cardholder Verification Method::
-카드 소유자 확인 방법 : 카드 네트워크에서 지원하는 소비자 인증 방법 (CVM)의 한 유형으로, 사용자가 결제 단말기 대신 모바일 장치에서 인증 할 수 있습니다.
+POS, Point of sale(or purchase) system::
+판매와 관련한 데이터를 일괄적으로 관리하고, 고객정보를 수집하여 부가가치를 향상시키는 시스템이다. 판매 시점(point of sale) 또는 구매 시점(point of purchase)은 대금(payment)이 지불됨으로써 물품 거래가 완료되는 장소이다. 일반적으로 컴퓨터 시스템을 이용하여 판매 시점 관리가 이루어지면, 상품의 제조/생산 단계에서 바코드 등을 이용하여 관리의 효율성을 증대한다.
 +
-* https://support.google.com/pay/merchants/answer/7381753?hl=en
-* https://support.apple.com/en-us/HT202527
+POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,000 달러 (약 7억원) 임계를 초과하는 경우 POS 시스템 투자에 이득이 있다고 하였다.
 
-EMV::
-EMV는 칩 카드 기술을 기반으로 한 신용 카드 및 직불 카드의 글로벌 표준으로, 카드 체계^Card{sp}Network^인 Europay, MasterCard, Visa에서 이름을 따온 것이다.
-+
-EMV Card는 스마트 카드, 칩 카드^chip{sp}card^ 혹은 IC 카드라고 부른다.
+
+== 참고 링크
+
+* https://lonelyinvest.com/886[PG,VAN,간편결제 사업구모 공부 및 NHN한국사이버결제 소개]
+* https://12bme.tistory.com/221[POS 시스템 보안 & PG와 VAN의 차이]
