@@ -2269,11 +2269,211 @@ sealed class StudentStatus {
 
 == Interface
 
-== Abstract Class
+* 인터페이스를 사용하면 여러 클래스들의 공통적인 속성과 행동을 나타낼 수 있다.
+** 클래스는 **어떻게(how)** 구현하는가에 초점을 두지만, 인터페이스는 **무엇(what)**을 구현해야 하는지를 나타낸다.
+** 추상클래스도 **무엇(what)**을 구현해야 하는지를 나타낸다는 관점에서 인터페이스와 비슷하지만, 
+   추상 클래스는 서브 클래스를 가질 수 있고 생성자도 정의할 수 있다는 차이점이 있다.
+* 헤더만 선언하고 몸체의 구현 코드가 없는 함수를 **추상 함수**^abstract{sp}function^ 라고 한다.
++
+[source, kt]
+----
+interface Account {
+  fun deposit(amount: Int): Int
+  fun withdrawal(amount: Int): Int
+}
+----
+
+* 함수의 매개변수가 값이 아닌 타입(클래스나 인터페이스)인 경우는 무엇을 할 수 있는지 나타내는 것이지
+  어떻게 구현되는지는 나타내는 것이 아니다. 따라서 매개변수의 타입을 인터페이스로 지정하면 장점이 많다. (다형성)
++
+[source, kt]
+----
+interface Account {
+  fun consolidate(account: Account): Account // 계좌 통합
+}
+----
++
+[quote, Item 64 - 객체는 인터페이스를 사용해 참조하라, Effective Java 3/E]
+____
+인터페이스를 타입으로 사용하는 습관을 길러두면 프로그램이 훨씬 유연해질 것이다.
+____
+
+* 인터페이스를 구현(implement)할 때는 상속과 동일하게 콜론(`:`)을 사용한다.
++
+[source, kt]
+----
+class BankAccount : Account {
+  ...
+}
+----
+
+=== Abstract Class
+
+* 추상 클래스는 class 키워드 앞에 `abstract` 키워드를 추가하여 정의한다.
+* 추상 클래스는 인스턴스를 생성할 수 없다.
+
+[NOTE]
+====
+인터페이스 사용::
+서로 다른 객체 간에 개념적으로 상속 관례가 없으면서 공통적인 속성이나 행동을 갖는 경우
+추상 클래스 사용::
+ 상속 관계가 있으면서 인스턴스 생성이 필요 없는 슈퍼 클래스가 필요할 경우
+
+.인터페이스와 추상 클래스 차이
+* 인터페이스는 생성자를 지정할 수 없다.
+* 일반 클래스는 하나의 추상 클래스만 상속받을 수 있다.
+* 일반 클래스는 여러 개의 인터페이스를 구현할 수 있다.
+====
 
 == Generic
 
-== Extend
+* 제네릭^generic^은 클래스와 인터페이스의 매개변수 또는 함수의 매개변수와 반환 타입을 미리 확정하지 않고 정의한 후에 사용되는 
+시점에서 특정 타입을 지정할 수 있도록 해주는 기법을 말한다.
+** 코드의 중복을 줄여준다.
+** 컴파일 시점에서 사용 타입의 적합성을 확인할 수 있으므로 타입 안전을 보장해준다. 
+* `List` 는 원시 타입^raw{sp}type^이라고 하며, `<>` 안에 지적된 `Int` 타입을 제네릭 타입^generic{sp}type^ 이라고 한다.
++
+[source, kt]
+----
+val listOfInts: List<Int> = listOf(1, 2, 3)
+----
+* Kotlin의 다른 타입처럼 제네릭 타입도 차입 추론^type{sp}inference^을 지원한다.
+* `T` 말고 다른 명칭을 사용할 수 있으며, 표준화된 명칭을 따르는 것이 좋다.
+** `E`(Entity, Element), `K`(Key), `N`(Number), `T`(Type), `V`(Value), `R`(Return), `X`(Exception)
+** 참고: Effective Java 3/E "Item 68, 일반적으로 통용되는 명명 규칙을 따르라"
+* 제네릭 클래스
++
+[source, kt]
+----
+class LootBox<T>(_item: T) { // 전리품 상자 <1>
+  private var loot: T = _item
+}
+----
+<1> `T` 가 제네릭 타입 매개변수이며, `<>` 안에 지정한다.
+* 제네릭 함수
++
+[source, kt]
+----
+class LootBox<T>(_item: T) {
+  private var loot: T = _item
+  var open = false
+
+  fun fetch(): T? {
+    return loot.talkIf { open }
+  }
+}
+----
+* 제네릭에 고차 함수^higher-order{sp}function^ 사용하기
++
+[source, kt]
+----
+class LootBox<T>(item: T) {
+  private var loot: T = item
+  var open = false
+
+  fun <R> fetch(lootModFunction: (T) -> R): R? { // <1>
+    return lootModFunction(loot).takeIf { open }
+  }
+}
+----
+<1> `(T) -> R` 을 함수 타입^function{sp}type^ 이라고 한다.
++
+[NOTE]
+.higher-order function
+====
+다른 함수를 매개변수로 받거나 반환할 수 있는 함수를 고차 함수라고 한다. 고차 함수는 인자로 받은 함수를 
+필요한 시점에 호출하거나 클로저^closure^를 생성하여 반환한다.
+====
+* 타입 제약^type{sp}constraint^을 지정할 수 있다.
++
+[source, kt]
+----
+class LootBox<T : Loot>(item: T) { // <1>
+  ...
+}
+
+open class Loot(val value: Int)
+class Fedora(val name: String, value: Int) : Loot(value)
+class Coin(value: Int) : Loot(value)
+----
+<1> `T` 에 `Loot` 를 지정하면 `Loot` 클래스 및 서브 클래스만 매개변수 타입으로 사용될 수 있다.
+* 가변인자는 `vararg` 키워드를 사용한다.
++
+[source, kt]
+----
+class LootBox<T : Loot>(vararg item: T) { // <1>
+  var open = false
+  private var loot: Array<out T> = item // <2>
+
+  operator fun get(index: Int): T? = loot[index].takeIf { open } // <3>
+
+  fun fetch(item: Int): T? {
+    return loot[item].takeIf { open }
+  }
+}
+----
+<1> 배열로 처리된다.
+<2> `out` 키워드는 `T` 타입을 포함해서 `T` 타입의 서브 타입도 타입 인자가 될 수 있다는 것을 뜻한다.
+<3> 인덱스 연산자를 오버로딩하는 get 함수를 정의하면 `fetch` 함수를 사용하지 않아도 loot 배열을 읽을 수 있다. 
++
+[source, kt]
+----
+lootBoxOne.fetch(1)
+lootBoxOne[1]
+----
+
+https://thdev.tech/kotlin/androiddev/2017/10/03/Kotlin-Generics/
+T : 별도의 Wildcard 정의가 없이 read/write 모두 가능
+in T : Java의 ? super T와 같음. input의 약자이며 write 만 가능
+out T : Java의 ? extends T와 같음. output의 약자이며 read 만 가능
+
+== Extension
+
+* 확장^extension^은 기존 타입의 정의를 직접 변경하지 않고 새로운 기능을 추가할 수 있게 해준다.
+* 확장 함수 정의하기
++
+[source, kt]
+----
+fun String.addEnthusiasm(amount: Int = 1) = this + "!".repeat(amount)
+----
+** 확장 함수를 추가할 타입(수신자 타입^receiver{sp}type^)도 같이 지정해야 한다.(위 코드에서는 `String` 이 수신자 타입이다)
+** 확장 함수는 최소한의 스코프에 사용해야 할 것 같다. 전역으로 사용하게 되면 변경 포인트가 방대해지면서 관리하기 어려워진다.
+* 함수의 확장은 클래스 상속 없이도 가능하다. 그러나 확장 함수의 호출 가능 범위를 넓히기 위해서 상속과 함께 사용될 수 있다.
++
+[source, kt]
+----
+fun Any.easyPrint() = println(this)
+----
+** `Any` 의 확장 함수를 추가하면 `Any` 의 모든 하위 클래스에 대해 호출될 수 있다.
+* 제네릭 확장 함수
+** 아래와 같이 `this` 를 반환하면 연쇄 호출(체이닝)이 가능하다.
++
+[source, kt]
+----
+fun Any.easyPrint(): Any {
+  println(this)
+  return this
+}
+----
+** 하지만 위 코드는 `Any` 를 반환하므로 하위 클래스들에서 연쇄 호출이 어렵고 컴파일 에러가 발생한다.
++
+[source, kt]
+----
+fun <T> T.easyPrint(): T {
+  println(this)
+  return this
+}
+----
+** 위 코드와 같이 제네릭 타입 매개변수를 사용하면 메서드 체이닝이 가능하다.
+** 모든 타입에 사용될 수 있도록 `let` 은 제네릭 함수로 정의되어 있다.
++
+[source, kt]
+----
+public inline fun <T, R> T.let(block: (T) -> R): R { // <1>
+  return block(this)
+}
+----
+<1> `inline` 키워드가 지정되어 있다. 왜냐하면 람다를 인자로 받는 확장 함수를 인파인으로 처리하면 메모리 사용의 부담을 줄일 수 있기 때문이다.
 
 == Functional Programming
 
