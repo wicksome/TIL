@@ -25,7 +25,16 @@ Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리�
 
 === Acquirer
 
-{wiki-acquirer}[Acquirer](전표매입사). 가맹점을 대신하여 신용 또는 직불 카드 결제를 처리하는 은행 또는 금융 기관을 말한다. 대표적인 예로 국내footnote:disclaimer[BC Global은 해외결제도 가능하다.]에선 BCcard가 있다.
+{wiki-acquirer}[Acquirer](전표매입사, 인수은행)는 가맹점을 대신하여 신용 또는 직불 카드 결제를 처리하는 은행 또는 금융 기관을 말한다. "acquiring bank" 또는 "merchant bank" 라고도 불린다.
+
+인수은행(acquiring bank)은 카드 결제 거래에서 중개인에 위치하며, 가맹점과 카드발급사(issuing bank)을 연결한다.
+카드발급사는 고객(cardholder)과 직접 협력하지만, 인수은행 가맹점(merchant)이 신용 카드를 수락(accept) 할 수 있도록 재정 지원(financial backing) 및 인프라를 제공한다.
+또한, 인수은행은 신용 카드 구매, 데이터 흐름 보안 책임 및 분쟁 발생시 초기 책임과 관련된 많은 재정 위험을 부담합니다.
+
+대표적인 예로 국내footnote:disclaimer[BC Global은 해외결제도 가능하다.]에선 BCcard가 있다.
+
+Issuing bank::
+소비자에게 신용 카드 및 직불 카드를 발급하는 은행
 
 [NOTE]
 ====
@@ -54,6 +63,14 @@ Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 �
 (그래서 국민카드 중단시 카카오뱅크 카드도 중단되는 걸까?footnote:disclaimer[See https://www.hankyung.com/economy/article/201909127021Y])
 
 === Gateways
+
+Payment Gateway(PG)는 전자 상거래(e-business)와 온라인 소매업체^online{sp}retailers^에 대한 결제를 승인(authorize)하는 전자 상거래(e-commerce) 서비스이다. PG는 
+
+PG는 payment portal(웹사이트, 모바일, IVR^interactive{sp}voice{sp}response^)과 front end processor 또는 acquiring bank간에 결제 거래를 용이하게 한다.
+대부분의 온라인 소매점에서 오프라인 POS 단말기의 역할을 한다.
+
+소매업(retailers)::
+최종 소비 목적의 소비자를 대상으로 상품과 용역을 판매하는 유통업을 말한다.
 
 === ISOs/MSPs
 
@@ -316,7 +333,9 @@ PG사는 전자지불대행회사로 온라인 결제를 관리하고 신청받�
 * 온라인상에서 상품과 서비스를 판매하고 고객이 이에 대한 대금을 신용카드 및 기타 결제수단을 이용하여 안전하고 편리하게 결제할 수 있도록 하는 전자지불 서비스
 * 신용카드사, 은행, 통신 등 결제사와 온라인상점 사이에서 결제를 대행해 주는 결제 대행사
 
-== MPM vs CPM
+== QR Payments
+
+QR^quick{sp}response^ code란 흑백 격자무늬 패턴으로 정보를 나타내는 매트릭스 형식의 이차원 바코드이다.
 
 === MPM, Merchant Presented Mode
 
@@ -371,6 +390,7 @@ POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,00
 == 참고 링크
 
 * https://tidalcommerce.com/learn/iso-payment-processing[What are ISO Payments?]
+* https://chargebacks911.com/the-acquiring-bank/[What is an Acquirer?]
 * https://lonelyinvest.com/886[PG,VAN,간편결제 사업구모 공부 및 NHN한국사이버결제 소개]
 * https://12bme.tistory.com/221[POS 시스템 보안 & PG와 VAN의 차이]
 * https://m.blog.naver.com/sum7788/221492533698
