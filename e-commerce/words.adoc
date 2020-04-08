@@ -57,6 +57,20 @@ Issuer는 카드발급사로 카드 네트워크^card{sp}network^를 대신해 �
 
 === ISOs/MSPs
 
+ISOs, 혹은 independent sales organizations는 공식적으로 VISA 또는 MasterCard와 같은 카드 회원 협회(cardmember association)에 소속되어 있지는 않지만
+가맹점 계정 또는 기타 가맹점 서비스를 회원에게 제공하기 위해 _acquiring member banks_ 와 파트너십을 맺은 회사를 말한다.
+
+Acquiring banks are banks that work with merchants and merchant services companies to provide merchant accounts and collect the money owed to merchants from issuing banks.
+
+The credit card acquirer receives the batched transactions at the end of the day and deposits that amount into the merchant’s account equal to the total of the batch minus applicable fees.
+
+An acquiring bank is a bank that has the authority and ability to provide merchant accounts.
+
+MSP(Merchant Service Provider)는 가맹점 서비스 제공자로 신용카드 협회(credit card association) 회원은 아니지만 신용카드 회사(VISA, MasterCard, etc)에 등록되어 있다.
+신용 카드 혹은 직불 카드 처리에 필요한 서비스를 merchant에 제공하는 주체이다. 또한 가맹점과 발급은행 또는 신용카드 네트워크간에 중개역할을 하며 거래 수익을 계좌에 입금할 책임이 있다.
+
+PG사를 말하는걸까?
+
 === NonCard Payments
 
 == Card Scheme
@@ -356,5 +370,9 @@ POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,00
 
 == 참고 링크
 
+* https://tidalcommerce.com/learn/iso-payment-processing[What are ISO Payments?]
 * https://lonelyinvest.com/886[PG,VAN,간편결제 사업구모 공부 및 NHN한국사이버결제 소개]
 * https://12bme.tistory.com/221[POS 시스템 보안 & PG와 VAN의 차이]
+* https://m.blog.naver.com/sum7788/221492533698
+
+* https://tidalcommerce.com/learn/acquirer - 용어 설명
