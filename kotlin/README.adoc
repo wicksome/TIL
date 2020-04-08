@@ -6,6 +6,9 @@ Yeongjun Kim <opid911@gmail.com>
 
 ====
 '빅 너드 랜치의 코틀린 프로그래밍' 교재를 공부한 내용을 정리한 공간입니다.
+
+.참고
+* https://jsonobject.tistory.com/503[Kotlin, 기본 특징 및 전망 정리]
 ====
 
 * 2011년 JetBrains는 JVM에서 실행되는 Kotlin 프로그래밍 언어의 개발을 발표하였다.
@@ -1117,8 +1120,8 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 |===
 | Function | Description
 
-| `checkNotNull` | 첫번째 인자가 null이면 `IllegalStateException` 을 던지며, 그렇지 않으면 번환한다.
-| `requireNotNull` | 첫번째 인자가 null이면 `IllegalArgumentException` 을 던지며, 그렇지 않으면 번환한다.
+| `checkNotNull` | 첫번째 인자가 null이면 `IllegalStateException` 을 던지며, 그렇지 않으면 반환한다.
+| `requireNotNull` | 첫번째 인자가 null이면 `IllegalArgumentException` 을 던지며, 그렇지 않으면 반환한다.
 | `require` | 첫번째 인자가 false면 `IllegalArgumentException` 을 던진다.
 | `error` | 첫번째 인자가 null이면 제공된 메시지와 함께 `IllegalStateException` 을 던지며, 그렇지 않으면 반환한다.
 | `assert` | 인자가 false면 `AssertionError` 를 던진다. 그리고 컴파일러의 assertion 플래그가 활성화된다.
