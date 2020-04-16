@@ -2417,7 +2417,7 @@ class LootBox<T : Loot>(vararg item: T) { // <1>
 ----
 <1> 배열로 처리된다.
 <2> `out` 키워드는 `T` 타입을 포함해서 `T` 타입의 서브 타입도 타입 인자가 될 수 있다는 것을 뜻한다.
-<3> 인덱스 연산자를 오버로딩하는 get 함수를 정의하면 `fetch` 함수를 사용하지 않아도 loot 배열을 읽을 수 있다. 
+<3> 인덱스 연산자(`[]`)를 오버로딩하는 get 함수를 정의하면 `fetch` 함수를 사용하지 않아도 loot 배열을 읽을 수 있다. 
 +
 [source, kt]
 ----
@@ -2425,14 +2425,112 @@ lootBoxOne.fetch(1)
 lootBoxOne[1]
 ----
 
-https://thdev.tech/kotlin/androiddev/2017/10/03/Kotlin-Generics/
-T : 별도의 Wildcard 정의가 없이 read/write 모두 가능
-in T : Java의 ? super T와 같음. input의 약자이며 write 만 가능
-out T : Java의 ? extends T와 같음. output의 약자이며 read 만 가능
+=== in, out
+
+* Kotlin에서는 `in` 과 `out` 키워드를 사용하여 제네릭 타입 매개변수를 더 다양한 방법으로 조정할 수 있다.
+** `T` : 별도의 Wildcard 정의가 없이 read/write 모두 가능
+** `in T` : Java의 ? super T와 같음. input의 약자이며 write 만 가능
+** `out T` : Java의 ? extends T와 같음. output의 약자이며 read 만 가능
+* 제네릭 타입 매개변수에 `out` 키워드를 지정한 것을 **공병형^covariance^** 이라고 하고, `in` 키워드를 지정한 것을 **반공변형^contravariance^** 이라고 한다.
+* `in`, `out` 키워드는 컴파일러가 `<>` 로 나타낸 제네릭 타입 간의 슈퍼-서브 관계가 있더라도 인식하지 못하는 문제를 해결해준다.
++
+[source, kt]
+.AS-IS
+----
+internal class LocalTest {
+  @Test
+  fun test() {
+    var child1: Generic<Child1> = Generic(Child1("child1"))
+    var parent: Generic<Parent> = Generic(Child2("child2"))
+
+    parent = child1 // 컴파일 오류 발생 <1>
+  }
+}
+
+class Generic<T>(var value: T)
+
+open class Parent(var value: String)
+class Child1(value: String) : Parent(value)
+class Child2(value: String) : Parent(value)
+----
+<1> c1은 `Generic<Child1>`, c2는 `Generic<Parent>` 타입으로 서로 다른 것으로 간주되기 때문에 컴파일 에러가 된다.
++
+[source, kt]
+.TO-BE
+----
+internal class LocalTest {
+    @Test
+    fun test() {
+        var child1: Generic<Child1> = Generic(Child1("child1"))
+        var parent: Generic<Parent> = Generic(Child2("child2"))
+
+        parent = child1
+        val value: Child1 = parent.value
+        println(value)
+    }
+}
+
+class Generic<out T>(val value: T) // <1>
+
+open class Parent(var value: String)
+class Child1(value: String) : Parent(value)
+class Child2(value: String) : Parent(value)
+----
+<1> `out` 키워드를 통해 _T_ 와  _T_ 의 자식 클래스를 포함한 제네릭 타입을 받을 수 있다.
+
+=== reified keyword
+
+* 컴파일된 JVM 바이드코드에는 제네릭 타입 매개변수의 정보가 수록되지 않고 소거된다.
+** 제네릭 타입 매개변수가 지정된 클래스로 인스턴스를 생성할 때 어떤 타입의 인자가 사용되었는지 알기 위해 타입을 검사할 수 없다. +
+   따라서 제네릭 타입 매개변수가 지정된 클래스를 타입 검사에 사용될 수 없다.
++
+[source, kt]
+----
+val list = listOf(1, 2)
+if (list if List<String>) { // compile error <1>
+  println("This is List<String>")
+}
+----
+<1> `List<String>` 에 `<String>` 은 소거되므로 정확한 타입을 검사할 수 없기 때문에 컴파일 에러가 발생한다.
+
+* 이와 같은 문제를 해결하기 위해 코틀린은 제네릭 타입 매개변수를 컴파일러가 실페 타입으로 변경해 주는 기능을 지원한다.
+  이것을 제네릭 타입 매개변수의 **실체화^reification^**라고 하며, `reified` 키워드를 사용한다.
+* `reified` 키워드를 사용하면 제네릭 매개변수로 전달된 인자의 타입과 제네릭 클래스 인스턴스의 타입을 런타임 시에 검사할 수 있다.
+* `reified` 키워드를 사용한 타입 매개변수의 실체화는 `inline` 키워드가 지정된 인라인 함수에서만 가능하다.
+** 원래 인라인 함수를 다른 함수를 인자로 받는 고차 함수의 실행 성능을 높이기 위해 필요하다.
+** 그러나 타입 매개변수의 실체화에서는 제네릭 타입 매개변수를 실제 타입으로 교체하기 위해 사용된다.
+** 인라인 함수에는 `reified` 키워드가 지정된 타입 매개변수를 하나 이상 지정할 수 있다.
+** 인라인 함수에는 `reified` 키워드가 지정되지 않은 일반 타입의 매개변수도 정의할 수 있다.
+
+[source, kt]
+----
+@Test
+fun test1() {
+  reifiedTest { "test" }.let { println(it) }
+  reifiedTest { "test" }.let { println(it) }
+  reifiedTest { 2 }.let { println(it) }
+  reifiedTest { 2L }.let { println(it) }
+}
+
+inline fun <reified T> reifiedTest(func: () -> T): T {
+  val list = listOf(1, 1L, "123")
+  val random = list.shuffled().first()
+  return if (random is T) { // <1>
+    random
+  } else {
+    func()
+  }
+}
+----
+<1> `reified` 키워드를 추가함으로써 바이트코드에 `T` 는 전달된 인자의 타입이 삽입된다.
+
 
 == Extension
 
 * 확장^extension^은 기존 타입의 정의를 직접 변경하지 않고 새로운 기능을 추가할 수 있게 해준다.
+
+=== Extension function
+
 * 확장 함수 정의하기
 +
 [source, kt]
@@ -2477,6 +2575,19 @@ public inline fun <T, R> T.let(block: (T) -> R): R { // <1>
 }
 ----
 <1> `inline` 키워드가 지정되어 있다. 왜냐하면 람다를 인자로 받는 확장 함수를 인파인으로 처리하면 메모리 사용의 부담을 줄일 수 있기 때문이다.
+
+=== Extension property
+
+[source, kt]
+----
+val String.masked
+    get() = { "${it.substring(0..2)}****${it.takeLast(4)}" }
+----
+
+* 확장 속성은 산출 속성처럼 후원 필드를 갖지 않는다.
+* 따라서 속성에서 반환된 값을 산출하는 get을 반드시 정의해야 한다.
+* 확장 속성은 후원 필드를 갖지 않으므로 초기화할 수 없기 때문이다.
+* 따라서 var 대신 val을 지정하고 원하는 값을 반환하는 get을 정의해야 한다.
 
 == Functional Programming
 
