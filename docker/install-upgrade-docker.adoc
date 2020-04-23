@@ -109,3 +109,7 @@ $ sudo yum upgrade docker-ce docker-ce-cli
 ----
 sudo $ systemctl restart docker
 ----
+
+=== References
+
+* https://docs.docker.com/engine/install/centos/
