@@ -32,7 +32,7 @@ user $ systemctl status docker
     Tasks: 24
    Memory: 34.5M
    CGroup: /system.slice/docker.service
-           ├─142103 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock -g /home/user/apps/docker
+           ├─142103 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
            └─155121 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 80 -container-ip 172.17.0.2 -container-port 9000
 ----
 .. Create new root dir
