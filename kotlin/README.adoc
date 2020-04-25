@@ -2654,6 +2654,97 @@ public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that) // <1>
 
 == Functional Programming
 
+* 함수형 프로그래밍
+** 람다 대수를 기반으로 1950년대에 개발되었다.
+** 일반적으로 상업용 소프트웨어보다는 학계에서 만이 사용되지만, 기본 원리는 어떤 언어에도 유용하다.
+** 컬렉션을 사용하도록 설계된 소수의 고차 함수(higher-order function)가 반환하는 데이터에 의존한다.
+* 함수형 프로그램을 구형하는 함수의 유형에는 크게 세 가지가 있다.
+** 변환^transform^: `map`, `flatMap`, ...
+*** 변환 함수는 입력 컬렉션의 변경 요소를 갖는 새로운 컬렉션을 생성하고 반환한다.
+*** 입력 컬렉션은 변경하지 않는다.
+** 필터^filter^: `filter`, `filterNot`, ...
+*** true 또는 false를 반환하는 술어 함수(predicate function)을 인자로 받는다.
+** 결합^combine^: `zip`, `fold`, ...
+*** 서로 다른 컬렉션을 인자로 받아서 모든 요소들이 합쳐진 새로운 컬렉션을 반환한다.
+*** `fold` 는 최초 누적값을 인자로 받는다.
+
+.References
+* 공식 문서: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/[Package kotlin.collections]
+
+=== Why FP?
+
+* 명령형 프로그래밍에서는 항상 해당 시점의 상태를 저장하는 변수들을 많이 생성해야 한다.
+** 상태를 저장하는 변수를 변경하는 일이나, 새로 만든 값을 추가하는 것을 빠르지는 경우가 종종 생길 수 있다.
+** 작업 단계가 추가될 때마다 이런 유형의 실수가 생일 가능성이 커진다.
+* 함수형 코드 구현에서는 새로운 축적 변수를 정의할 필요가 없다.
+** 단, 연쇄 호출의 각 단계마다 개로운 컬렉션이 임시로 생성된다는 부담이 생긴다.
+** 그러나 연쇄 호출의 작업마다 내부적으로 새로운 컬렉션에 값을 축적하므로 **프로그래머의 실수는 거의 생기지 않는다**
+* 확장성이 좋다.
+** 명령형 프로그래밍에서는 for 루프와 축적값 및 변수등이 추가되야한다.
++
+[source, java]
+----
+List<String> names = new ArrayList<>();
+
+for (Map.Entry<String, String> value : users.entrySet()) {
+  names.add(String.format("%s [%s]", value.getKey(), value.getValue();
+}
+----
+** 함수형 프로그래밍에서는 추가로 수행할 함수를 연쇄 호출에 추가만 하면 된다.
++
+[source, kt]
+----
+val names = users
+  .map { "${it.key} [${it.value}]" };
+}
+----
+
+=== Sequence
+
+* `List`, `Set`, `Map` 과 같은 컬렉션 타입들은 조기 컬렉션^eager{sp}collection^이라고 한다.
+** 이 컬렉션 타입의 인스턴스가 생서오딜 때는 자신이 포함하는 요소나 항목이 추가되므로 바로 사용될 수 있기 때문이다.
+* 다른 컬렉션으로는 지연 컬렉션^lazy{sp}collection^이 있다.
+** 변수가 최초 사용될 때 초기화되는 지연 초기화와 유사하게 필요할 때만 값이 생성된다.
+** 지연 컬렉션 타입은 더 좋은 성능을 제공한다(특히 매우 큰 컬렉션을 사용할 때).
+* Kotlin은 시퀀스^sequence^라는 내정된 지연 컬렉션 타입을 제공한다.
+** 인덱스를 사용하지 않으며, 크기 정보도 유지하지 않는다.
+* 시퀀스는 저장되는 항목의 갯수에 제한이 없다. → 무한 수열
+* 시퀀스를 사용할 때는 새로운 값이 요청될 때마다 참조되는 반복자 함수^iterator{sp}function^를 정의한다.
++
+[source, kt]
+----
+generateSequence(0) { it + 1 }
+  .onEach { println("value: $it" }
+----
+<1> 만일 이 코드를 실행하면 onEach 함수가 끝나지 않고 영원히 실행될 것이다.
+
+* 1000개의 소수를 얻기 위해서는 얼마나 많은 수를 검사해야 할까?
+** 이런 경우에 시퀀스를 사용하면 완벽하다.
++
+[source, kt]
+----
+val oneThousandPrimes = generateSequence(3) { it + 1 }
+  .filter { it.isPrime() }
+  .talk(1000)
+----
+
+* 함수형 프로그래밍에서는 새로운 컬렉션을 자주 생성해야 한다.
+** 함수의 연쇄 호출에 따른 중간 과정의 결과를 임시 컬렉션에 저장해야 하기 때문이다.
+** 그러나 시퀀스는 그렇지 않으며, 대형 컬렉션에 사용할 수 있는 신축성 있는 메커니즘을 제공한다.
+
+== Performance Test
+
+[source, kt]
+----
+val listInNanos = measureNanoTime {
+  // 측정할 코드
+}
+----
+
+* Kotlin은 코드 성능을 알려주는 유틸리티 함수인 `measureNanoTime` 과 `measureTimeInMillis` 를 제공한다.
+* `measureNanoTime` 은 10억분의 1초 단위의 시간을 반환한다.
+* `measureTimeInMillis` 는 1000분의 1초 단위의 시간을 반환한다.
+
 == With Java
 
 == Coroutine
