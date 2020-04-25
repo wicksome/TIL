@@ -139,6 +139,16 @@ pipeline {
 . `Build Now` 버튼을 통해 한번 실행하여 webhook을 받을 수 있도록 해준다.
 . checkout 받은 마지막 브랜치가 설정되고, 이 브랜치에 변경이 없으면 빌드가 실행되지 않는다.
 
+=== URL 바뀌면 변경되어야 할 곳
+
+* GitHub > Settings > Developer settings > OAuth Apps 에서 URL 변경
+** Homepage URL
+** Authorization callback URL
+* GitHub > 각 repo > Settings > Hooks 에서 Webhooks 설정 변경
+** Payload URL
+* Jenkins > configure 에서 URL 변경
+** Jenkins Location > Jenkins URL
+
 == 트러블슈팅
 
 === GitHub Commit Status Setter 실패
