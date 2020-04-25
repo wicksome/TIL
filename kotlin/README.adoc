@@ -2270,6 +2270,18 @@ sealed class StudentStatus {
 |in |contains |객체가 컬렉션에 있으면 true를 반환한다.
 |===
 
+=== Type aliases
+
+* Type aliases는 기존 타입의 대체 이름을 제공한다. 
++
+[source, kt]
+----
+typealias NodeSet = Set<Network, Node>
+----
+
+.References
+* https://kotlinlang.org/docs/reference/type-aliases.html[Type aliases - Kotlin Guide]
+
 == Interface
 
 * 인터페이스를 사용하면 여러 클래스들의 공통적인 속성과 행동을 나타낼 수 있다.
@@ -2528,6 +2540,7 @@ inline fun <reified T> reifiedTest(func: () -> T): T {
 == Extension
 
 * 확장^extension^은 기존 타입의 정의를 직접 변경하지 않고 새로운 기능을 추가할 수 있게 해준다.
+* 일반 함수처럼 확장 함수도 정의된 곳 외에 다른 곳에서 사용되지 않는다면 `private` 으로 지정하다.
 
 === Extension function
 
@@ -2576,6 +2589,34 @@ public inline fun <T, R> T.let(block: (T) -> R): R { // <1>
 ----
 <1> `inline` 키워드가 지정되어 있다. 왜냐하면 람다를 인자로 받는 확장 함수를 인파인으로 처리하면 메모리 사용의 부담을 줄일 수 있기 때문이다.
 
+* Type aliases와 함께 사용하면 불필요한 타입을 만드는 것을 피할 수 있다.
++
+[source, kt]
+----
+typealias AccountNumber = String
+
+fun AccountNumber.masked(): String {
+	return "${this.substring(0..2)}****${this.takeLast(4)}"
+}
+----
++
+[source, kt]
+----
+val accountNumber: AccountNumber = "123456789"
+
+println(accountNumber)
+println(accountNumber.masked())
+----
+
+* nullable한 타입에도 확장함수를 사용할 수 있다.
++
+[source, kt]
+----
+fun String?.printlnWithDefault(default: String) = println(this ?: default)
+----
+
+* 확장 함수는 바이트코드에서 static 메서드로 변환된다.
+
 === Extension property
 
 [source, kt]
@@ -2588,6 +2629,28 @@ val String.masked
 * 따라서 속성에서 반환된 값을 산출하는 get을 반드시 정의해야 한다.
 * 확장 속성은 후원 필드를 갖지 않으므로 초기화할 수 없기 때문이다.
 * 따라서 var 대신 val을 지정하고 원하는 값을 반환하는 get을 정의해야 한다.
+
+=== infix
+
+[source, kt]
+.Tuples.kt
+----
+public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that) // <1>
+----
+
+[source, kt]
+----
+"key" to "value"
+----
+<1> `Tuples.kt` 에 `to` infix 함수가 정의되어 있으며, 이를 통해 `Pair` 를 직관적으로 생성할 수 있다.
+
+<<<
+
+* `infix` 키워드는 하나의 인자를 갖는 확장 함수와 클래스 함수 모두에 사용할 수 있다.
+* 함수 호출 문법을 간결하게 해준다.
+* 함수에 infix 키워드를 지정한 것을 중위 함수^infix{sp}function^라고 한다.
+* 중위 함수를 호출할 때는 수신자 객체와 함수 호출 사이의 점(`.`)은 물론이고 인자 주위의 괄호도 생략할 수 있다.
+* Kotlin의 비트 연산자^bitwise{sp}operator^는 `shl`, `shr`, `ushr`, `and`, `or`, `xor`, `inv` 와 같은 중위함수로 정의되어 있다.
 
 == Functional Programming
 
