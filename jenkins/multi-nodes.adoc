@@ -35,10 +35,23 @@ $ ssh-keygen -t rsa -C "jenkins agent" -f "jenkins_agent_rsa"
 [source, bash]
 ----
 # 현재 서버의 public key를 특정서버의 authorized_keys에 추가
-$ ssh-copy-id -i jenkins_agent_rsa.pub irteam@dev-nsp-jenkins-ncl
-# $ ssh-copy-id -i ansible_agent_rsa.pub irteam@dev-nsp-spa01-ncl.nfra.io
+$ ssh-copy-id -i jenkins_agent_rsa.pub user@slave-server-host
 ----
 . private 키는 master jenkins에 credentials로 저장
-.. Username: 접속하고자 하는 dev-contact-build-001-ncl의 계정
+.. Username: 접속하고자 하는 jenkins-slave 의 계정
 .. Passphrase: ssh key 생성시 입력한 passphrase
+. . `Host Key Verification Strategy` 값은 `Manually trusted key Verification Strategy` 로 설정해줘야 한다.
 . launcher agent로 설치
+
+
+== Troubleshooting
+
+=== Failed to create parent directories for tracking file
+
+[source, bash]
+----
+[WARNING] Failed to write tracking file /home/user/.m2/repository/...
+----
+
+* 원인: 빌드가 동작하는 노드가 예전에 docker로 jenkins를 띄웠었는데, 그 때 m2 디렉토리 권한을 root로 변경시킴
+* 해결방법: `$ chown -R user:user ~/.m2`
