@@ -1,0 +1,24 @@
+= Logback, Slf4j, Log4j, ...
+
+
+== Logging frameworks
+
+Log4J → Logback → Log4J2
+
+=== Log4J
+
+* Apache에서 개발
+* 2015년 개발팀에서 개발 중단 발표
+* log4j 메머
+
+=== Logback
+
+* log4j를 구현한 개발자가 개발
+
+=== Log4J2
+
+== SLF4J(Simple Logging Facade for Java)
+
+image::https://i.stack.imgur.com/Gxcuh.png[]
+
+* Log4J, Logback과 같은 back-end logger framework의 facade pattern
