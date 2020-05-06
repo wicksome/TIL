@@ -55,3 +55,6 @@ $ ssh-copy-id -i jenkins_agent_rsa.pub user@slave-server-host
 
 * 원인: 빌드가 동작하는 노드가 예전에 docker로 jenkins를 띄웠었는데, 그 때 m2 디렉토리 권한을 root로 변경시킴
 * 해결방법: `$ chown -R user:user ~/.m2`
+
+도커 슬레이브 설치시 슬레이브 서버에 yum 업데이트할 때 커널 제외하기
+* https://www.cyberciti.biz/faq/yum-update-except-kernel-package-command/
