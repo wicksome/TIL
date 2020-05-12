@@ -1,18 +1,26 @@
 = Add multi-nodes
 
-== Node 추가
+== ssh key 처음 생성하기
 
-. ssh key 생성
-+
 [source, bash]
 ----
-$ ssh <server>
 $ mkdir ~/.ssh && chmod 700 ~/.ssh
 $ cd ~/.ssh
+$ ssh-keygen -t rsa -C "JenkinsAgentRSA" -f "jenkinsAgent_rsa"
+$ ls
+jenkinsAgent_rsa  jenkinsAgent_rsa.pub
+----
 
-$ ssh-keygen -t rsa -C "Jenkins agent key" -f "jenkinsAgent_rsa"
+* 이 키는 한번 만들어두면 여러 slave 서버에 사용할 수 있다.
+
+== Slave 서버에 public key 등록하기
+
+[source, bash]
+----
 $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 ----
+
+== Jenkins에 private key 등록하기 (jenkins mgmt, master node)
 
 . credentials 생성
 .. `Add Credentials` 로 추가
@@ -20,28 +28,13 @@ $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 *** Private Key: 서버에서 생성한 private key
 *** Passphrase: ssh key 생성시 입력한 passphrase
 
-. node 추가
-** `# of executors` 갯수는 전체 코어 갯수보다 적게 설정해야 한다. -> `lscpu` 명령어로 cpu 정보 확인 가능
+== Jenkins에 Slave 노드 추가하기
 
-
-. ssh key 생성
-+
-[source, bash]
-----
-$ ssh-keygen -t rsa -C "jenkins agent" -f "jenkins_agent_rsa"
-----
-. pub 키는 노드 서버에 저장
-+
-[source, bash]
-----
-# 현재 서버의 public key를 특정서버의 authorized_keys에 추가
-$ ssh-copy-id -i jenkins_agent_rsa.pub user@slave-server-host
-----
-. private 키는 master jenkins에 credentials로 저장
-.. Username: 접속하고자 하는 jenkins-slave 의 계정
-.. Passphrase: ssh key 생성시 입력한 passphrase
-. . `Host Key Verification Strategy` 값은 `Manually trusted key Verification Strategy` 로 설정해줘야 한다.
-. launcher agent로 설치
+* `# of executors` 갯수는 전체 코어 갯수보다 적게 설정해야 한다. -> `lscpu` 명령어로 cpu 정보 확인 가능
+* Username: 접속하고자 하는 jenkins-slave 의 계정
+* Passphrase: ssh key 생성시 입력한 passphrase
+* `Host Key Verification Strategy` 값은 `Manually trusted key Verification Strategy` 로 설정해줘야 한다.
+* launcher agent로 설치
 
 
 == Troubleshooting
@@ -55,3 +48,6 @@ $ ssh-copy-id -i jenkins_agent_rsa.pub user@slave-server-host
 
 * 원인: 빌드가 동작하는 노드가 예전에 docker로 jenkins를 띄웠었는데, 그 때 m2 디렉토리 권한을 root로 변경시킴
 * 해결방법: `$ chown -R user:user ~/.m2`
+
+도커 슬레이브 설치시 슬레이브 서버에 yum 업데이트할 때 커널 제외하기
+* https://www.cyberciti.biz/faq/yum-update-except-kernel-package-command/
