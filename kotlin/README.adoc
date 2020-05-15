@@ -2324,6 +2324,13 @@ class BankAccount : Account {
 
 === Abstract Class
 
+[source, kt]
+----
+abstract class Payment {
+  abstract fun payment(amount: Long)
+}
+----
+
 * 추상 클래스는 class 키워드 앞에 `abstract` 키워드를 추가하여 정의한다.
 * 추상 클래스는 인스턴스를 생성할 수 없다.
 
