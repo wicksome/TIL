@@ -238,6 +238,11 @@ ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME); // 2020-01-2
 Date date = new Date();
 
 Instant now = date.toInstant();
+
+// sql package
+Instant.ofEpochMilli(rs.getTimestamp("date_column").getTime())
+    .atZone(timeZone)
+    .toLocalDateTime()
 ----
 
 [source, java]
