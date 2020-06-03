@@ -385,6 +385,11 @@ QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스�
 
 == 기타 용어
 
+CAT, Credit Authorization Terminal::
+CAT 단말기란 신용카드가맹점 등에서 신용카드 등의 거래 승인을 위해 사용되는 발행회사, 회원번호 등을 자동 판독해 통신회선을 통하여 신용카드업체로 전달하고 정산해주는 일반 결제 단말기를 말한다.
++
+image::https://uploads-ssl.webflow.com/55805c1704ba70184ee0bc0a/5af331fe66df017cb1919ac8_Verifone%20Vx680%20Wireless%20Payment%20Terminal.png[]
+
 CDCVM, Consumer Device Cardholder Verification Method::
 카드 소유자 확인 방법 : 카드 네트워크에서 지원하는 소비자 인증 방법 (CVM)의 한 유형으로, 사용자가 결제 단말기 대신 모바일 장치에서 인증 할 수 있습니다.
 +
