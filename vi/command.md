@@ -22,6 +22,25 @@
 - `:set syntax=sql`: syntax 적용
 
 
+## Select multiple lines
+
+> <kbd>Ctrl</kbd> + <kbd>v</kbd> visual line 상태에서...
+
+- <kbd>$</kbd>: 마지막 컬럼으로 이동
+- <kbd>^</kbd>: 첫번째 컬럼으로 이동
+
+## Insert text in multiple lines
+
+1. <kbd>Ctrl</kbd> + <kbd>v</kbd>: 라인 단위 선택 모드(visual line)
+2. 텍스트 입력
+    - <kbd>Shift</kbd> + <kbd>i</kbd>: 현재 컬럼에서 텍스트 입력
+    - <kbd>Shift</kbd> + <kbd>a</kbd>: 마지막 컬럼으로 이동 후 텍스트 입력
+3. <kbd>Esc</kbd>: 선택했던 라인에 모두 텍스트 추가
+
+## Delete multiple lines
+
+1. <kbd>Ctrl</kbd> + <kbd>v</kbd>: 라인 단위 선택 모드(visual line)
+2. <kbd>d</kbd>: 선택한 라인 제거
 
 # Shortcuts
 
