@@ -1,6 +1,6 @@
 ## Metric Definitions
 
-> SonarQube에서 나타내는 각 매트릭에 대한 설명입니다. 8.3 문서 기준으로 작성하였으며 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
+> SonarQube에서 나타내는 각 매트릭에 대한 설명입니다. 8.3 문서 기준으로 작성하였으며, 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
 
 ### Complexity: 복잡도
 
@@ -131,6 +131,13 @@
 ### Tests
 
 - Condition coverage
+    - 부울식이 포함된 각 코드 줄에서, condition coverage는 
+    ```
+    Condition coverage = (CT + CF) / (2*B)
+    ```
+    - CT = conditions that have been evaluated to 'true' at least once
+    - CF = conditions that have been evaluated to 'false' at least once
+    - B = total number of conditions
 - Condition coverage on new code
 - Condition coverage hits
 - Conditions by line
