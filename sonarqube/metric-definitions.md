@@ -130,32 +130,48 @@
 
 ### Tests
 
-- Condition coverage
-    - 부울식이 포함된 각 코드 줄에서, condition coverage는 
+- Condition coverage: 조건 커버리지
+    - condition coverage는 부울식이 포함된 각 코드 줄에서 true와 false의 경우가 모두 평가되었는지를 나타냄.
     ```
     Condition coverage = (CT + CF) / (2*B)
     ```
-    - CT = conditions that have been evaluated to 'true' at least once
-    - CF = conditions that have been evaluated to 'false' at least once
-    - B = total number of conditions
-- Condition coverage on new code
-- Condition coverage hits
-- Conditions by line
-- Covered conditions by line
+    - CT = 적어도 1번 `true`로 평가된 조건
+    - CF = 적어도 1번 `false`로 평가된 조건
+    - B = 조건의 전체 갯수
+- Condition coverage on new code: 신규 코드에 대한 조건 커버리지
+- Condition coverage hits: 수행된(covered) 조건 목록
+- Conditions by line: 각 라인별 조건 갯수
+- Covered conditions by line: 각 라인별 수행된(covered)조건 갯수
 - Coverage
-- Coverage on new code
-- Line coverage
-- Line coverage on new code
-- Line coverage hits
-- Lines to cover
-- Lines to cover on new code
+    - 라인 커버리지와 조건 커버리지가 혼합됨
+    - 단위 테스트에서 얼마나 많은 코드를 다루었는가에 대해서 알 수 있는 지표
+    ```
+    Coverage = (CT + CF + LC)/(2*B + EL)
+    ```
+    - CT = 적어도 1번 `true`로 평가된 조건
+    - CF = 적어도 1번 `false`로 평가된 조건
+    - LC = covered lines = 수행할 라인 - 수행되지 않은 라인
+    - B = 전체 조건 갯수
+    - EL = 총 평가라인 수(lines_to_cover)
+- Coverage on new code: 신규 코드에 대한 커버리지
+- Line coverage: 수행된 라인에 대한 밀도(density)
+    - 단위 테스트가 실행하는 동안 평가된 라인인지 나타냄
+    ```
+    Line coverage = LC / EL
+    ```
+    - LC = 수행된(covered) 라인 (`lines_to_cover` - `uncovered_lines`)
+    - EL = total number of executable lines (`lines_to_cover`)
+- Line coverage on new code: 신규 코드에 대한 라인 커버리지
+- Line coverage hits: 수행된(covered) 라인 목록
+- Lines to cover: 단위 테스트로 다룰 수 있는 코드 줄 수
+- Lines to cover on new code: 신규 코드에 한해 단위 테스트로 다룰 수 있는 코드 줄 수
 - Skipped unit tests: 건너 뛴 단위 테스트 갯수
-- Uncovered conditions
-- Uncovered conditions on new code
-- Uncovered lines
-- Uncovered lines on new code
+- Uncovered conditions: 단위 테스트에서 수행되지 않은(uncovered) 조건 갯수 
+- Uncovered conditions on new code: 신규 코드에 한해 단위 테스트에서 수행되지 않은(uncovered) 조건 갯수
+- Uncovered lines: 단위 테스트에서 수행되지 않은(uncovered) 줄 수
+- Uncovered lines on new code: 신규 코드에 한해 단위 테스트에서 수행되지 않은(uncovered) 줄 수
 - Unit tests: 단위 테스트 갯수
 - Unit tests duration: 단위 테스트 실행 시간
 - Unit test errors: 실패한 단위 테스트 갯수
 - Unit test failures: 예상치 않은 예외로 실패한 단위 테스트 갯수
-- Unit test success density (%)
+- Unit test success density (%): 단위 테스트 성공 비율
