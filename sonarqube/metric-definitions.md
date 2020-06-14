@@ -106,8 +106,8 @@
 
 > **Security Hotspot vs Vulnerability**
 > 
-> Security Hotspot: 보안 관련해서 개발자가 직접 검토가 필요한 문제.
-> Vulnerability: 백도어 공격과 관련한 보안 관련 문제. [Security-releated Rules](https://docs.sonarqube.org/latest/user-guide/security-rules/) 참고
+> - Security Hotspot: 보안 관련해서 개발자가 직접 검토가 필요한 문제.
+> - Vulnerability: 백도어 공격과 관련한 보안 관련 문제. [Security-releated Rules](https://docs.sonarqube.org/latest/user-guide/security-rules/) 참고
 >     - SQL 인젝션, 크로스사이트 스크립팅, 코드 인젝션 등
 
 ### Size
