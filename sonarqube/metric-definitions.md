@@ -10,8 +10,8 @@
     - 각 함수의 최소 복잡도는 1, 각 언어의 키워드나 기능에 따라 계산방법이 다름
     - Java에서 복잡도를 올리는 키워드: `if`, `for`, `while`, `case`, `catch`, `throw`, `&&`, `||`, `?`
 - Cognitive Complexity: 인지적 복잡도
-    - https://www.sonarsource.com/resources/white-papers/cognitive-complexity.html
-    - https://sonarqubekr.atlassian.net/wiki/spaces/SON/blog/2017/10/06/34996228/Cognitive+Complexity+Because+Testability+Understandability
+    - [Cognitive Complexity](https://www.sonarsource.com/resources/white-papers/cognitive-complexity.html)
+    - [Cognitive Complexity, Because Testability != Understandability](https://sonarqubekr.atlassian.net/wiki/spaces/SON/blog/2017/10/06/34996228/Cognitive+Complexity+Because+Testability+Understandability)
 
 ### Duplications: 코드중복
 
