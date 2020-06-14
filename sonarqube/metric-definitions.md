@@ -83,8 +83,8 @@
     - C: 최소 1개의 Major 취약점
     - D: 최소 1개의 Critical 취약점
     - E: 최소 1개의 Blocker 취약점
-- Security remediation effort
-- Security remediation effort on new code
+- Security remediation effort: 보안 취약점을 해결하기 위한 비용(or 노력)
+- Security remediation effort on new code: 신규 코드에 대한 보안 취약점을 해결하기 위한 비용(or 노력)
 - Security Hotspots: 보안 핫스팟 갯수
 - Security Hotspots on new code: 신규 코드에 대한 보안 핫스팟 갯수
 - Security Review Rating: 전체 코드에 대한 보안 검토 등급. 보안 핫스팟의 백분율을 기준으로 함
@@ -94,23 +94,61 @@
     - D = >= 30% and <50%
     - E = < 30%
 - Security Review Rating on new code: 신규 코드에 대한 보안 검토 등급
-- Security Hotspots Reviewed
-- New Security Hotspots Reviewed: 
+- Security Hotspots Reviewed: 보안 핫스팟에 대한 백분율
+- New Security Hotspots Reviewed: 신규 보안 핫스팟에 대한 백분율
 
 > **Security Hotspot**
+> 
 > Security Hotspot은 아래와 같은 보안 프로젝트를 바탕으로 개발자의 검토가 필요한 (보안에 민감한) 코드를 나타냅니다. 이러한 Security Hotspot을 발견하고 코딩함으로 개발자는 보안 코딩 방법을 익히며 보안 리스크를 평가하는 방법을 배울 수 있습니다.
 > - **OWASP(The Open Web Application Security Project)** 는 오픈소스 웹 애플리케이션 보안 프로젝트입니다. 주로 웹에 관한 정보노출, 악성 파일 및 스크립트, 보안 취약점 등을 연구하며, 10대 웹 애플리케이션의 취약점 (OWASP TOP 10)을 발표했습니다. 이 프로젝트의 원래 목표는 단순히 개발자와 관리자의 인식을 높이는 것이었지만, 사실상 애플리케이션 보안의 업계 표준이 되었습니다.
 > - **CVE(Common Vulnerabilities and Exposures)** 는 취약점 리스트로, 발견된 보안 취약점들을 체계적으로 정리하여 보안 취약점 고유 번호로 나타냅니다.
 > - **CWE(Common Weakness Enumeration)** 는 보안약점 리스트로, MITRE 프로젝트에서 관리하며 주요 취약점, 보안 문제를 정리한 프로젝트입니다.
 
-
 > **Security Hotspot vs Vulnerability**
+> 
 > Security Hotspot: 보안 관련해서 개발자가 직접 검토가 필요한 문제.
 > Vulnerability: 백도어 공격과 관련한 보안 관련 문제. [Security-releated Rules](https://docs.sonarqube.org/latest/user-guide/security-rules/) 참고
 >     - SQL 인젝션, 크로스사이트 스크립팅, 코드 인젝션 등
 
 ### Size
 
+- Classes
+- Comment lines
+    - Java에서 파일 헤더는 주석 줄수로 계산하지 않음. 일반적으로 라이센스를 정의하기 때문.
+- Comments
+    - 50%는 코드와 주석 줄 수가 같다는 것을 의미
+    - 100%는 주석만 있다는 것을 의미
+- Directories
+- Files
+- Lines
+- Lines of code
+- Lines of code per language
+- Functions
+    - Java에서 익명클래스의 메소드는 무시
+- Projects
+- Statements
+
 ### Tests
 
-
+- Condition coverage
+- Condition coverage on new code
+- Condition coverage hits
+- Conditions by line
+- Covered conditions by line
+- Coverage
+- Coverage on new code
+- Line coverage
+- Line coverage on new code
+- Line coverage hits
+- Lines to cover
+- Lines to cover on new code
+- Skipped unit tests: 건너 뛴 단위 테스트 갯수
+- Uncovered conditions
+- Uncovered conditions on new code
+- Uncovered lines
+- Uncovered lines on new code
+- Unit tests: 단위 테스트 갯수
+- Unit tests duration: 단위 테스트 실행 시간
+- Unit test errors: 실패한 단위 테스트 갯수
+- Unit test failures: 예상치 않은 예외로 실패한 단위 테스트 갯수
+- Unit test success density (%)
