@@ -54,3 +54,7 @@
 단위 테스트를 위해 생성된 Setter일 경우, Spring Framework의 [ReflectionTestUtils](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/util/ReflectionTestUtils.html)를 활용할 수 있습니다.
 
 Spring Batch의 Job에서 Step 간의 데이터 이동이 필요한 경우에는 [Passing Data to Future Steps](https://docs.spring.io/spring-batch/docs/current/reference/html/common-patterns.html#passingDataToFutureSteps)를 참고할 수 있습니다.
+
+**See Also**
+
+* [How can we share data between the different steps of a Job in Spring Batch?](https://stackoverflow.com/a/2791644/3793078) - stackoverflow
