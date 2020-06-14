@@ -1,6 +1,6 @@
 ## Metric Definitions
 
-> 소나큐브에서 나타내는 각 매트릭에 대한 설명입니다. 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
+> SonarQube에서 나타내는 각 매트릭에 대한 설명입니다. 8.3 문서 기준으로 작성하였으며 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
 
 ### Complexity: 복잡도
 
