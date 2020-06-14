@@ -41,7 +41,6 @@
 - [Pull Request Analysis](https://docs.sonarqube.org/latest/analysis/pull-request/)
   - PR에 대해서 merge 전에 표준을 충족하는지 확인할 수 있음
   - PR 별로 QG을 볼 수 있음
-  - 
 
 ## 조건 항목
 
