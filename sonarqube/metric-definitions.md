@@ -1,8 +1,8 @@
-## Metric Definitions
+# Metric Definitions
 
 > SonarQube에서 나타내는 각 매트릭에 대한 설명입니다. 8.3 문서 기준으로 작성하였으며, 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
 
-### Complexity: 복잡도
+## Complexity: 복잡도
 
 -  Complexity
     - 코드를 통과하는 경우의 수를 기반으로 계산된 Cyclomatic Complexity
@@ -13,14 +13,14 @@
     - [Cognitive Complexity](https://www.sonarsource.com/resources/white-papers/cognitive-complexity.html)
     - [Cognitive Complexity, Because Testability != Understandability](https://sonarqubekr.atlassian.net/wiki/spaces/SON/blog/2017/10/06/34996228/Cognitive+Complexity+Because+Testability+Understandability)
 
-### Duplications: 코드중복
+## Duplications: 코드중복
 
 - Duplicated blocks: 중복된 코드의 블럭 수.
     - Java에서는 적어도 10개의 연속적이고 중복된 코드를 나타내며, 중복을 감지하는 동안 들여쓰기와 `String`은 무시
 - Duplicated files: 중복된 파일 수
 - Duplicated lines: 중복된 코드 라인 수
 
-### Issues: 이슈
+## Issues: 이슈
 
 - New issues: 신규 코드에서 처음으로 발견한 이슈 갯수
 - New xxx issues: 신규 코드에 대해서 심각도별로 구분한 이슈 갯수
@@ -35,7 +35,7 @@
 - Confirmed issues: Confirmed 상태의 총 이슈 갯수
 - Reopened issues: Reopened 상태의 총 이슈 갯수
 
-### Maintainability: 유지보수성
+## Maintainability: 유지보수성
 
 - Code Smells: 코드악취 이슈 갯수
 - New Code Smells: 신규 코드에 대한 코드악취 갯수
@@ -49,13 +49,13 @@
     - 코드를 개발하는데 드는 비용은 한 줄 당 0.06일로 계산
 - Technical Debt Ratio on New Code: 신규 코드에 대해서 개발과 유지보수 비용 간의 비율
 
-### Quality Gates: 품질 게이트
+## Quality Gates: 품질 게이트
 
 - Quality Gate Status: 품질 게이트 상태 (`ERROR`, `OK`)
     - `WARN`은 v7.6부터 없어짐
 - Quality Gate Details: 품질 게이트에 어떤 조건이 통과하고 실패했는지에 대한 정보
 
-### Reliability: 신뢰성
+## Reliability: 신뢰성
 
 - Bugs: 버그 갯수
 - New Bugs: 신규 코드에서 발견된 버그 갯수
@@ -73,7 +73,7 @@
 > - Code Smell: 이해가능성, 변경가능성, 재사용성 등과 관련한 유지보수성 이슈로 버그는 아니다.
 > - Bugs: 잠지잭인 버그나 런타임에 문제가 있을만한 코드를 나타낸다.
 
-### Security: 보안성
+## Security: 보안성
 
 - Vulnerabilities: 취약점 갯수
 - Vulnerabilities on new code: 신규 코드에서 발견한 취약점 갯수
@@ -110,7 +110,7 @@
 > - Vulnerability: 백도어 공격과 관련한 보안 관련 문제. [Security-releated Rules](https://docs.sonarqube.org/latest/user-guide/security-rules/) 참고
 >     - SQL 인젝션, 크로스사이트 스크립팅, 코드 인젝션 등
 
-### Size
+## Size
 
 - Classes
 - Comment lines
@@ -128,7 +128,7 @@
 - Projects
 - Statements
 
-### Tests
+## Tests
 
 - Condition coverage: 조건 커버리지
     - condition coverage는 부울식이 포함된 각 코드 줄에서 true와 false의 경우가 모두 평가되었는지를 나타냄.
@@ -175,3 +175,14 @@
 - Unit test errors: 실패한 단위 테스트 갯수
 - Unit test failures: 예상치 않은 예외로 실패한 단위 테스트 갯수
 - Unit test success density (%): 단위 테스트 성공 비율
+
+> **Line Coverage, Statement Coverage**
+> 
+> Line Coverage(라인 커버리지), Statement Coverage(구문 커버리지, 스테이트먼트 커버리지)로 불리는 것 같다. 이 커버리지는 단위 테스트에 의해서 실행된 코드 라인 수를 의미한다.
+
+# See Also
+
+- [테스트 커버리지에 현혹되지 말자](http://egloos.zum.com/aeternum/v/1209470)
+    > - 라인 커버리지만 올려 신뢰성이 떨어지는 지표를 만들지 말자. Path Coverage를 목표로 하라.
+    > - "파레토 원리를 잊지 말자. 우리는 전체 오류의 80%를 차지하는 20% 부분에 집중해야 한다. 테스트 커버리지 측정은 적은 노력으로도 매우 큰 이익을 얻을 수 있는 효과적인 프랙티스다. 테스트 커버리지를 바보들의 황금으로 만드는 것은 테스트 그 자체가 아니라 테스트 커버리지를 사용하는 우리들 자신이라는 것을 잊지 말아야 한다. 배를 난파시키려는 세이렌의 노래에 현혹되지 말자. 눈을 감고 귀를 막을 필요까지는 없지만 무엇이 옳은 길인가에 대한 냉철한 판단력을 유지해야 한다."
+    
