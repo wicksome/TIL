@@ -42,3 +42,13 @@
 
 - law of demeter
   - [디미터 법칙](https://johngrib.github.io/wiki/law-of-demeter)
+  
+
+
+## Correctness - Method of Singleton class writes to a field in an unsynchronized manner
+
+> fb-contrib:USFW_UNSYNCHRONIZED_SINGLETON_FIELD_WRITES
+
+이 메서드는 해당 클래스의 필드를 수정을 합니다. 허나 이 클래스는 싱글톤(singleton)으로 보이며 해당 필드가 동기적으로 변경되지 않기 때문에 경합 상태(race condition)가 발생하거나 다른 스레드가 확인할 수 없는 변경을 만들 수 있습니다.
+
+단위 테스트를 위해 생성된 Setter일 경우, Spring Framework의 [ReflectionTestUtils](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/util/ReflectionTestUtils.html)를 활용할 수 있습니다.
