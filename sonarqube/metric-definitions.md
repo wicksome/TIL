@@ -1,4 +1,4 @@
-## Metric Definitions:
+## Metric Definitions
 
 > 소나큐브에서 나타내는 각 매트릭에 대한 설명입니다. 자세한 내용은 [Metric Definitions](https://docs.sonarqube.org/latest/user-guide/metric-definitions/) 참고바랍니다.
 
@@ -56,5 +56,61 @@
 - Quality Gate Details: 품질 게이트에 어떤 조건이 통과하고 실패했는지에 대한 정보
 
 ### Reliability: 신뢰성
+
+- Bugs: 버그 갯수
+- New Bugs: 신규 코드에서 발견된 버그 갯수
+- Reliability Rating
+    - A: 0 bugs
+    - B: 최소 1개의 Minor Bug
+    - C: 최소 1개의 Major Bug
+    - D: 최소 1개의 Critical Bug
+    - E: 최소 1개의 Blocker Bug
+- Reliability remediation effort: 버그를 해결하기 위한 비용
+    - 분 단위로 저장하며, 하루 8시간으로 가정
+- Reliability remediation effort on new code: 신규 코드에 대한 버그를 해결하기 위한 비용
+
+> **Code Smell vs Bugs**
+> - Code Smell: 이해가능성, 변경가능성, 재사용성 등과 관련한 유지보수성 이슈로 버그는 아니다.
+> - Bugs: 잠지잭인 버그나 런타임에 문제가 있을만한 코드를 나타낸다.
+
+### Security: 보안성
+
+- Vulnerabilities: 취약점 갯수
+- Vulnerabilities on new code: 신규 코드에서 발견한 취약점 갯수
+- Security Rating
+    - A: 0 취약점
+    - B: 최소 1개의 Minor 취약점
+    - C: 최소 1개의 Major 취약점
+    - D: 최소 1개의 Critical 취약점
+    - E: 최소 1개의 Blocker 취약점
+- Security remediation effort
+- Security remediation effort on new code
+- Security Hotspots: 보안 핫스팟 갯수
+- Security Hotspots on new code: 신규 코드에 대한 보안 핫스팟 갯수
+- Security Review Rating: 전체 코드에 대한 보안 검토 등급. 보안 핫스팟의 백분율을 기준으로 함
+    - A = >= 80%
+    - B = >= 70% and <80%
+    - C = >= 50% and <70%
+    - D = >= 30% and <50%
+    - E = < 30%
+- Security Review Rating on new code: 신규 코드에 대한 보안 검토 등급
+- Security Hotspots Reviewed
+- New Security Hotspots Reviewed: 
+
+> **Security Hotspot**
+> Security Hotspot은 아래와 같은 보안 프로젝트를 바탕으로 개발자의 검토가 필요한 (보안에 민감한) 코드를 나타냅니다. 이러한 Security Hotspot을 발견하고 코딩함으로 개발자는 보안 코딩 방법을 익히며 보안 리스크를 평가하는 방법을 배울 수 있습니다.
+> - **OWASP(The Open Web Application Security Project)** 는 오픈소스 웹 애플리케이션 보안 프로젝트입니다. 주로 웹에 관한 정보노출, 악성 파일 및 스크립트, 보안 취약점 등을 연구하며, 10대 웹 애플리케이션의 취약점 (OWASP TOP 10)을 발표했습니다. 이 프로젝트의 원래 목표는 단순히 개발자와 관리자의 인식을 높이는 것이었지만, 사실상 애플리케이션 보안의 업계 표준이 되었습니다.
+> - **CVE(Common Vulnerabilities and Exposures)** 는 취약점 리스트로, 발견된 보안 취약점들을 체계적으로 정리하여 보안 취약점 고유 번호로 나타냅니다.
+> - **CWE(Common Weakness Enumeration)** 는 보안약점 리스트로, MITRE 프로젝트에서 관리하며 주요 취약점, 보안 문제를 정리한 프로젝트입니다.
+
+
+> **Security Hotspot vs Vulnerability**
+> Security Hotspot: 보안 관련해서 개발자가 직접 검토가 필요한 문제.
+> Vulnerability: 백도어 공격과 관련한 보안 관련 문제. [Security-releated Rules](https://docs.sonarqube.org/latest/user-guide/security-rules/) 참고
+>     - SQL 인젝션, 크로스사이트 스크립팅, 코드 인젝션 등
+
+### Size
+
+### Tests
 
 
