@@ -2921,6 +2921,8 @@ class AppService {
 == Tip
 
 * https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
+* https://github.com/Kotlin/KEEP[KEEP - Kotlin Evolution and Enhancement Process]
+** https://github.com/hikaMaeng/kotlinCoroutineKR[코루틴 번역]
 
 == TODO
 
