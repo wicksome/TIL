@@ -1610,6 +1610,15 @@ class Payment(
 <1> 기본 생성자에 속성을 정의할 수 있으며, var나 val을 추가해야 한다. 이러한 코드는 클래스 속성과 
     생성자 매개변수의 두 가지 역할을 모두 하게 되므로 코드의 중복도 줄여 준다.
 
+[source, kt]
+.visibility
+----
+class C private constructor(a: Int) { ... } // <1>
+----
+<1> 기본 생성자에 접근제어자를 설정하려면 명시적으로 `constructor` 키워드를 추가해야 한다. 기본값은 `public`이다.
+
+https://kotlinlang.org/docs/reference/visibility-modifiers.html#constructors
+
 ==== Secondary constructor
 
 * 보조 생성자에서는 속성을 정의할 수 없다.
