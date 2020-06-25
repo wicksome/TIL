@@ -1615,7 +1615,7 @@ class Payment(
 ----
 class C private constructor(a: Int) { ... } // <1>
 ----
-<1> 기본 생성자에 접근제어자를 설정하려면 명시적으로 `constructor` 키워드를 추가해야 한다. 기본값은 `public`이다.
+<1> 기본 생성자에 접근제어자를 설정하려면 명시적으로 `constructor` 키워드를 추가해야 한다. 기본값은 `public` 이다.
 
 https://kotlinlang.org/docs/reference/visibility-modifiers.html#constructors
 
@@ -2593,7 +2593,11 @@ inline fun <reified T> reifiedTest(func: () -> T): T {
 == Extension
 
 * 확장^extension^은 기존 타입의 정의를 직접 변경하지 않고 새로운 기능을 추가할 수 있게 해준다.
-* 일반 함수처럼 확장 함수도 정의된 곳 외에 다른 곳에서 사용되지 않는다면 `private` 으로 지정하다.
+* Extensions는 정적(static)으로 처리된다.
+* 이미 클래스에 Extension과 동일한 시그니처로 맴버가 있을 경우 맴버가 우선이다.
+* https://kotlinlang.org/docs/reference/extensions.html#scope-of-extensions[선택적인 import]가 가능하다.
+** 클래스의 맴버로 선언하면 해당 클래스 내에서만 범위가 결정된다.
+** 일반 함수처럼 확장 함수도 정의된 곳 외에 다른 곳에서 사용되지 않는다면 `private` 으로 지정하다.
 
 === Extension function
 
@@ -2704,6 +2708,12 @@ public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that) // <1>
 * 함수에 infix 키워드를 지정한 것을 중위 함수^infix{sp}function^라고 한다.
 * 중위 함수를 호출할 때는 수신자 객체와 함수 호출 사이의 점(`.`)은 물론이고 인자 주위의 괄호도 생략할 수 있다.
 * Kotlin의 비트 연산자^bitwise{sp}operator^는 `shl`, `shr`, `ushr`, `and`, `or`, `xor`, `inv` 와 같은 중위함수로 정의되어 있다.
+
+=== See Also
+
+* https://medium.com/til-kotlin-ko/kotlin%EC%9D%98-extension%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94%EA%B0%80-part-1-7badafa7524a[Kotlin의 Extension은 어떻게 동작하는가 part 1]
+* https://medium.com/til-kotlin-ko/kotlin%EC%9D%98-extension%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94%EA%B0%80-part-2-fb52bb20bc9e[Kotlin의 Extension은 어떻게 동작하는가 part 2]
+* https://medium.com/til-kotlin-ko/kotlin%EC%9D%98-extension%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94%EA%B0%80-part-3-587cc37e7337[Kotlin의 Extension은 어떻게 동작하는가 part 3]
 
 == Functional Programming
 
