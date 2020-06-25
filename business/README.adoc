@@ -1,3 +1,15 @@
 = 업무관련
 
 f/u:: follow up
+
+lgtm:: looks good to me
+
+w/:: with
+
+eg::
+
+tl;dr:: "too long; didn't read"(너무 길어서 읽지 않았다)는 응답이 되는 어떠한 텍스트가 그 길이 때문에 무시되고 있다는 것을 말하는 인터넷 속어이다. 속어로 "Too lazy; didn't read"(너무 게을러서 읽지 않았다)를 가리킬 수도 있다. 온라인 게시물이나 신문 기사의 요약을 위한 기표로도 사용된다.
+
+IMO (IMHO):: “In My (Humble) Opinion” 개인적인 의견 입니다만, 내 소견이지만. (humble 이 들어가면 조금 겸손한 느낌)
+
+wip::
