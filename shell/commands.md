@@ -35,7 +35,7 @@ $ open -a TextWrangler 파일명
 $ httpd -k start|stop|restart
 ```
 
-초당 TIME_WAIT 소켓 갯수 확인
+초당 TIME_WAIT 소켓 개수 확인
 
 ```sh
 $ while true; do echo "$(date) :: $(ss -tanop | grep -E "TIME-WAIT.*:11001" | wc -l)"; sleep 1; done
