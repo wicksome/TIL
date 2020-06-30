@@ -24,9 +24,9 @@ exec.execute(task);
 	- 프로그램에 최적화된 실행자를 반환
 	- idle thread에서 실행, 모든 스레드가 사용중이면 새로운 스레드 생성, 장시간 idle state이면 종료
 - `Executors.newFixedThreadPool(nThreads)`
-	- 고정 갯수 thread pool을 반환
+	- 고정 개수 thread pool을 반환
 	- 강도 높은 계산을 수행하는 태스크에 적합
-	- 다음 방법으로 스레드 갯수 도출
+	- 다음 방법으로 스레드 개수 도출
 
 	```java
 	int processors = Runtime.getRuntime().availableProcessors();
