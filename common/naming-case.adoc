@@ -14,6 +14,22 @@
 ** `bIsClass`
 ** `strClassName`
 
+---
+
+[quote, https://www.chaseadams.io/posts/most-common-programming-case-types/#javascript-conventions]
+____
+* kebab case in Lisp.
+* **kebab case in HTTP URLs (most-common-programming-case-types/).**
+* snake case in JSON property keys.
+___
+
+[quote, https://wprock.fr/en/blog/conventions-nommage-programmation/]
+____
+The kebab case is recommended for writing URLs as well as naming images, PDFs and other files for the web. In programming, it is used, for example, to name classes and IDs in HTML and CSS code.
+____
+
+---
+
 .See Also
 * https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case[What's the name for hyphen-separated case?]
 * https://en.wikipedia.org/wiki/Letter_case#Special_case_styles[Special case styles]
