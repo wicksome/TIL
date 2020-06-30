@@ -22,23 +22,23 @@
 
 ## Issues: 이슈
 
-- New issues: 신규 코드에서 처음으로 발견한 이슈 갯수
-- New xxx issues: 신규 코드에 대해서 심각도별로 구분한 이슈 갯수
+- New issues: 신규 코드에서 처음으로 발견한 이슈 개수
+- New xxx issues: 신규 코드에 대해서 심각도별로 구분한 이슈 개수
     - blocker, critical, major, minor, info.
-- Issues: 전체 코드에 대해서 발견한 이슈 갯수
-- xxx issues: 전체 코드에 대해서 심각도에 따라 구분한 이슈 갯수
+- Issues: 전체 코드에 대해서 발견한 이슈 개수
+- xxx issues: 전체 코드에 대해서 심각도에 따라 구분한 이슈 개수
     - blocker, critical, major, minor, info.
-- False positive issues: False Positive로 표시된 이슈 갯수
+- False positive issues: False Positive로 표시된 이슈 개수
     - 문제 없는데 문제 있다고 나온 것? 테스트 실패 건? 오탐?
     - [소프트웨어 테스팅의 False Positive](https://justhackem.wordpress.com/2018/12/20/false-positive-in-software-testing/)
-- Open issues: 열려있는 총 이슈 갯수
-- Confirmed issues: Confirmed 상태의 총 이슈 갯수
-- Reopened issues: Reopened 상태의 총 이슈 갯수
+- Open issues: 열려있는 총 이슈 개수
+- Confirmed issues: Confirmed 상태의 총 이슈 개수
+- Reopened issues: Reopened 상태의 총 이슈 개수
 
 ## Maintainability: 유지보수성
 
-- Code Smells: 코드악취 이슈 갯수
-- New Code Smells: 신규 코드에 대한 코드악취 갯수
+- Code Smells: 코드악취 이슈 개수
+- New Code Smells: 신규 코드에 대한 코드악취 개수
 - Maintainability Rating: 기술 부채 비율에 관련해 측정된 등급
     - 유지보수성 등급의 기본 비율 값: A=0-0.05, B=0.06-0.1, C=0.11-0.20, D=0.21-0.5, E=0.51-1
 - Technical Debt: 유지보수 이슈를 해결하는데 예상되는 시간
@@ -57,8 +57,8 @@
 
 ## Reliability: 신뢰성
 
-- Bugs: 버그 갯수
-- New Bugs: 신규 코드에서 발견된 버그 갯수
+- Bugs: 버그 개수
+- New Bugs: 신규 코드에서 발견된 버그 개수
 - Reliability Rating
     - A: 0 bugs
     - B: 최소 1개의 Minor Bug
@@ -75,8 +75,8 @@
 
 ## Security: 보안성
 
-- Vulnerabilities: 취약점 갯수
-- Vulnerabilities on new code: 신규 코드에서 발견한 취약점 갯수
+- Vulnerabilities: 취약점 개수
+- Vulnerabilities on new code: 신규 코드에서 발견한 취약점 개수
 - Security Rating
     - A: 0 취약점
     - B: 최소 1개의 Minor 취약점
@@ -85,8 +85,8 @@
     - E: 최소 1개의 Blocker 취약점
 - Security remediation effort: 보안 취약점을 해결하기 위한 비용(or 노력)
 - Security remediation effort on new code: 신규 코드에 대한 보안 취약점을 해결하기 위한 비용(or 노력)
-- Security Hotspots: 보안 핫스팟 갯수
-- Security Hotspots on new code: 신규 코드에 대한 보안 핫스팟 갯수
+- Security Hotspots: 보안 핫스팟 개수
+- Security Hotspots on new code: 신규 코드에 대한 보안 핫스팟 개수
 - Security Review Rating: 전체 코드에 대한 보안 검토 등급. 보안 핫스팟의 백분율을 기준으로 함
     - A = >= 80%
     - B = >= 70% and <80%
@@ -137,11 +137,11 @@
     ```
     - CT = 적어도 1번 `true`로 평가된 조건
     - CF = 적어도 1번 `false`로 평가된 조건
-    - B = 조건의 전체 갯수
+    - B = 조건의 전체 개수
 - Condition coverage on new code: 신규 코드에 대한 조건 커버리지
 - Condition coverage hits: 수행된(covered) 조건 목록
-- Conditions by line: 각 라인별 조건 갯수
-- Covered conditions by line: 각 라인별 수행된(covered)조건 갯수
+- Conditions by line: 각 라인별 조건 개수
+- Covered conditions by line: 각 라인별 수행된(covered)조건 개수
 - Coverage
     - 라인 커버리지와 조건 커버리지가 혼합됨
     - 단위 테스트에서 얼마나 많은 코드를 다루었는가에 대해서 알 수 있는 지표
@@ -151,7 +151,7 @@
     - CT = 적어도 1번 `true`로 평가된 조건
     - CF = 적어도 1번 `false`로 평가된 조건
     - LC = covered lines = 수행할 라인 - 수행되지 않은 라인
-    - B = 전체 조건 갯수
+    - B = 전체 조건 개수
     - EL = 총 평가라인 수(lines_to_cover)
 - Coverage on new code: 신규 코드에 대한 커버리지
 - Line coverage: 수행된 라인에 대한 밀도(density)
@@ -165,15 +165,15 @@
 - Line coverage hits: 수행된(covered) 라인 목록
 - Lines to cover: 단위 테스트로 다룰 수 있는 코드 줄 수
 - Lines to cover on new code: 신규 코드에 한해 단위 테스트로 다룰 수 있는 코드 줄 수
-- Skipped unit tests: 건너 뛴 단위 테스트 갯수
-- Uncovered conditions: 단위 테스트에서 수행되지 않은(uncovered) 조건 갯수 
-- Uncovered conditions on new code: 신규 코드에 한해 단위 테스트에서 수행되지 않은(uncovered) 조건 갯수
+- Skipped unit tests: 건너 뛴 단위 테스트 개수
+- Uncovered conditions: 단위 테스트에서 수행되지 않은(uncovered) 조건 개수 
+- Uncovered conditions on new code: 신규 코드에 한해 단위 테스트에서 수행되지 않은(uncovered) 조건 개수
 - Uncovered lines: 단위 테스트에서 수행되지 않은(uncovered) 줄 수
 - Uncovered lines on new code: 신규 코드에 한해 단위 테스트에서 수행되지 않은(uncovered) 줄 수
-- Unit tests: 단위 테스트 갯수
+- Unit tests: 단위 테스트 개수
 - Unit tests duration: 단위 테스트 실행 시간
-- Unit test errors: 실패한 단위 테스트 갯수
-- Unit test failures: 예상치 않은 예외로 실패한 단위 테스트 갯수
+- Unit test errors: 실패한 단위 테스트 개수
+- Unit test failures: 예상치 않은 예외로 실패한 단위 테스트 개수
 - Unit test success density (%): 단위 테스트 성공 비율
 
 > **Line Coverage, Statement Coverage**
