@@ -1,0 +1,18 @@
+= naming case
+
+* calmelCase
+** lowerCalmelCase
+** UpperCamelCase
+* PascalCase (= UpperCalmelCase)
+* kebab-case
+** dash-case
+* snake_case
+** Train_Case
+** spinal_case
+* _Hungarian notation_: 이름 앞에 변수의 타입을 prefix로 추가하는 표기법
+** `bIsClass`
+** `strClassName`
+
+.See Also
+* https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case[What's the name for hyphen-separated case?]
+* https://en.wikipedia.org/wiki/Letter_case#Special_case_styles[Special case styles]
