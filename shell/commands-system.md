@@ -36,7 +36,7 @@ $ df -h # Human-readable
 > ps - **p**rocess **s**tatus
 
 ```sh
-# 실행중인 프로세스 확인, 갯수(e: 모든 프로세스, f: full listing)
+# 실행중인 프로세스 확인, 개수(e: 모든 프로세스, f: full listing)
 $ ps -ef | grep 'httpd'
 $ ps -ef | grep 'httpd' | wc -l
 ```
