@@ -9,6 +9,7 @@
 * snake_case
 ** Train_Case
 ** spinal_case
+** SCREAMING_SNAKE_CASE
 * _Hungarian notation_: 이름 앞에 변수의 타입을 prefix로 추가하는 표기법
 ** `bIsClass`
 ** `strClassName`
