@@ -16,14 +16,14 @@
 
 ---
 
-[quote, Chase Adams, https://www.chaseadams.io/posts/most-common-programming-case-types/#javascript-conventions[Most Common Programming Case Types]]
+[quote, Chase Adams, 'https://www.chaseadams.io/posts/most-common-programming-case-types/#javascript-conventions[Most Common Programming Case Types]']
 ____
 * kebab case in Lisp.
 * **kebab case in HTTP URLs (most-common-programming-case-types/).**
 * snake case in JSON property keys.
 ____
 
-[quote, Julien MA Jacob, https://wprock.fr/en/blog/conventions-nommage-programmation/[Programming 👩‍🍳 Naming and code writing conventions]]
+[quote, Julien MA Jacob, 'https://wprock.fr/en/blog/conventions-nommage-programmation/[Programming 👩‍🍳 Naming and code writing conventions]']
 ____
 The kebab case is recommended for writing URLs as well as naming images, PDFs and other files for the web. In programming, it is used, for example, to name classes and IDs in HTML and CSS code.
 ____
