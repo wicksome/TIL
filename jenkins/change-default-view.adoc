@@ -1,0 +1,6 @@
+= change default view
+
+. Configuration → Default View 를 다른 것으로 변경
+. All 뷰 제거
+. All 를 대체할 뷰 생성
+. Configuration → Default View 를 대체할 뷰로 설정
