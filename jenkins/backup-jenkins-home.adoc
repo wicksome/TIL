@@ -107,3 +107,15 @@ pipeline {
     }
 }
 ----
+
+== References
+
+
+* https://github.com/sue445/jenkins-backup-script[sue445/jenkins-backup-script]
+* https://www.jenkins.io/doc/pipeline/steps/ssh-agent/[SSH Agent Plugin] - `sshagent` step
+* https://git-lfs.github.com/[Git Large File Storage] - `.gitattributes` 설정
++
+[source, bash]
+----
+this exceeds GitHub Enterprise's file size limit of 100.00 MB
+----
