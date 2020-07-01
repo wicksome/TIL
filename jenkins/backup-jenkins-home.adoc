@@ -33,7 +33,7 @@ pipeline {
         BACKUP_DATETIME = new Date().format('yyyyMMddHHmmss', TimeZone.getTimeZone('Asia/Seoul'))
     }
     triggers {
-        cron('0 3 * * *')
+        cron('TZ=Asia/Seoul\n0 3 * * *')
     }
     stages {
         stage('Checkout') {
