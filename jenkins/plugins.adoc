@@ -9,3 +9,28 @@
 freestyle 잡에서 'GitHub Pull Request Builder' 트리거 사용하기 위함
 +
 ** https://github.com/jenkinsci/ghprb-plugin/issues/407[디폴트 commit status 안나오게 하기]
+** 아래와 같이 사용하고 싶지만 Job DSL 에서만 사용가능한 것으로 보임
++
+[source, groovy]
+----
+// GitHub Pull Request Builder Plugin
+githubPullRequest {
+    orgWhitelist('org-name')
+    triggerPhrase('rebuild')
+    useGitHubHooks()
+    extensions {
+        commitStatus {
+            triggeredStatus('--none--')
+            startedStatus('--none--')
+            statusUrl('--none--')
+            completedStatus('SUCCESS', '--none--')
+            completedStatus('FAILURE', '--none--')
+            completedStatus('ERROR', '--none--')
+        }
+    }
+}
+----
+
+* https://github.com/jenkinsci/github-plugin
++
+pipeline에서 commit status 변경하는 함수 사용하기 위함
