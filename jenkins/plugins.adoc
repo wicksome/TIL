@@ -1,0 +1,5 @@
+= plugins
+
+* https://plugins.jenkins.io/pipeline-github/
++
+`triggers { issueCommentTrigger("rebuild") }` 사용하기 위함
