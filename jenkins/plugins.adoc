@@ -38,3 +38,7 @@ pipeline에서 commit status 변경하는 함수 사용하기 위함
 * https://plugins.jenkins.io/http_request/
 +
 pipeline에서 http request 사용하기 위함(`httpRequest`)
+
+* https://plugins.jenkins.io/ssh-agent/
++
+pipeline에서 `sshagent` 사용하기 위함
