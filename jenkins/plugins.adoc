@@ -3,3 +3,9 @@
 * https://plugins.jenkins.io/pipeline-github/
 +
 `triggers { issueCommentTrigger("rebuild") }` 사용하기 위함
+
+* https://github.com/jenkinsci/ghprb-plugin
++
+freestyle 잡에서 'GitHub Pull Request Builder' 트리거 사용하기 위함
++
+** https://github.com/jenkinsci/ghprb-plugin/issues/407[디폴트 commit status 안나오게 하기]
