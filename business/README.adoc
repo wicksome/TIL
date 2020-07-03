@@ -10,6 +10,14 @@ tl;dr:: "too long; didn't read"(너무 길어서 읽지 않았다)는 응답이 
 
 WIP:: Work in Progress
 
+FYI:: For Your Information
+
+24/365, 24/7/365:: 24시간 7일 365일 전체를 의미
+
+P&L:: Profit and loss, 손익
+
+ROI:: Return on Investment, 투자수익률. 금융용어지만 리소스(시간, 비용, 개발) 투자 대비 돌아오는 결과를 나타낼 때에도 사용하는 것 같다. (e.g. "ROI 나오는거야?")
+
 == GitHub
 
 IMO(IMHO):: “In My (Humble) Opinion” 개인적인 의견 입니다만, 내 소견이지만. (humble 이 들어가면 조금 겸손한 느낌)
