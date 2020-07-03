@@ -1,0 +1,23 @@
+= Docker
+:toc:
+
+== 유용한 명령어
+
+=== 이미지에 bash 바로 접근하기
+
+[source, bash]
+----
+docker run -it --rm --entrypoint /bin/bash nginx:latest
+----
+
+[source, bash]
+----
+docker pull ansible/ansible:default
+----
+
+=== 빌드하고 바로 실행하기
+
+[source, bash]
+----
+docker build -t foo . && docker run -it foo
+----
