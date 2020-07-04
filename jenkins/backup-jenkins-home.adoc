@@ -23,45 +23,57 @@ Settings → Deploy keys → Add deploy key
 . 비공개키(`jenkins_backup`)는 jenkins에 등록
 +
 Add Credentials → Kind: `SSH Username with private key` → ID: `jenkins-backup`
+. https://github.com/sue445/jenkins-backup-script.git[jenkins-backup.sh]을 개인의 backup 저장소에 이동
++
+https://github.com/sue445/jenkins-backup-script.git 에서 가져와서 사용해도 되나 두번 clone 받는 비용을 줄이기 위해 선 이동 작업 진행
 . Jenkinsfile을 활용하여 백업 작업 등록
 +
 [source, groovy]
 ----
+def BACKUP_DATETIME = new Date().format('yyyyMMddHHmmss', TimeZone.getTimeZone('Asia/Seoul'))
+
 pipeline {
     agent { label 'master' }
+    triggers { cron('TZ=Asia/Seoul\n0 3 * * *') }
     environment {
-        BACKUP_DATETIME = new Date().format('yyyyMMddHHmmss', TimeZone.getTimeZone('Asia/Seoul'))
-    }
-    triggers {
-        cron('TZ=Asia/Seoul\n0 3 * * *')
+        JENKINS_HOST = ''
     }
     stages {
+        stage('Init') {
+            steps {
+                script {
+                    JENKINS_HOST = sh(script: "echo ${env.BUILD_URL} | awk -F[/:] '{print \$4}'", returnStdout: true).trim()
+                }
+            }
+        }
         stage('Checkout') {
             steps {
-                checkout([
-                    $class           : 'GitSCM',
-                    branches         : [[name: 'refs/tags/0.1.9']],
-                    userRemoteConfigs: [[url: 'https://github.com/sue445/jenkins-backup-script.git']]
-                ])
-            }
-        }
-
-        stage('Backup') {
-            when { expression { fileExists('./jenkins-backup.sh') } }
-            steps {
-                sh './jenkins-backup.sh ${JENKINS_HOME} cicd_${BACKUP_DATETIME}.tar.gz'
-            }
-        }
-
-        stage('Upload') {
-            steps {
-                // git clone
+                sh "git lfs install"
                 checkout([
                     $class           : 'GitSCM',
                     branches         : [[name: 'refs/remotes/origin/master']],
-                    userRemoteConfigs: [[url: 'git@github.com:wicksome/jenkins-backup.git', credentialsId: 'jenkins-backup']]
+                    userRemoteConfigs: [[url: 'git@github.com:wicksome/jenkins-backup.git', credentialsId: 'jenkins-backup']],
+                    extensions       : [
+                        [$class: 'GitLFSPull'],
+                        [$class: 'CheckoutOption', timeout: 20],
+                        [$class   : 'CloneOption',
+                         depth    : 0,
+                         noTags   : false,
+                         reference: '/other/optional/local/reference/clone',
+                         shallow  : false,
+                         timeout  : 120]
+                    ]
                 ])
-
+            }
+        }
+        stage('Backup') {
+            when { expression { fileExists('./jenkins-backup.sh') } }
+            steps {
+                sh "./jenkins-backup.sh ${env.JENKINS_HOME} ${JENKINS_HOST}_${BACKUP_DATETIME}.tar.gz"
+            }
+        }
+        stage('Upload') {
+            steps {
                 // setting git config
                 sh '''
                     git config user.name 'JENKINS\'
@@ -69,14 +81,14 @@ pipeline {
                 '''
 
                 // rotate backup files
-                sh 'find . -type f -name "cicd_*" | grep -v "${BACKUP_DATETIME}" | xargs rm -f'
+                sh "find . -type f -name '${JENKINS_HOST}_*' | grep -v \"${BACKUP_DATETIME}\" | xargs rm -f"
 
                 // git commit
-                sh '''
-                    git add cicd*
+                sh """
+                    git add -A
                     git ls-files --deleted | xargs git add
-                    git commit -m "Backup the JENKINS_HOME of CI/CD"
-                '''
+                    git commit -m "Backup the jenkins home directory"
+                """
 
                 // git push
                 sshagent(['jenkins-backup']) {
@@ -84,6 +96,8 @@ pipeline {
                         #!/usr/bin/env bash
                         set +x
                         export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                        git remote set-head origin -a
+                        git pull origin master
                         git push origin HEAD:master
                     """)
                 }
@@ -98,7 +112,7 @@ pipeline {
 
                 emailext body: '''${SCRIPT, template="groovy-html.template"}''',
                     mimeType: 'text/html',
-                    subject: "${jobName} 실패",
+                    subject: "${jobName} 실패 - ${JENKINS_HOST}",
                     to: "${mailRecipients}",
                     replyTo: "${mailRecipients}",
                     recipientProviders: [[$class: 'CulpritsRecipientProvider']]
@@ -106,6 +120,7 @@ pipeline {
         }
     }
 }
+
 ----
 
 == References
