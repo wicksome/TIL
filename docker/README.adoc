@@ -21,3 +21,10 @@ docker pull ansible/ansible:default
 ----
 docker build -t foo . && docker run -it foo
 ----
+
+=== 데몬으로 실행하기
+
+[source, bash]
+----
+docker run -d -p 8080:8080 --name jenkins jenkins/jenkins:latest 
+----
