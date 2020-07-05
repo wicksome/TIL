@@ -1,9 +1,12 @@
 = 리팩터링 2판
 :toc:
+:toclevels: 2
 
 공부하면서 남기고 싶은 것들에 대해서 정리.
 
 ---
+
+== 들어가기
 
 * 내가 좋아하는/주도적으로 하는 일이 정확히 같아서 남김.
 +
@@ -24,7 +27,10 @@ ____
 * "잘 정리된 용어는 개발 도구가 제공하는 자동와된 리팩터링을 선택하는 데도 도움을 준다."
 ** "잘 지어진 용어는 소통을 도와준다."
 ** https://docs.google.com/spreadsheets/d/1nFx-PjZ9Qs3QBZFzaMo6MSUSrWjSsO-iz5kpBtlVRPQ/edit#gid=866204681[IDE들이 제공하는 리팩터링 목록]
-
+* IntelliJ 기능/단축키를 이것 저것 사용하면서 쓰던 https://www.jetbrains.com/help/idea/refactoring-source-code.html[refactor] 기능이 리팩토링의 기법이라니..
+** 이클립스, 인텔리제이 기능 사용하다가 기능이 있길래 사용함
+** 리팩토링은 'refactor 기능을 사용(-ing)한다는 의미이라고만 생각함
+** 그래서 단순히 '(유지보수성을 높히는) 코드 수정' 정도의 의미인 줄 알았음
 
 == 01. 리팩터링: 첫 번째 예시
 
@@ -50,12 +56,8 @@ ____
 
 == 12. 상속 다루기
 
-== 읽고나서 느낌 점
+== 읽고나서 느낌점
 
-* IntelliJ 기능/단축키를 이것 저것 사용하면서 쓰던 https://www.jetbrains.com/help/idea/refactoring-source-code.html[refactor] 기능이 리팩토링의 기법이라니..
-** 이클립스, 인텔리제이 기능 사용하다가 기능이 있길래 사용함
-** 리팩토링은 'refactor 기능을 사용(-ing)한다는 의미이라고만 생각함..
-** 그래서 단순히 '(유지보수성을 높히는) 코드 수정' 정도의 의미인 줄 알았음
 * 리팩터링은 배워야하는 것도 맞지만, 왜 필요한지, 왜 해야하는지 이해하는 것도 중요한 것 같음.
 
 == References
