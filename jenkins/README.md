@@ -16,3 +16,9 @@
 
 - [Credential 추가하기](https://github.com/wicksome/TIL/blob/master/jenkins/credentials.adoc)
 - [Pipeline vs Job DSL](https://github.com/wicksome/TIL/blob/master/jenkins/pipeline-vs-dsl.adoc)
+
+## Rerferences
+
+- Delivery Pipeline
+  - https://plugins.jenkins.io/delivery-pipeline-plugin/
+  - https://velog.io/@minholee_93/Jenkins-Delivery-Pipeline-nvk5t7g2rh
