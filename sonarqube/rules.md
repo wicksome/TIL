@@ -58,3 +58,21 @@ Spring Batch의 Job에서 Step 간의 데이터 이동이 필요한 경우에는
 **See Also**
 
 * [How can we share data between the different steps of a Job in Spring Batch?](https://stackoverflow.com/a/2791644/3793078) - stackoverflow
+
+## Local variable could be final
+
+> pmd:LocalVariableCouldBeFinal
+
+재할당하지 않는 로컬 변수는 final로 선언한다.
+
+- final로 선언하면 리팩토링 할 때 불변값이라고 이해하고 리팩토링을 도와준다. (객체의 참조는 변경될 수 있는 언어적 특성은 알고있어야 한다)
+- 클린코드의 내용처럼 단위 테스트를 통해 오류를 모두 잡아내므로 final을 안붙히는가? 아니면 final을 상수말고 의미를 두어서 사용하려 한 적이 있는가
+
+> *클린코드 356 페이지*
+>
+> "또한 인수와 변수 선언에서 final 키워드를 모두 없앴다. 실질적인 가치는 없으면서 코드만 복잡하게 만든다고 판단했기 때문이다.[G12] final을 제거하겠다는 결정은 일부 기존 관례에 어긋난다. 예를 들어, 로버트 시몬스는 "코드 전체에 final을 사용하라..."고 강력히 권장한다. 확실히 나와 다른 생각이다. 내가 보기에 final 키워드는 final 상수 등 몇 군데를 제하면 별다른 가치가 없으며 코드만 복잡하게 만든다. 어쩌면 내가 이렇게 느끼는 이유는 **내가 짠 단위 테스트가 final 키워드로 잡아낼 오류를 모두 잡아내기 때문인지도 모르겠다.**"
+
+**See Also**
+
+- [Does use of final keyword in Java improve the performance?](https://stackoverflow.com/questions/4279420/does-use-of-final-keyword-in-java-improve-the-performance)
+- [PMD LocalVariableCouldBeFinal](https://stackoverflow.com/questions/29070984/pmd-localvariablecouldbefinal)
