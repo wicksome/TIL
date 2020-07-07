@@ -86,3 +86,49 @@ a| 1.25 MB * 86,400 s
 ** 한 달간 집계된 일일트래픽 중 상위 3번째까지 제외한 4번째 값을 실제 사용한 트래픽으로 합니다.
 . 월간누적사용량
 ** 5분 단위 평균 트래픽을 한달 간 누적 전송 데이터(Byte)로 환산한 값을 말합니다.
+
+
+== 용어 정리
+
+AS(Autonomous System):: 공통 라우팅 전략을 공유하는 공통적인 시스템 관리 방식이 적용되는 네트워크 집합체. Autonomous System은 하위 영역으로 세분된다. Autonomous System은 IANA에서 할당한 고유한 16비트를 부여 받는다. 때때로 AS라고 표기되기도 한다.
+
+BGP(Border Gateway Protocol)::
+* EGP를 대치하는 도메인 간 라우팅 프로토콜. BGP는 다른 BGP 시스템과 전달 능력 정보를 교환한다. 이것은 RFC 1163에 정의돼 있다.
+* AS와 AS 경계 사이에서 라우팅 업데이트 용도로 사용하는 라우팅 프로토콜
+
+DSR(Direct Server Return)::
+L4를 사용한 SLB의 구성 시, 리얼 서버는 VIP의 인터페이스를 받을 수 있도록 설정하며 각각의 리얼 서버는 L4를 거치지 않고 직접 사용자에게 응답 패킷을 전달
+
+DSR: Dynamic Source Routing Protocal
+
+EGP(Exterior Gateway Protocol)::
+AS간 라우팅 정보 교환을 위한 인터넷 프로토콜. RFC 904에 정리돼 있다.
+
+IDC(Internet Data Center)::
+
+https://ko.wikipedia.org/wiki/%EC%B5%9C%EB%8C%80_%EC%A0%84%EC%86%A1_%EB%8B%A8%EC%9C%84[MTU](maximum transmission unit):: 최대 전송 단위
+
+NAT:: Network Access Translation: 사설 IP, 공인 IP 변환
+
+PCI DSS(Payment Card Industry Data Security Standard)::
+PCI DSS망(network)은 신용카드업계 데이터보안 요구사항을 충족하는 네트워크 망을 말한다.
+
+RR(Round Robin):: 요청을 순차적으로 Real Server에게 분배(순서를 시간단위로 리소스를 할당하는 방식)
+
+VIP(Virtual IP):: 
+
+SLB(Server Load Balancing)::
+SLB는 의미 그대로 Server의 부하를 조절하는 기법을 의미한다. SLB는 LB(Load Balancer)와 VIP(Virtual IP)로 구성된다. LB는 Server에 전달되야 하는 Client의 요청을 대신 받아 적절한 Server에게 전달하는 역할을 수행한다. VIP(Virtual IP)는 Load Balancing의 대상이 되는 여러 Server들을 대표하는 하나의 가상 IP이다. Client는 각 Server의 IP가 아닌 LB가 갖고 있는 VIP(Virtual IP)를 대상으로 요청한다. 따라서 Client는 여러 Server들의 존재를 알지 못하고 하나의 Server와 통신한다고 생각한다.
+
+== L4 Switch
+
+* 'Load Balancer'로서 주로 SLB(Server Load Balancing) / FLB(Firewall Load Banlancing)을 수행
+* Load Balancing 흐름
+.. 사용자는 L4의 VIP 주소로 요청
+.. L4는 사용자의 요청을 최적의 Real Server에게 전달
+.. Real Server는 L4에게 응답 전달
+.. L4는 다시 사용자에게 응답 전송
+* 보통 Fail Over 방지를 위해 Active/StandBy 형태로 L4 장비 2대를 운용
+
+.References
+* https://run-it.tistory.com/44
