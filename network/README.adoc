@@ -88,6 +88,12 @@ a| 1.25 MB * 86,400 s
 . 월간누적사용량
 ** 5분 단위 평균 트래픽을 한달 간 누적 전송 데이터(Byte)로 환산한 값을 말합니다.
 
+== 전용선
+
+leased line, dedicated line 
+
+http://www.terms.co.kr/leasedline.htm
+
 == AS(Autonomous System)
 
 공통 라우팅 전략을 공유하는 공통적인 시스템 관리 방식이 적용되는 네트워크 집합체. Autonomous System은 하위 영역으로 세분된다. Autonomous System은 IANA에서 할당한 고유한 16비트를 부여 받는다. 때때로 AS라고 표기되기도 한다.
