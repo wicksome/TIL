@@ -21,4 +21,9 @@ $ ssh-copy-id -i ./ansible_rsa.pub <user>@<host>
 [NOTE]
 ====
 접근이 불가능 할 경우 직접 이동?
+
+[source, bash]
+----
+$ vi ~/.ssh/authorized_keys
+----
 ====
