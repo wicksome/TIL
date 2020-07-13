@@ -1,0 +1,24 @@
+= Ansible
+
+== Add nodes
+
+. create key
++
+[source, bash]
+----
+$ ssh-keygen -t rsa -f ansible_rsa
+$ ls
+ansible_rsa  ansible_rsa.pub
+----
+
+. copy pub key to node
++
+[source, bash]
+----
+$ ssh-copy-id -i ./ansible_rsa.pub <user>@<host>
+----
++
+[NOTE]
+====
+접근이 불가능 할 경우 직접 이동?
+====
