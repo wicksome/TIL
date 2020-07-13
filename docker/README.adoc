@@ -15,6 +15,13 @@ docker run -it --rm --entrypoint /bin/bash nginx:latest
 docker pull ansible/ansible:default
 ----
 
+=== 컨테이너 접근하기
+
+[source, bash]
+----
+docker container exec -it <container-name> /bin/bash
+----
+
 === 빌드하고 바로 실행하기
 
 [source, bash]
