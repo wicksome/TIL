@@ -1,0 +1,28 @@
+= 암복호화
+
+
+* https://crypto.stackexchange.com/questions/9043/what-is-the-difference-between-pkcs5-padding-and-pkcs7-padding
+* https://asecuritysite.com/encryption/keygen
+* https://stackoverflow.com/a/25942381/3793078
+** https://www.oracle.com/java/technologies/javase-jce8-downloads.html
+
+== AES256
+
+* aes-256-cbc로 생성하면 64byte 키값이 생성됨
++
+[source]
+----
+salt=5B1CD0A0E6F91535
+key=1F3CDAD3FDD397162A8431B24D67B65C7C4A0277BC07223C19B7CD711F4376F5
+iv =BF9B3C014A9061CB7F33FF3451023ABE
+----
+
+* 블록암호화를 진행하기 위해 패딩 기법 필요
+* 데이터를 특정크기로 맞추기 위해 채워넣는 방법
++
+[source]
+----
+val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
+----
+
+* JDK에서는 지원하지 않으며 JCE 설치 필요
