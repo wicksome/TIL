@@ -27,6 +27,7 @@ val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
 ----
 
 * JDK에서는 지원하지 않으며 JCE 설치 필요
+** https://engineering.linecorp.com/ko/blog/line-open-jdk/#OpenJDK%EC%A0%81%EC%9A%A9%EA%B8%B0(JDKExodusTF)-%ED%99%95%EC%9D%B8%EB%90%9C%EC%9D%B4%EC%8A%88%EC%82%AC%ED%95%AD[LINE의 OpenJDK 적용기: 호환성 확인부터 주의 사항까지 - JCE 설치 여부]
 
 === PKCS#7 Padding
 
@@ -37,7 +38,6 @@ val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
 ____
 PKCS#5 패딩은 PKCS#7 패딩과 구현 방식이 같지만 블럭의 크기가 8바이트로 고정된 것이다. AES는 128비트(16바이트) 블럭 알고리즘이기 때문에 사실 PKCS#5 패딩을 쓸 일이 없다. 그러나 PKCS#7 패딩과 구현 방식이 같아 보통 같은 구현을 돌려쓰는데다, Java에서 'AES/CBC/PKCS5Padding' 표기법만 허용하고 'AES/CBC/PKCS7Padding' 표기법은 지원하지 않다보니 오히려 AES에 PKCS#5 패딩을 쓰는 것이 맞는 줄 아는 경우가 많다.
 ____
-* https://engineering.linecorp.com/ko/blog/line-open-jdk/#OpenJDK%EC%A0%81%EC%9A%A9%EA%B8%B0(JDKExodusTF)-%ED%99%95%EC%9D%B8%EB%90%9C%EC%9D%B4%EC%8A%88%EC%82%AC%ED%95%AD[LINE의 OpenJDK 적용기: 호환성 확인부터 주의 사항까지 - JCE 설치 여부]
 
 
 == References
