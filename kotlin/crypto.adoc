@@ -46,3 +46,4 @@ ____
 * https://asecuritysite.com/encryption/keygen
 * https://stackoverflow.com/a/25942381/3793078
 ** https://www.oracle.com/java/technologies/javase-jce8-downloads.html
+* https://perfectacle.github.io/2019/11/24/aes/
