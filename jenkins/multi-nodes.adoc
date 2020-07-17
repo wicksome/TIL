@@ -13,7 +13,7 @@ jenkinsAgent_rsa  jenkinsAgent_rsa.pub
 
 * 이 키는 한번 만들어두면 여러 slave 서버에 사용할 수 있다.
 
-== Slave 서버에 public key 등록하기
+== Worker 서버에 public key 등록하기
 
 [source, bash]
 ----
@@ -22,6 +22,7 @@ $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 
 == Jenkins에 private key 등록하기 (jenkins mgmt, master node)
 
+. plugin 설치: https://plugins.jenkins.io/ssh-slaves/[SSH Build Agents]
 . credentials 생성
 .. `Add Credentials` 로 추가
 *** Username: 접속하고자 하는 서버의 계정
