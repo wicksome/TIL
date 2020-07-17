@@ -1,4 +1,5 @@
 = Add multi-nodes
+:toc:
 
 == ssh key 처음 생성하기
 
@@ -29,7 +30,7 @@ $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 *** Private Key: 서버에서 생성한 private key
 *** Passphrase: ssh key 생성시 입력한 passphrase
 
-== Jenkins에 Slave 노드 추가하기
+== Jenkins에 Worker 노드 추가하기
 
 * `# of executors` 갯수는 전체 코어 갯수보다 적게 설정해야 한다. -> `lscpu` 명령어로 cpu 정보 확인 가능 +
 https://stackoverflow.com/a/9626974/3793078
