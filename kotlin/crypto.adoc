@@ -44,6 +44,7 @@ ____
 
 * Secure Hash Algorithm
 * SHA 알고리즘의 한 종류로 256bit로 구성된 64자리 문자열 반환
+** https://stackoverflow.com/a/6630280/3793078["A SHA256 hash represented in hexadecimal consists of 64 hexadecimal characters"]
 * 2^256^ 개의 경우의 수를 만들 수 있음
 * 어떤 길이의 값을 입력하더라도 256bit의 고정된 결과값 출력
 ** 8bit → 1byte, 2byte → char
