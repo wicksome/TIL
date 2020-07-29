@@ -1,6 +1,8 @@
 = Hash Algorithm
 :toc:
 
+* Cryptography hash('digest'라고도 함)는 텍스트 또는 데이터 파일에 대한 일종의 'signature'.
+
 == SHA-256
 
 * Secure Hash Algorithm
