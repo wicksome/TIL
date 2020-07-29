@@ -1,4 +1,4 @@
-= 암복호화
+= 암호화
 :toc:
 
 == AES
@@ -6,7 +6,7 @@
 * Advanced Encryption Standard
 * 대칭키를 ㅅ쓰는 블럭 암호
 
-== AES256
+=== AES256
 
 * 256 암호화 키 사용
 * aes-256-cbc로 생성하면 64byte 키값이 생성됨
@@ -29,7 +29,7 @@ val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
 * JDK에서는 지원하지 않으며 JCE 설치 필요
 ** https://engineering.linecorp.com/ko/blog/line-open-jdk/#OpenJDK%EC%A0%81%EC%9A%A9%EA%B8%B0(JDKExodusTF)-%ED%99%95%EC%9D%B8%EB%90%9C%EC%9D%B4%EC%8A%88%EC%82%AC%ED%95%AD[LINE의 OpenJDK 적용기: 호환성 확인부터 주의 사항까지 - JCE 설치 여부]
 
-=== PKCS#7 Padding
+==== PKCS#7 Padding
 
 * 블럭의 빈 자리를 채우는 방법
 * 일반적으로 PKCS#5, PKCS#7 사용
@@ -38,40 +38,6 @@ val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
 ____
 PKCS#5 패딩은 PKCS#7 패딩과 구현 방식이 같지만 블럭의 크기가 8바이트로 고정된 것이다. AES는 128비트(16바이트) 블럭 알고리즘이기 때문에 사실 PKCS#5 패딩을 쓸 일이 없다. 그러나 PKCS#7 패딩과 구현 방식이 같아 보통 같은 구현을 돌려쓰는데다, Java에서 'AES/CBC/PKCS5Padding' 표기법만 허용하고 'AES/CBC/PKCS7Padding' 표기법은 지원하지 않다보니 오히려 AES에 PKCS#5 패딩을 쓰는 것이 맞는 줄 아는 경우가 많다.
 ____
-
-
-== SHA-256
-
-* Secure Hash Algorithm
-* SHA 알고리즘의 한 종류로 256bit로 구성된 64자리 문자열 반환
-** https://stackoverflow.com/a/6630280/3793078["A SHA256 hash represented in hexadecimal consists of 64 hexadecimal characters"]
-* 2^256^ 개의 경우의 수를 만들 수 있음
-* 어떤 길이의 값을 입력하더라도 256bit의 고정된 결과값 출력
-** 8bit → 1byte, 2byte → char
-** 256bit → 32byte
-* 단방향성으로 복호화가 불가
-* 16진법(hex)
-
-[source, kotlin]
-----
-val hash1 = MessageDigest
-    .getInstance("SHA-256")
-    .digest(origin.toByteArray())
-    .fold("", { str, it -> str + "%02x".format(it) })
-
-// required "org.bouncycastle:bcprov-jdk15on"
-val hash2 = MessageDigest
-    .getInstance("SHA-256")
-    .digest(origin.toByteArray())
-    .let { String(Hex.encode(it)) }
-            
-val hash3 = MessageDigest
-    .getInstance("SHA-256")
-    .digest(origin.toByteArray())
-    .let { BigInteger(1, it).toString(16).padStart(32, '0') }
-----
-
-== Base64
 
 == References
 
