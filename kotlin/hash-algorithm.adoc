@@ -3,7 +3,8 @@
 
 * Cryptography hash('digest'라고도 함)는 텍스트 또는 데이터 파일에 대한 일종의 'signature'.
 
-== SHA-256
+== SHA
+=== SHA-256
 
 * Secure Hash Algorithm
 * SHA 알고리즘의 한 종류로 256bit로 구성된 64자리 문자열 반환
@@ -33,5 +34,7 @@ val hash3 = MessageDigest
     .digest(origin.toByteArray())
     .let { BigInteger(1, it).toString(16).padStart(32, '0') }
 ----
+
+== MD5
 
 == References
