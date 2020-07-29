@@ -149,3 +149,33 @@ SLB는 의미 그대로 Server의 부하를 조절하는 기법을 의미한다.
 
 .References
 * https://run-it.tistory.com/44
+
+== 통신 관련 명령어
+
+=== traceroute
+
+[source, bash]
+----
+$ traceroute -T -p 8080 10.100.100.100
+----
+
+=== telnet
+
+[source, bash]
+----
+$ telnet 10.100.100.100 8080
+----
+
+=== ping
+
+[source, bash]
+----
+$ ping 10.100.100.100
+----
+
+=== nping
+
+[source, bash]
+----
+$ nping --tcp -p 8080 10.100.100.100
+----
