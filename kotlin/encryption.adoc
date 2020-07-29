@@ -26,8 +26,38 @@ iv =BF9B3C014A9061CB7F33FF3451023ABE
 val c = Cipher.getInstance("AES/CBC/PKCS5Padding")
 ----
 
-* JDK에서는 지원하지 않으며 JCE 설치 필요
-** https://engineering.linecorp.com/ko/blog/line-open-jdk/#OpenJDK%EC%A0%81%EC%9A%A9%EA%B8%B0(JDKExodusTF)-%ED%99%95%EC%9D%B8%EB%90%9C%EC%9D%B4%EC%8A%88%EC%82%AC%ED%95%AD[LINE의 OpenJDK 적용기: 호환성 확인부터 주의 사항까지 - JCE 설치 여부]
+* JDK에서는 지원하지 않음
+.. JCE 설치
+*** https://engineering.linecorp.com/ko/blog/line-open-jdk/#OpenJDK%EC%A0%81%EC%9A%A9%EA%B8%B0(JDKExodusTF)-%ED%99%95%EC%9D%B8%EB%90%9C%EC%9D%B4%EC%8A%88%EC%82%AC%ED%95%AD[LINE의 OpenJDK 적용기: 호환성 확인부터 주의 사항까지 - JCE 설치 여부]
+.. 외부 디펜던시 추가
++
+[source, kotlin]
+.build.gradle.kts
+----
+dependencies {
+    api("org.bouncycastle:bcprov-jdk15on:1.66")
+}
+----
++
+[source, kotlin]
+.AesUtils.kt
+----
+object AesUtils {
+    init {
+        Security.addProvider(BouncyCastleProvider())
+    }
+
+    fun encrypt256(data: String, hexAesKey: String): ByteArray {
+        val keySpec = SecretKeySpec(hexAesKey.hexStringToByteArray(), "AES")
+        val ivSpec = IvParameterSpec(ByteArray(16) { 0x00 })
+
+        return Cipher
+            .getInstance("AES/CBC/PKCS7Padding", BouncyCastleProvider.PROVIDER_NAME)
+            .apply { init(Cipher.ENCRYPT_MODE, keySpec, ivSpec) }
+            .doFinal(data.toByteArray(StandardCharsets.UTF_8))
+    }
+}
+----
 
 ==== PKCS#7 Padding
 
