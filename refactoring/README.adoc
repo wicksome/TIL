@@ -1,8 +1,7 @@
 = 리팩터링 2판
 :toc:
 :toclevels: 2
-:source-highlighter: pygments
-:pygments-style: emacs
+:source-highlighter: highlightjs
 
 공부하면서 남기고 싶은 것들에 대해서 정리.
 
@@ -153,13 +152,13 @@ fun acquireData(input: String): List<Office> {
 
 . 반복문에서 컬렉션을 가르키는 별도 변수를 만든다.
 +
-[source,kotlin,linenums,highlight='3-5']
+[source, kotlin]
 ----
 fun acquireData(input: String): List<Office> {
     val lines = input.split("\n")
     var firstLine = true
     val result = mutableListOf<Office>()
-    val loopItems = lines // <1>
+    val loopItems = lines
     for (line in loopItems) {
         if (firstLine) {
             firstLine = false
@@ -174,7 +173,6 @@ fun acquireData(input: String): List<Office> {
     return result.toList()
 }
 ----
-<1> 루프 변수를 만든다.
 
 . 첫 줄을 건너뛰는 역할을 `drop()` 연산을 첫 줄을 건너뛸 수 있다. 이로써 반복문 안의 if문을 제거하자.
 +
@@ -187,6 +185,27 @@ fun acquireData(input: String): List<Office> {
         .drop(1)
     for (line in loopItems) {
         if (line.trim() === "") continue
+        val record = line.split(",")
+        if (record[1].trim() == "India") {
+            result += Office(city = record[0].trim(), phone = record[2].trim())
+        }
+    }
+    return result.toList()
+}
+----
+
+. 반복문에서 다음에 수행했던 빈 줄 지우기는 `filter()` 연산으로 대체할 수 있다. `trim()` 으로
+  빈 줄을 지우는 작업은 `isBlank()` 를 활용할 수 있다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n")
+    val result = mutableListOf<Office>()
+    val loopItems = lines
+        .drop(1)
+        .filter { it.isBlank() }
+    for (line in loopItems) {
         val record = line.split(",")
         if (record[1].trim() == "India") {
             result += Office(city = record[0].trim(), phone = record[2].trim())
