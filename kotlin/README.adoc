@@ -2982,3 +2982,4 @@ class AppService {
 * Kotlin에서 속성과 Java의 필드는 다르므로, 어노테이션을 필드에 추가하려면 `@field:` 을 활용해야 한다.
 * val, var 모두 적용 가능하다.
 * https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
+* https://www.baeldung.com/spring-boot-bean-validation
