@@ -277,6 +277,21 @@ println("amount: ${"%.2f".format(balance)}")
 ----
 * Kotlin은 비트 연산^bitwise{sp}operation^을 하는 함수들을 제공한다.
 
+==== BigDecimal
+
+* Kotlin에서는 연산자 오버로딩이 가능하므로 `BigDecimal` 사용이 편리해졌다.
++
+[source, kt]
+----
+val a = BigDecimal(10)
+val b = BigDecimal(3)
+val c = 3.0.toBigDecimal()
+
+TODO
+----
+
+.References
+* https://okky.kr/article/649639
 
 == Conditionals
 
