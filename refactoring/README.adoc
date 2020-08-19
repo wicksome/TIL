@@ -113,7 +113,7 @@ val names = input
 ** 하나를 대체할 때마다 테스트한다.
 . 반복문의 모든 동작을 대체했다면 반복문 자체를 지운다.
 
-== Example
+==== Example
 
 [source, csv]
 .예시 데이터
@@ -130,10 +130,10 @@ Bangalore, India, +91 80 4064 9570
 [source, kotlin]
 ----
 fun acquireData(input: String): List<Office> {
-    val lines = input.split("\n") // collection
+    val lines = input.split("\n")
     var firstLine = true
     val result = mutableListOf<Office>()
-    for (line in lines) { // loop
+    for (line in lines) {
         if (firstLine) {
             firstLine = false
             continue
@@ -158,7 +158,7 @@ fun acquireData(input: String): List<Office> {
     val lines = input.split("\n")
     var firstLine = true
     val result = mutableListOf<Office>()
-    val loopItems = lines
++   val loopItems = lines
     for (line in loopItems) {
         if (firstLine) {
             firstLine = false
@@ -180,10 +180,15 @@ fun acquireData(input: String): List<Office> {
 ----
 fun acquireData(input: String): List<Office> {
     val lines = input.split("\n")
+-   var firstLine = true
     val result = mutableListOf<Office>()
     val loopItems = lines
-        .drop(1)
++       .drop(1)
     for (line in loopItems) {
+-       if (firstLine) {
+-           firstLine = false
+-           continue
+-       }
         if (line.trim() === "") continue
         val record = line.split(",")
         if (record[1].trim() == "India") {
@@ -194,8 +199,8 @@ fun acquireData(input: String): List<Office> {
 }
 ----
 
-. 반복문에서 다음에 수행했던 빈 줄 지우기는 `filter()` 연산으로 대체할 수 있다. `trim()` 으로
-  빈 줄을 지우는 작업은 `isBlank()` 를 활용할 수 있다.
+. 반복문에서 다음에 수행했던 빈 줄 지우기는 `filter()` 연산과 `isNotBlank()` 함수를 통해 필터링
+  할 수 있다. 반대로 `filterNot()`, `isBlank()` 조합으로도 필터링 할 수 있다.
 +
 [source, kotlin]
 ----
@@ -204,8 +209,9 @@ fun acquireData(input: String): List<Office> {
     val result = mutableListOf<Office>()
     val loopItems = lines
         .drop(1)
-        .filter { it.isBlank() }
++       .filter { it.isNotBlank() }
     for (line in loopItems) {
+-       if (line.trim() === "") continue
         val record = line.split(",")
         if (record[1].trim() == "India") {
             result += Office(city = record[0].trim(), phone = record[2].trim())
@@ -215,10 +221,123 @@ fun acquireData(input: String): List<Office> {
 }
 ----
 
+. 다음으로 `map()` 연산을 통해 CSV 데이터를 문자열 배열로 변환한다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n")
+    val result = mutableListOf<Office>()
+    val loopItems = lines
+        .drop(1)
+        .filter { it.isNotBlank() }
++       .map { it.split(",") }
+    for (line in loopItems) {
+-       val record = line.split(",")
++       val record = line
+        if (record[1].trim() == "India") {
+            result += Office(city = record[0].trim(), phone = record[2].trim())
+        }
+    }
+    return result.toList()
+}
+----
+
+. 다시 한번 `filter()` 연산을 통해 인도에 위치한 사무실 레코드만 뽑아낸다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n")
+    val result = mutableListOf<Office>()
+    val loopItems = lines
+        .drop(1)
+        .filter { it.isNotBlank() }
+        .map { it.split(",") }
++       .filter { it[1].trim() == "India" }
+    for (line in loopItems) {
+        val record = line
+-       if (record[1].trim() == "India") {
+-           result += Office(city = record[0].trim(), phone = record[2].trim())
+-       }
++       result += Office(city = record[0].trim(), phone = record[2].trim())
+    }
+    return result.toList()
+}
+----
+
+. `map()` 을 통해 결과 레코드를 생성한다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n")
+    val result = mutableListOf<Office>()
+    val loopItems = lines
+        .drop(1)
+        .filter { it.isNotBlank() }
+        .map { it.split(",") }
+        .filter { it[1].trim() == "India" }
++       .map { Office(city = it[0].trim(), phone = it[2].trim()) }
+    for (line in loopItems) {
+        val record = line
+-       result += Office(city = record[0].trim(), phone = record[2].trim())
++       result += line
+    }
+    return result.toList()
+}
+----
+
+. 이제 반복문이 하는 일은 결과를 누적 변수에 대입하는 작업만 남아있다. 파이프라인의 결과를 누적 변수에 
+  대입해주면 이 코드도 지울 수 있다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n")
+-   val result = mutableListOf<Office>()
++   val result = lines
+        .drop(1)
+        .filter { it.isNotBlank() }
+        .map { it.split(",") }
+        .filter { it[1].trim() == "India" }
+        .map { Office(city = it[0].trim(), phone = it[2].trim()) }
+-   for (line in loopItems) {
+-       val record = line
+-       result += line
+-   }
+-   return result.toList()
++   return result
+}
+----
+
+. 위 단계까지가 이번 리팩터링의 핵심이다. 하지만 코드를 좀 더 정리해보자. `result` 변수를 인라인하고
+  코드를 정돈하면 다음처럼 된다.
++
+[source, kotlin]
+----
+fun acquireData(input: String): List<Office> {
+    val lines = input.split("\n") // <1>
+    return lines
+        .drop(1)
+        .filter { it.isNotBlank() }
+        .map { it.split(",") }
+        .filter { it[1].trim() == "India" }
+        .map { Office(city = it[0].trim(), phone = it[2].trim()) }
+}
+----
+<1> 저자는 `lines` 도 인라인할까 생각했지만, 그대로 두는 편이 코드가 수행하는 일을 더 잘 설명해준다고 
+    판단하여 그래로 뒀다고 한다.
+
 ==== See Also
 
 * https://martinfowler.com/articles/refactoring-pipelines.html[Refactoring with Loops and Collection Pipelines] - Martin Fowler
-* 향상된 for문 써라 이펙티브 자바 참고
+* 아이템 58. 전통적인 for 문보다는 for-each 문을 사용하라. - 이펙티브자바 3/e
++
+====
+예전엔 for 대신 for-each 였지만(이펙티브자바), 이젠 pipeline로 리팩터링하는 방법을 책에 나오니 여러모로 달라진 것 같다.
+JAVA의 stream은 다른 동작이니 참고하자.
+====
 * https://github.com/wicksome/TIL/blob/master/java/stream.adoc[Getting Started the Stream API]
 
 === 죽은 코드 제거하기
