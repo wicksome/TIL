@@ -2998,3 +2998,7 @@ class AppService {
 * val, var 모두 적용 가능하다.
 * https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
 * https://www.baeldung.com/spring-boot-bean-validation
+
+== Kotlin 1.4
+
+https://kotlinlang.org/docs/reference/whatsnew14.html
