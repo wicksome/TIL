@@ -42,6 +42,11 @@ https://en.dict.naver.com/#/entry/enko/5552c82d687449f1a4be490984b747c7[Payment]
 * Charges API를 지원 중단하지는 않지만, Stripe API의 기반을 만들기 위해 Payment Intents API에 프로덕트 개발에 집중.
 
 
+==== POST /v1/payment_intents/:id/capture
+
+* Capture 되지 않은 결제건은 7일 후 삭제됨
+
+
 == {square}[Square]
 
 * 결제 처리를 위해 두가지 옵션을 제공
