@@ -3,6 +3,7 @@
 :stripe: https://stripe.com/
 :square: https://squareup.com/
 :paypal: https://www.paypal.com/
+:fastspring: https://fastspring.com/
 
 == 사전전 의미
 
@@ -55,6 +56,8 @@ https://en.dict.naver.com/#/entry/enko/5552c82d687449f1a4be490984b747c7[Payment]
 
 
 == {paypal}[PayPal]
+
+== {fastspring}[FastSpring]
 
 == Etc
 
