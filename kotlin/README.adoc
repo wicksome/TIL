@@ -2617,6 +2617,9 @@ inline fun <reified T> reifiedTest(func: () -> T): T {
 ----
 <1> `reified` 키워드를 추가함으로써 바이트코드에 `T` 는 전달된 인자의 타입이 삽입된다.
 
+=== where keyword
+
+https://kotlinlang.org/docs/reference/generics.html#upper-bounds
 
 == Extension
 
