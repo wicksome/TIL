@@ -1,0 +1,29 @@
+---
+
+== SEQUENCE
+
+image:https://docs.oracle.com/cd/B12037_01/server.101/b10759/create_sequence.gif[create_sequence.gif]
+
+[source, sql]
+----
+SELECT * FROM USER_SEQUENCES;
+
+CREATE SEQUENCE seq_pay <1>
+  START WITH 1 <2>
+  INCREMENT BY 1 <3>
+  MAXVALUE 10000 <4>
+  MINVALUE 0 <5>
+  CYCLE <6>
+  NOCACHE; <7>
+----
+<1> 시퀀스 이름(`seq_pay`)을 제외한 나머지 값은 optional
+<2> 시작 번호
+<3> 증가값
+<4> 최댓값
+<5> 최솟값
+<6> 시퀀스가 최대 값이 되었을때 다시 시작값으로 돌아갈 것인지에 대한 설정, `CYCLE` or `NOCYCLE`
++
+(순환여부를 설정할경우는 보통 시퀀스랑 현재날짜를조합해서 테이블에 데이터를 집어넣는 경우도 많이 있습니다.)
+<7> 시퀀스 값을 메모리에 할당할 것인지에 대한 설정, 원하는 값만큼 미리 만들어 Shared Pool의 Library Cache에 상주 시킴. `CACHE [n]` or `NOCACHE`
+
+https://docs.oracle.com/cd/B12037_01/server.101/b10759/statements_6014.htm
