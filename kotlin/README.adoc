@@ -1634,6 +1634,12 @@ class Payment(
     * https://kotlinlang.org/docs/reference/coding-conventions.html#names-for-backing-properties[Names for backing properties - Kotlin docs]
     * https://bit.ly/2Qt2WpM[Kotlin Programming: The Big Nerd Ranch Guide 일부]
 
+[NOTE]
+. 임시 변수에 `_` prefix를 사용하는 것에 대한 생각
+====
+* named parameter 입력시에도 임시로 사용하는 것에 대해서 명확해서 괜찮다고 생각.
+* spring framework에서 생성자 빈 주입시 프로퍼티(`@Value`)에 대해서 임시 변수로 사용할 때 명확하다고 생각.
+====
 
 [source, kt]
 .Defining properties in a primary constructor
