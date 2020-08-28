@@ -1183,6 +1183,19 @@ class CustomException() : IllegalStateException("custom exception") // <2>
 ** https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/[`Result`]: `-Catching` API가 반환하는 타입이다.
 * `Result` 는 함수의 반환 값으로 사용할 수 없으며, 함수 안에서 처리하고 결과를 반환해야 한다.
 
+=== try-with-resource
+
+[source, kt]
+----
+File("/home/aasmund/test.txt").inputStream().use {
+   val bytes = it.readBytes()
+   println(bytes.size)
+}
+----
+
+* JDK7에는 `Closable` 을 구현한 객체에 대해서 `close()` 처리해주는 try-with-resource 기능이 있다.
+* Kotlin에서는 `use()` 함수를 활용할 수 있다.
+** https://kotlinlang.org/docs/tutorials/kotlin-for-py/scoped-resource-usage.html
 
 == Collection
 
@@ -2638,7 +2651,7 @@ inline fun <reified T> reifiedTest(func: () -> T): T {
 ----
 <1> `reified` 키워드를 추가함으로써 바이트코드에 `T` 는 전달된 인자의 타입이 삽입된다.
 
-=== where keyword
+=== where
 
 https://kotlinlang.org/docs/reference/generics.html#upper-bounds
 
@@ -3011,3 +3024,8 @@ class AppService {
 == Kotlin 1.4
 
 https://kotlinlang.org/docs/reference/whatsnew14.html
+
+* Gradle
+
+
+* `fun interface` 
