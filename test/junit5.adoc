@@ -1,0 +1,12 @@
+= JUnit5
+
+JUnit5 = JUnit Platform + JUnit Jupiter + JUnit Vintage
+
+* `@DisplayName`
+* `@Ignore` → `@Disable`
+* `@BeforeClass`, `@AfterClass` → `@BeforeAll`, `@AfterAll`
+* `@Before`, `@After` → `@BeforeEach`, `@AfterEach`
+* `@ParameterizedTest`
+** `org.junit.jupiter:junit-jupiter-params` 디펜던시 필요
+* `@RepeatedTest`
+* `@Nested`
