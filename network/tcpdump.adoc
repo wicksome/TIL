@@ -19,6 +19,7 @@ tcpdump: /usr/sbin/tcpdump /usr/share/man/man8/tcpdump.8.gz
 * `-vvv`: Even more verbose output.  For example, telnet SB ... SE options are printed in full.  With -X Telnet options are printed in hex as well.
 * `-vv`: Even more verbose output.  For example, additional fields are printed from NFS reply packets, and SMB packets are fully decoded.
 * `-A`: Print each packet (minus its link level header) in ASCII.  Handy for capturing web pages.
+* `-X`: When  parsing  and printing, in addition to printing the headers of each packet, print the data of  each  packet,  including  its link level header, in hex and ASCII.
 * https://jojoldu.tistory.com/316
 
 [source, bash]
