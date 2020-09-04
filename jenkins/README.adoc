@@ -3,6 +3,8 @@
 
 == 시작하기
 
+. 설치하기
+.. https://github.com/wicksome/TIL/blob/master/jenkins/jenkins-upgrage.adoc[업그레이드하기]
 . https://github.com/wicksome/TIL/blob/master/jenkins/github-login.adoc[GitHub 로그인 적용하기]
 . main/
 
