@@ -4,7 +4,7 @@
 == 시작하기
 
 . 설치하기
-.. https://github.com/wicksome/TIL/blob/master/jenkins/upgrage-jenkins.adoc[업그레이드하기]
+.. https://github.com/wicksome/TIL/blob/master/jenkins/upgrade-jenkins.adoc[업그레이드하기]
 . https://github.com/wicksome/TIL/blob/master/jenkins/login-with-github.adoc[GitHub 로그인 적용하기]
 . https://github.com/wicksome/TIL/blob/master/jenkins/add-ssh-agent.adoc[SSH-Agent 추가하기]
 ** main/(worker|agent)s
