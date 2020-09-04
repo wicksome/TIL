@@ -3,7 +3,7 @@
 
 == 시작하기
 
-. GitHub 로그인
+. https://github.com/wicksome/TIL/blob/master/jenkins/github-login.adoc[GitHub 로그인 적용하기]
 . main/
 
 == 관리/운영
