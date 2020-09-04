@@ -1,7 +1,7 @@
 = Add SSH Agent
 :toc:
 
-== ssh key 처음 생성하기
+== SSH Key 생성하기
 
 [source, bash]
 ----
@@ -14,14 +14,14 @@ jenkinsAgent_rsa  jenkinsAgent_rsa.pub
 
 * 이 키는 한번 만들어두면 여러 agent 서버에 사용할 수 있다.
 
-== Worker 서버에 public key 등록하기
+== Worker 서버에 공개키 등록하기(Agent)
 
 [source, bash]
 ----
 $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 ----
 
-== Jenkins에 private key 등록하기 (jenkins mgmt, master node)
+== Manager에 비밀키 등록하기(Jenkins)
 
 . plugin 설치: https://plugins.jenkins.io/ssh-slaves/[SSH Build Agents]
 . credentials 생성
@@ -30,12 +30,10 @@ $ cat jenkinsAgent_rsa.pub >> ~/.ssh/authorized_keys
 *** Private Key: 서버에서 생성한 private key
 *** Passphrase: ssh key 생성시 입력한 passphrase
 
-== Jenkins에 Worker 노드 추가하기
+== SSH Agent 추가하기
 
 * `# of executors` 갯수는 전체 코어 갯수보다 적게 설정해야 한다. -> `lscpu` 명령어로 cpu 정보 확인 가능 +
 https://stackoverflow.com/a/9626974/3793078
-* Username: 접속하고자 하는 jenkins-slave 의 계정
-* Passphrase: ssh key 생성시 입력한 passphrase
 * `Host Key Verification Strategy` 값은 `Manually trusted key Verification Strategy` 로 설정해줘야 한다.
 * launcher agent로 설치
 
@@ -52,5 +50,5 @@ https://stackoverflow.com/a/9626974/3793078
 * 원인: 빌드가 동작하는 노드가 예전에 docker로 jenkins를 띄웠었는데, 그 때 m2 디렉토리 권한을 root로 변경시킴
 * 해결방법: `$ chown -R user:user ~/.m2`
 
-도커 슬레이브 설치시 슬레이브 서버에 yum 업데이트할 때 커널 제외하기
+도커 worker(aka. agent, node) 설치시 workser 서버에 yum 업데이트할 때 커널 제외하기
 * https://www.cyberciti.biz/faq/yum-update-except-kernel-package-command/
