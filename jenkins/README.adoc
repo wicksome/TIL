@@ -1,6 +1,10 @@
 = Jenkins Cookbook
 
 
+== 시작하기
+
+. GitHub 로그인
+. main/
 
 == 관리/운영
 
@@ -10,7 +14,7 @@
 * https://github.com/wicksome/TIL/blob/master/jenkins/plugins.adoc[유용한 플러그인]
 
 
-== 커스터마이징
+== UI
 
 * https://github.com/wicksome/TIL/blob/master/jenkins/change-default-view.adoc['All' 뷰 지우고, 변경하기]
 
@@ -24,3 +28,10 @@
 * Delivery Pipeline
 ** https://plugins.jenkins.io/delivery-pipeline-plugin/
 ** https://velog.io/@minholee_93/Jenkins-Delivery-Pipeline-nvk5t7g2rh
+
+
+== ETC
+
+* slave → agent 용어 변경
+** https://www.jenkins.io/blog/2020/06/18/terminology-update/
+** https://www.jenkins.io/blog/2020/05/06/docker-agent-image-renaming/ 
