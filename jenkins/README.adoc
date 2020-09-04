@@ -6,15 +6,13 @@
 . 설치하기
 .. https://github.com/wicksome/TIL/blob/master/jenkins/jenkins-upgrage.adoc[업그레이드하기]
 . https://github.com/wicksome/TIL/blob/master/jenkins/github-login.adoc[GitHub 로그인 적용하기]
-. main/
+. https://github.com/wicksome/TIL/blob/master/jenkins/multi-nodes.adoc[Agent 추가하기]
+** main/(worker|agent)
 
 == 관리/운영
 
 * https://github.com/wicksome/TIL/blob/master/jenkins/backup-jenkins-home.adoc[JENKINS_HOME 백업하기]
-* https://github.com/wicksome/TIL/blob/master/jenkins/jenkins-upgrage.adoc[업그레이드하기]
-* https://github.com/wicksome/TIL/blob/master/jenkins/multi-nodes.adoc[노드 추가하기]
 * https://github.com/wicksome/TIL/blob/master/jenkins/plugins.adoc[유용한 플러그인]
-
 
 == UI
 
