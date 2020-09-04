@@ -12,7 +12,7 @@ $ ls
 jenkinsAgent_rsa  jenkinsAgent_rsa.pub
 ----
 
-* 이 키는 한번 만들어두면 여러 slave 서버에 사용할 수 있다.
+* 이 키는 한번 만들어두면 여러 agent 서버에 사용할 수 있다.
 
 == Worker 서버에 public key 등록하기
 
