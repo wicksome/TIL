@@ -378,6 +378,36 @@ Stream<User> s2 = list1.stream()
 // User(name=c), User(name=b), User(name=a)
 ----
 
+[TIP]
+.비교하려는 값에 Null이 있을 경우
+====
+
+정렬 기준 값이 Null이 있을 경우 NPE가 발생하게 된다. 이러한 NPE를 피하기 위해서는 `Comparator.nullsLast()`, `Comparator.nullsFirst()` 를 사용하면 안전하게 정렬을 할 수 있다. 
+
+[source, java]
+.Null safe
+----
+List<User> list1 = Arrays.asList(new User("c"), new User(null), new User("a"));
+
+Stream<User> s1 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsLast(Comparator.naturalOrder())));
+// User(name=a), User(name=c), User(name=null)
+
+Stream<User> s2 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsLast(Comparator.reverseOrder())));
+// User(name=c), User(name=a), User(name=null)
+
+Stream<User> s3 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsFirst(Comparator.naturalOrder())));
+// User(name=null), User(name=a), User(name=c)
+
+Stream<User> s4 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsFirst(Comparator.reverseOrder())));
+// User(name=null), User(name=c), User(name=a)
+----
+
+====
+
 ===== _distinct_
 
 Stream 내에 Element의 중복을 제거한다.
