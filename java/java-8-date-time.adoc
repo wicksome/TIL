@@ -94,7 +94,7 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 | {nbsp}{nbsp}{nbsp}{nbsp} `TemporalAdjuster` | `Temporal` 객체들을 조절하기 위한 함수형 인터페이스
 | {nbsp}{nbsp}{nbsp}{nbsp} `ChronoUnit` | 날짜/시간의 period를 나타내는 표준 셋을 가진 열거타입
 2+| https://docs.oracle.com/javase/8/docs/api/java/time/format/package-summary.html[__java.time.format 패키지__]
-| {nbsp}{nbsp}{nbsp}{nbsp} `DateTimeFormatter` | date-time 객체를 파싱하거나 출력하기 위한 포맷터
+| {nbsp}{nbsp}{nbsp}{nbsp} `DateTimeFormatter` | date-time 객체를 파싱하거나 출력하기 위한 포맷터 (thread-safe)
 |===
 
 [NOTE]
@@ -201,7 +201,7 @@ today.with(TemporalAdjusters.ofDateAdjuster(date -> date.minusMonths(2))); // �
 
 === `DateTimeFormatter`
 
-날짜/시간 객체를 파싱하거나 출력하기 위한 포맷터이다.
+날짜/시간 객체를 파싱하거나 출력하기 위한 포맷터이다. 이 객체는 immutable 하고 thread-safe 하다.
 
 [source, java]
 ----
@@ -329,6 +329,8 @@ Instant now = ts.toInstant();
 === `SimpleDateFormat`
 
 https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns[_DateTimeFormatter_] 와 https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html[_SimpleDateFormat_] 의 패턴이 완전히 동일하지 않으므로 리팩토링시 문서를 꼭 참고해야 한다.
+
+기존에 제공하던 `SimpleDateFormat`, `DateFormat` 은 thread-safe 하지 않으므로, 상수로 선언하여 사용할 땐 `DateTimeFormatter` 을 사용해야 한다.
 
 [source, java]
 ----
