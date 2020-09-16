@@ -61,6 +61,7 @@ object AesUtils {
 
 ==== PKCS#7 Padding
 
+* http://tools.ietf.org/html/rfc2315
 * 블럭의 빈 자리를 채우는 방법
 * 일반적으로 PKCS#5, PKCS#7 사용
 * 나무위키
