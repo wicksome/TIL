@@ -35,3 +35,16 @@ docker build -t foo . && docker run -it foo
 ----
 docker run -d -p 8080:8080 --name jenkins jenkins/jenkins:latest 
 ----
+
+---
+
+== Kubernetes
+
+[source, bash]
+----
+$ k get pods
+$ k logs [pod-name] -f
+$ k logs [pod-name] -c install-init
+$ k exec [pod-name] -- cat /var/jenkins_home/secrets/initialAdminPassword
+$ k exec -it [pod-name] -- /bin/bash
+----
