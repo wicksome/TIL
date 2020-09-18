@@ -1,0 +1,47 @@
+= spring framework
+
+== spring boot 2.1
+
+=== @WebMvcTest
+
+== https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes[spring boot 2.2]
+
+* Spring Framework 5.2
+* JUnit 5
+
+== 생성자 @Autowired 
+
+* SpringBoot 2.2.0 부터 JUnit5가 기본으로 변경됨 - https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.2-Release-Notes#junit-5[참고]
+* JUnit5부터 생성자를 통해 주입받을 수 있음
++
+[source, java]
+----
+class UserControllerTest {
+  private final UserController userController;
+
+  @Autowired
+  private UserControllerTest(UserController userController) {
+    this.userController = userController;
+  }
+}
+----
+
+* `@TestConstructor` 어노테이션을 사용하여 생성자에 `@Autowired` 를 생략할 수 있다.
++
+[source, java]
+----
+@TestConstructor(autowireMode = AutowireMode.ALL)
+class UserControllerTest {
+  private final UserController userController;
+
+  private UserControllerTest(UserController userController) {
+    this.userController = userController;
+  }
+}
+----
+
+---
+
+=== @AutoConfigureMockMvc
+
+* `MockMvc` 를 Builder 없이 주입 받을 수 있다.
