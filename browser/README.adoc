@@ -1,0 +1,25 @@
+= browser issues
+
+---
+
+== window.open in safari
+
+bug window.open in safari
+
+동작 안함
+
+- OS X 10.11.6 - Safari 10.0.3
+- OS X 10.11.1 - Safari 9.0.1
+- macOS 10.12.2 - Safari 10.0.2
+
+동작
+
+- macOS 10.12.2 - Safari 10.0.2
+- ajax 콜백 안에서 window.open 열면 동작안함.
+- 밖에서 window.open()하고 콜백안에서 값 넣어주어야함
+
+== IE 무조건 실행
+
+`IE 무조건 실행`
+
+if(/@cc_on!@/false){ //do this only in IE

@@ -1,0 +1,6 @@
+= OOP, Object-Oriented Programming
+
+* Abstraction, 추상화
+* Encapsulation, 캡슐화
+* Inheritance, 상속
+* Polymorphism, 다형성
