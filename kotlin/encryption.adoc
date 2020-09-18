@@ -4,7 +4,7 @@
 == AES
 
 * Advanced Encryption Standard
-* 대칭키를 ㅅ쓰는 블럭 암호
+* 대칭키를 쓰는 블럭 암호
 
 === AES256
 
@@ -61,6 +61,7 @@ object AesUtils {
 
 ==== PKCS#7 Padding
 
+* http://tools.ietf.org/html/rfc2315
 * 블럭의 빈 자리를 채우는 방법
 * 일반적으로 PKCS#5, PKCS#7 사용
 * 나무위키
@@ -68,6 +69,20 @@ object AesUtils {
 ____
 PKCS#5 패딩은 PKCS#7 패딩과 구현 방식이 같지만 블럭의 크기가 8바이트로 고정된 것이다. AES는 128비트(16바이트) 블럭 알고리즘이기 때문에 사실 PKCS#5 패딩을 쓸 일이 없다. 그러나 PKCS#7 패딩과 구현 방식이 같아 보통 같은 구현을 돌려쓰는데다, Java에서 'AES/CBC/PKCS5Padding' 표기법만 허용하고 'AES/CBC/PKCS7Padding' 표기법은 지원하지 않다보니 오히려 AES에 PKCS#5 패딩을 쓰는 것이 맞는 줄 아는 경우가 많다.
 ____
+
+==== Mode/IV
+
+* IV(Initialization Vector): 초기화 벡터
+* https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
+* 블럭 암호화 순서 및 규칙에 대한 표준
+* CBC(Cipher-Block Chining)
+** 최초 평문 1블럭과 IV를 XOR 연산하고 암호화
+** 다음 편문 1블록은 앞에서 위에어 암호화된 결과 블럭에 XOR 연산하여 다시 암호화
+** 이 과정을 끝까지 반복하는 것이 CBC
+** 평문 마지막 블럭은 패딩된 블럭
+* ECB
+** IV를 사용하지 않고, 즉 XOR 연산 없이 각 블럭을 암호화
+
 
 == References
 

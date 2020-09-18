@@ -53,3 +53,46 @@
 # ETC
 
 - vim-prettier: https://github.com/prettier/vim-prettier
+
+
+---
+
+- :newtab [file name] - 새로운 파일 오픈
+- gt - 오른쪽 탭 이동
+- gT - 왼쪽 탭 이동
+- zc - 폴딩하기
+- zo - 폴딩 펼치기
+- `ctrl-\` tree 열기
+- `u` undo
+- `ctrl-r` redo
+
+
+[Vim Chicago Meetup - FZF and Vim Talk - Dorian Karter](https://youtu.be/aXPQTesFdTI)
+
+- :Lines - 라인별 검색
+- :Commits - 해당 깃 커밋
+- :bp - 이전 버퍼
+- :bn - 다음 버퍼
+- :ls - 버퍼 리스트
+- :Buffers - 버퍼 리스트 `fzf`
+
+# Usage
+
+1. `vi [file]` 으로 vim 진입
+2. `ctrl-p` 파일 검색
+    - `ctrl-j/k` 로 파일 이동
+3. 파일 열기
+    - `enter` 파일 오픈(버퍼로 열기)
+        - `:bp` 이전 버퍼 이동
+        - `:bn` 다음 버퍼 이동
+    - 새 탭
+        - `ctrl-t` 선택된 파일을 새 탭으로 오픈
+        - `gt` 오른쪽 탭으로 이동
+        - `gT` 왼쪽 탭으로 이동
+    - 창 분할
+        - `ctrl-x` 수평 분할
+        - `ctrl-v` 수직 분할
+        - `ctrl-w h/j/k/l` 패널 이동
+        - `ctrl-w r` 현재 창 이동
+4. `:! [bash command]` 명령어 실행
+    - `:r ! [bash command]` 명령어 실행 후 결과를 vi 에 입력

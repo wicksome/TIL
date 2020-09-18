@@ -15,11 +15,16 @@ tcpdump: /usr/sbin/tcpdump /usr/share/man/man8/tcpdump.8.gz
 * `-i [interface name]`
 * `-w [file name]`
 * `-D`, `--list-interfaces`: 네트워크 인터페이스 리스트 보기 (`ifconfig`)
+* `-nn`: 포트를 그대로 출력.
+* `-vvv`: Even more verbose output.  For example, telnet SB ... SE options are printed in full.  With -X Telnet options are printed in hex as well.
+* `-vv`: Even more verbose output.  For example, additional fields are printed from NFS reply packets, and SMB packets are fully decoded.
+* `-A`: Print each packet (minus its link level header) in ASCII.  Handy for capturing web pages.
+* `-X`: When  parsing  and printing, in addition to printing the headers of each packet, print the data of  each  packet,  including  its link level header, in hex and ASCII.
 * https://jojoldu.tistory.com/316
 
 [source, bash]
 ----
-$ sudo tcpdump -i eth1 -w tcpdump1.pcap
+$ sudo tcpdump -i eth1 -nn -vvv -A -w tcpdump1.pcap
 ----
 
 == pcap 파일 읽기
