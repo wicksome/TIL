@@ -13,6 +13,8 @@
 * https://github.com/wicksome/TIL/blob/master/jenkins/backup-jenkins-home.adoc[JENKINS_HOME 백업하기]
 * https://github.com/wicksome/TIL/blob/master/jenkins/clear-user-security.adoc[사용자 로그인 설정 초기화]
 * https://github.com/wicksome/TIL/blob/master/jenkins/plugins.adoc[유용한 플러그인]
+* `userContent` 활용
+** 이곳에 각종 설치파일을 저장해서 `wget`으로 활용 가능
 
 == UI
 
