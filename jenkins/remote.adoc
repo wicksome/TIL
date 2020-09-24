@@ -1,0 +1,16 @@
+= Jenkins Remoting
+
+* https://www.jenkins.io/projects/remoting/
+
+== ssh
+
+== jnlp
+
+== inbound-agent
+
+* 다운로드
++
+[source, bach]
+----
+wget {JENKINS_URL}/jnlpJars/remoting.jar
+----
