@@ -1,0 +1,10 @@
+= log
+
+* level
+** ERROR, WARN, INFO, DEBUG, TRACE
+** 선택한 레벨의 왼쪽 레벨은 로깅에 포함된다.
+** e.g. INFO 선택시 ERROR, WARN, INFO 로깅됨
+* `additivity` 옵션
+** 중복 출력 제외
+** 상위 appender 상속받는 것을 제어
+** root 로거에 출력을 제외시킴
