@@ -43,8 +43,20 @@ docker run -d -p 8080:8080 --name jenkins jenkins/jenkins:latest
 [source, bash]
 ----
 $ k get pods
-$ k logs [pod-name] -f
-$ k logs [pod-name] -c install-init
 $ k exec [pod-name] -- cat /var/jenkins_home/secrets/initialAdminPassword
+----
+
+[source, bash]
+.특정 Pod 로그 보기
+----
+$ k logs [pod-name] -f
+$ k logs [pod-name] -c install-init # specific container in pod
+----
+
+[source, bash]
+.Pod 접근하기
+----
 $ k exec -it [pod-name] -- /bin/bash
 ----
+
+== Helm
