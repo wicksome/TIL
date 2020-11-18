@@ -398,6 +398,10 @@ QR 코드를 가맹점이 생성하는 방식으로 이를 소비자가 자신�
 
 QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스캔해 통신하는 방식
 
+=== spec
+
+* EMV QR Code: https://www.emvco.com/emv-technologies/qrcodes/
+
 == 기타 용어
 
 BIN, Bank Identification Number::
