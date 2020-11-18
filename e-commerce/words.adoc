@@ -400,6 +400,11 @@ QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스�
 
 == 기타 용어
 
+BIN, Bank Identification Number::
+https://rpgc.com/bins-and-you-a-guide-for-merchants/
++
+image::https://rpgc.com/wp-content/uploads/2020/03/bin_credit_card.jpg[]
+
 CAT, Credit Authorization Terminal::
 CAT 단말기란 신용카드가맹점 등에서 신용카드 등의 거래 승인을 위해 사용되는 발행회사, 회원번호 등을 자동 판독해 통신회선을 통하여 신용카드업체로 전달하고 정산해주는 일반 결제 단말기를 말한다.
 +
@@ -410,6 +415,9 @@ CDCVM, Consumer Device Cardholder Verification Method::
 +
 * https://support.google.com/pay/merchants/answer/7381753?hl=en
 * https://support.apple.com/en-us/HT202527
+
+DCB, Direct Carrier Billing::
+https://en.wikipedia.org/wiki/Direct_carrier_billing
 
 EMV::
 EMV는 칩 카드 기술을 기반으로 한 신용 카드 및 직불 카드의 글로벌 표준으로, 카드 체계^Card{sp}Network^인 Europay, MasterCard, Visa에서 이름을 따온 것이다.
@@ -429,6 +437,9 @@ ISO와 MSP 부문을 말하며, PG, VAN사들을 말하는 것 같다.
 * https://www.bambora.com/en/au/news/whats-the-difference-between-a-payment-facilitator-payment-gateway--merchant-account/[What's the difference between a payment facilitator, payment gateway & merchant account?]
 * https://www.paymentfacilitator.com/business/what-is-the-payment-facilitator-model/[WHAT IS THE PAYMENT FACILITATOR MODEL?]
 * https://www.samsungpop.com/common.do?cmd=down&saveKey=todayinvest.file&fileName=gbrch_01.pdf
+
+PAN, Primary Account Number::
+up to 19 digits, as defined in ISO/IEC 7812-1
 
 {wiki-pcidss}[PCI DSS], Payment Card Industry Data Security Standards::
 신용카드업계 데이터보안 표준
