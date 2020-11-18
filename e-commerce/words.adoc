@@ -211,6 +211,8 @@ ditaa
 
 [ditaa, align="center"]
 ....
+@startuml
+ditaa
          +----------+
          |cGRE      |
          | Customer |
@@ -230,6 +232,7 @@ ditaa
                       +-----+----+
                       | Licensor |
                       +----------+
+@enduml
 ....
 <1> 김모씨는 카드 발급을 위해 신용카드사로 연회비를 지불한다.
 <2> 신용카드사는 카드 스킴 혹은 프랜차이즈에 라이센스 비용을 지불한다.
@@ -240,6 +243,8 @@ ditaa
 
 [ditaa, align="center"]
 ....
+@startuml
+ditaa
  +----------+ 1. Payment          +----------+
  |cGRE      +-------------------->+cGRE      |
  | Customer |                     | Merchant |
@@ -257,6 +262,7 @@ ditaa
               | Acquirer/Issuer |        |
               |                 +<-------+
               +-----------------+
+@enduml
 ....
 <1> 김모씨는 A매장에서 상품을 구입하기 위해 결제(카드결제, 신용구매)를 한다. (**Payment**)
 <2> A매장은 VAN사로 승인요청을 한다.
@@ -271,6 +277,8 @@ ditaa
 
 [ditaa, align="center"]
 ....
+@startuml
+ditaa
                                 +----------+
                                 |cGRE      |
                                 | Merchant |
@@ -290,6 +298,7 @@ ditaa
                              :                 |
                              +-----------------+
                                VAN charge
+@enduml
 ....
 <1> A매장은 VAN를 통해 구매대금 입금을 요청한다. (매출전표 매입업무)
 <1> 신용카드사는 A매장에게 구매대금을 지급한다. (이 때, 가맹점 수수료를 제외한 카드대금을 지급) +
@@ -299,6 +308,8 @@ ditaa
 
 [ditaa, align="center"]
 ....
+@startuml
+ditaa
          +----------+
          |cGRE      |
          | Customer |
@@ -313,6 +324,7 @@ ditaa
             |      | Acquirer/Issuer |
             +----->+                 |
                    +--------+--------+
+@enduml
 ....
 <1> 신용카드사는 김모씨에게 구매대금을 청구한다.
 <2> 김모씨는 신용카드사로 구매대금을 납부한다.
