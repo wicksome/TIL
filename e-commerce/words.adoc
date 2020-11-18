@@ -159,6 +159,8 @@ POS사를 말하는걸까?
 [ditaa, align="center"]
 .Three-party scheme
 ....
+@startuml
+ditaa
  +------------+ Payment                         +----------+
  |cGRE        +-------------------------------->+cGRE      |
  | Cardholder |                 Product/Service | Merchant |
@@ -178,6 +180,7 @@ POS사를 말하는걸까?
                            +----------+ 
                            | Licensor | 
                            +----------+ 
+@enduml
 ....
 
 
