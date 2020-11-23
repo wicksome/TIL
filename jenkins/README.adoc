@@ -20,6 +20,10 @@
 
 * https://github.com/wicksome/TIL/blob/master/jenkins/change-default-view.adoc['All' 뷰 지우고, 변경하기]
 
+== 빌드
+
+* https://jojoldu.tistory.com/446[캐시?클린?]
+
 == 기타
 
 * https://github.com/wicksome/TIL/blob/master/jenkins/credentials.adoc[Credential 추가하기]
