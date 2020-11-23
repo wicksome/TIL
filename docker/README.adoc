@@ -36,6 +36,13 @@ docker build -t foo . && docker run -it foo
 docker run -d -p 8080:8080 --name jenkins jenkins/jenkins:latest 
 ----
 
+=== 파일 이동
+
+[source, bash]
+----
+docker cp {conatiner_name}:/home/user/file.txt ~/file.text
+----
+
 ---
 
 == Kubernetes
