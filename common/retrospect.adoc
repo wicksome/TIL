@@ -1,0 +1,13 @@
+= 회고
+
+== KPT
+
+> Keep, Problem, Try
+
+* https://www.designsori.com/zero/1157702[프로덕트 매니저의 애자일 회고 방법론 - KPT 실전편]
+* https://brunch.co.kr/@jinha0802/35[KPT 회고란 무엇인가?]
+* https://woowabros.github.io/experience/2020/05/13/birth-of-team-culture.html[팀 문화의 탄생 - 우아한형제들 기술 블로그]
+
+== tools
+
+* https://github.com/lovasoa/whitebophir[lovasoa/whitebophir] - online collaborative whiteboard 
