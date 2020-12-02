@@ -2,6 +2,8 @@
 :toc:
 :rfc6749: https://tools.ietf.org/html/rfc6749
 
+인증(Authentication)과  권한 부여(Authorization)의 필요에 의해..
+
 == Roles
 
 OAuth는 4가지 역할을 정의한다. :
@@ -17,7 +19,7 @@ Authorization Server:: 성공적으로 `Resource Owner` 를 인증(authenticatin
 == Protocol Flow
 
 [source]
-.Abstract Protocol Flow
+.Figure 1: Abstract Protocol Flow
 ----
 @startuml
 ditaa
@@ -50,25 +52,10 @@ ditaa
 
 == Authorization Grant
 
-인증(Authentication)과  권한 부여(Authorization)의 필요에 의해..
-
-RFC 6749에 소개된 방식
-
-Authorization Code Grant Type::
-권한 코드 승인 타입
-
-Implicit Grant::
-암시적 승인
-
-Resource Owner Password Credentials Grant::
-리소스 오너 패스워드 자격 증명
-
-Client Credentials Grant Type::
-클라이언트 자격 증명
-
 === Authorization Code
 
 [source]
+.Figure 3: Authorization Code Flow
 ----
 @startuml
 ditaa
@@ -102,15 +89,89 @@ ditaa
 
 === Implicit
 
+[source]
+.Figure 4: Implicit Grant Flow
+----
+@startuml
+ditaa
+     +----------+
+     | Resource |
+     |  Owner   |
+     |          |
+     +----------+
+          ^
+          |
+         (B)
+     +----|-----+          Client Identifier     +---------------+
+     |         -+----(A)-- & Redirection URI --->|               |
+     |  User-   |                                | Authorization |
+     |  Agent  -|----(B)-- User authenticates -->|     Server    |
+     |          |                                |               |
+     |          |<---(C)--- Redirection URI ----<|               |
+     |          |          with Access Token     +---------------+
+     |          |            in Fragment
+     |          |                                +---------------+
+     |          |----(D)--- Redirection URI ---->|   Web-Hosted  |
+     |          |          without Fragment      |     Client    |
+     |          |                                |    Resource   |
+     |     (F)  |<---(E)------- Script ---------<|               |
+     |          |                                +---------------+
+     +-|--------+
+       |    |
+      (A)  (G) Access Token
+       |    |
+       ^    v
+     +---------+
+     |         |
+     |  Client |
+     |         |
+     +---------+
+@enduml
+----
+
 === Resource Owner Password Credentials
+
+[source]
+.Figure 5: Resource Owner Password Credentials Flow
+----
+@startuml
+ditaa
+     +----------+
+     | Resource |
+     |  Owner   |
+     |          |
+     +----------+
+          v
+          |    Resource Owner
+         (A) Password Credentials
+          |
+          v
+     +---------+                                  +---------------+
+     |         |>--(B)---- Resource Owner ------->|               |
+     |         |         Password Credentials     | Authorization |
+     | Client  |                                  |     Server    |
+     |         |<--(C)---- Access Token ---------<|               |
+     |         |    (w/ Optional Refresh Token)   |               |
+     +---------+                                  +---------------+
+@enduml
+----
 
 === Client Credentials
 
 [source]
+.Figure 6: Client Credentials Flow
 ----
-
+@startuml
+ditaa
+     +---------+                                  +---------------+
+     |         |                                  |               |
+     |         |>--(A)- Client Authentication --->| Authorization |
+     | Client  |                                  |     Server    |
+     |         |<--(B)---- Access Token ---------<|               |
+     |         |                                  |               |
+     +---------+                                  +---------------+
+@enduml
 ----
-
 == Etc
 
 User:: 서비스 제공자와 소비자를 사용하는 계정을 가지고 있는 개인
