@@ -2,3 +2,24 @@
 
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455[전자금융거래법]
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455&lang=ENG[ELECTRONIC FINANCIAL TRANSACTIONS ACT]
+
+
+---
+
+== shop vs merchant vs vendor vs retail vs buyer vs ...
+
+Shop::
+
+Merchant::
+
+Vendor::
+
+Retail::
+
+Buyer::
+
+.references
+* https://wikidiff.com/retail/merchant
+* https://www.askdifference.com/merchant-vs-vendor/
+* https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
+* https://wikidiff.com/merchant/shopkeeper
