@@ -23,3 +23,21 @@ Buyer::
 * https://www.askdifference.com/merchant-vs-vendor/
 * https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
 * https://wikidiff.com/merchant/shopkeeper
+
+== 사업자등록번호
+
+* 번역家가 번역社에서는 Business registration number 정도로 번역하는 것이 통례
+** but, 사업자등록번호란 사업하는 주체에게 세금을 부과하기 위한 고유번호를 의미하며, 이에 대응하는 개념인 Employer ID number^EID^를 쓰는것이 바람직해 보임
+** 외국인에게 Korean EID라고 전하면 쉽게 이해할 수 있음
+* Tax Identification Number^TIN^, Tax ID
+* 나라별로 다를 수도 있음
+** Tax ID, Tax No, Tax Code, TRN^Tax{sp}Registration{sp}No^: Tax 표현을 쓰는 나라
+** USCI^The{sp}United{sp}Social{sp}Credit{sp}Identifier^, OC^Organization{sp}Code^: 중국
+** CNPJ^Cadastro{sp}Nacional{sp}da{sp}Pessoa{sp}Jurídica^ No: 브라질
+** IEC^Importer{sp}Exporter{sp}Code^ No: 인도
+
+.References:
+* https://en.wikipedia.org/wiki/Employer_Identification_Number
+* https://m.blog.naver.com/PostView.nhn?blogId=uwit_biz&logNo=10077266863&proxyReferer=https:%2F%2Fwww.google.com%2F
+* https://m.blog.naver.com/book_jockey/220925683346
+* https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
