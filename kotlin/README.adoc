@@ -2940,6 +2940,11 @@ fun main(args: Array<String>) {
 
 coroutine.adoc 참고
 
+== Tip
+
+* https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
+* https://github.com/Kotlin/KEEP[KEEP - Kotlin Evolution and Enhancement Process]
+
 == TODO
 
 * https://kotlinlang.org/docs/reference/returns.html#return-at-labels[Return at Labels]
