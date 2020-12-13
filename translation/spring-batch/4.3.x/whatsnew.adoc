@@ -1,0 +1,129 @@
+= What's New in Spring Batch 4.3
+:revdate: 2020-12-13T23:15:00+09:00
+:toc: left
+
+====
+https://docs.spring.io/spring-batch/docs/4.3.x/reference/html/whatsnew.html[docs] 번역
+====
+
+이번 릴리즈에는 새로운 기능, 성능 향상, 의존성 업데이트 및 API 지원 중단이 함께 제공된다. 이 섹션에서는
+가장 중요한 변경 사항을 설명한다. 전체 변경 사항은 https://github.com/spring-projects/spring-batch/releases/tag/4.3.0[릴리즈 노트]를 참조하라.
+
+== New features
+
+=== New synchronized ItemStreamWriter
+
+`SynchronizedItemStreamReader` 와 유사하게, `SynchronizedItemStreamWriter` 가 도입되었다.
+이 writer는 multi-threaded 스텝에서 concurrent 스레드가 서로의 writer에 오버라이드하지 않도록 
+동기화가 필요할 때 유용하다.
+
+=== New JpaQueryProvider for named queries
+
+이 릴리즈에서는 `JpaPagingItemReader` 를 사용할 때 JPA에 명명된 쿼리를 쉽게 설정하도록 `JpaNativeQueryProvider` 옆에 `JpaNamedQueryProvider` 를 도입했다.
+
+[source, java]
+----
+JpaPagingItemReader<Foo> reader = new JpaPagingItemReaderBuilder<Foo>()
+    .name("fooReader")
+    .queryProvider(new JpaNamedQueryProvider("allFoos", Foo.class))
+    // set other properties on the reader
+    .build();
+----
+
+=== New JpaCursorItemReader Implementation
+
+JPA 2.2 에서는 페이징만 지원하지 않고 커서로 결과를 스트리밍하는 기능이 추가되었다. 이번 릴리즈에서 이 
+기능을 사용하여 `JdbcCursorItemReader` 및 `HibernateCursorItemReader` 와 유사한 커서 기반 
+방식으로 결과를 스트림하는 새로운 JPA item reader를 추가했다.
+
+=== New JobParametersIncrementer implementation
+
+`RunIdIncrementer` 와 유사하게, Spring Framework의 `DataFieldMaxValueIncrementer` 기반으로 하는 `JobParametersIncrementer` 를 추가했다.
+
+=== GraalVM Support
+
+GraalVM 위에서 Spring Batch 어플리케이션을 실행하기 위한 초기 지원을 추가했다. 아직 실험 단계이며 앞으로 계속 개선할 것이다.
+
+=== Java records Support
+
+이번 릴리즈부터 chunk-oriented step에서 item으로 Java의 record 사용을 지원한다. 다음 예제와 같이,
+새로 추가된 `RecordFieldSetMapper` 는 flat file에서 Java record에 데이터 맵핑을 지원한다.
+
+[source, java]
+----
+@Bean
+public FlatFileItemReader<Person> itemReader() {
+    return new FlatFileItemReaderBuilder<Person>()
+        .name("personReader")
+        .resource(new FileSystemResource("persons.csv"))
+        .delimited()
+        .names("id", "name")
+        .fieldSetMapper(new RecordFieldSetMapper<>(Person.class))
+        .build();
+}
+----
+
+위 예제에서 `Person` 타입은 다음과 같이 정의된 Java record다.
+
+[source, java]
+----
+public record Person(int id, String name) { }
+----
+
+`FlatFileItemReader` 는 새로운 `RecordFieldSetMapper` 를 사용하여 `persons.csv` 파일을 `Person` 타입의 레코드에 맵핑한다.
+
+
+== Performance improvements
+
+=== Use bulk writes in RepositoryItemWriter
+
+4.2 버전까지는 `RepositoryItemWriter` 에서 `CrudRepository#saveAll` 을 사용하기 위해 writer 구현 확장(extend) 혹은 `write(List)` 오버라이드가 필요했다.
+
+이번 릴리즈에서 `RepositoryItemWriter` 는 기본 설정으로 `CrudRepository#saveAll` 을 사용하도록 변경되었다.
+
+=== Use bulk writes in MongoItemWriter
+
+`MongoItemWriter` 는 for loop 에서 `MongoOperations#save()` 를 사용하여 item을 데이터베이스에 저장했다. 이번 릴리즈에서는 writer가
+`org.springframework.data.mongodb.core.BilkOperations` 를 사용하도록 변경되었다.
+
+=== Job start/restart time improvement
+
+`JobRepository#getStepExecutionCount()` 는 모든 job execution과 step execution을 메모리에 로드하고 프레임워크단에서 카운트를 했다.
+이번 릴리즈에서는 step execution 카운트를 위해 데이터베이스에 SQL count 쿼리를 단일 호출하도록 변경되었다.
+
+== Dependency updates
+
+이번 릴리즈에서 종속된 Spring 프로젝트를 다음과 같이 업데이트한다:
+
+* Spring Framework 5.3
+* Spring Data 2020.0
+* Spring Integration 5.4
+* Spring AMQP 2.3
+* Spring for Apache Kafka 2.6
+* Micrometer 1.5
+
+== Deprecations
+
+=== API Deprecations
+
+이번 릴리즈에서 더이상 사용하지 않는 API는 다음과 같다:
+
+* `org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean`
+* `org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean`
+* `org.springframework.batch.core.repository.dao.MapJobInstanceDao`
+* `org.springframework.batch.core.repository.dao.MapJobExecutionDao`
+* `org.springframework.batch.core.repository.dao.MapStepExecutionDao`
+* `org.springframework.batch.core.repository.dao.MapExecutionContextDao`
+* `org.springframework.batch.item.data.AbstractNeo4jItemReader`
+* `org.springframework.batch.item.file.transform.Alignment`
+* `org.springframework.batch.item.xml.StaxUtils`
+* `org.springframework.batch.core.launch.support.ScheduledJobParametersFactory`
+* `org.springframework.batch.item.file.MultiResourceItemReader#getCurrentResource()`
+* `org.springframework.batch.core.JobExecution#stop()`
+
+권장되는 대체제는 각 API의 javadoc에서 찾을 수 있다.
+
+=== SQLFire support deprecations
+
+SQLFire는 2014년 11월 1일부로 종료(https://www.vmware.com/latam/products/pivotal-sqlfire.html[EOL])되었다. 
+이번 릴리즈에 job repository로 SQLFire 사용 지원을 중단하고 5.0 버전에서 제거할 예정이다.
