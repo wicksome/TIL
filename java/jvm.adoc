@@ -1,6 +1,4 @@
-= Java GC
-Yeongjun kim <opid911@gmail.com>
-v1.0, 2018-03-22
+= JVM
 :toc:
 :page-draft:
 
@@ -66,23 +64,20 @@ jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로
 * java 외의 언어로 작성된 코드를 위한 stack 영역
 * native code, JNI로 실행되는 코드
 
-== Generational Garbage Collection
+
+== GC
+
+=== Generational Garbage Collection
 
 * STW^stop-the-world^ 란 GC를 실행하기 위해 JVM이 애플리케이션 실행을 멈추는 것
 * 대개의 경우 GC 튜닝이란 'stop-the-world' 시간을 줄이는 것
 * `System.gc()` 는 절대로 사용하지 말것 -> 시스템의 성능에 매우 큰 영향
 * link:https://plumbr.io/handbook/garbage-collection-in-java/generational-hypothesis[weak generational hypothesis]을 바탕으로 두 영역으로 나뉨
 
-== Young Generation
-
-
-== Old Generation
 === Serial GC
 === Parallel GC
 === Parallel Old GC(Parallel Compacting GC)
 === Concurrent Mark & Sweep GC(이하 CMS)
-
-
 === G1(Garbage First) GC
 
 * Java 9부터 default GC
@@ -110,7 +105,12 @@ jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로
 .. cleanup
 .. copy
 
-== 참고
+Young Garbage Collections::
+The G1 GC satisfies most allocation requests from regions added to the eden set of regions. During a young garbage collection, the G1 GC collects both the eden regions and the survivor regions from the previous garbage collection. The live objects from the eden and survivor regions are copied, or evacuated, to a new set of regions. The destination region for a particular object depends upon the object's age; an object that has aged sufficiently evacuates to an old generation region (that is, promoted); otherwise, the object evacuates to a survivor region and will be included in the CSet of the next young or mixed garbage collection.
+
+
+== References
+
 * http://d2.naver.com/helloworld/1329
 * http://d2.naver.com/helloworld/37111
 * https://plumbr.io/handbook/garbage-collection-in-java/generational-hypothesis
