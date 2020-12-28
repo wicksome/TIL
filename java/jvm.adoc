@@ -105,6 +105,8 @@ jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로
 .. cleanup
 .. copy
 
+==== Young Garbage Collections
+
 Young Garbage Collections::
 The G1 GC satisfies most allocation requests from regions added to the eden set of regions. During a young garbage collection, the G1 GC collects both the eden regions and the survivor regions from the previous garbage collection. The live objects from the eden and survivor regions are copied, or evacuated, to a new set of regions. The destination region for a particular object depends upon the object's age; an object that has aged sufficiently evacuates to an old generation region (that is, promoted); otherwise, the object evacuates to a survivor region and will be included in the CSet of the next young or mixed garbage collection.
 
