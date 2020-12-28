@@ -117,3 +117,4 @@ The G1 GC satisfies most allocation requests from regions added to the eden set 
 * http://d2.naver.com/helloworld/37111
 * https://plumbr.io/handbook/garbage-collection-in-java/generational-hypothesis
 * https://mirinae312.github.io/develop/2018/06/04/jvm_gc.html
+* https://yaboong.github.io/java/2018/06/09/java-garbage-collection/
