@@ -90,6 +90,43 @@ OK
 
 === Set
 
+[source]
+----
+> sadd partner:visa:merchants 3212 1231 <1>
+(integer) 2
+> smembers partner:visa:merchants <2>
+1) "3212"
+2) "1231"
+> scard partner:visa:merchants <3>
+(integer) 2
+> sismember partner:visa:merchants 3212 <4>
+(integer) 1
+> srandmember partner:visa:merchants <5>
+"1231"
+> srandmember partner:visa:merchants 2 <6>
+1) "1231"
+2) "3212"
+> srandmember partner:visa:merchants -2 <7>
+1) "1231"
+2) "1231"
+> spop
+> stem
+> smove
+> sinter
+> sinterstore
+> sdiff
+> sdiffstore
+> sunion
+> sunionstore
+----
+<1> _set add_
+<2> set members
+<3> set cardinality
+<4> if is member, return 1(`true`). otherwise, return 0(`false`)
+<5> set random member
+<6> multiple random
+<7> multiple random(duplicate)
+
 === Sorted Set
 
 == key naming
