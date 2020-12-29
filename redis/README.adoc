@@ -91,3 +91,9 @@ OK
 === Set
 
 === Sorted Set
+
+== key naming
+
+* https://keichee.tistory.com/248
+* https://stackoverflow.com/questions/6965451/redis-key-naming-conventions
+* https://stackoverflow.com/questions/30271808/naming-convention-and-valid-characters-for-a-redis-key/30271837
