@@ -97,3 +97,15 @@ OK
 * https://keichee.tistory.com/248
 * https://stackoverflow.com/questions/6965451/redis-key-naming-conventions
 * https://stackoverflow.com/questions/30271808/naming-convention-and-valid-characters-for-a-redis-key/30271837
+* max size: 512 MB
+
+[source]
+---
+object-type#id:data
+partner:user#123:name
+partner:merchant#123:bno
+partner:merchant#123
+merchant#121231:base-url
+users // <1>
+---
+<1> `users`에 user 키를 모두 저장하는 list 혹은 set 
