@@ -33,6 +33,12 @@ open .
 OK
 > get hello
 "world"
+> exists hello
+(integer) 1
+> del hello
+(integer) 1
+> exists hello
+(integer) 0
 ----
 
 [source]
