@@ -1,6 +1,14 @@
 = Redis
+:toc:
 
 == client
+
+[source, bash]
+----
+$ brew install redis
+$ redis-cli -h $host -p $port
+> config get *
+----
 
 > https://github.com/luin/medis
 
@@ -14,3 +22,66 @@ node bin/pack.js
 cd dist/out/Medis-mas-x64/
 open .
 ----
+
+== 자료구조
+
+=== String
+
+[source]
+----
+> set hello world
+OK
+> get hello
+"world"
+----
+
+[source]
+----
+> set counter 100
+OK
+> get counter
+"100"
+> incr counter
+(integer) 101
+> incr counter
+(integer) 102
+> incrby counter 50
+(integer) 152
+----
+
+[source]
+----
+> incr count
+1
+> getset count 0
+"1"
+> get count
+"0"
+> del count
+(integer) 1
+> get count
+(nil)
+----
+
+=== List
+
+* linked list
+* pub-sub 패턴으로 활용
+
+[source, bash]
+----
+
+----
+
+=== Hash
+
+[source, bash]
+----
+> hmget user2 email country
+1) "id@domain.com"
+2) "Korea"
+----
+
+=== Set
+
+=== Sorted Set
