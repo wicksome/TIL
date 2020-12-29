@@ -146,3 +146,8 @@ merchant#121231:base-url
 users // <1>
 ----
 <1> `users`에 user 키를 모두 저장하는 list 혹은 set 
+
+
+== batch
+
+bulk insert `cat data.txt | redis-cli --pipe` using pipe mode
