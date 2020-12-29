@@ -100,12 +100,12 @@ OK
 * max size: 512 MB
 
 [source]
----
+----
 object-type#id:data
 partner:user#123:name
 partner:merchant#123:bno
 partner:merchant#123
 merchant#121231:base-url
 users // <1>
----
+----
 <1> `users`에 user 키를 모두 저장하는 list 혹은 set 
