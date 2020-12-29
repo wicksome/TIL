@@ -151,3 +151,17 @@ users // <1>
 == batch
 
 bulk insert `cat data.txt | redis-cli --pipe` using pipe mode
+
+== transaction
+
+[source]
+----
+MULTI
+INCR id:users
+SET user:{id} '{"name": "yj","age": 30}'
+SADD users {id}
+EXEC
+----
+
+* https://redis.io/topics/transactions
+* https://dark0096.github.io/redis/2018/10/27/redis-transaction.html
