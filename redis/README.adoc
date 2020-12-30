@@ -155,3 +155,4 @@ EXEC
 
 * https://redis.io/topics/transactions
 * https://dark0096.github.io/redis/2018/10/27/redis-transaction.html
+* cluster 모드에서는 multi, exec 안됨..
