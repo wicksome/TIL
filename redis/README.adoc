@@ -10,18 +10,8 @@ $ redis-cli -h $host -p $port
 > config get *
 ----
 
-> https://github.com/luin/medis
-
-[source, bash]
-----
-git clone https://github.com/luin/medis.git
-cd medis
-npm install
-npm run pack
-node bin/pack.js
-cd dist/out/Medis-mas-x64/
-open .
-----
+* ~https://github.com/luin/medis~
+* https://github.com/qishibo/AnotherRedisDesktopManager
 
 == 자료구조
 
