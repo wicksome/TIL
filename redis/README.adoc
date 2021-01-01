@@ -59,6 +59,13 @@ OK
 (nil)
 ----
 
+* `SET` 으로 값을 넣을 때 이미 값이 있으면 덮어씀 - https://redis.io/commands/set[doc]
++
+[quote]
+____
+If key already holds a value, it is overwritten, regardless of its type.
+____
+
 === List
 
 * linked list
