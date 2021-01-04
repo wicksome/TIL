@@ -110,6 +110,8 @@
 └── /var   로그나 메일 등 가변적인 파일을 놓아두는 디렉토리
 ```
 
+- [When does /tmp get cleared?](https://serverfault.com/questions/377348/when-does-tmp-get-cleared)
+
 **Linux 보안 기능**
 - permission
     - 디렉토리나 파일에 대한 엑세스 권한을 계정 및 그룹별로 설정 가능
