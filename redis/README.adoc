@@ -190,3 +190,4 @@ EXEC
 
 * https://jacking75.github.io/DB_Redis_service/
 * https://github.com/redis-study/redis-summary
+* https://zdnet.co.kr/view/?no=20131119174125
