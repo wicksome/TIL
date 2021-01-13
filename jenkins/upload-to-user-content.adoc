@@ -1,8 +1,10 @@
 = userContent 디렉토리 활용하기
 
 * `userContent` 활용(이곳에 각종 설치파일을 저장해서 `wget` 으로 활용 가능)
-.. FreeStyle 작업 생성
-.. `General` 매개변수 옵션추가
+
+
+. FreeStyle 작업 생성
+. `General` 매개변수 옵션추가
 +
 [source]
 .Chioce Paramter
@@ -25,10 +27,10 @@ Name: FILE_NAME
 ----
 File location: tmpFile
 ----
-.. `Restrict where this project can be run` 옵션에 `master` label 추가
+. `Restrict where this project can be run` 옵션에 `master` label 추가
 +
 (master 노드에서만 실행되도록 설정)
-.. `Build > Execute shell` 스텝 추가
+. `Build > Execute shell` 스텝 추가
 +
 [source, bash]
 .Command
@@ -46,4 +48,8 @@ fi
 
 echo "URL: ${JENKINS_URL}userContent"
 ----
-** Jenkins pipeline 으로 만들어보려고 했으나 File Parameter 버그가 있어서 업로드가 안됨
+
+[WARNING]
+====
+Jenkins pipeline 으로 만들어보려고 했으나 File Parameter 버그가 있어서 업로드가 안됨
+====
