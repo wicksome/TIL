@@ -53,6 +53,10 @@ fi
 echo "URL: ${JENKINS_URL}userContent"
 ----
 
+. Global Tool Configuration 설정에서 JDK 추가
++
+image::setting-tool-jdk.png[]
+
 [WARNING]
 ====
 Jenkins pipeline 으로 만들어보려고 했으나 File Parameter 버그가 있어서 업로드가 안됨
