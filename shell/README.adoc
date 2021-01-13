@@ -8,3 +8,11 @@
 $ cat file | awk -F'\|' '{print $3;}' | less
 $ cut -d '|' -f 3 file | less
 ----
+
+== 중복 갯수 파악하기
+
+[source, bash]
+.`|` 로 분리하여 3번째 값 추출한뒤 중복된 값 상위 100개 출력
+----
+$ cat file | awk -F'\|' '{print $3;}' | sort | uniq -c | sort | head -n 100
+----
