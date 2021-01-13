@@ -16,4 +16,9 @@ scl enable devtoolset-7 bash
 cd redis-stable
 make distclean
 make
+make test
+
+# use
+cd src
+./redis-cli -v
 ----
