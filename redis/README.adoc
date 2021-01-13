@@ -126,6 +126,9 @@ ____
 
 > The max number of members in a set is 2^32^ - 1 (4294967295, more than 4 billion of members per set).
 
+* 순서 보장할 수 없음 +
+https://stackoverflow.com/questions/12064317/redis-set-default-order
+
 === Sorted Set
 
 == key naming
