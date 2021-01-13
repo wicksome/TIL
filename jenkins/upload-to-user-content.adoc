@@ -1,7 +1,11 @@
 = userContent 디렉토리 활용하기
 
-* `userContent` 활용(이곳에 각종 설치파일을 저장해서 `wget` 으로 활용 가능)
+.key point
+****
+`userContent` 활용(이곳에 각종 설치파일을 저장해서 `wget` 으로 활용 가능)
+****
 
+image::user-content.png[]
 
 . FreeStyle 작업 생성
 . `General` 매개변수 옵션추가
