@@ -1,0 +1,10 @@
+== shell
+:toc:
+
+== 파일 딜리미터로 분리하기
+
+[source, bash]
+----
+$ cat file | awk -F'\|' '{print $3;}' | less
+$ cut -d '|' -f 3 file | less
+----
