@@ -4,7 +4,21 @@ https://plugins.jenkins.io/extended-choice-parameter/
 
 == 젠킨스 작업 리스트 보여주기
 
-[source, groovy]
+. 신규 작업 생성
+. 빌드 파라미터에 아래 스크립트 추가
++
+[soruce, groovy]
+.Extensible Choice > Choice Provider: "System Groovy Choice Parameter" > Goovy Script
+----
+import jenkins.model.Jenkins
+import hudson.model.Job
+
+return Jenkins.instance.getAllItems(Job.class).collect { URLDecoder.decode(it.name) }
+----
++
+혹은 jenkins rest api 사용 가능
++
+[source, gy]
 ----
 import groovy.json.JsonSlurper
 
@@ -22,27 +36,7 @@ if (http.responseCode == 200) {
   response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
 }
 
-def result = response.jobs.collect { it.name }
-
-return result
-  
-
-
-    println "response: ${result}"
-----
-
----
-
-. 신규 작업 생성
-. 빌드 파라미터에 아래 스크립트 추가
-+
-[soruce, groovy]
-.Extensible Choice > Choice Provider: "System Groovy Choice Parameter" > Goovy Script
-----
-import jenkins.model.Jenkins
-import hudson.model.Job
-
-return Jenkins.instance.getAllItems(Job.class).collect { URLDecoder.decode(it.name) }
+return response.jobs.collect { it.name }
 ----
 
 . `<JENKINS_URL>/scriptApproval` 에서 아래 시그니쳐 approve 설정
