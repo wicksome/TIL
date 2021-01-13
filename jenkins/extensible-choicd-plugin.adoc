@@ -1,0 +1,47 @@
+[source, groovy]
+----
+import groovy.json.JsonSlurper
+
+def http = new URL("http://<JENKINS_URL>/api/json").openConnection() as HttpURLConnection
+http.setDoOutput(true)
+http.setRequestProperty("Accept", 'application/json')
+http.setRequestProperty("Content-Type", 'application/json')
+http.connect()
+
+def response = [:]    
+
+if (http.responseCode == 200) {
+  response = new JsonSlurper().parseText(http.inputStream.getText('UTF-8'))
+} else {
+  response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
+}
+
+def result = response.jobs.collect { it.name }
+
+return result
+  
+
+
+    println "response: ${result}"
+----
+
+---
+
+* `<JENKINS_URL>/scriptApproval` 에서 아래 시그니쳐 approve 해줘야 함
++
+[source]
+.Signatures already approved:
+----
+method hudson.model.Item getName
+method hudson.model.ItemGroup getAllItems java.lang.Class
+staticMethod jenkins.model.Jenkins getInstance
+----
+* 빌드 파라미터에 아래 스크립트 추가
++
+[soruce, groovy]
+----
+import jenkins.model.Jenkins
+import hudson.model.Job
+
+return Jenkins.instance.getAllItems(Job.class).collect { it.name };
+----
