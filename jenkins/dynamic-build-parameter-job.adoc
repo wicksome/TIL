@@ -101,7 +101,7 @@ return ['none']
 export LANG=C.UTF-8
 
 log_file=${target_job}_${target_number}
-output="${target_job}_${target_number}-result_created_${BUILD_ID}_at_$(date +%Y%m%d_%H%M%S).txt"
+output="${target_job}_${target_number}-result_created_${BUILD_ID}_at_$(date +%Y%m%d%H%M%S)"
 
 # download log
 curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${log_file}
@@ -109,11 +109,11 @@ curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${log_file}
 # convert keyword to array
 arr=()
 while read -r line; do
-  arr+=("$line")
+   arr+=("$line")
 done <<< "$keyword"
 
 # search
 for key in "${arr[@]}"; do
-  cat ${log_file} | grep "$key" >> ${output}
+	cat ${log_file} | grep "$key" >> ${output}
 done
 ----
