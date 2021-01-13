@@ -34,6 +34,7 @@ return result
 ----
 method hudson.model.Item getName
 method hudson.model.ItemGroup getAllItems java.lang.Class
+staticMethod java.net.URLDecoder decode java.lang.String
 staticMethod jenkins.model.Jenkins getInstance
 ----
 * 빌드 파라미터에 아래 스크립트 추가
@@ -43,5 +44,5 @@ staticMethod jenkins.model.Jenkins getInstance
 import jenkins.model.Jenkins
 import hudson.model.Job
 
-return Jenkins.instance.getAllItems(Job.class).collect { it.name };
+return Jenkins.instance.getAllItems(Job.class).collect { URLDecoder.decode(it.name) }
 ----
