@@ -98,12 +98,12 @@ return ['none']
 +
 [source, bash]
 ----
-# create output directory
-mkdir -p output
-output="output/${target_job}_${target_number}_result.$(date +%Y%m%d_%H%M%S)"
+export LANG=C.UTF-8
+
+log_file=${target_job}_${target_number}
+output="${target_job}_${target_number}.result_$(date +%Y%m%d_%H%M%S)"
 
 # download log
-log_file=${target_job}_${target_number}
 curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${log_file}
 
 # convert keyword to array
