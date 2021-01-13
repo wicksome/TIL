@@ -1,0 +1,19 @@
+= redis 설치
+
+[source, bash]
+----
+# download
+sudo wget http://download.redis.io/redis-stable.tar.gz
+sudo tar xvzf redis-stable.tar.gz
+
+# Appears that gcc >= 4.9 is required to build redis 6x ...
+# https://stackoverflow.com/questions/61535050/redis-build-failure
+sudo yum install centos-release-scl
+sudo yum install devtoolset-7-gcc*
+scl enable devtoolset-7 bash
+
+# install
+cd redis-stable
+make distclean
+make
+----
