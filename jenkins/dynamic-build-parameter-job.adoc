@@ -103,7 +103,8 @@ mkdir -p output
 output="output/${target_job}_${target_number}_result.$(date +%Y%m%d_%H%M%S)"
 
 # download log
-curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${target_job}_${target_number}
+log_file=${target_job}_${target_number}
+curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${log_file}
 
 # convert keyword to array
 arr=()
@@ -113,8 +114,6 @@ done <<< "$keyword"
 
 # search
 for key in "${arr[@]}"; do
-	cat target_file | grep "$key" >> ${output}
+	cat ${log_file} | grep "$key" >> ${output}
 done
-
-
 ----
