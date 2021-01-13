@@ -1,7 +1,8 @@
-= Extended Choice Parameter 플러그인 활용
+= 동적 빌드 파라미터 적용하기
 
 * https://plugins.jenkins.io/extended-choice-parameter
 * https://plugins.jenkins.io/extensible-choice-parameter
+* https://plugins.jenkins.io/uno-choice/
 
 == 젠킨스 작업 리스트 보여주기
 
