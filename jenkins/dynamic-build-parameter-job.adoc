@@ -51,3 +51,70 @@ method hudson.model.ItemGroup getAllItems java.lang.Class
 staticMethod java.net.URLDecoder decode java.lang.String
 staticMethod jenkins.model.Jenkins getInstance
 ----
+
+== 젠킨스 작업 및 빌드번호 보여주기
+
+****
+https://plugins.jenkins.io/uno-choice/ 활용
+****
+
+. 신규 작업 생성
+. 빌드 파라미터에 작업 이름 리스트 설정 추가 (Active Choices Reactive Parameter)
+** Name: target_job
+** Script > Groovy Script > Script > Groovy Script
++
+[soruce, groovy]
+----
+import jenkins.model.Jenkins
+import hudson.model.Job
+
+return Jenkins.instance.getAllItems(Job.class).collect { URLDecoder.decode(it.name) }
+----
+** Choice Type: Single Select
+** Enable filters: [v]
+
+. 빌드 파라미터에 작업 번호 리스트 추가 (Active Choices Reactive Parameter)
+** Name: target_job
+** Script > Groovy Script > Script > Groovy Script
++
+[soruce, groovy]
+----
+import jenkins.model.Jenkins
+
+return Jenkins.instance.getItemByFullName(target_job).getBuildsAsMap().keySet().collect { it }
+----
+** Script > Groovy Script > Fallback Script > Groovy Script
++
+[soruce, groovy]
+----
+return ['none']
+----
+** Choice Type: Single Select
+** Referenced parameters: target_job
+. 빌드 파라미터에 키워드 추가 (Multi-line String Parameter)
+** Name: keyword
+. 빌드 스크립트 추가 (Build > Execute shell)
+** Command
++
+[source, bash]
+----
+# create output directory
+mkdir -p output
+output="output/${target_job}_${target_number}_result.$(date +%Y%m%d_%H%M%S)"
+
+# download log
+curl ${JENKINS_URL}job/${target_job}/${target_number}/consoleText -o ${target_job}_${target_number}
+
+# convert keyword to array
+arr=()
+while read -r line; do
+   arr+=("$line")
+done <<< "$keyword"
+
+# search
+for key in "${arr[@]}"; do
+	cat target_file | grep "$key" >> ${output}
+done
+
+
+----
