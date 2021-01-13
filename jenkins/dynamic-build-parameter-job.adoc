@@ -43,7 +43,7 @@ return response.jobs.collect { it.name }
 
 . `<JENKINS_URL>/scriptApproval` 에서 아래 시그니쳐 approve 설정
 +
-[source]
+[source, gy]
 .Signatures already approved:
 ----
 method hudson.model.Item getName
