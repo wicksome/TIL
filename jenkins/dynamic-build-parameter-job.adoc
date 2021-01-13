@@ -94,6 +94,11 @@ return ['none']
 . 빌드 파라미터에 키워드 추가 (Multi-line String Parameter)
 ** Name: keyword
 . 빌드 스크립트 추가 (Build > Execute shell)
++
+[NOTE]
+====
+여기서는 특정 빌드 작업의 로그를 다운받아 키워드로 검색하는 작업을 예시로 만들었다.
+====
 ** Command
 +
 [source, bash]
