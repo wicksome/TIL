@@ -1,1 +1,27 @@
-= Helm Chart
+= Helm: k8s package manager
+
+[source, bash]
+----
+$ helm version
+Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+$ helm create sonarqube
+$ tree ./
+./
+├── Chart.yaml
+├── charts
+├── templates
+│   ├── NOTES.txt
+│   ├── _helpers.tpl
+│   ├── deployment.yaml
+│   ├── ingress.yaml
+│   ├── service.yaml
+│   ├── serviceaccount.yaml
+│   └── tests
+│       └── test-connection.yaml
+└── values.yaml
+```
+----
+
+* chart: 매니페스트 파일을 생성하는 템플릿을 여러개 패키징한것
+** helm 레포지토리에 tgz 파일로 저장하여 틸러가 매니페스트를 생성하는데 사용함
