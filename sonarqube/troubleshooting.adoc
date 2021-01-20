@@ -14,6 +14,8 @@ java.lang.IllegalStateException: Fail to execute request 'https://your-company.c
 . GitHub Apps 이동
 . 소나큐브 앱 선택
 . "Permissions > User permissions > Email addresses" 설정에 `Read-only` 추가 필요
++
+image:img/github-app-user-email-permission.png[e]
 
 
 == lombok 설정
