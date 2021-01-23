@@ -11,6 +11,8 @@
 https://www.vojtechruzicka.com/stop-using-javadoc-author-tag/["Stop using Javadoc @author tag"] (2016-03-07) by https://www.vojtechruzicka.com/about/[Vojtech Ruzicka]
 ****
 
+image:https://www.vojtechruzicka.com/static/3c08ce8c00d3f38ea6752fa294fcfd06/131f1/javadoc-author.webp[javadoc author tag]
+
 :javadoc-author: https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javadoc.html#author
 
 https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html[Javadoc] 태그인 `@author` 를 아직도 사용하고 있는가?
