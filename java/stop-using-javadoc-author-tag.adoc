@@ -43,7 +43,7 @@ public class MaxLengthValidator {
 이 때, 버전 관리 시스템(Git 혹은 SVN)에는 훨씬 더 나은 원작자와 기여자에 대한 정보 소스가 있고, 주석에 이러한 정보를 추가하는 것은 중복이며 불필요한 노이즈가 된다.
 나아가 파일의 각 한줄마다 누가 언제 편집했는지도 확인할 수 있다.
 
-image::https://www.vojtechruzicka.com/static/f386dc1b41897c7cf22e19cc05a2c4ba/70ba9/annotate.webp[Authors and time of changes as shown in IntelliJ Idea 2016.1]
+image::https://www.vojtechruzicka.com/static/f386dc1b41897c7cf22e19cc05a2c4ba/9b58d/annotate.webp[Authors and time of changes as shown in IntelliJ Idea 2016.1]
 
 또한 @author 태그와 달리 VCS를 활용하는 것은 항상 정확하고 최신 정보를 확인하게 된다. 주석은 금방 쓸모 없거나 구식의 정보를 가지게 되는 경향이 있다. 
 개발자는 코드 변경시 주석도 함께 업데이트하는 것을 잊거나 무시할 때가 많으며, 리팩토링 후에는 원작자가 개발했을 때와 전혀 다른 코드가 되기 마련이다.
