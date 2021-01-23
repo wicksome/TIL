@@ -103,7 +103,7 @@ public class BrandNewClass {
 
 GitHub의 경우 이 파일은 새로운 pull request에 대한 reviewer를 자동으로 추가하는 데 사용되지만, 프로젝트의 특정 부분에 도움을 줄 수 있는 사람을 찾는 곳이 한 곳이라는 것 또한 매우 유용하다. 이 개념은 흔치 않은 것은 아니다. - 원래 https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#OWNERS-files[크롬의 비슷한 기능]에서 영향을 받았다.
 
-이 파일은 `.gitignore` 와 비슷한 패턴으로 사용하며, 이 패턴데 각 담당자를 지정할 수 있다.
+이 파일은 `.gitignore` 와 비슷한 패턴으로 사용하며, 각 패턴에 각 담당자를 지정할 수 있다.
 
 [source]
 .CODEOWNERS
