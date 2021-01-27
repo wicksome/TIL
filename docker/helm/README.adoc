@@ -1,1 +1,31 @@
-= Helm Chart
+= Helm: k8s package manager
+
+[source, bash]
+----
+$ helm version
+Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+$ helm create sonarqube
+$ tree ./
+./
+├── Chart.yaml
+├── charts
+├── templates
+│   ├── NOTES.txt
+│   ├── _helpers.tpl
+│   ├── deployment.yaml
+│   ├── ingress.yaml
+│   ├── service.yaml
+│   ├── serviceaccount.yaml
+│   └── tests
+│       └── test-connection.yaml
+└── values.yaml
+----
+
+* chart: 매니페스트 파일을 생성하는 템플릿을 여러개 패키징한것
+** helm 레포지토리에 tgz 파일로 저장하여 틸러가 매니페스트를 생성하는데 사용함
+* Helm Chart : Kubernetes에서 리소스를 만들기 위한 템플릿 화 된 yaml 형식의 파일
+* Helm (Chart) Repository : Helm Repository는 해당 리포지토리에 있는 모든 차트의 모든 메타데이터를 포함하는 저장소. 상황에 따라서, Public Repository를 사용 하거나 내부에 Private Repository를 구성할 수 있습니다.
+* Helm Client(cli) : 외부의 저장소에서 Chart를  가져 오거나, gRPC로 Helm Server 와 통신하여 요청을 하는 역할을 합니다.
+* Helm Server(tiller) : Helm Client의 요청을 처리하기 위하여 대기하며, 요청이 있을 경우 Kuberernetes에 Chart를 설치하고 릴리즈를 관리 합니다.
+** v3에서 제거

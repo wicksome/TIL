@@ -1,0 +1,120 @@
+= JVM
+:toc:
+:page-draft:
+
+== JVM
+
+jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로 나눠져 있다
+
+=== method area
+
+* 클래스와 인터페이스의 정보가 저장되는 영역
+* 클래스 생성자, 메소드 코드(바이트 코드)등 저장
+* 클래스의 인스턴스가 생성된 후, 메소드가 실행되는 순산 클래스의 정보다 method area에 저장
+* mehotd area는 모든 thread에 의해 공유되는 영역
+* jvm이 시작될 때 생성
+* method area 내부에는 runtime constant pool 영역을 가짐
+** 클래스/인터페이스의 메소드, 필드, 문자열 상수등의 레퍼런스 저장
+** 이들의 물리적 위치를 참조할 경우 사용
+
+=== heap
+
+* new 연산자 등으로 생성된 인스턴스와 배열등이 저장되는 영역
+* GC가 발생하는 영역
+* `-Xms`: 초기 heap size
+* `-Xmx`: 최대 heap size
+
+==== Eden area
+
+* young area
+* 새로 생성된 대부분의 객체가 처음 위치하는 영역
+* 정지적으로 GC 발생하고 살아남은 객체들은 survivor1 or 2의 영역으로 이동
+
+==== Survivor1, Survivor2
+
+* young area
+* survivor1,2 중 하나의 영역이 꽉 차면 살아남은 객체가 비어진 survivor 영역으로 이동.
+* 이때 참조가 없는 객체들은 메모리에서 정리
+* young 영역에서 발생하는 gc를 minor gc
+
+===== Old area
+
+* survivor1, survivor2 영역을 왔다갔다하는 과정에서 살아남은 객체가 이동되는 영역
+* 보통 young 영역보다 크게 할당
+* old, permanent 영역에서 발생하는 GC를 major gc, full gc 라고 함
+
+===== Permanent area
+
+* 클래스 로더에 의해 로드된 클래스들이 저장되는 공간
+* java8 에서는 좀더 다듬어 metaspace 영역으로 교체됨
+
+=== JVM language stacks
+
+* 메서드 호출시 수행중인 메소드 데이터(지역변수, 지역변수 레퍼런스, 메소드 파라미터, 리턴값 등)를 저장하기 위한 영역
+* stack 영역은 thread별로 각각 독립적으로 생성
+* 메소드 진입시마다 메소드 데이터를 포함하는 stack frame이 생성되어 push, 메서드 생성이 완료되면 stack frame은 pop되어 사라짐
+
+=== PC Registers
+
+* 각 thread 마다 할당되는 영역, thread가 시작될 때 생성
+* thread가 실행할 jvm 명령의 주소를 저장함
+
+=== Native method area
+
+* java 외의 언어로 작성된 코드를 위한 stack 영역
+* native code, JNI로 실행되는 코드
+
+
+== GC
+
+=== Generational Garbage Collection
+
+* STW^stop-the-world^ 란 GC를 실행하기 위해 JVM이 애플리케이션 실행을 멈추는 것
+* 대개의 경우 GC 튜닝이란 'stop-the-world' 시간을 줄이는 것
+* `System.gc()` 는 절대로 사용하지 말것 -> 시스템의 성능에 매우 큰 영향
+* link:https://plumbr.io/handbook/garbage-collection-in-java/generational-hypothesis[weak generational hypothesis]을 바탕으로 두 영역으로 나뉨
+
+=== Serial GC
+=== Parallel GC
+=== Parallel Old GC(Parallel Compacting GC)
+=== Concurrent Mark & Sweep GC(이하 CMS)
+=== G1(Garbage First) GC
+
+* Java 9부터 default GC
+* heap 영역을 고정된 크기의 region으로 나눔
+** region들을 free한 region 리스트 형태로 관리한다
+** 메모리가 필요해지면 free region은 young 혹은 old 영역으로 할당한다.
+** region의 크기는 1MB에서 32MB로 전체 heap 이 2048개의 region으로 나눠지는 범위 내에서 결정됨
+** region이 비게되면 다시 free region 리스트로 돌아감
+* g1gc는 heap 메모리를 회수할 때 살아 있는 객체가 적은 region을 수집한다. 살아있는 객체가 적을수록 쓰레기이므로 garbage first
+* 전통적인 gc의 heap 구조처럼 young, old 영역들이 인접해있지 않다.
+* eden region과 suvivor region이 young 영역을 만듦
+* 큰 메모리 할당이 아닌 경우 대부분 eden 에서 발생
+* eden 영역의 용량 한계에 다다르면 young gc 발생
+* 큰 힙메모리에서 짧은 GC 시간을 보장하는데 목적을 둠
+* Humongous : Region 크기의 50%를 초과하는 큰 객체를 저장하기 위한 공간이며, 이 Region 에서는 GC 동작이 최적으로 동작하지 않는다.
+* Available/Unused : 아직 사용되지 않은 Region을 의미한다.
+* young gc를 수행할때 stw 발생, stw 시간을 줄이기 위해 멀티스레드로 gc 수행
+* young gc는 region중 gc대상각체가 많은 region(eden, survivor 역할)에서 수행
+* resion에서 살아남은 객체를 다른 resion(survivor 역할)으로 옮긴 후, 빈 region을 사용가능한 region으로 돌림
+* g1gc에서 full gc가 수행될 때 다음 단계를 거침
+.. initial mark
+.. root region scan
+.. concurrent mark
+.. remark
+.. cleanup
+.. copy
+
+==== Young Garbage Collections
+
+Young Garbage Collections::
+The G1 GC satisfies most allocation requests from regions added to the eden set of regions. During a young garbage collection, the G1 GC collects both the eden regions and the survivor regions from the previous garbage collection. The live objects from the eden and survivor regions are copied, or evacuated, to a new set of regions. The destination region for a particular object depends upon the object's age; an object that has aged sufficiently evacuates to an old generation region (that is, promoted); otherwise, the object evacuates to a survivor region and will be included in the CSet of the next young or mixed garbage collection.
+
+
+== References
+
+* http://d2.naver.com/helloworld/1329
+* http://d2.naver.com/helloworld/37111
+* https://plumbr.io/handbook/garbage-collection-in-java/generational-hypothesis
+* https://mirinae312.github.io/develop/2018/06/04/jvm_gc.html
+* https://yaboong.github.io/java/2018/06/09/java-garbage-collection/
