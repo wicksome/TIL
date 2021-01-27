@@ -1,0 +1,169 @@
+= Clean Code
+:toc:
+:imagesdir: images/
+
+image:https://mk0osnewswb2dmu4h0a.kinstacdn.com/images/comics/wtfm.jpg[wtf]
+
+[quote]
+____
+The only valid measurement of code quality is WTFs/minute
+____
+
+* 깨끗한 코드를 작성하는 방법은 배우기 어렵다.
+* 장인 정신으로 고생해가며 체득해야한다.
+* 자전거 타는 법에 능숙해지면 자전거가 마치 몸의 일부처럼 움직이듯이, 손으로 몸으로 마음으로 익혀보자.
+
+== Clean Code
+
+* "나중은 결코 오지 않는다(Later equals Never)." - 르블랑의 법칙(LeBlanc's Law)
+[.float-group]
+--
+image:https://miro.medium.com/max/714/1*oSx-d-MoXuh6MFyGG5kMXg.png["Productivity Vs Time working on bad code", float="right"]
+
+* 간단한 변경은 없다. 매번 얽히고설킨 코드를 '해독'해서 얽히고설킨 코드를 더한다. 시간이 지나면서 쓰레기 
+더미는 점점 높아지고 깊어지고 커진다. 청소할 방법이 없다. 불가항력이다.
++
+나쁜 코드가 쌓일수록 팀 생산성은 떨어진다. 그러마다 마침내 0에 근접한다.
+--
+* 왜 코드가 이렇게 되었을까?
+** 전적으로 우리 프로그래머에게 있다.
+** 관리자가 일정과 요구사항을 밀어붙이는 이유는 그들의 책임이다. 좋은 코드를 사수하는 일은 우리 프로그래머의 책임이다.
+** 예를 들어, 우리가 의사라고 가정하다. 환자가 순을 씻지 말라고 요구한다. 시간이 너무 걸리니까. 하지만 의사는 단호하게 거부한다. 
+왜? 질병과 감염의 위험은 환자보다 의사가 더 잘 아니까.
+** 나쁜 코드의 위험을 이해하지 못하는 관리자의 말을 그대로 따르는 행동은 전문가답지 못하다.
+* 기한을 맞추는 유일한 방법은, 그러니까 빨리 가는 유일한 방법은, 언제나 코드를 최대한 깨끗하게 유지하는 습관이다.
+* 그림을 보면 대부분의 사람은 잘 그려졌는지 엉망으로 그려졌는지 안다. 하지만 잘 그린 그림을 구분한다고해서 그림을 잘 그리는 것은 아니다.
+다시 말해, 깨끗한 코드와 나쁜 코드를 구분할 줄 안다고 꺠끗한 코드를 작성할 줄 알다는 뜻은 아니다.
+
+[.float-group]
+--
+image:bjarne-stroustrup.jpg[float="right"]
+
+[quote, "비야네 스트롭스트룹(Bijarne Stroustrup)", "C++ 창시자이자 The C++ Programming Language 저자"]
+____
+나는 우아하고 효율적인 코드를 좋아한다. 논리가 간단해야 버그가 숨어들지 못한다. 의존성을 최대한 줄여야 유지보수가 쉽다. 오류는 명백한 전략에 의거래 철저히 처리한다. ... 
+**깨끗한 코드는 한 가지를 제대로 한다.**
+____
+
+* 비야네는 철저한 오류 처리도 언급한다. 세세한 사항까지 꼼꼼하게 신경 쓰라는 말이다. 프로그래머들이 대충 넘어가는 부분 중 하나가 오류 처리다.
+* 즉, 깨끗한 코드는 세세한 사항까지 꼼꼼하게 처리하는 코드다.
+--
+[.float-group]
+--
+image:grady-booch.jpg["Grady Booch", float="right"]
+
+[quote, "그래디 부치(Grady Booch)", "Object Oriented Analysis and Design with Application 저자"]
+____
+깨끗한 코드는 단순하고 직접적이다. 깨끗한 코드는 잘 쓴 문장처럼 읽힌다.
+____
+
+* 그래디는 비야네와 흡사한 의견을 표명하지만 가독성을 강조한다.
+* 코드틑 추축이 아니라 사실에 기반해야 한다. 반드시 필요한 내용만 담아야 한다.
+--
+[.float-group]
+--
+image:big-dave-thomas.jpg["\"Big\" Dave Thomas", float="right"]
+
+[quote, "\"빅\" 데이브 토마스(\"Big\" Dave Thomas)", "OTI 창립자이다 이클립스 전략의 대부"]
+____
+**꺠끗한 코드는 작성자가 아닌 사람도 읽기 쉽고 고치기 쉽다.** 단위 테스트 케이스와 인스 테스트 케이스가 존재한다. 깨끗한 코드에는 의미 있는 이름이 붙는다.
+____
+
+* 데이브는 가독성에 더해 깨끗한 코드는 다름 사람이 고치기 쉽다고 단언한다.
+* 실제로 읽기 휘운 코드와 고치기 쉬운 코드는 엄연히 다르다.
+--
+[.float-group]
+--
+image:michael-feathers.jpg["Michael Feathers", float="right"]
+
+[quote, "마이클 페더스(Micheal Feathers)", "Working Effectively with Legacy Code 저자"]
+____
+깨끗한 코드는 언제나 누군가 주의 싶게 짰다는 느낌을 준다. 고치려고 살펴봐도 딱히 손 댈 곳이 없다. 작성자가 이미 모든 사항을 고려했으므로. 고칠 궁리를 하다보면 언제나 제자리로 돌아온다.
+____
+
+* 깨끗한 코드는 주의 깊게 작성한 코드다. 누군가 시간을 들여 깔끔하고 단정하게 정리한 코드다.
+--
+[.float-group]
+--
+image:ron-jeffries.jpg["Ron Jeffries", float="right"]
+
+[quote, "론 제프리스(Ron Jeffries)", "Extreme Programming Installed와 Extreme Programming Adventure in C# 저자"]
+____
+중복 줄이기, 표현력 높이기, 초반부터 간단한 추상화 고려하기, 내게는 이 세 가지가 꺠끗한 코드를 만드는 비결이다.
+____
+--
+[.float-group]
+--
+image:ward-cunningham.jpg["Ward Cunningham", float="right"]
+
+[quote, "워드 커닝햄(Ward Cunningham", "위키<sup>Wiki</sup> 창시자, 피트<sup>Fit</sup> 창시자, 익스트림 프로그래밍<sup>eXtreme{sp}Programming</sup> 공동 창시자"]
+____
+코드를 읽으면서 짐작했던 기능을 각 루틴이 그대로 수행한다면 깨끗한 코드가 불러도 되겠다. 코드가 그 문제를 풀기 위한 언어처럼 보인다면 아름다운 코드라 불러도 되겠다.
+____
+
+* 코드를 독해하느라 머리를 쥐어짤 필요가 없어야 한다. 읽으면서 짐작한 대로 돌아가는 코드가 깨끗한 코드다.
+* 프로그램을 단순하게 보이도록 만드는 열쇠는 언어가 아니다. 언어를 단순하게 보이도록 만드는 열쇠는 프로그래머다.
+--
+[.float-group]
+--
+image:uncle-bob.jpg["Robert C. Martin", float="right"]
+
+[quote, "Robert C. Martin, the author."]
+____
+less 'type and erases'
+____
+
+* 이 책에서는 우리 오브젝트 멘토 진영이 생각하는 깨끗한 코드를 설명한다.
+* 하지만 우리 생각이 절대적으로 '옳다'라는 단전은 금물이다.
+* 우리들 못지않게 경험 많은 집단과 전문가가 존재한다. 마땅히 그들에게서도 배우라고 권한다.
+* 코드를 읽는 시간대 코드를 짜는 시간 비율이 10 대 1을 훌쩍 넘는다. 새 코드를 짜면서 우리는 끊임없이 기존 코드를 읽는다.
+* 주변 코드가 읽기 쉬우면 새 코드를 짜기도 쉽다.
+--
+
+[quote, "The Boy Scout Rule"]
+____
+Leave the campground cleaner than you found it.
+____
+
+* 잘짠 코드가 전부는 아니다. 시간이 지나도 언제나 깨끗하게 유지해야 한다.
+* 시간이 지날수록 코드가 좋아지는 프로젝트에서 작업한다고 상상해보라! 전문가라면 너무 당연하지 않은가! 지속적인 개선이야말로 전문가 정신의 본질이 아니던가?
+
+== Meaningful Names
+
+== Functions
+
+== Comments
+
+== Formatting
+
+== Objects and Data Structures
+
+== Error Handling
+
+== Boundaries
+
+== Unit Tests
+
+== Classes
+
+== Systems
+
+== Emergence
+
+== Concurrency
+
+== Successive Refinement
+
+== JUnit Internals
+
+== Refactoring `SerialDate`
+
+== Smells and Heuristics
+
+== Appendix A: Concurrency II
+
+== Appendix B: org.jfree.date. SerialDate
+
+== Appendix C: Cross References of Heuristics
+
+== 
