@@ -1,0 +1,196 @@
+= Redis
+:toc:
+
+== client
+
+[source, bash]
+----
+$ brew install redis
+$ redis-cli -h $host -p $port
+> config get *
+----
+
+* ~https://github.com/luin/medis~
+* https://github.com/qishibo/AnotherRedisDesktopManager
+
+== 자료구조
+
+=== String
+
+[source]
+----
+> set hello world
+OK
+> get hello
+"world"
+> exists hello
+(integer) 1
+> del hello
+(integer) 1
+> exists hello
+(integer) 0
+----
+
+[source]
+----
+> set counter 100
+OK
+> get counter
+"100"
+> incr counter
+(integer) 101
+> incr counter
+(integer) 102
+> incrby counter 50
+(integer) 152
+----
+
+[source]
+----
+> incr count
+1
+> getset count 0
+"1"
+> get count
+"0"
+> del count
+(integer) 1
+> get count
+(nil)
+----
+
+* `SET` 으로 값을 넣을 때 이미 값이 있으면 덮어씀 - https://redis.io/commands/set[doc]
++
+[quote]
+____
+If key already holds a value, it is overwritten, regardless of its type.
+____
+
+=== List
+
+* linked list
+* pub-sub 패턴으로 활용
+
+[source, bash]
+----
+
+----
+
+=== Hash
+
+[source, bash]
+----
+> hmget user2 email country
+1) "id@domain.com"
+2) "Korea"
+----
+
+=== Set
+
+[source]
+----
+> sadd partner:visa:merchants 3212 1231 <1>
+(integer) 2
+> smembers partner:visa:merchants <2>
+1) "3212"
+2) "1231"
+> scard partner:visa:merchants <3>
+(integer) 2
+> sismember partner:visa:merchants 3212 <4>
+(integer) 1
+> srandmember partner:visa:merchants <5>
+"1231"
+> srandmember partner:visa:merchants 2 <6>
+1) "1231"
+2) "3212"
+> srandmember partner:visa:merchants -2 <7>
+1) "1231"
+2) "1231"
+> spop
+> stem
+> smove
+> sinter
+> sinterstore
+> sdiff
+> sdiffstore
+> sunion
+> sunionstore
+----
+<1> _set add_
+<2> set members
+<3> set cardinality
+<4> if is member, return 1(`true`). otherwise, return 0(`false`)
+<5> set random member
+<6> multiple random
+<7> multiple random(duplicate)
+
+> The max number of members in a set is 2^32^ - 1 (4294967295, more than 4 billion of members per set).
+
+* 순서 보장할 수 없음 +
+https://stackoverflow.com/questions/12064317/redis-set-default-order
+
+=== Sorted Set
+
+== key naming
+
+* https://keichee.tistory.com/248
+* https://stackoverflow.com/questions/6965451/redis-key-naming-conventions
+* https://stackoverflow.com/questions/30271808/naming-convention-and-valid-characters-for-a-redis-key/30271837
+* max size: 512 MB
+
+[source]
+----
+object-type#id:data
+partner:user#123:name
+partner:merchant#123:bno
+partner:merchant#123
+merchant#121231:base-url
+users // <1>
+----
+<1> `users`에 user 키를 모두 저장하는 list 혹은 set 
+
+
+== batch
+
+bulk insert `cat data.txt | redis-cli --pipe` using pipe mode
+
+== transaction
+
+[source]
+----
+MULTI
+INCR id:users
+SET user:{id} '{"name": "yj","age": 30}'
+SADD users {id}
+EXEC
+----
+
+* https://redis.io/topics/transactions
+* https://dark0096.github.io/redis/2018/10/27/redis-transaction.html
+* cluster 모드에서는 multi, exec 안됨..
+
+== 데이터 설계
+
+* 모든 데이터를 키에 저장할 수 있는가?
+** 키만 조회하여 업무를 처리할 수 있도록 구성
+* 자료구조로 구현이 가능한가
+** 여러개의 명령어를 사용해도 실행시간이 O(1)인지
+** 우리에겐 lua가 있다
+* 데이터 사용 성향에 따라 다른 데이터 구조 선택 필요
+** 빠른 쓰기가 필요한지 빠른 읽기가 필요한지
+* 단순한 데이터 조회 패턴을 가지는가?
+** where 절 없음
+* 숫자 데이터가 많은가?
+** 카운터와 같은 숫자 데이터 저장에 강함
+* lua 사용시 전체 시간 복잡도는 O(log n)을 초과하지 않도록 하라
+
+=== lua 사용시 주의 사항
+
+* 예측 불가능한 loop 사용하지 말것
+** 루아 스크립트의 실행을 원자성을 가짐
+* 에러 처리에 신경쓸것
+** 조회한 데이터가 존재하는지 확인
+
+* https://jacking75.github.io/DB_Redis_service/
+* https://github.com/redis-study/redis-summary
+* https://zdnet.co.kr/view/?no=20131119174125
