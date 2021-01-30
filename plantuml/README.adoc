@@ -3,3 +3,6 @@
 * https://drawio-app.com/use-plantuml-in-draw-io/[Use PlantUML in draw.io]
 +
 but, "Note: draw.io for Confluence Server and data center do not support PlantUML."
+* Jira
+** https://marketplace.atlassian.com/apps/41025/plantuml-for-confluence[PlantUML for Confluence]
+** https://marketplace.atlassian.com/apps/1215115/plantuml-diagrams-for-confluence[**PlantUML Diagrams for Confluence**]
