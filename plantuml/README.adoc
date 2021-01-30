@@ -1,0 +1,5 @@
+= Plant UML
+
+* https://drawio-app.com/use-plantuml-in-draw-io/[Use PlantUML in draw.io]
++
+but, "Note: draw.io for Confluence Server and data center do not support PlantUML."
