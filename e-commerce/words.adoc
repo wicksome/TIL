@@ -26,6 +26,9 @@ image::https://i.insider.com/6000686ea8de7700187d3d76?width=1300&format=jpeg&aut
 [link="https://www.cardknox.com/white-papers/payments-industry-landscape/"]
 image::https://2f0gzq466hza2r8os02tcwno-wpengine.netdna-ssl.com/wp-content/uploads/payment-landscape.png[The Payments Ecosystem]
 
+[link="https://tainconstructions.wordpress.com/2020/12/17/mapping-the-payment-ecosystem/"]
+image::https://media-exp1.licdn.com/dms/image/C5612AQE_Yv-YGnXzpA/article-inline_image-shrink_1500_2232/0/1601377478351?e=1613606400&v=beta&t=LluRX3xn7hZb8tblx53tIfHJ73FQ5N3WUY6Gu3jKkDY[]
+
 Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리더 기업을 중심으로 경쟁과 협력을 통해 공생하고 함께 발전해나가는 모습이라고 할 수 있다.
 여기서 '몇 개의 리더 기업'은 카드 네트워크^Card{sp}Network^를 말하는 것이 아닐까 싶다.
 
