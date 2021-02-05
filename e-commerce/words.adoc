@@ -134,7 +134,7 @@ ISO의 주된 고객들은 중소형 가맹점이다. 가맹점이 신규로 결
 ISO의 수수료는 ISO와 가맹점간 개별 계약을 통해 설정되는데, ISO가 제공하는 서비스와 규모의 경제, 가맹점의 월 결제 규모 등에 따라 협상이 가능하다. 
 통상적으로 총 수수료에서 Interchange, 네트워크사, 매입사에 대한 수수료를 제한 뒤 남는 금액을 ISO가 수령하게 되는 구조이다. 
 
-POS사를 말하는걸까?
+POS사를 말하는걸까? VAN사?
 
 .See also
 * https://tidalcommerce.com/learn/iso-payment-processing[What are ISO Payments?]
@@ -163,6 +163,12 @@ ____
 * https://m.blog.naver.com/PostView.nhn?blogId=semu3456&logNo=221211726842&proxyReferer=https:%2F%2Fwww.google.com%2F[사업용계좌 제도란?]
 
 === Payment Provider
+
+* 결제 대행. VAN사에 가까울 것 같음.
+* POS는 결제하는 플랫폼일뿐 POS社라고 말하는건 아닌 것 같음
+
+.References
+* https://en.wikipedia.org/wiki/List_of_online_payment_service_providers
 
 === NonCard Payments
 
