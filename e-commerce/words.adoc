@@ -21,7 +21,7 @@ Yeongjun Kim <opid911@gmail.com>
 image::https://i.insider.com/5e39a5425bc79c6f194dd01a?width=2500&format=jpeg&auto=webp[The Payments Industry Ecosystem]
 
 [link="https://www.businessinsider.com/payments-ecosystem-report"]
-image::https://i.insider.com/6000686ea8de7700187d3d76?width=1300&format=jpeg&auto=webp]
+image::https://i.insider.com/6000686ea8de7700187d3d76?width=1300&format=jpeg&auto=webp[The Payments Industry Ecosystem]
 
 [link="https://www.cardknox.com/white-papers/payments-industry-landscape/"]
 image::https://2f0gzq466hza2r8os02tcwno-wpengine.netdna-ssl.com/wp-content/uploads/payment-landscape.png[The Payments Ecosystem]
