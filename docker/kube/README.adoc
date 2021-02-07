@@ -7,10 +7,6 @@
 - 대세는 쿠버네티스 [초급~중급], 김태민, 인프런
 ****
 
-== 들어가기 앞서
-
-* https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/[CKA] 자격증 도전하기
-
 == 섹션 0. 기초 다지기
 
 * 최대한 서버 자원을 효율적으로 사용하기 위해 가상화 기술에 대해 관심이 많아짐
@@ -265,6 +261,39 @@ spec:
 
 == 섹션 4. Pod
 
+* Lifecycle
+.. Pending
+.. Running
+.. Succeeded
+.. Failed
+
+[source]
+----
+[Pod]
+┌────────────────────────────────────────────────────────────────────────┐
+│ Status:                                                                |
+| ┌────────┬───────────────────────────────────────────────────────────┐ |
+| | Phase  | Pending, Running, Succeeded, Failed, Unknown              | |
+| └────────┴───────────────────────────────────────────────────────────┘ |
+| Conditions:                                                            |
+| ┌────────┬───────────────────────────────────────────────────────────┐ |
+| | Type   | Initialized, ContainerReady, PodScheduled, Ready          | |
+| ├────────┼───────────────────────────────────────────────────────────┤ |
+| | Reason | ContainersNotReady, PodCompleted                          | |
+| └────────┴───────────────────────────────────────────────────────────┘ |
+├────────────────────────────────────────────────────────────────────────┤
+| [Containers]                                                           |
+| ┌────────────────────────────────────────────────────────────────────┐ |
+| | ContainerStatuses:                                                 | |
+| | ┌────────┬───────────────────────────────────────────────────────┐ | |
+| | | State  | Wating, Running, Terminated                           | | |
+| | ├────────┼───────────────────────────────────────────────────────┤ | |
+| | | Reason | ContainerCreating, CrashLoopBackOff, Error, Completed | | |
+| | └────────┴───────────────────────────────────────────────────────┘ | |
+| └────────────────────────────────────────────────────────────────────┘ |
+└────────────────────────────────────────────────────────────────────────┘
+----
+
 == 섹션 5. 기본 오브젝트
 
 == 섹션 6. 컨트롤러
@@ -274,3 +303,43 @@ spec:
 == 섹션 8. CKA 개요 및 시험 공부
 
 == 섹션 9. 아키텍처편
+
+
+---
+
+== Note
+
+=== kubectl create vs apply
+
+[TIP]
+.Declarative? Imperative?
+====
+자주 언급되는 단어들 중, 선언적^Declarative^ 및 명령적^Imperative^ 동작이라는 것이 있다. 
+Kubernetes는 선언적 및 명령적 동작을 모두 지원하지만, **가능하면 선언적인 동작을 사용하는 것이 권장**되고 있다. 
+선언적 동작은 Desired-state 를 미리 정의한 뒤 Current-state가 Desired-state가 되도록 하는 것을 의미하며, Kubernetes의 Controller는 대표적인 선언적 동작의 예시라고 볼 수 있다.
+
+`kubectl apply -f` 은 선언적이고, `kubectl create` 는 명령적이라는 것을 생각해보면 쉽게 이해할 수 있다.
+
+.References
+* https://kubernetes.io/ko/docs/tasks/manage-kubernetes-objects/imperative-config/[Imperative Management of Kubernetes Objects Using Configuration Files]
+* https://kubernetes.io/ko/docs/tasks/manage-kubernetes-objects/declarative-config/[Declarative Management of Kubernetes Objects Using Configuration Files]
+====
+
+* create - 명령적 관리, 
+* apply - 선언적 관리, 
+
+
+[source]
+----
+┌─────────┬───────────────────────┬────────────────────────┐
+│ command │ object does not exist │ object already exists  │
+├─────────┼───────────────────────┼────────────────────────┤
+│ create  │ create new object     │          ERROR         │ 
+│         │                       │                        │
+│ apply   │ create new object     │ configure object       │
+│         │ (needs complete spec) │ (accepts partial spec) │
+│         │                       │                        │
+│ replace │         ERROR         │ delete object          │
+│         │                       │ create new object      │
+└─────────┴───────────────────────┴────────────────────────┘
+----
