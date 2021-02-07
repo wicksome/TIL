@@ -2,6 +2,15 @@
 
 * 2021/02/08 - 인프런 강의 듣다가 어떤 입력값 넣는지 볼라고 얼떨결에 결제(할인받아 237달러)
 
+== TIP
+
+* sudo -i
+* k scale
+* k rollout undo
+* k rollout status
+* k rollout history
+* k expose
+
 == 들어가기 앞서
 
 * https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/[CKA] 자격증 도전하기
