@@ -20,6 +20,15 @@ Yeongjun Kim <opid911@gmail.com>
 [link="https://www.businessinsider.com/payments-ecosystem-report"]
 image::https://i.insider.com/5e39a5425bc79c6f194dd01a?width=2500&format=jpeg&auto=webp[The Payments Industry Ecosystem]
 
+[link="https://www.businessinsider.com/payments-ecosystem-report"]
+image::https://i.insider.com/6000686ea8de7700187d3d76?width=1300&format=jpeg&auto=webp[The Payments Industry Ecosystem]
+
+[link="https://www.cardknox.com/white-papers/payments-industry-landscape/"]
+image::https://2f0gzq466hza2r8os02tcwno-wpengine.netdna-ssl.com/wp-content/uploads/payment-landscape.png[The Payments Ecosystem]
+
+[link="https://tainconstructions.wordpress.com/2020/12/17/mapping-the-payment-ecosystem/"]
+image::https://media-exp1.licdn.com/dms/image/C5612AQE_Yv-YGnXzpA/article-inline_image-shrink_1500_2232/0/1601377478351?e=1613606400&v=beta&t=LluRX3xn7hZb8tblx53tIfHJ73FQ5N3WUY6Gu3jKkDY[]
+
 Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리더 기업을 중심으로 경쟁과 협력을 통해 공생하고 함께 발전해나가는 모습이라고 할 수 있다.
 여기서 '몇 개의 리더 기업'은 카드 네트워크^Card{sp}Network^를 말하는 것이 아닐까 싶다.
 
@@ -118,25 +127,50 @@ An acquiring bank is a bank that has the authority and ability to provide mercha
 MSP(Merchant Service Provider)는 가맹점 서비스 제공자로 신용카드 협회(credit card association) 회원은 아니지만 신용카드 회사(VISA, MasterCard, etc)에 등록되어 있다.
 신용 카드 혹은 직불 카드 처리에 필요한 서비스를 merchant에 제공하는 주체이다. 또한 가맹점과 발급은행 또는 신용카드 네트워크간에 중개역할을 하며 거래 수익을 계좌에 입금할 책임이 있다.
 
-ISO (Independent Sales Organization) 혹은 MSP (Merchant Service Provider)는 Visa/Master Card와
-같은 기존의 카드 결제 네트워크 상에 포함되지 않는 제3자로써 가맹점을 모집하는 역할을 한다.
-이들은 가맹점 모집과 더불어 1) 카드 발급과 매입 역할에 관여하고 2) 가맹점에 POS기를 공급
-하며, 3) 가맹점의 결제기기 등에 대한 서비스를 제공한다.
-ISO의 주된 고객들은 중소형 가맹점이다. 가맹점이 신규로 결제 네트워크에 참여하기 위해서는 계
-좌 개설부터 결제 네트워크 (Visa, Master Card 등), 매입사 등과의 계약을 체결해야 한다. 하지만,
-중소형 가맹점들의 입장에서 이러한 일련의 작업을 하기에는 접근성 등의 측면에서 한계가 있다.
-즉, ISO, MSP들은 이 틈새 시장에서 가맹점 관련 서비스를 제공하고 수익을 창출하는 것이다.
-ISO의 수수료는 ISO와 가맹점간 개별 계약을 통해 설정되는데, ISO가 제공하는 서비스와 규모의
-경제, 가맹점의 월 결제 규모 등에 따라 협상이 가능하다. 통상적으로 총 수수료에서 Interchange,
-네트워크사, 매입사에 대한 수수료를 제한 뒤 남는 금액을 ISO가 수령하게 되는 구조이다. 
+ISO (Independent Sales Organization) 혹은 MSP (Merchant Service Provider)는 Visa/Master Card와 같은 기존의 카드 결제 네트워크 상에 포함되지 않는 제3자로써 가맹점을 모집하는 역할을 한다.
+이들은 가맹점 모집과 더불어 1) 카드 발급과 매입 역할에 관여하고 2) 가맹점에 POS기를 공급하며, 3) 가맹점의 결제기기 등에 대한 서비스를 제공한다.
+ISO의 주된 고객들은 중소형 가맹점이다. 가맹점이 신규로 결제 네트워크에 참여하기 위해서는 계좌 개설부터 결제 네트워크 (Visa, Master Card 등), 매입사 등과의 계약을 체결해야 한다. 
+하지만, 중소형 가맹점들의 입장에서 이러한 일련의 작업을 하기에는 접근성 등의 측면에서 한계가 있다. 즉, ISO, MSP들은 이 틈새 시장에서 가맹점 관련 서비스를 제공하고 수익을 창출하는 것이다. 
+ISO의 수수료는 ISO와 가맹점간 개별 계약을 통해 설정되는데, ISO가 제공하는 서비스와 규모의 경제, 가맹점의 월 결제 규모 등에 따라 협상이 가능하다. 
+통상적으로 총 수수료에서 Interchange, 네트워크사, 매입사에 대한 수수료를 제한 뒤 남는 금액을 ISO가 수령하게 되는 구조이다. 
 
-POS사를 말하는걸까?
+POS사를 말하는걸까? VAN사?
 
 .See also
 * https://tidalcommerce.com/learn/iso-payment-processing[What are ISO Payments?]
 
-=== NonCard Payments
+=== 3rd Party Processor
 
+[quote]
+____
+A third-party processor is a service that lets you accept online payments without a merchant account of your own. Instead, a third-party processor will allow you to use their merchant account.
+____
+
+정산 받을 판매자 계좌(https://tidalcommerce.com/learn/merchant-account-explained[merchant account]) 없이 결제를 할 수 있도록 하는 서비스를 말한다.
+이들은 payment gateway, payment provider라고도 불리지만 "online pateway"와 혼동해서는 안된다. 대표적으로 PayPal, Stripe, Square 가 있다.
+
+보통 payment processor는 판매자로부터 거래 요청을 받고 다양한 은행과 연락하여 고객의 계정에서 판매자의 계정으로 자금을 이동시킨다.
+하지만, merchant account를 만드는 일은 작은 기업에서는 비용도 많고 발급 시간도 기다려야한다.
+
+3rd-party processor는 기본적으로 payment processor와 동일하지만, 판매자 계정(merchant account)으로 돈을 보내는 대신 중간 단계로 3rd-party merchant account를 사용한다.
+이를 통해 간편하고 빠르게 연동 및 결제 서비스를 할 수 있는 장점을 가진다. 또한 중간에서 대행을 해주는 역할로 은행과 판매자의 직접적인 관계가 없다.
+
+.References
+* https://www.bambora.com/en/au/news/third-party-payments-processors-explained/[Third Party Payments Processors]
+* https://www.cardswitcher.co.uk/third-party-payment-processor/[What is a Third-Party Payment Processor?]
+* https://fattmerchant.com/blog/what-is-a-third-party-payment-processor/[Payment Processing: What Is a Third-Party Payment Processor?]
+* https://tidalcommerce.com/learn/third-party-payment-processor[What Is a Third-Party Payment Processor?]
+* https://m.blog.naver.com/PostView.nhn?blogId=semu3456&logNo=221211726842&proxyReferer=https:%2F%2Fwww.google.com%2F[사업용계좌 제도란?]
+
+=== Payment Provider
+
+* 결제 대행. VAN사에 가까울 것 같음.
+* POS는 결제하는 플랫폼일뿐 POS社라고 말하는건 아닌 것 같음
+
+.References
+* https://en.wikipedia.org/wiki/List_of_online_payment_service_providers
+
+=== NonCard Payments
 
 === Companies
 
