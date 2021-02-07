@@ -1,0 +1,276 @@
+= Kubernetes
+:toc:
+
+****
+아래 강의를 학습한 내용을 정리/기록한 포스트입니다. 자세한 내용은 책을 참고하시기 바라며, 문제가 있을 경우 연락 부탁드립니다.
+
+- 대세는 쿠버네티스 [초급~중급], 김태민, 인프런
+****
+
+== 들어가기 앞서
+
+* https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/[CKA] 자격증 도전하기
+
+== 섹션 0. 기초 다지기
+
+* 최대한 서버 자원을 효율적으로 사용하기 위해 가상화 기술에 대해 관심이 많아짐
+* 히스토리
+.. 1991. - 리눅스 자원 격리 기술(chroot, namespace, cgroup)
+.. VM. 가상과 기술(VMWARE, KVM, ...)
+.. 2010. 7 - 가상화 기술(openstack, rackspace, nasa)
+.. 2014. 6 - 컨테이너 가상화 기술(datCloud → docker 이름변경 후 오픈소스화)
+.. 오케스트레이터 도구가 만들어짐
+.. 2015. 7 - google kubernetes
+... 다양한 회사에서 참여하면서 커짐
+.. 다양한 기업에서 kube를 활용하여 클라우드 서비스 제공
+* Kubernetes
+** User - Workloads, Service, Storage/Config, Metadata, Cluster
+** Admin: Installation, Architecture, Network, Monitoring, Plugins, Ecosystem
+
+== 1. Why Kubernetes?
+
+* 자원을 효율적으로 사용 - auto scaling
+* Failover - Auto Healing
+* Deployment - rolling update, recreate
+
+===  VM vs Container
+
+==== VM
+
+* layer
+.. Host Server
+.. Host OS
+.. Hypervisor: VM을 가상화하기 위한 하이퍼바이저
+.. Guest OS: 하나의 OS를 독립적올 사용
+
+==== Container
+
+* layer
+.. Host Server
+.. Host OS
+.. docker: 컨테이너 가상화하는 도구
+*** cgroup: 자원 격리
+*** namespace: 커널 관리
+
+==== Overview
+
+* 쿠베는 서버 한대는 마스터, 나머지는 노드라고해서 한 마스터에 여러 노드가 연결
+** 이렇게 연결이 되면 하나의 클러스터라는 개념에 묶임
+** 마스터는 컨트롤 하는 역할
+** 노드는 자원
+** 클러스터내에 네임스페이스라고 쿠베 오브젝트들을 독립된 공간으로 분리해줌
+** 네임스페이스 안에 파드가 있고,
+** 외부 연결해주는 서비스가 있고,
+** 서로 다른 네임스페이스는 파드 끼리 연결 안됨
+** 파드가 죽으면 데이터가 날라감
+** 날라가는 문제를 해결하기 위해 볼륨을 만듬
+** 네임스페이스에 ResourceQuota, LimitRange 설정을 통해 자원을 한정 시킬 수 있음
+** 컨테이너안에 환경변수나 파일을 넣어줄 수 있는데 ConfigMap, Secret으로 함
+** 컨트롤러가 파드들을 관리.
+* 컨트롤러
+** `Replication Controller`, `ReplicaSet`
+*** Pod 죽으면 살리거나 스케일 인/아웃
+** `Deployment` 는 배포 후에 Pod들을 새 버전으로 업그레이드/롤백
+** `DaemonSet` 은 한 노드에 Pod가 하나씩 유지해주는 것
+** `Job` 은 특정 작업만 종료시켜야 할 때
+*** 그런 Job들을 주기적으로 실행해야할 때 `CronJob`
+
+== 섹션 2. 기본 오브젝트
+
+=== Pod
+
+==== Container
+
+* 파드안에는 하나의 독립적인 서비스를 구동할 수 있는 컨테이너들이 있음
+* 컨테이너들은 서비스가 연결될 수 있도록 포트를 가지고 있음.
+* 한 컨테이너가 포트를 여러개 가질 수 있음
+* 파드내에서 컨테이너들끼리 포트 중복 불가
+* 한 호스트로 묶여있다고 봐야함
+* 로컬호스트 8080으로 접근 가능
+* 파드가 생성될 때 IP가 생성되는데 클러스내에서만 접근 가능(휘발성 IP)
+
+=== Label
+
+* 라벨은 파드뿐만 아니라 모든 오브젝트에 달 수 있음
+* 목적에 따라 오브젝트 들을 분리하고 골라서 연결하기 위함
+* 키/값이 한쌍으로 한 파드에 여러 라벨 설정 가능
+
+=== Node Schedule
+
+* 파드는 여러 노드중 한 노드에 올라가져야 함
+* 직접 선택하려면 노드에 라벨을 달고 nodeSelector 설정
+* 쿠베가 설정하려면 리소스를 설정
+** memory 설정을 초과시 파드 종료
+** cpu는 초과시 리소스를 낮추고 종료시키진 않음
+
+=== Service
+
+* 파드에는 클러스터내에 접근할 수 있는 아이피가 있음
+* 하지만 파드는 재생성이 계속되므로 신뢰성이 떨어짐
+* 그래서 파드와 서비스를 연결해두고 서비스 아이피를 활용
+* 여러개 파드에 연결해주고 서비스가 분산해줌
+* ClientIp
+** 클러스터내에서만 접근 가능한 IP
+* NodePort
+** 내부망연결
+* LoadBalancer
+** 외부시스템 노출할 때 사용
+
+=== Volume
+
+* emptyDir
+** 컨테이너들끼리 데이터를 공유하기 위해 볼륨 사용
+** 최초 볼륨 사용시 비어있음
+** e.g. 두 웹서버가 파일을 주고받을 필요 없이 사용. 파드내에 생성되니 없어지면 제거. 즉 일시적인 사용으로..
+* hostPath
+** 한 호스트, 즉 파드들이 올라가있는 노드들 사이에 사용
+** 노드에 있는 데이터를 파드에서 쓰기위한 용도
+** 파드가 노드가 바뀌어져 올라갔을 때 사용할 수 없음
+** 직접 연결해주면 가능
+* PVC/PV
+** 파드에 영속성있는 볼륨을 제공하기 위함
+** 외부 볼륨도 사용 가능
+** 파드는 PV에 바로 연결하기 않고 PVC로 연결함
+** PVC는 유저측, PV는 어드민측
+** 어드민이 PV를 만들어두면 유저가 사용
+
+=== ConfigMap, Secret
+
+* 환경에 따라 변하는 값을 외부에서 관리하도록 도와주는 것
+* 키와 벨류로 이뤄짐
+* ConfigMap
+* Secret
+** 보안적인 관리가 필요한 값
+** value를 넣을 때 base64 인코딩해서 넣어야 함
+** pod에 주입될 때는 decoding 됨
+** ConfigMap은 디비에 저장되는데 Secret은 메모리에 저장됨
+** 1 MB만 넣을 수 있음
+** 메모리에 저장하니 많아지면 시스템 자원에 영향을 미침
+* 상수나 파일을 넣을 수 있음
+* 파일은 환경변수가 아닌 볼륨을 마운트해서 사용할 수 있음
+
+[source, yaml]
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-dev
+data:
+  SSH: False
+  User: dev
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sec-dev
+data:
+  Key: MTs12==
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  containers:
+    - name: container
+      image: nginx
+      envFrom:
+        - configMapRef:
+          name: cm-dev
+        - secretRef:
+          name: sec-dev
+----
+
+* 파일을 통으로 ConfigMap에 넣을 수 있음
+* 파일의 이름이 키가 됨
+* 파일 ConfigMap
+** 환경변수 방식은 한번 주입하면 끝
+** 볼륨 마운트 방식은 원본이 변경되면 실제 파드에 마운트된 내용도 변하게 됨
+
+=== Namespace, ResourceQuota, LimitRange
+
+* Namespace
+** 쿠버네티스 클러스터 안에 여러 네임스페이스를 만들 수 있음
+** 네임스페이스 안에 여러 파드는 만들 수 있음
+** 한 네임스페이스 안에서 같은 파드의 오브젝트는 중복해서 만들수 없음
+** 타 네임스페이스의 자원과 분리됨
+** 노드나 PV와 같이 모든 네임스페이스에서 공용으로 사용되는 오브젝트도 있음
+** 파드마다 IP가 있음. 분리되어 있지만 기본적으로 연결이 됨 → NetworkPolicy 오브젝트를 통해 가능
+* ResourceQuota: 네임스페이스의 리소스 한계 설정
+* LimitRange: 각각의 파드마나 네임스페이스에 들어올 수 있는지 설정
+
+== 섹션 3. 컨트롤러
+
+* Auto Healing
+** 파드에 장애가 오면 파드를 다른 노드에 생성해줌
+* Auto Scaling
+** 파드는 분산해줌
+* Software Update
+** 여러 파드를 한번에 업그레이드하거나 롤백해줌
+* Job
+** 일시적인 파드의 경우 순간에만 만들고 제거
+
+==== Replication Controller, ReplicaSet
+
+* Replication Controller: deprecated
+* ReplicaSet
+** selector
+*** matchLabels: 키와 벨류가 같아야 연결
+*** matchExpressions: 좀 더 디테일하게 설정
+
+==== Deployment
+
+* 현재 한 서비스가 운영중인데 업데이트해서 배포할 때 유용한 컴포넌트
+* Recreate
+** 동작 방식
+... pod1 제거하고(이전 replicaSet의 replicas가 0이 됨)
+... pod2 생성해서 연결
+** 다운타임이 발생하므로 일시정지 가능한 서비스에 사용
+* RollingUpdate
+** 동작 방식
+... v2의 파드를 하나 만듬 - 자원 자용량 증가
+... v1과 v2에 모두 서비스중
+... v1의 파드 하나 삭제
+** 배포 중간에 추가적인 자원을 요구하지만, 다운타임이 없음
+** 다른 버전이 잠시 공존하게 됨
+* Blue/Green
+** 서비스의 라벨을 스위칭해서 롤백 용이함
+** 자원이 두배가 필요하다는 것
+* Canary
+** 카나리는 심박수가 높고 유해한 공기를 확인하는데 사용하던 새
+** 일산화 탄소를 감지하는데 사용했음
+** 카나리같은 실험체를 사용하는 것
+** 동작 방식
+*** 요청 흘리기 - 불특정 다수에 테스트할 때 사용함
+.... 모든 파드에 동일한 라벨이 있고, 하나의 서비스에 해당 라벨을 설정함
+.... v2 파드 하나 생성하고 v2 파드에 흘려보냄(일부 요청을 v2로 테스트)
+.... 문제 발생하면 v2 의 컨트롤러의 replicas를 0으로 변경
+*** Ingress Controller
+.... v1, v2 각각의 서비스를 만듬
+.... 인그레스 컨트롤러를 만듬 - 유입되는 트래픽을 url path를 다르게 설정(/app, /v2/app)
+
+==== DaemonSet, Job, CronJob
+
+* DaemonSet
+** 레플리카셋은 노드의 자원에 맞게 스케줄링 되는 반면, 데몬셋은 모든 노드에 파드가 하나씩 생성된다.
+** 성능 수집에 사용
+** 로그 수집
+** 노드들은 스토리지
+** nodeSelector를 통해 특정 노드에만 가능
+* Job, CronJob
+** 파드가 삭제되는 것은 아니고 자원을 사용하지 않게 됨 - 로그 수집을 위해
+** activeDeadlineSeconds 옵션으로 실행시간을 지정할 수 있음
+
+== 섹션 4. Pod
+
+== 섹션 5. 기본 오브젝트
+
+== 섹션 6. 컨트롤러
+
+== 섹션 7. 쿠버네티스 설치
+
+== 섹션 8. CKA 개요 및 시험 공부
+
+== 섹션 9. 아키텍처편
