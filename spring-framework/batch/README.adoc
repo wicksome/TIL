@@ -1,8 +1,13 @@
 = Spring Batch
 :revdate: 2020-01-30T21:45:00+09:00
-:toc:
+:toc: 
 
 == 컴포넌트
+
+[source]
+----
+
+----
 
 image:https://docs.spring.io/spring-batch/docs/current/reference/html/images/spring-batch-reference-model.png[batch stereotypes]
 
@@ -199,7 +204,12 @@ Job이 정상적으로 수행됬는지, 실패됬는지에 대한 정보를 기�
 <1> `job.name` 은 실행시킬 job 이름을 저장하는 값이다. `spring.batch.job.name` 을 사용할 수도 있다.
 <1> `job.name` 프로퍼티에 `SampleJobConfig.JOB_NAME` 이 있을 경우에 해당 컴포넌트를 생성하는 어노테이션이다.
 
+== Common Batch Patterns
+
+https://docs.spring.io/spring-batch/docs/current/reference/html/common-patterns.html
+
 == 참고
+
 * https://kwonnam.pe.kr/wiki/springframework/batch/commandlinejobrunner
 * https://kwonnam.pe.kr/wiki/springframework/batch
 * https://jamong-icetea.tistory.com/228
