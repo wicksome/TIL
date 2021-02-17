@@ -33,6 +33,3 @@ Freestyle project를 사용할 경우 UI를 통해 누구나 설정이 가능하
 - [Branches and Pull Requests](https://www.jenkins.io/doc/book/pipeline/multibranch/)
 - GitHub 조직을 전체로 관리하려면 "GitHub Organization" 아이템으로 생성할 수 있습니다.
 - Multibranch Pipeline에서 자동으로 추가되는 commit status를 없애기 위한 플러그인: [Disable GitHub Multibranch Status](https://plugins.jenkins.io/disable-github-multibranch-status/)
-
-### 6. 메일 알람은 사용할 수 없나요?
-
