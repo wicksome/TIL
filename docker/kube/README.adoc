@@ -301,14 +301,125 @@ spec:
 **** Running이여도 컨테이너의 상태가 실패일 수 있다는 것을 확인해야 한다.
 .. Succeeded
 .. Failed
+* ReadinessProbe
+** 앱이 구동되는 순간에 요청 실패를 막아주는 방법
+** 톰캣은 돌고 있지만 메모리 오버플로우나 문제가 생겼을 때
+** Pod 처음 기동시 정상 실행될 때까지 대기해야하는 경우 사용
+** 실패시: 컨테이너를 대체하지 않고 기다림
+** e.g., l4 h/c
+* LivenessProbe
+** App에 대한 장애 상황을 파악하여 막아줌
+** 실패시: Pod를 restart 함
+** e.g., l7 h/c(실패시 재시작)
+* QoS classes
+** 다운되는 순서: BestEffort > Burstable > Guaranteed
+** 컨테이너의 리소스 설정으로 결정됨
+** Guaranteed(보장, 개런티-드)
+*** 모든 컨테이너에 requests, limit 설정
+*** request, limit의 memory, cpu 모두 설정
+*** 각 컨테이너의 request와 limit의 memory, cpu 값이 같음
+** Burstable(부스터블)
+** BestEffort: 어떤 컨테이너에도 request, limit 미설정
+* Node Scheduling
+** 파드가 기본적으로 스케줄러에 할당되지만 다른 가능도 지원
+** Pod를 특정 노드에 할당되도록 선택 - NodeName, NodeSelector, NodeAffinity
+*** NodeAffinity: 라벨 키값으로 구분 가능
+**** required, preferred(선호) 옵션이 있음
+** Pod Affinity, Anti-Affinity
+*** 노드의 라벨이 아니라 파드의 라벨로 할당
+*** 특정 노드에 설정한 라벨의 파드가 있는지 없는지를 확인하여 스케줄링 함
+*** 노드별로 failover할 때 같은 노드에 설정되게끔 하면 안되므로 이 설정 사용
+** Toleration / Taint
+*** Node 할당 제한
+*** 노드에 Taint 설정을 함
+*** Toleration을 달고 와야지만 할당됨
 
 .References
 * https://kubernetes.io/ko/docs/concepts/workloads/pods/pod-lifecycle/
 
-
 == 섹션 5. 기본 오브젝트
 
+=== Service
+
+[source]
+----
+@startuml
+ditaa
+[Kubernetes Cluster]                 : [Internal Network]   :
+                                     |                      |
+[Pod Network]    :  Service Network  |                      |
+20.96.0.0/12     |  10.96.0.0/12     |                      |
+                 |                   |                      |
++-------------+  |  +-------------+  |  +----------------+  |
+| pod1        |  |  | service1    |  |  | Master         |  |
++-------------+     +-------------+     | (192.168.0.30) |  |
+| 20.109.5.11 +<-+->+ 10.111.4.10 +--+  +----------------+  |
++-------------+  |  +-------------+  +--+ 3000(NodePort) |  |
+                 |                      +----------------+  |
++-------------+  |                                          |
+| pod2        |  |                   :  +----------------+  |
++-------------+  |                   |  | Node1          |  |
+| 20.109.5.12 +<-+                   |  | (192.168.0.31) |  |
++-------------+                      |  +----------------+  |
+                 :                   |                      |
+                 |                   |  +----------------+  |
+                 |                   |  | Node2          |  |
+                 |                   |  | (192.168.0.32) |  |
+                                     |  +----------------+  |
+                                     |                      |
+@enduml
+
+----
+
+* FQDN = Fully Qualified Domain Name
+** 전체 도메인을 표기한 방식이며 kubernetes에서 Service 명에 사용된다. (외부에서 접근시)
+** 규칙에 의해 만들어진 도메인
+* Service를 headless로 만들면 DNS를 통해 여러 Pod에 접근이 가능
+* Headless
+** https://kubernetes.io/ko/docs/concepts/services-networking/service/#%ED%97%A4%EB%93%9C%EB%A6%AC%EC%8A%A4-headless-%EC%84%9C%EB%B9%84%EC%8A%A4
+** ClusterIP가 생성되지 않고, DNS를 통해 통신 가능
+* Endpoint
+** 라벨을 통해 연결하지만 이건 사용자 측면
+** 실제로는 엔드포인트를 만들어 연결됨
+* ExternalName
+** Endpoint는 IP로 구분되지만 ExternalName은 DNS로 설정
+
+=== Volume
+
+* On-Premise Solution: ceph(세프)
+* Dynamic Provisioning
+** 자동으로 PV를 만들어주고...
+** StorageClass 오브젝트
+** StorageClassName에 이름 넣으면 자동으로 PV가 만들어짐
+* Status & ReclaimPolicy
+** 최초 만들떄 Available
+** PVC와 연결이되면 Bound
+*** 아직 볼륨에 실제 만들어지지 않음
+*** Pod가 PVC를 사용해서 구동될때 만들어짐
+*** Pod가 삭제되더라도 데이터 유지
+** PVC를 삭제하면 연결이 끊어지면서 PV 상태는 Released
+
+=== Accessing API
+
+* 쿠베에 API로 접근하기
+* master 노드에 kube API server가 있음
+* kubectl이 이 API 서버에 접근해서 사용
+* User Account, Service Account
+* Authentication
+** CA key(발급기관 개인키) → CA csr(인증요청서) → CA crt(인증서)
+** Client key(클라이언트 개인키) → Client csr(인증요청서)
+** CA key + CA crt + Client csr → Client crt
+* Authorization
+** RBAC
+*** 클러스터내의 권한: ClusterRole, ClusterRoleBinding
+*** 네임스페이스내의 권한: Role, RoleBinding
+
 == 섹션 6. 컨트롤러
+
+=== StatefulSet
+
+* stateless, stateful
+* pod마다 각자의 역할을 저장하는 PVC가 붙음
 
 == 섹션 7. 쿠버네티스 설치
 
