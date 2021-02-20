@@ -421,12 +421,58 @@ ditaa
 * stateless, stateful
 * pod마다 각자의 역할을 저장하는 PVC가 붙음
 
+=== Ingress
+
+* 목적
+** Service LoadBalancing
+*** url path별로 특정 서비스로 연결해줌
+** Canary Upgrade
+*** 90%, 10% 트래픽으로 서비스로 연결해줌
+*** 어노테이션으로 분리 가능(e.g. 지역, 국가)
+
+
+=== HPA
+
+* autoscaler
+** HPA(Horizontal Pod Autoscaler): 파드의 갯수를 늘리는
+** VPA(Vertical Pod Autoscaler) : 파드의 리소스를 조정하는
+** CA(Cluster Autoscaler): 클러스터에 노드를 추가하는 
+* HPA
+** 장애시 사용(replicas 값 변경)
+** stateless 권장
+** 기동이 빠르게 되는 APP
+** scale out: pod가 늘어난 것
+** scale in: pod가 줄어드는 것
+* VPA
+** stateful app
+** scale up: 리소스 증가
+** scale down: 리소스 감소
+
 == 섹션 7. 쿠버네티스 설치
 
 == 섹션 8. CKA 개요 및 시험 공부
 
 == 섹션 9. 아키텍처편
 
+=== Component
+
+* Master 노드
+** Etcd, kube-scheduler, kube-apiserver
+** Etcd: kube에서 여러 데이터들을 저장하는 데이터베이스 역할
+* Worker 노드
+** kubelet, 
+
+=== Network
+
+* IPVS: l4 LB
+* CIDR(사이더)
+
+=== Storage
+
+=== Logging
+
+* Core Pipeline
+* Service Pipeline
 
 ---
 
