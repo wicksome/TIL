@@ -10,31 +10,31 @@ https://plugins.jenkins.io/workflow-multibranch/[Multibranch Pipeline]를 사용
 * Multibranch Pipeline에서 자동으로 추가되는 commit status를 없애기 위한 플러그인: https://plugins.jenkins.io/disable-github-multibranch-status/[Disable GitHub Multibranch Status]
 ____
 
-[quote, Pipeline]
+[quote]
 ____
-&nbsp;&nbsp;여기서 말한 Pipeline은 Jenkins의 Pipeline을 의미합니다. Declarative and Scripted Pipeline은 software delivery pipeline의 일부를 작성한 DSL입니다. 
+여기서 말한 Pipeline은 Jenkins의 Pipeline을 의미합니다. Declarative and Scripted Pipeline은 software delivery pipeline의 일부를 작성한 DSL입니다. 
 Scripted Pipeline은 일부 제한된 형태의 Groovy 문법으로 작성합니다. Declarative Pipeline은 Jenkins Pipelie에 최근에 추가된 것으로 기존에 제공하던 Scriped Pipeline 보다 
 비교적 단순하고 Jenkins와 관련된 기능을 제공하는 파이프라인입니다.
 ____
 
 == Scripted pipeline
 
-> Scripted Pipeline으로 작성하면 log 가져올 때 권한 이슈가 있습니다. 빌드 로그 확인이 필요하다면 Declarative Pipeline를 사용하시기 바랍니다.
->
-> ```groovy
-> def logContent1 = Jenkins.getInstance()
->     .getItemByFullName(env.JOB_NAME)
->     .getBuildByNumber(
->         Integer.parseInt(env.BUILD_NUMBER))
->     .logFile.text
-> def logContent2 = currentBuild.rawBuild.getLog(100)
-> ```
->
-> **References**
->
-> - https://fraaargh.wordpress.com/2018/06/20/get-a-jobs-console-logfile-from-a-jenkins-pipeline/[Get a job’s console logfile from a Jenkins pipeline]
-> - https://support.cloudbees.com/hc/en-us/articles/226237768-How-to-embed-html-report-in-email-body-using-Email-ext-plugin-[How to embed html report in email body using Email-ext plugin?]
-> - https://support.cloudbees.com/hc/en-us/articles/218554077-How-to-set-current-build-result-in-Pipeline-[How to set current build result in Pipeline?]
+Scripted Pipeline으로 작성하면 log 가져올 때 권한 이슈가 있습니다. 빌드 로그 확인이 필요하다면 Declarative Pipeline를 사용하시기 바랍니다.
+
+[source, groovy]
+----
+def logContent1 = Jenkins.getInstance()
+    .getItemByFullName(env.JOB_NAME)
+    .getBuildByNumber(
+        Integer.parseInt(env.BUILD_NUMBER))
+    .logFile.text
+def logContent2 = currentBuild.rawBuild.getLog(100)
+----
+
+.References
+* https://fraaargh.wordpress.com/2018/06/20/get-a-jobs-console-logfile-from-a-jenkins-pipeline/[Get a job’s console logfile from a Jenkins pipeline]
+* https://support.cloudbees.com/hc/en-us/articles/226237768-How-to-embed-html-report-in-email-body-using-Email-ext-plugin-[How to embed html report in email body using Email-ext plugin?]
+* https://support.cloudbees.com/hc/en-us/articles/218554077-How-to-set-current-build-result-in-Pipeline-[How to set current build result in Pipeline?]
 
 
 == Declarative pipeline
