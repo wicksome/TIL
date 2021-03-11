@@ -19,3 +19,4 @@ Hexagon:: 6각형
 == Referneces
 
 * https://www.dialogic.com/webhelp/csp1010/8.4.1_ipn3/exsapi_quickref_tlv_-_introduction_to_tlvs.htm
+* https://github.com/kamshory/ISO-8583-Parser-and-Builder-With-TLV/blob/master/src/com/bgw/translator/TLV.java
