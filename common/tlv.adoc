@@ -1,5 +1,7 @@
 = TLV
 
+> https://en.wikipedia.org/wiki/X.690[ITU-T X.690]
+
 TLV:: Tag-Length-Value encoding.
 
 Octet:: 8 bit. 8 bit를 표현하기 위한 용어. 현대에 1 byte는 8 bit지만, 예전에는 4, 6 bit를 1 byte로 사용하는 컴퓨터도 있었음.
