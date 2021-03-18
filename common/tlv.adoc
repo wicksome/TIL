@@ -75,6 +75,17 @@ h|1
 7+^|Tag number
 |===
 
+* b8-7은 타입의 클래스를 나타냄
++
+|===
+|Class |Value |Description
+
+|Universal |0 |The type is native to ASN.1
+|Application |1 |The type is only valid for one specific application
+|Context-specific |2 |Meaning of this type depends on the context (such as within a sequence, set or choice)
+|Private |3 |Defined in private specifications
+|===
+
 * b6은 Primitive 타입인지, Constrcuted 타입인지 구분
 ** Primitive `0`: value의 값을 직접 인코딩됨 ('Constructed data object')
 ** Constructed `1`: value('Primitive data object')
