@@ -64,7 +64,7 @@ h|3
 h|2
 h|1
 
-2.2+^|Tag class
+2.2+.^|Tag class
 .2+^|P/C
 5+^|Tag number(0-30)
 8+^|N/A
