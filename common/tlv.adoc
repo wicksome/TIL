@@ -40,13 +40,50 @@ Hexagon:: 6각형
 * BER, CER, DER 방식이 있음(SIMPLE? COMPACT)
 * 데이터 통신에 사용되는 프로토콜
 
-=== 형식
+=== Tag
 
-* tag: 보통 알파벳과 숫자를 부호화한 이진 코드
-* length: value 부분이 차지하는 크기. 보통 바이트 단위, 통상 1~4 바이트
-* value: 가변 길이의 바이트열
+* 보통 알파벳과 숫자를 부호화한 이진 코드
+
+|===
+8+h|Octet 1 8+h|Octec 2
+
+h|8 
+h|7 
+h|6 
+h|5 
+h|4 
+h|3 
+h|2
+h|1
+h|8
+h|7
+h|6
+h|5
+h|4
+h|3
+h|2
+h|1
+
+2.2+^|Tag class
+.2+^|P/C
+5+^|Tag number(0-30)
+8+^|N/A
+
+5+^|31
+^|More
+7+^|Tag number
+|===
+
+=== Length
+
+* value 부분이 차지하는 크기. 보통 바이트 단위, 통상 1~4 바이트
+
+=== Value
+
+* 가변 길이의 바이트열
 
 == Referneces
 
+* https://en.wikipedia.org/wiki/X.690
 * https://www.dialogic.com/webhelp/csp1010/8.4.1_ipn3/exsapi_quickref_tlv_-_introduction_to_tlvs.htm
 * https://github.com/kamshory/ISO-8583-Parser-and-Builder-With-TLV/blob/master/src/com/bgw/translator/TLV.java
