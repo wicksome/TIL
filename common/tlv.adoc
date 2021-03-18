@@ -75,6 +75,10 @@ h|1
 7+^|Tag number
 |===
 
+* b6은 Primitive 타입인지, Constrcuted 타입인지 구분
+** Primitive `0`: value의 값을 직접 인코딩됨 ('Constructed data object')
+** Constructed `1`: value('Primitive data object')
+
 === Length
 
 * value 부분이 차지하는 크기. 보통 바이트 단위, 통상 1~4 바이트
