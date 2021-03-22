@@ -18,6 +18,24 @@ P&L:: Profit and loss, 손익
 
 ROI:: Return on Investment, 투자수익률. 금융용어지만 리소스(시간, 비용, 개발) 투자 대비 돌아오는 결과를 나타낼 때에도 사용하는 것 같다. (e.g. "ROI 나오는거야?")
 
+etc.:: ‘기타 등등’이라는 뜻의 etc.는 라틴어 et cetera의 축약형입니다.
+
+vs.:: ‘against’를 뜻하는 vs.는 라틴어 versus의 축약형입니다.
+
+== Mail
+
+cf.:: ‘참고’라는 뜻의 cf.는 라틴어 confer의 축약형입니다.
+
+i.e.:: ‘다시 말하면’이라는 뜻의 i.e.는 라틴어 id est의 축약형입니다.
+
+e.g.:: ‘예를 들면’이라는 뜻의 e.g.은 라틴어 exempli gratia의 축약형입니다.
+
+BTW:: by the way
+
+ASAP:: as soon as possible
+
+FYI:: for your infomation
+
 == GitHub
 
 IMO(IMHO):: “In My (Humble) Opinion” 개인적인 의견 입니다만, 내 소견이지만. (humble 이 들어가면 조금 겸손한 느낌)
