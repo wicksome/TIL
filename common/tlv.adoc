@@ -123,6 +123,12 @@ h|1
 
 * 가변 길이의 바이트열
 
+== Libraries
+
+* https://www.asnlab.com/asnjc/gettingstarted.html
+* https://github.com/hierynomus/asn-one
+* https://github.com/beanit/asn1bean
+
 == Referneces
 
 * https://www.openscdp.org/scripts/tutorial/emv/TLV.html[1.3 ASN1 and TLV - EMV Tutorial]
