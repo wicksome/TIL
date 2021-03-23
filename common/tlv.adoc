@@ -2,8 +2,7 @@
 
 > https://en.wikipedia.org/wiki/X.690[ITU-T X.690]
 
-ASN.1:: 
-Abstract Syntax Notation One
+ASN.1: Abstract Syntax Notation One:: 
 * 데이터 구조를 기술하기 위한 언어
 * 데이터 타입이 primitive, constructed 로 나뉨
 * ASN 데이터를 인코딩하기 위해 TLV^Tag-Length-Value^ 구조 사용
@@ -13,7 +12,7 @@ Abstract Syntax Notation One
 * 정보보호 분야에서 사용됨
 
 X.690::
-ASN.1 인코딩 형식^format^을 지정하는 ITU-T 표준
+* ASN.1 인코딩 형식^format^을 지정하는 ITU-T 표준
 * BER, CER, DER 형식이 존재함
 
 ITU-T::
@@ -21,8 +20,7 @@ ITU-T::
 * ITU(International Telecommunication Union)의 세개의 섹타 중 하나
 * 전기 통신 분야의 적용하는 표준을 만듦
 
-BER::
-* Basic Encoding Rules
+BER: Basic Encoding Rules::
 * '버르'로 발음
 * ITU0T X.690에 정의됨
 * ASN.1 데이터를 인코딩하는 하나의 규칙 집합.
