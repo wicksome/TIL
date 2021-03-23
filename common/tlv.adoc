@@ -3,7 +3,7 @@
 > https://en.wikipedia.org/wiki/X.690[ITU-T X.690]
 
 ASN.1: Abstract Syntax Notation One:: 
-* 데이터 구조를 기술하기 위한 언어
+* 데이터 구조를 기술하기 위한 언어(표기법)
 * 데이터 타입이 primitive, constructed 로 나뉨
 * ASN 데이터를 인코딩하기 위해 TLV^Tag-Length-Value^ 구조 사용
 ** 즉, 모든 데이터 객체는 tag, length, value(data)를 가짐
