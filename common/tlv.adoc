@@ -8,12 +8,25 @@ Abstract Syntax Notation One
 * 데이터 타입이 primitive, constructed 로 나뉨
 * ASN 데이터를 인코딩하기 위해 TLV^Tag-Length-Value^ 구조 사용
 ** 즉, 모든 데이터 객체는 tag, length, value(data)를 가짐
+* 플랫폼에 종속되지 않고 적용 가능
 * ITU-T를 통해 표준화됨
 * 정보보호 분야에서 사용됨
 
 X.690::
 ASN.1 인코딩 형식^format^을 지정하는 ITU-T 표준
 * BER, CER, DER 형식이 존재함
+
+ITU-T::
+* ITU Telecommunication Standardization Sector
+* ITU(International Telecommunication Union)의 세개의 섹타 중 하나
+* 전기 통신 분야의 적용하는 표준을 만듦
+
+BER::
+* Basic Encoding Rules
+* '버르'로 발음
+* ITU0T X.690에 정의됨
+* ASN.1 데이터를 인코딩하는 하나의 규칙 집합.
+* 옥텟의 스프림으로 구성
 
 Octet:: 8 bit. 8 bit를 표현하기 위한 용어. 현대에 1 byte는 8 bit지만, 예전에는 4, 6 bit를 1 byte로 사용하는 컴퓨터도 있었음.
 
@@ -107,6 +120,7 @@ h|1
 
 == Referneces
 
-* https://en.wikipedia.org/wiki/X.690
+* https://www.openscdp.org/scripts/tutorial/emv/TLV.html[1.3 ASN1 and TLV - EMV Tutorial]
+* https://en.wikipedia.org/wiki/X.690[X.690] - Wikipedia
 * https://www.dialogic.com/webhelp/csp1010/8.4.1_ipn3/exsapi_quickref_tlv_-_introduction_to_tlvs.htm
 * https://github.com/kamshory/ISO-8583-Parser-and-Builder-With-TLV/blob/master/src/com/bgw/translator/TLV.java
