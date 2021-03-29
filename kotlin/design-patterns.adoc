@@ -46,7 +46,7 @@ class FileStream {
 }
 
 ' relation
-Closeable <|-- FileStream
+Closeable <|.. FileStream
 @enduml
 ----
 
