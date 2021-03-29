@@ -1,4 +1,5 @@
 = 디자인 패턴
+:toc:
 
 == 행동 패턴
 
@@ -51,7 +52,13 @@ data class Context(
 }
 ```
 
-=== 방문자
+=== 템플릿 메서드(Template method)
+
+```kotlin
+
+```
+
+=== 방문자(Visitor)
 
 ```kotlin
 class Client {}
