@@ -111,32 +111,41 @@ class Amount
 
 * 다른 객체의 참조를 가지는 필드를 나타냄
 
-```puml
+[source, puml]
+----
 @startuml
-Parent <|-- Children
+Order  "1" -- "*" Merchant
 @enduml
-```
+----
 
-```kotlin
-open class Parent
+[source, kotlin]
+----
+data class Order(
+    val merchant: Merchant,
+)
 
-class Children : Parent()
-```
+data class Merchant(
+    val orders: List<Order>,
+)
+----
 
 === 직접연관(Directed Association)
 
-
-```puml
+[source, puml]
+----
 @startuml
-Parent <|-- Children
+Product  --> "1" Amount
+Product  --> "*" Tag: tags
 @enduml
-```
+----
 
-```kotlin
-open class Parent
-
-class Children : Parent()
-```
+[source, kotlin]
+----
+data class Product(
+    val amount: Amount,
+    val tags: List<Tag>,
+)
+----
 
 === 집합(Aggregation)
 
