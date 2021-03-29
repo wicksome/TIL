@@ -3,7 +3,7 @@
 
 == 행동 패턴(Behavioral Pattern)
 
-=== 책임 연쇄(Chain of Responsibilty)
+=== 책임 연쇄(Chain of Responsibility)
 
 === 전략(Strategy)
 
