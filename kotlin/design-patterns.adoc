@@ -3,6 +3,20 @@
 
 == 클래스 다이어그램
 
+TODO: 전체 그림
+
+[source, puml]
+----
+@startuml
+' config
+hide empty field
+hide empty method
+
+' definition
+' relation
+@enduml
+----
+
 === 일반화(Generalization)
 
 * 부모 클래스와 자식 클래스간의 상속 관계를 나타냄
@@ -149,31 +163,21 @@ data class Product(
 
 === 집합(Aggregation)
 
-```puml
+[source, puml]
+----
 @startuml
-Parent <|-- Children
+A  o-- B
 @enduml
-```
-
-```kotlin
-open class Parent
-
-class Children : Parent()
-```
+----
 
 === 합성(Composition)
 
-```puml
+[source, puml]
+----
 @startuml
-Parent <|-- Children
+A *-- B
 @enduml
-```
-
-```kotlin
-open class Parent
-
-class Children : Parent()
-```
+----
 
 == 생성 패턴(Creational Pattern)
 
