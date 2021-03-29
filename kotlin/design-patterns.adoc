@@ -179,7 +179,7 @@ A *-- B
 @enduml
 ----
 
-=== 참고
+=== 참고 링크
 
 * https://plantuml.com/ko/class-diagram
 
