@@ -1,12 +1,202 @@
 = 디자인 패턴
 :toc:
 
+== 클래스 다이어그램
+
+=== 일반화(Generalization)
+
+* 부모 클래스와 자식 클래스간의 상속 관계를 나타냄
+
+[source, puml]
+----
+@startuml
+' config
+hide empty field
+hide empty method
+
+' relation
+Parent <|-- Children
+@enduml
+----
+
+[source, kotlin]
+----
+open class Parent
+
+class Children : Parent() // inheriance
+----
+
+=== 실체화(Realization)
+
+* 인터페이스를 실제 기능으로 구현하는 것을 말함
+
+[source, puml]
+----
+@startuml
+' config
+hide empty field
+hide empty method
+
+' definition
+interface Closeable {
+    fun close()
+}
+class FileStream {
+    fun close()
+}
+
+' relation
+Closeable <|-- FileStream
+@enduml
+----
+
+[source, puml]
+----
+@startuml
+' config
+hide empty field
+hide empty method
+
+' definition
+circle Closeable
+class FileStream {
+    close()
+}
+
+' relation
+Closeable -- FileStream
+@enduml
+----
+
+[source, kotlin]
+----
+interface Closeable {
+    fun close()
+}
+
+class FileStream : Closeable {
+    override fun close() {
+        TODO("Not yet implemented")
+    }
+}
+----
+
+=== 의존(Dependency)
+
+* 어떤 클래스가 다른 클래스를 참조하는 것을 말함
+
+[source, puml]
+----
+@startuml
+Product ..> Amount
+@enduml
+----
+
+[source, kotlin]
+----
+class Product {
+    fun payment(amount: Amount) {
+        TODO("Not yet implemented")
+    }
+
+    fun refund(): Amount {
+        TODO("Not yet implemented")
+    }
+}
+
+class Amount
+----
+
+=== 연관(Association)
+
+* 다른 객체의 참조를 가지는 필드를 나타냄
+
+```puml
+@startuml
+Parent <|-- Children
+@enduml
+```
+
+```kotlin
+open class Parent
+
+class Children : Parent()
+```
+
+=== 직접연관(Directed Association)
+
+
+```puml
+@startuml
+Parent <|-- Children
+@enduml
+```
+
+```kotlin
+open class Parent
+
+class Children : Parent()
+```
+
+=== 집합(Aggregation)
+
+```puml
+@startuml
+Parent <|-- Children
+@enduml
+```
+
+```kotlin
+open class Parent
+
+class Children : Parent()
+```
+
+=== 합성(Composition)
+
+```puml
+@startuml
+Parent <|-- Children
+@enduml
+```
+
+```kotlin
+open class Parent
+
+class Children : Parent()
+```
+
 == 생성 패턴(Creational Pattern)
+
+* 인스턴스를 만드는 절차를 추상화하는 패턴
 
 === 추상 팩토리(Abstract factory)
 
+[quote]
+____
+구체적인 클래스를 지정하지 않고 관련성을 갖는 객체들의 집합을 생성하거나 서로 독립적인 객체들의 집합을 생성할 수 있는 인터페이스를 제공하는 패턴입니다.
+____
+
 ```puml
-A -> B
+@startuml
+' define
+abstract class AbstractFactory {
+    CreateProductA()
+    CreateProductB()
+}
+class ConcreteFactory1 {
+    CreateProductA()
+    CreateProductB()
+}
+class ConcreteFactory2 {
+    CreateProductA()
+    CreateProductB()
+}
+
+
+' structure
+AbstractFactory <|-- Client
+@enduml
 ```
 
 ```kotlin
@@ -79,6 +269,10 @@ data class Context(
 ```
 
 === 방문자(Visitor)
+
+[quote]
+____객체 구조를 이루는 원소에 대해 수행할 연산을 표현하는 패턴으로, 연산을 적용할 원소의 클래스를 변경하지 않고도 새로운 연산을 정의할 수 있게 합니다.
+____
 
 ```kotlin
 class Client {}
