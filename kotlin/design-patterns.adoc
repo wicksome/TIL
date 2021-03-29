@@ -1,0 +1,66 @@
+= 디자인 패턴
+
+== 행동 패턴
+
+=== 전략(Strategy)
+
+```kotlin
+internal class DesignPatternTest {
+
+    @Test
+    fun main() {
+        listOf(
+            Context(Person()),
+            Context(Car()),
+            Context(Airplane()),
+        ).forEach {
+            it.move()
+        }
+    }
+}
+
+
+interface Strategy {
+    fun logic()
+}
+
+class Person : Strategy {
+    override fun logic() {
+        println("walk")
+    }
+}
+
+class Car : Strategy {
+    override fun logic() {
+        println("drive")
+    }
+}
+
+class Airplane : Strategy {
+    override fun logic() {
+        println("fly")
+    }
+}
+
+data class Context(
+    private val strategy: Strategy,
+) {
+    fun move() {
+        strategy.logic()
+    }
+}
+```
+
+=== 방문자
+
+```kotlin
+class Client {}
+
+interface Element {
+    accept
+}
+
+
+
+
+```
