@@ -1,7 +1,9 @@
 = 디자인 패턴
 :toc:
 
-== 행동 패턴
+== 행동 패턴(Behavioral Pattern)
+
+=== 책임 연쇄(Chain of Responsibilty)
 
 === 전략(Strategy)
 
