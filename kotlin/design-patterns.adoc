@@ -179,6 +179,11 @@ A *-- B
 @enduml
 ----
 
+=== 참고
+
+* https://plantuml.com/ko/class-diagram
+
+
 == 생성 패턴(Creational Pattern)
 
 * 인스턴스를 만드는 절차를 추상화하는 패턴
