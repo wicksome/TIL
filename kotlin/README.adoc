@@ -2960,22 +2960,21 @@ coroutine.adoc 참고
 
 == Test
 
-=== kotest
-
-* https://github.com/kotest/kotest + mockk
 * Behavior Driven Development(BDD) 스타일
 ** 일관된 테스트 구조, 테스트 코드를 통해 스펙 파악 용이
-* Kotest + MockK 도입
-** test framework: junit -> kotest
-** assertion lib: junit -> kotest
-** mocking lib: mockito -> mockk
-* Kotest: 코틀린 기반의 멀티플랫폼 테스트 프레임워크
-** Test Framework / Assertions Library / Property Testing 의 subproject로 구성
+* https://github.com/kotest/kotest[Kotest] + https://mockk.io/[MockK] 도입
+** Test Framework: JUnit → Kotest
+** Assertion Library: JUnit → Kotest
+** Mocking Library: Mockito → MockK
+
+=== Kotest
+
+* 코틀린 기반의 멀티플랫폼 테스트 프레임워크
+* Test Framework / Assertions Library / Property Testing 의 subproject로 구성
 * BCC 스타일을 포함한 총 10가지 테스트 스타일 지원
 ** BehaviorSpec (like Spock)
 ** DescribeSpec (like RSpec)
 ** FetureSpec (like Cucumber)
-* BehaviorSpec
 
 == Kotlin version
 
