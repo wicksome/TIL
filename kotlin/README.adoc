@@ -2971,7 +2971,7 @@ coroutine.adoc 참고
 
 * Kotlin 기반의 멀티플랫폼 테스트 프레임워크
 * Test Framework / Assertions Library / Property Testing 의 subproject로 구성
-* BCC 스타일을 포함한 총 10가지 테스트 스타일 지원
+* BDD 스타일을 포함한 총 10가지 테스트 스타일 지원
 ** BehaviorSpec (like Spock)
 ** DescribeSpec (like RSpec)
 ** FetureSpec (like Cucumber)
@@ -2997,7 +2997,7 @@ coroutine.adoc 참고
 
 === Examples
 
-* BefaviorSpec
+* BehaviorSpec
 ** 테스트 시나리오가 복잡하고 다양한 전제조건이 필요한 경우에 사용
 ** Service/Controller 대상의 unit/integration test
 * DescribeSpec
