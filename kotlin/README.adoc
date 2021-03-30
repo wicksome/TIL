@@ -2969,12 +2969,41 @@ coroutine.adoc 참고
 
 === Kotest
 
-* 코틀린 기반의 멀티플랫폼 테스트 프레임워크
+* Kotlin 기반의 멀티플랫폼 테스트 프레임워크
 * Test Framework / Assertions Library / Property Testing 의 subproject로 구성
 * BCC 스타일을 포함한 총 10가지 테스트 스타일 지원
 ** BehaviorSpec (like Spock)
 ** DescribeSpec (like RSpec)
 ** FetureSpec (like Cucumber)
+* Assertions
+** JUnit assertion 대비 직관적인 문법
+** 다양한 type에 특화된 Matcher 제공
+** JSON, Android 용 별도 Matcher 모듈 제공(실제 JSON content 기준으로 검증 가능)
+* JVM위에서 Kotest는 JUnit Platform 의존성 필요
+
+=== MockK
+
+* Kotlin 기반의 Mocking 라이브러리
+* Mockito와 흡사하게 기존적인 mocking feature 지원
+* Kotlin 특화 기능 지원
+** Mocking Kotlin singleton object
+** Mocking suspend function (coroutine)
+** Mocking extension function
+** Accessing property backing field
+* Annotation기반의 mock 객체 생성 지원
+* Strict vs. Relaxed mock
+** Strict: 명시되지 않은 동작이 호출될 경우 exception 발생 (default)
+** Relaxed: 명시되지 않은 동작이 호출될 경우 기본값 반환
+
+=== Examples
+
+* BefaviorSpec
+** 테스트 시나리오가 복잡하고 다양한 전제조건이 필요한 경우에 사용
+** Service/Controller 대상의 unit/integration test
+* DescribeSpec
+** 테스트 시나리오가 단순하고 전제조건이 불필요한 경우에 사용
+** Utility class 혹은 외부 서비스 client 용 class 대상의 unit test
+
 
 == Kotlin version
 
