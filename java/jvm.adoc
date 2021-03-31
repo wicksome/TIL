@@ -4,20 +4,24 @@
 
 == JVM
 
-jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로 나눠져 있다
+JVM 메모리 영역은 runtime data area라고도 불리며 여러 영역으로 나눠져 있다
 
-=== method area
+=== Method area
+
+`전체 쓰레드가 공유`
 
 * 클래스와 인터페이스의 정보가 저장되는 영역
 * 클래스 생성자, 메소드 코드(바이트 코드)등 저장
 * 클래스의 인스턴스가 생성된 후, 메소드가 실행되는 순산 클래스의 정보다 method area에 저장
 * mehotd area는 모든 thread에 의해 공유되는 영역
-* jvm이 시작될 때 생성
+* JVM이 시작될 때 생성
 * method area 내부에는 runtime constant pool 영역을 가짐
 ** 클래스/인터페이스의 메소드, 필드, 문자열 상수등의 레퍼런스 저장
 ** 이들의 물리적 위치를 참조할 경우 사용
 
-=== heap
+=== Heap
+
+`전체 쓰레드가 공유`
 
 * new 연산자 등으로 생성된 인스턴스와 배열등이 저장되는 영역
 * GC가 발생하는 영역
@@ -28,7 +32,7 @@ jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로
 
 * young area
 * 새로 생성된 대부분의 객체가 처음 위치하는 영역
-* 정지적으로 GC 발생하고 살아남은 객체들은 survivor1 or 2의 영역으로 이동
+* 정기적으로 GC 발생하고 살아남은 객체들은 survivor1 or 2의 영역으로 이동
 
 ==== Survivor1, Survivor2
 
@@ -50,16 +54,22 @@ jvm 메모리 영역은 runtime data area라고도 불리며 여러 영역으로
 
 === JVM language stacks
 
+`쓰레드별 생성`
+
 * 메서드 호출시 수행중인 메소드 데이터(지역변수, 지역변수 레퍼런스, 메소드 파라미터, 리턴값 등)를 저장하기 위한 영역
 * stack 영역은 thread별로 각각 독립적으로 생성
 * 메소드 진입시마다 메소드 데이터를 포함하는 stack frame이 생성되어 push, 메서드 생성이 완료되면 stack frame은 pop되어 사라짐
 
-=== PC Registers
+=== PC(Program Counter) Registers
+
+`쓰레드별 생성`
 
 * 각 thread 마다 할당되는 영역, thread가 시작될 때 생성
 * thread가 실행할 jvm 명령의 주소를 저장함
 
 === Native method area
+
+`쓰레드별 생성`
 
 * java 외의 언어로 작성된 코드를 위한 stack 영역
 * native code, JNI로 실행되는 코드
