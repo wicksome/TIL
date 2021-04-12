@@ -50,6 +50,16 @@ Fear Field Communication
 
 One Time Code
 
+== MS
+
+* Magnetic Stripe
+* 마그네틱 카드
+
+== IC
+
+* Integrated Curcuit
+* IC 카드, 카드 내부에 반도체 기반의 직접회로(Integrated Curcuit)을 내장한 카드.
+
 == vs.
 
 === Shop, Merchant, Vendor, Retail, Buyer, ...
