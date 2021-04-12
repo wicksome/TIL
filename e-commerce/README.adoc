@@ -1,4 +1,5 @@
-
+= E-Commerce
+:toc:
 
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455[전자금융거래법]
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455&lang=ENG[ELECTRONIC FINANCIAL TRANSACTIONS ACT]
@@ -41,3 +42,39 @@ Buyer::
 * https://m.blog.naver.com/PostView.nhn?blogId=uwit_biz&logNo=10077266863&proxyReferer=https:%2F%2Fwww.google.com%2F
 * https://m.blog.naver.com/book_jockey/220925683346
 * https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
+
+== OTC
+
+- 
+
+== BIN
+
+Bank Information Number
+
+== VAN
+
+Value Added Network
+
+== PAN
+
+primary Account Number
+
+== POS
+
+Point Of Sales system
+
+== NFC
+
+Fear Field Communication
+
+== Track 2
+
+- ISO/IEC7813
+
+== OTC
+
+One Time Code
+
+== References
+
+- https://patents.google.com/patent/WO2014092233A1/ko[일회성 카드정보를 이용한 결제 방법] / WO2014092233A1 - Google Patents
