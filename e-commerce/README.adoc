@@ -50,8 +50,7 @@ Fear Field Communication
 
 One Time Code
 
-== vs.<sup>versus</sup>
-
+== vs.
 
 === shop vs merchant vs vendor vs retail vs buyer vs ...
 
