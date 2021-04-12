@@ -4,27 +4,6 @@
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455[전자금융거래법]
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455&lang=ENG[ELECTRONIC FINANCIAL TRANSACTIONS ACT]
 
-
----
-
-== shop vs merchant vs vendor vs retail vs buyer vs ...
-
-Shop::
-
-Merchant::
-
-Vendor::
-
-Retail::
-
-Buyer::
-
-.references
-* https://wikidiff.com/retail/merchant
-* https://www.askdifference.com/merchant-vs-vendor/
-* https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
-* https://wikidiff.com/merchant/shopkeeper
-
 == 사업자등록번호
 
 * 번역家가 번역社에서는 Business registration number 정도로 번역하는 것이 통례
@@ -42,10 +21,6 @@ Buyer::
 * https://m.blog.naver.com/PostView.nhn?blogId=uwit_biz&logNo=10077266863&proxyReferer=https:%2F%2Fwww.google.com%2F
 * https://m.blog.naver.com/book_jockey/220925683346
 * https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
-
-== OTC
-
-- 
 
 == BIN
 
@@ -74,6 +49,27 @@ Fear Field Communication
 == OTC
 
 One Time Code
+
+== vs.<sup>versus</sup>
+
+
+=== shop vs merchant vs vendor vs retail vs buyer vs ...
+
+Shop::
+
+Merchant::
+
+Vendor::
+
+Retail::
+
+Buyer::
+
+.references
+* https://wikidiff.com/retail/merchant
+* https://www.askdifference.com/merchant-vs-vendor/
+* https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
+* https://wikidiff.com/merchant/shopkeeper
 
 == References
 
