@@ -52,7 +52,7 @@ One Time Code
 
 == vs.
 
-=== shop vs merchant vs vendor vs retail vs buyer vs ...
+=== Shop, Merchant, Vendor, Retail, Buyer, ...
 
 Shop::
 
