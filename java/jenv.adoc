@@ -1,8 +1,16 @@
 = jenv로 java 버전 관리하기
 :revdate: 2019-09-28T13:10:00+09:00
-:page-tags: java, jenv
+:page-tags: java, jenv, jdk
 
 <<<
+
+https://openjdk.java.net/[OpenJDK.org]:: 썬 마이크로시스템즈 시절에 만들어진 커뮤니티로 우리가 알고 있는 OpenJDK가 만들어진 곳
+
+https://adoptopenjdk.net/[AdoptOpenJDK.net]:: IBM, RedHat, SAP, Oracle 등이 참가하는 OpenJDK 커뮤니티
+
+Hotspot JVM:: 모든 작업에 적합한 검증된 JVM
+
+Open J9:: IBM, Eclipse 재단의 OpenJDK용 VM
 
 https://www.jenv.be[jEnv]는 Java 환경을 관리하기 위한 커맨드라인 툴이다.
 
@@ -98,3 +106,7 @@ $ jenv versions
   openjdk64-9
   oracle64-1.8.0.221
 ----
+
+== References
+
+* https://engineering.linecorp.com/ko/blog/line-open-jdk/
