@@ -30,9 +30,19 @@ $ echo 'if which jenv > /dev/null; then eval "$(jenv init -)"; fi' >> ~/.bash_pr
 
 == 설정하기
 
-설치되어 있는 java를 `jenv add` 를 통해 추가한다.
-
+. jdk를 설치한다. - https://github.com/AdoptOpenJDK/homebrew-openjdk[ref]
++
 [source, bash]
+.install jdk
+----
+$ brew install --cask adoptopenjdk
+$ brew 
+----
+
+. 설치되어 있는 java를 `jenv add` 를 통해 추가한다.
++
+[source, bash]
+.set jdk to jenv
 ----
 # Add open jdk 1.9
 $ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-9.jdk/Contents/Home
