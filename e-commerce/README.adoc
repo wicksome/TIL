@@ -1,6 +1,520 @@
 = E-Commerce
 :toc:
 
+<<<
+
+:wiki-ecommerce: https://ko.wikipedia.org/wiki/전자_상거래
+:wiki-visa: https://en.wikipedia.org/wiki/Visa_Inc
+:wiki-mastercard: https://en.wikipedia.org/wiki/Mastercard
+:wiki-unionpay: https://en.wikipedia.org/wiki/UnionPay
+:wiki-discover: https://en.wikipedia.org/wiki/Discover_Card
+:wiki-amex: https://en.wikipedia.org/wiki/American_Express
+:wiki-acquirer: https://en.wikipedia.org/wiki/Acquiring_bank
+:wiki-pcidss: https://en.wikipedia.org/wiki/Payment_Card_Industry_Data_Security_Standard
+
+== Payments Ecosystem
+
+[link="https://www.businessinsider.com/payments-ecosystem-report"]
+image::https://i.insider.com/5e39a5425bc79c6f194dd01a?width=2500&format=jpeg&auto=webp[The Payments Industry Ecosystem]
+
+[link="https://www.businessinsider.com/payments-ecosystem-report"]
+image::https://i.insider.com/6000686ea8de7700187d3d76?width=1300&format=jpeg&auto=webp[The Payments Industry Ecosystem]
+
+[link="https://www.cardknox.com/white-papers/payments-industry-landscape/"]
+image::https://2f0gzq466hza2r8os02tcwno-wpengine.netdna-ssl.com/wp-content/uploads/payment-landscape.png[The Payments Ecosystem]
+
+[link="https://tainconstructions.wordpress.com/2020/12/17/mapping-the-payment-ecosystem/"]
+image::https://media-exp1.licdn.com/dms/image/C5612AQE_Yv-YGnXzpA/article-inline_image-shrink_1500_2232/0/1601377478351?e=1613606400&v=beta&t=LluRX3xn7hZb8tblx53tIfHJ73FQ5N3WUY6Gu3jKkDY[]
+
+Payments Ecosystem^생태계^란 여러 결제 관련 기억이 몇 개의 리더 기업을 중심으로 경쟁과 협력을 통해 공생하고 함께 발전해나가는 모습이라고 할 수 있다.
+여기서 '몇 개의 리더 기업'은 카드 네트워크^Card{sp}Network^를 말하는 것이 아닐까 싶다.
+
+=== Acquirer
+
+{wiki-acquirer}[Acquirer](전표매입사, 인수은행)는 가맹점을 대신하여 신용 또는 직불 카드 결제를 처리하는 은행 또는 금융 기관을 말한다. "Acquiring Bank" 또는 "Merchant Bank" 라고도 불린다.
+
+인수은행^acquiring{sp}bank^은 카드 결제 거래에서 중개인에 위치하며, 가맹점^merchant^과 카드발급사^issuing{sp}bank^을 연결한다.
+카드발급사는 고객^cardholder^과 직접 협력하지만, 인수은행 가맹점이 신용 카드를 수락(accept) 할 수 있도록 재정 지원(financial backing) 및 인프라를 제공한다.
+또한, 인수은행은 신용 카드 구매, 데이터 흐름 보안 책임 및 분쟁 발생시 초기 책임과 관련된 많은 재정 위험을 부담합니다.
+
+대표적인 예로 국내footnote:disclaimer[BC Global은 해외결제도 가능하다.]에선 BC카드가 있다. BC 카드의 경우에는 전표매입사의 역할과 함께 발급사footnote:disclaimer[https://www.bccard.com/app/card/OnlineCardIssue.do[BC바로카드]는 BC카드에서 발급하는 카드이다.]의 역할도 하고 있다. 
+
+[NOTE]
+====
+Cardholder::
+금융 기관^financial{sp}institution^에서 발행한 직불^debit^, 신용^credit^ 혹은 청구^charge^ 카드를 소지한 개인 또는 사업자를 말한다.
+
+Issuing bank::
+소비자에게 신용 카드 및 직불 카드를 발급하는 은행
+
+Merchant::
+상품 혹은 서비스를 고객에게 판매하는 가맹점을 말한다.
+====
+
+.See Also
+* https://chargebacks911.com/the-acquiring-bank/[What is an Acquirer?]
+* https://tidalcommerce.com/learn/acquirer[Merchant Acquirer or "Acquiring Bank" Explained]
+* https://chargebacks911.com/knowledge-base/difference-between-acquiring-bank-and-issuing-bank/[Difference Between ‘Acquiring Bank’ and ‘Issuing Bank’]
+
+=== Card Network
+
+Card Network는 Card Scheme Network 혹은 Brand 라고도 불리며, {wiki-visa}[Visa], {wiki-mastercard}[Mastercard], {wiki-unionpay}[Union Pay], {wiki-discover}[DISCOVER], {wiki-amex}[American express] 등이 있다.
+
+=== Issuers
+
+Issuer(발급사)는 카드 네트워크^card{sp}network^를 대신해 소비자에게 신용 카드를 발급하는 금융 기관(재정적으로 지원하는 은행 혹은 신용 조합^credit{sp}unions^)이다. 
+"Issuing Bank" 혹은 "Credit Card Company" 라고도 불린다. 실제로 Visa나 Mastercard는 소비자에게 신용 카드를 발급하지 않는다. 대신 Issuer가 
+credit card network와 협력하여 카드를 발급한다. 발급사는 소지자^cardholder^에게 카드대금 혹은 연회비를 청구한다.
+
+카카오뱅크의 경우에는 발급사는 카카오뱅크지만 매입사는 국민카드이다. 그러므로 KB국민카드의 결제망을 쓴다. 이는 기업은행이 BC카드 결제망을 사용하는 것과 동일하다.
+(그래서 국민카드 중단시 카카오뱅크 카드도 중단되는 걸까?footnote:disclaimer[https://www.hankyung.com/economy/article/201909127021Y])
+
+
+[NOTE]
+====
+Credit Union::
+크레딧 유니온^Credit{sp}Union^은 비영리 금융기관으로 회원들이 소유/운영하는 일종의 협동금융기관이다.
++
+.See also
+* http://www.koreadaily.com/news/read.asp?art_id=175952[크레딧 유니온이란?]
+====
+
+=== Gateways
+
+PG^Payment{sp}Gateway^라고도 불리는 Gateway는 온라인 상점에 대한 결제 대행사라고도 볼 수 있다. 예를 들어, 사용자^cardholder^에게 자신의 카드 정보를 입력할 
+결제창을 제공하고. 가맹점^merchant^에서는 이 정보를 이용해 보안성 높은 다양한 결제 방법을 지원한다. 이렇게 PG는 여러가지 결제 진입점^payment{sp}portal^과 
+front end processor 또는 인수은행^acquiring{sp}bank^ 간에 결제 거래를 용이하게 한다. 다시 말하면, 결제와 코드 정보를 수집하고 이를 (암호화된 방식으로) 
+Acquirer에게 전달하는 것이다.
+
+주로 온라인에서 오프라인 결제에서 POS과 비슷한 역할을 한다. 하지만 앞으로는 오프라인 영역으로 확대되는 중이다.
+
+대표적으로 국내에선 KSNET, 이니시스, KCP, 모빌리언스, 다날 등이 있고 해외에선 PayPal 등이 있다. (PayPal은 결제 에코시스템에서 다양한 영역을 맡고 있다
+
+PG사가 생겨난 이유는 중소형 쇼핑몰의 경우 카드사와 직접 계약을 맺는 것이 어렵기 때문에 PG사가 대표 가맹점 역할을 해주고, 쇼필몰은 PG사만 계약을 맺고 PG를 
+통해 대금 결제를 하도록 하기 위함이다. 온라인 업체들의 경우 오프라인 업체처럼 카드사에서 안정성을 확신하기 어렵기 때문에 PG사가 대신해서 리스크를 지고 각 
+쇼핑몰과 계약하는 구조이다. (온라인 쇼핑몰들의 대표 가맹점)
+
+* PG사의 핵심 경쟁력은 확보 온라인 가맹점 숫자
+
+<<<
+
+[NOTE]
+====
+Retailers::
+Retailer(소매업)은 최종 소비 목적의 소비자를 대상으로 상품과 용역을 판매하는 유통업을 말한다.
+
+IVR::
+Interactive Voice Response의 줄임말로 대화식 음성 응답/안내를 말한다. 콜센터에서 많이 사용되고 있다.
+
+Payment Portal::
+여기서 의미하는 결제 포탈을 결제가 일어날 수 있는 웹사이트, 모바일, IVR등을 말한다.
+====
+
+=== ISOs/MSPs
+
+ISOs, 혹은 independent sales organizations는 공식적으로 VISA 또는 MasterCard와 같은 카드 회원 협회(cardmember association)에 소속되어 있지는 않지만
+가맹점 계정 또는 기타 가맹점 서비스를 회원에게 제공하기 위해 _acquiring member banks_ 와 파트너십을 맺은 회사를 말한다.
+
+Acquiring banks are banks that work with merchants and merchant services companies to provide merchant accounts and collect the money owed to merchants from issuing banks.
+
+The credit card acquirer receives the batched transactions at the end of the day and deposits that amount into the merchant’s account equal to the total of the batch minus applicable fees.
+
+An acquiring bank is a bank that has the authority and ability to provide merchant accounts.
+
+MSP(Merchant Service Provider)는 가맹점 서비스 제공자로 신용카드 협회(credit card association) 회원은 아니지만 신용카드 회사(VISA, MasterCard, etc)에 등록되어 있다.
+신용 카드 혹은 직불 카드 처리에 필요한 서비스를 merchant에 제공하는 주체이다. 또한 가맹점과 발급은행 또는 신용카드 네트워크간에 중개역할을 하며 거래 수익을 계좌에 입금할 책임이 있다.
+
+ISO (Independent Sales Organization) 혹은 MSP (Merchant Service Provider)는 Visa/Master Card와 같은 기존의 카드 결제 네트워크 상에 포함되지 않는 제3자로써 가맹점을 모집하는 역할을 한다.
+이들은 가맹점 모집과 더불어 1) 카드 발급과 매입 역할에 관여하고 2) 가맹점에 POS기를 공급하며, 3) 가맹점의 결제기기 등에 대한 서비스를 제공한다.
+ISO의 주된 고객들은 중소형 가맹점이다. 가맹점이 신규로 결제 네트워크에 참여하기 위해서는 계좌 개설부터 결제 네트워크 (Visa, Master Card 등), 매입사 등과의 계약을 체결해야 한다. 
+하지만, 중소형 가맹점들의 입장에서 이러한 일련의 작업을 하기에는 접근성 등의 측면에서 한계가 있다. 즉, ISO, MSP들은 이 틈새 시장에서 가맹점 관련 서비스를 제공하고 수익을 창출하는 것이다. 
+ISO의 수수료는 ISO와 가맹점간 개별 계약을 통해 설정되는데, ISO가 제공하는 서비스와 규모의 경제, 가맹점의 월 결제 규모 등에 따라 협상이 가능하다. 
+통상적으로 총 수수료에서 Interchange, 네트워크사, 매입사에 대한 수수료를 제한 뒤 남는 금액을 ISO가 수령하게 되는 구조이다. 
+
+POS사를 말하는걸까? VAN사?
+
+.See also
+* https://tidalcommerce.com/learn/iso-payment-processing[What are ISO Payments?]
+
+=== 3rd Party Processor
+
+[quote]
+____
+A third-party processor is a service that lets you accept online payments without a merchant account of your own. Instead, a third-party processor will allow you to use their merchant account.
+____
+
+정산 받을 판매자 계좌(https://tidalcommerce.com/learn/merchant-account-explained[merchant account]) 없이 결제를 할 수 있도록 하는 서비스를 말한다.
+이들은 payment gateway, payment provider라고도 불리지만 "online pateway"와 혼동해서는 안된다. 대표적으로 PayPal, Stripe, Square 가 있다.
+
+보통 payment processor는 판매자로부터 거래 요청을 받고 다양한 은행과 연락하여 고객의 계정에서 판매자의 계정으로 자금을 이동시킨다.
+하지만, merchant account를 만드는 일은 작은 기업에서는 비용도 많고 발급 시간도 기다려야한다.
+
+3rd-party processor는 기본적으로 payment processor와 동일하지만, 판매자 계정(merchant account)으로 돈을 보내는 대신 중간 단계로 3rd-party merchant account를 사용한다.
+이를 통해 간편하고 빠르게 연동 및 결제 서비스를 할 수 있는 장점을 가진다. 또한 중간에서 대행을 해주는 역할로 은행과 판매자의 직접적인 관계가 없다.
+
+.References
+* https://www.bambora.com/en/au/news/third-party-payments-processors-explained/[Third Party Payments Processors]
+* https://www.cardswitcher.co.uk/third-party-payment-processor/[What is a Third-Party Payment Processor?]
+* https://fattmerchant.com/blog/what-is-a-third-party-payment-processor/[Payment Processing: What Is a Third-Party Payment Processor?]
+* https://tidalcommerce.com/learn/third-party-payment-processor[What Is a Third-Party Payment Processor?]
+* https://m.blog.naver.com/PostView.nhn?blogId=semu3456&logNo=221211726842&proxyReferer=https:%2F%2Fwww.google.com%2F[사업용계좌 제도란?]
+
+=== Payment Provider
+
+* 결제 대행. VAN사에 가까울 것 같음.
+* POS는 결제하는 플랫폼일뿐 POS社라고 말하는건 아닌 것 같음
+
+.References
+* https://en.wikipedia.org/wiki/List_of_online_payment_service_providers
+
+=== NonCard Payments
+
+=== Companies
+
+- https://www.earthport.com/[eartport]: 크로스보더 플랫폼을 개발하는 회사이다.
+- https://www.aciworldwide.com/[ACI Universal Payments]: 실시간 전자 결제의 용이함에 중점을 둔 폭 넓은 소프트웨어를 개발하는 결제 시스템 회사이다.
+  제품 및 서비스는 전 세계적으로 은행, 써드파티 결제 프로세서, 결제 협회, 가맹점, 기업, 다양한 기기, 인터넷 쇼핑몰, POS 등 트랜잭션 생성 진입점에서 사용된다.
+- Vocalink: 영국의 6만5천여개의 ATM을 포함하는 영국의 실시간 결제, 정산, 직불 시스템 등 결제 인프라를 설계, 구축, 운영한다.
+- Paysafe
+
+== Card Scheme
+
+카드 스킴^Card{sp}scheme^은 직불^debit^ 또는 신용^credit^ 카드와 같은 지불 카드^payment{sp}cards^의 "brand"이며, 지불 카드에 연결된 payment networks를 말한다.
+
+3-당사자 거래구조^Tree-party{sp}scheme^와 4-당사자 거래구조^Four-party{sp}scheme^ 두 가지 타입으로 나눠진다.
+
+한국과 일본의 경우 3-당사자 거래구조이고 미국이나 호주 등의 경우에는 3-당사자 거래구조와 4-당사자 거래구조가 혼재되어 있다.
+
+=== Three-party scheme(or closed scheme)
+
+[ditaa, align="center"]
+.Three-party scheme
+....
+@startuml
+ditaa
+ +------------+ Payment                         +----------+
+ |cGRE        +-------------------------------->+cGRE      |
+ | Cardholder |                 Product/Service | Merchant |
+ |            +<--------------------------------+          |
+ +--+-----+---+                                 +--+----+--+
+    |     ^                                        ^    | Merchant service charge
+    |     |                                        |    |
+    |     |                    Settlement of funds |    |
+    |     | Invoicing +-------------------+        |    |
+    |     +---------->+cGRE               +--------+    |
+    |                 | Issuer & Acquirer |             |
+    +---------------->+                   +<------------+
+    Cardholder fee    +---------+---------+
+                                |
+                                | License fee
+                                v
+                           +----------+ 
+                           | Licensor | 
+                           +----------+ 
+@enduml
+....
+
+
+3-당사자 구조는 카드회원^Cardholder^, 가맹점^Merchant^, 신용카드사^Issuer{sp}&{sp}Acquirer^의 3개 당사자가 거래에 참여해 신용카드 거래가 이루어지는 거래구조를 말한다.
+
+신용카드사는 카드회원을 대상으로 [.underline]#카드발급 업무와# 가맹점(Merchant)을 대상으로 [.underline]#'매출전표 매입업무'를# 동시에 수행한다.
+
+한국은 주로 3당사자 거래구조이면서 VAN^Valud-Added{sp}Network^사가 카드사와 가맹점의 중간에서 카드거래의 승인업무 등을 중계하고 거맹점을 모집 관리하는 역할을 한다.
+
+(국내 신용카드사 중에서 비씨카드는 Acquirer 역할로 4-당사자 구조로 영업한다.)
+
+매출전표(賣出傳票, Sales Slip)::
+매출이 발생한 거래를 정리하는 양식 및 그 기록물이다. 신용카드 매출전표를 익숙하게 볼 수 있다.
+
+매출전표 매입업무::
+가맹점은 고객이 서명한 매출전표(매출Data)를 VAN사를 통해 카드사에 전송하고 카드사는 가맹점으로부터 받은 매출전표를 심사하여 정상적으로 처리된 것이면 신용판매대금을 가맹점의 은행계좌에 입금시켜준다. 이러한 일련의 과정을 '매출전표 매입업무'라고 한다.
+
+==== Use Case
+
+3-당사자 구조에서 VAN사를 포함하여 오프라인 카드결제 및 정산이 어떻게 일어나는지 단계별로 보자.
+
+* **김모씨**는 Customer, Cardholder, 신용카드 회원, 소비자이다.
+* **A매장**은 Merchant, 신용카드 가맹점, 판매자이다.
+* **신용카드사**는 Acquirer/Issuer이다.
+* **Licensor**는 Card scheme, Franchisee이다.
+
+===== Create a credit card
+
+[ditaa, align="center"]
+....
+@startuml
+ditaa
+         +----------+
+         |cGRE      |
+         | Customer |
+         |          |
+         +--+---+---+
+            |   ^ 
+            |   |
+            |   |
+            |   | 3. Issue a card
+            |   |  +-----------------+
+            |   +--+cGRE             |
+            |      | Acquirer/Issuer |
+            +----->+                 |
+ 1. Cardholder fee +--------+--------+
+                            | 2. Licensing fee
+                            v
+                      +-----+----+
+                      | Licensor |
+                      +----------+
+@enduml
+....
+<1> 김모씨는 카드 발급을 위해 신용카드사로 연회비를 지불한다.
+<2> 신용카드사는 카드 스킴 혹은 프랜차이즈에 라이센스 비용을 지불한다.
+<3> 신용카드사는 김모씨에게 카드를 받급해준다.
+
+
+===== Purchase product or services.
+
+[ditaa, align="center"]
+....
+@startuml
+ditaa
+ +----------+ 1. Payment          +----------+
+ |cGRE      +-------------------->+cGRE      |
+ | Customer |                     | Merchant |
+ |          +<--------------------+          |
+ +----------+   4.Product/Service +---+--+---+
+                                      ^  |
+                                      |  | 2. Request approval
+                                      |  |
+                                    +-+--+--+
+                                    |  VAN  |
+                                    +-+--+--+
+                           3. Approve |  |
+              +-----------------+     |  |
+              |cGRE             +-----+  |
+              | Acquirer/Issuer |        |
+              |                 +<-------+
+              +-----------------+
+@enduml
+....
+<1> 김모씨는 A매장에서 상품을 구입하기 위해 결제(카드결제, 신용구매)를 한다. (**Payment**)
+<2> A매장은 VAN사로 승인요청을 한다.
+<3> VAN사는 신용카드사로부터 카드 확인 후 결제를 진행시킨다. 이 때 매출전표가 만들어진다.
+<4> A매장은 김모씨에세 상품 및 서비스를 제공(신용판매)한다. (**Product/Service**)
+
+
+
+===== Settlement of funds
+
+카드사가 회원을 대신하여 가맹점에 결제대금(가맹점수수료 공제 후)을 먼저 지급하고, 나중에 회원에게 결제대금을 청구하여 회수하게 된다.
+
+[ditaa, align="center"]
+....
+@startuml
+ditaa
+                                +----------+
+                                |cGRE      |
+                                | Merchant |
+                                |          |
+                                +---+---+--+
+                                    ^   |1. Request Settlement of funds through VAN
+                                    |   |
+                                    | +-+---+
+                                    | | VAN |<-+
+             2. Settlement of funds | +-+---+  |
+(excluding Merchant service charge) |   |      |
+             +-----------------+    |   |      |
+             |cGRE             +----+   |      |
+             + Acquirer/Issuer |        |      |
+             |                 +<-------+      |
+             +-----------------+               |
+                             :                 |
+                             +-----------------+
+                               VAN charge
+@enduml
+....
+<1> A매장은 VAN를 통해 구매대금 입금을 요청한다. (매출전표 매입업무)
+<1> 신용카드사는 A매장에게 구매대금을 지급한다. (이 때, 가맹점 수수료를 제외한 카드대금을 지급) +
+    그리고 신용카드사는 VAN사에게 VAN charge 지급한다.
+
+===== Make a card payment
+
+[ditaa, align="center"]
+....
+@startuml
+ditaa
+         +----------+
+         |cGRE      |
+         | Customer |
+         |          |
+         +--+---+---+
+ 2. Payment |   ^ 
+            |   |
+            |   |
+            |   | 1. Invoicing
+            |   |  +-----------------+
+            |   +--+cGRE             |
+            |      | Acquirer/Issuer |
+            +----->+                 |
+                   +--------+--------+
+@enduml
+....
+<1> 신용카드사는 김모씨에게 구매대금을 청구한다.
+<2> 김모씨는 신용카드사로 구매대금을 납부한다.
+
+=== Four-party scheme(or open scheme)
+
+image::https://www.brimstone-consulting.com/images/pic_four_party_scheme.jpg[four party card scheme]
+
+3 당사자 거래구조에서 카드사가 카드발급사^Issuer^, 전표매입사^Acquirer^로 분업화돼 총 4개 당사자 중심으로 신용카드 거래가 이뤄지는 구조
+
+대표적으로 Visa, MasterCard, UnionPay가 이 구조에 속한다.
+
+.유니온페이 QR 결제 플로우(CPM)
+[link="https://developer.unionpayintl.com/cjweb/api/detail?apiSvcId=16#api-flowChart"]
+image::https://developer.unionpayintl.com/upload/cj/image/1526349102018026242.jpg[UPI QR Code Acceptance]
+
+image::https://qph.fs.quoracdn.net/main-qimg-3c63ca1f1808ae69660f6718858f0676[]
+
+(TODO) 4당사자구조일때 누가 어떻게 돈을 버는가?
+
+[link="https://www.slideshare.net/nceo/4-output"]
+.국내 신용카드 거래 구조
+image::https://image.slidesharecdn.com/4-120519123139-phpapp02/95/4-output-4-728.jpg?cb=1337430796[]
+
+=== References
+
+* https://en.wikipedia.org/wiki/Card_scheme[Card scheme - Wikipedia]
+* https://www.clearhaus.com/blog/a-quick-guide-to-payments-in-e-commerce-four-party-scheme/[A quick guide to payments in e-Commerce]
+* http://www.theukcardsassociation.org.uk/getting_started/card-payment-cycle.asp[Card payment cycle]
+
+
+== VAN vs PG
+PG 시스템은 VAN 을 타고 카드사 시스템에 접속하여 결제가 이루어짐
+
+=== VAN, Value-Added Network
+
+____
+매장과 카드사를 연결해주는 회사
+____
+
+VAN사는 오프라인 결제시스템을 관리하고 신청받는 업체를 말한다. 대표적으로 한국신용정보(KICC), 금융결제원(KFTC), 케이에스밴(KSVAN), KIS, 나이스정보통신(NICE) 등이 있다.
+
+* 카드사의 가맹점 모집을 대행, 가맹점에 거래승인용 단말기를 설치하며 가맹점계약까지 중개해준다.
+* VAN사에서는 가맹점의 거래승인 중개 시 건당 수수료를 받기 때문에 가급적 많은 가맹점을 유치하고 많은 카드사와 관계를 형성하려고 하고 있어 VAN사와 카드사는 공생의 관계로 볼 수 있다.
+* 가맹점과 카드사간 네트워크망을 구축해 카드사용 승인중계 및 카드전표 매입 업무를 하는 부가통신사업자.
+* 부가가치 통신망 사업자
+* 마그네틱을 직접 단말기에 긁었을 때 일어나는 결제를 관리한다.
+* 고객이 카드를 사용할 때 단말기를 통해 승인중계업무를 한다.
+* 신용카드사를 대신해 가맹점을 모집하고 단말기를 제공 
+* 고객이 카드결제할 때 카드사로부터 해당회원의 카드결제승인을 받을 수 있도록 단말기를 통해 승인중계업무 진행
+* 카드결제 후 가맹점이 카드사에 대해 카드결제대금을 청구해 받을 수 있도록 카드매출데이터를 정치, 제출하는 카드전표 매입 업무 대행
+
+[NOTE]
+.NHN 한국사이버결제(KCP)
+====
+PG와 온라인/오프라인VAN 사업을 영위하고 있다. KCP가 온라인 VAN 시장의 약 50%를 점유하고 있는것으로 추정하며, 오프라인 VAN으로는 7% 가량 점유하고 있는 것으로 추정한다.
+
+.References
+* https://lonelyinvest.com/886
+====
+
+== QR Payments
+
+QR^quick{sp}response^ code란 흑백 격자무늬 패턴으로 정보를 나타내는 매트릭스 형식의 이차원 바코드이다.
+
+=== MPM, Merchant Presented Mode
+
+QR 코드를 가맹점이 생성하는 방식으로 이를 소비자가 자신의 휴대폰으로 읽어내는 방식. MPM은 다시 '고정형'과 '변동형'으로 구분된다.
+
+=== CPM, Customer Presented Mode
+
+QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스캔해 통신하는 방식
+
+=== spec
+
+* EMV QR Code: https://www.emvco.com/emv-technologies/qrcodes/
+
+== 기타 용어
+
+BIN, Bank Identification Number::
+Bank Information Number +
+https://rpgc.com/bins-and-you-a-guide-for-merchants/
++
+image::https://rpgc.com/wp-content/uploads/2020/03/bin_credit_card.jpg[]
+
+CAT, Credit Authorization Terminal::
+CAT 단말기란 신용카드가맹점 등에서 신용카드 등의 거래 승인을 위해 사용되는 발행회사, 회원번호 등을 자동 판독해 통신회선을 통하여 신용카드업체로 전달하고 정산해주는 일반 결제 단말기를 말한다.
++
+image::https://uploads-ssl.webflow.com/55805c1704ba70184ee0bc0a/5af331fe66df017cb1919ac8_Verifone%20Vx680%20Wireless%20Payment%20Terminal.png[]
+
+CDCVM, Consumer Device Cardholder Verification Method::
+카드 소유자 확인 방법 : 카드 네트워크에서 지원하는 소비자 인증 방법 (CVM)의 한 유형으로, 사용자가 결제 단말기 대신 모바일 장치에서 인증 할 수 있습니다.
++
+* https://support.google.com/pay/merchants/answer/7381753?hl=en
+* https://support.apple.com/en-us/HT202527
+
+DCB, Direct Carrier Billing::
+https://en.wikipedia.org/wiki/Direct_carrier_billing
+
+EMV::
+EMV는 칩 카드 기술을 기반으로 한 신용 카드 및 직불 카드의 글로벌 표준으로, 카드 체계^Card{sp}Network^인 Europay, MasterCard, Visa에서 이름을 따온 것이다.
++
+EMV Card는 스마트 카드, 칩 카드^chip{sp}card^ 혹은 IC 카드라고 부른다.
+
+{wiki-ecommerce}[E-Commerce], Electronic Commerce::
+전자 상거래
+
+FDS, Fraud Detection System::
+이상금융거래탐지 시스템
+
+PayFac, Payment Facilitator::
+ISO와 MSP 부문을 말하며, PG, VAN사들을 말하는 것 같다.
++
+.See also
+* https://www.bambora.com/en/au/news/whats-the-difference-between-a-payment-facilitator-payment-gateway--merchant-account/[What's the difference between a payment facilitator, payment gateway & merchant account?]
+* https://www.paymentfacilitator.com/business/what-is-the-payment-facilitator-model/[WHAT IS THE PAYMENT FACILITATOR MODEL?]
+* https://www.samsungpop.com/common.do?cmd=down&saveKey=todayinvest.file&fileName=gbrch_01.pdf
+
+PAN, Primary Account Number::
+up to 19 digits, as defined in ISO/IEC 7812-1
+
+VAN:: Value Added Network
+
+POS:: Point Of Sales system
+
+NFC:: Fear Field Communication
+
+Track 2:: ISO/IEC7813
+
+OTC:: One Time Code
+
+MS::
++
+* Magnetic Stripe
+* 마그네틱 카드
+
+IC::
++
+* Integrated Curcuit
+* IC 카드, 카드 내부에 반도체 기반의 직접회로(Integrated Curcuit)을 내장한 카드.
+
+{wiki-pcidss}[PCI DSS], Payment Card Industry Data Security Standards::
+신용카드업계 데이터보안 표준
++
+"The PCI DSS is an #information security standard# for organizations that handle branded credit cards from the major card schemes."
+-- Wikipedia
+
+POS, Point of sale(or purchase) system::
+판매와 관련한 데이터를 일괄적으로 관리하고, 고객정보를 수집하여 부가가치를 향상시키는 시스템이다. 판매 시점(point of sale) 또는 구매 시점(point of purchase)은 대금(payment)이 지불됨으로써 물품 거래가 완료되는 장소이다. 일반적으로 컴퓨터 시스템을 이용하여 판매 시점 관리가 이루어지면, 상품의 제조/생산 단계에서 바코드 등을 이용하여 관리의 효율성을 증대한다.
++
+POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,000 달러 (약 7억원) 임계를 초과하는 경우 POS 시스템 투자에 이득이 있다고 하였다.
+
+
+== 참고 링크
+* https://lonelyinvest.com/886[PG,VAN,간편결제 사업구모 공부 및 NHN한국사이버결제 소개]
+* https://12bme.tistory.com/221[POS 시스템 보안 & PG와 VAN의 차이]
+* https://m.blog.naver.com/sum7788/221492533698[격동을 겪고 있는 결제 시장에 비해 돈을 더 벌 수 밖에 없는 구조를 지닌 비자 카드]
+
+
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455[전자금융거래법]
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455&lang=ENG[ELECTRONIC FINANCIAL TRANSACTIONS ACT]
 
@@ -22,43 +536,6 @@
 * https://m.blog.naver.com/book_jockey/220925683346
 * https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
 
-== BIN
-
-Bank Information Number
-
-== VAN
-
-Value Added Network
-
-== PAN
-
-primary Account Number
-
-== POS
-
-Point Of Sales system
-
-== NFC
-
-Fear Field Communication
-
-== Track 2
-
-- ISO/IEC7813
-
-== OTC
-
-One Time Code
-
-== MS
-
-* Magnetic Stripe
-* 마그네틱 카드
-
-== IC
-
-* Integrated Curcuit
-* IC 카드, 카드 내부에 반도체 기반의 직접회로(Integrated Curcuit)을 내장한 카드.
 
 == vs.
 
