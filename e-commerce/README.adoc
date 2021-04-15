@@ -433,6 +433,44 @@ QR 코드를 소비자가 생성하는 방식으로 이를 가맹점주가 스�
 
 * EMV QR Code: https://www.emvco.com/emv-technologies/qrcodes/
 
+== 사업자등록번호
+
+* 번역家가 번역社에서는 Business registration number 정도로 번역하는 것이 통례
+** but, 사업자등록번호란 사업하는 주체에게 세금을 부과하기 위한 고유번호를 의미하며, 이에 대응하는 개념인 Employer ID number^EID^를 쓰는것이 바람직해 보임
+** 외국인에게 Korean EID라고 전하면 쉽게 이해할 수 있음
+* Tax Identification Number^TIN^, Tax ID
+* 나라별로 다를 수도 있음
+** Tax ID, Tax No, Tax Code, TRN^Tax{sp}Registration{sp}No^: Tax 표현을 쓰는 나라
+** USCI^The{sp}United{sp}Social{sp}Credit{sp}Identifier^, OC^Organization{sp}Code^: 중국
+** CNPJ^Cadastro{sp}Nacional{sp}da{sp}Pessoa{sp}Jurídica^ No: 브라질
+** IEC^Importer{sp}Exporter{sp}Code^ No: 인도
+
+.References:
+* https://en.wikipedia.org/wiki/Employer_Identification_Number
+* https://m.blog.naver.com/PostView.nhn?blogId=uwit_biz&logNo=10077266863&proxyReferer=https:%2F%2Fwww.google.com%2F
+* https://m.blog.naver.com/book_jockey/220925683346
+* https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
+
+== vs.
+
+=== Shop, Merchant, Vendor, Retail, Buyer, ...
+
+Shop::
+
+Merchant::
+
+Vendor::
+
+Retail::
+
+Buyer::
+
+.references
+* https://wikidiff.com/retail/merchant
+* https://www.askdifference.com/merchant-vs-vendor/
+* https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
+* https://wikidiff.com/merchant/shopkeeper
+
 == 기타 용어
 
 BIN, Bank Identification Number::
@@ -509,7 +547,8 @@ POS, Point of sale(or purchase) system::
 POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,000 달러 (약 7억원) 임계를 초과하는 경우 POS 시스템 투자에 이득이 있다고 하였다.
 
 
-== 참고 링크
+== References
+
 * https://lonelyinvest.com/886[PG,VAN,간편결제 사업구모 공부 및 NHN한국사이버결제 소개]
 * https://12bme.tistory.com/221[POS 시스템 보안 & PG와 VAN의 차이]
 * https://m.blog.naver.com/sum7788/221492533698[격동을 겪고 있는 결제 시장에 비해 돈을 더 벌 수 밖에 없는 구조를 지닌 비자 카드]
@@ -518,45 +557,4 @@ POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,00
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455[전자금융거래법]
 > - https://elaw.klri.re.kr/kor_service/lawView.do?hseq=44455&lang=ENG[ELECTRONIC FINANCIAL TRANSACTIONS ACT]
 
-== 사업자등록번호
-
-* 번역家가 번역社에서는 Business registration number 정도로 번역하는 것이 통례
-** but, 사업자등록번호란 사업하는 주체에게 세금을 부과하기 위한 고유번호를 의미하며, 이에 대응하는 개념인 Employer ID number^EID^를 쓰는것이 바람직해 보임
-** 외국인에게 Korean EID라고 전하면 쉽게 이해할 수 있음
-* Tax Identification Number^TIN^, Tax ID
-* 나라별로 다를 수도 있음
-** Tax ID, Tax No, Tax Code, TRN^Tax{sp}Registration{sp}No^: Tax 표현을 쓰는 나라
-** USCI^The{sp}United{sp}Social{sp}Credit{sp}Identifier^, OC^Organization{sp}Code^: 중국
-** CNPJ^Cadastro{sp}Nacional{sp}da{sp}Pessoa{sp}Jurídica^ No: 브라질
-** IEC^Importer{sp}Exporter{sp}Code^ No: 인도
-
-.References:
-* https://en.wikipedia.org/wiki/Employer_Identification_Number
-* https://m.blog.naver.com/PostView.nhn?blogId=uwit_biz&logNo=10077266863&proxyReferer=https:%2F%2Fwww.google.com%2F
-* https://m.blog.naver.com/book_jockey/220925683346
-* https://m.blog.naver.com/PostView.nhn?blogId=j-sao&logNo=221476910384&proxyReferer=https:%2F%2Fwww.google.com%2F 
-
-
-== vs.
-
-=== Shop, Merchant, Vendor, Retail, Buyer, ...
-
-Shop::
-
-Merchant::
-
-Vendor::
-
-Retail::
-
-Buyer::
-
-.references
-* https://wikidiff.com/retail/merchant
-* https://www.askdifference.com/merchant-vs-vendor/
-* https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
-* https://wikidiff.com/merchant/shopkeeper
-
-== References
-
-- https://patents.google.com/patent/WO2014092233A1/ko[일회성 카드정보를 이용한 결제 방법] / WO2014092233A1 - Google Patents
+* https://patents.google.com/patent/WO2014092233A1/ko[일회성 카드정보를 이용한 결제 방법] / WO2014092233A1 - Google Patents
