@@ -16,11 +16,19 @@ FYI:: For Your Information
 
 P&L:: Profit and loss, 손익
 
+POD:: 개념 증명(槪念證明, POC, Proof of Concept)
+
 ROI:: Return on Investment, 투자수익률. 금융용어지만 리소스(시간, 비용, 개발) 투자 대비 돌아오는 결과를 나타낼 때에도 사용하는 것 같다. (e.g. "ROI 나오는거야?")
 
 etc.:: ‘기타 등등’이라는 뜻의 etc.는 라틴어 et cetera의 축약형입니다.
 
 vs.:: ‘against’를 뜻하는 vs.는 라틴어 versus의 축약형입니다.
+
+用:: 쓸 용.
+
+社:: 모일 사.
+
+向:: 향할 향.
 
 == Mail
 
