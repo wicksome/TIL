@@ -71,6 +71,16 @@ ____
 ** `If-None-Match`: 날짜 대신 문서에 대한 일련번호와 같이 동작하는 특변한 태그 제공 가능. 이 태그가 서버에 있는 태그와 다를때만 요청을 처리 
 
 
+== 캐시 제어
+
+* `Cache-Control: no-store`: 응답에 해당 값이 있을 경우 캐시가 그 응답의 사본을 만드는 것음 금지함
+* `Cache-Control: no-cache`: 응답에 해당 값이 있을 경우 캐시된 사본을 사용자에게 보여주기 이전에 서버에 재검사를 하도록 강제함
+* `Pragma: no-cache`: HTTP/1.0+와의 하위호환성을 위해 HTTP/1.1에 포함됨. HTTP/1.0 어플리케이션에 대응해야하는 경우가 아니라면 `Cache-Control: no-cache`를 사용해야 함
+* `Cache-Control: max-age=<sec>`: 리소스가 최신 상태라고 판단할 최대 시간을 정함
+* `Cache-Control: s-maxage=<sec>`: 공유 캐시에만 적용
+* https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Expires[`Expires: <http-date>`]: 더 이상 신선하지 않다고 판단할 날짜/시간 지정
+* `Cache-Control: must-revalidate`: 캐시 사용하기 이전에 리소스 상태를 반드시 확인해야함. 만료된 리소스라면 `504 Gateway Timeout error`를 반환.
+
 == etc
 
 * https://ui.toast.com/weekly-pick/ko_20201201
