@@ -58,7 +58,7 @@ ____
 . 발송
 . 로깅
 
-== 최신 캐시 데이터 유지
+== 최신 캐시 데이터 유지(사본을 신선하게 유지하기)
 
 * `Cache-Control`, `Expires` 헤더를 통해 원서버가 각 문서에 유효기간 설정 가능
 * `Cache-Control: max-age=<sec>`: 문서의 최대 나이를 설정함(초 단위서 설정)
@@ -80,6 +80,16 @@ ____
 * `Cache-Control: s-maxage=<sec>`: 공유 캐시에만 적용
 * https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Expires[`Expires: <http-date>`]: 더 이상 신선하지 않다고 판단할 날짜/시간 지정
 * `Cache-Control: must-revalidate`: 캐시 사용하기 이전에 리소스 상태를 반드시 확인해야함. 만료된 리소스라면 `504 Gateway Timeout error`를 반환.
+* 응답이 `Cache-Control: max-age` or `Expires` 헤더 중 어느 것도 포함하지 않는다면 캐시는 경험적인 방법으로(heuristic) 최대 나이를 계산할 것임.
+** 계산 결과 얻은 최대 나이 값이 24시간보다 크면 Heuristic Expiration 경고 헤더가 응답 헤더에 추가되어야 함.
+** 그러나 대게 이 경고 정보를 사용자에게 볼 수 있게 해주는 브라우저는 거의 없음
+* 많은 원 서버들이 아직도 Expires와 max-age 헤더를 생성하지 못함. 캐시의 만료 기본값을 신중하게 선택하라.
+* 클라이언트에서 헤더를 추가하여 강제로 캐시 재검사하거나 서버로부터 가져오게끔 하는 리프레시 버튼이 있음
+
+== 캐시 제어 설정
+
+* 각 웹서버의 모듈 참고
+* [line-through]#`<META HTTP-EQUIV>` 태그를 이용한 HTML 캐시 제어#
 
 == etc
 
