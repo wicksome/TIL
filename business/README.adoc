@@ -14,6 +14,10 @@ FYI:: For Your Information
 
 24/365, 24/7/365:: 24시간 7일 365일 전체를 의미
 
+M/M:: Man Month, 엄밀히 말하면 men per month
+
+NCND:: neither confirm nor deny, 어떠한 시인도 부인도 하지 않음
+
 P&L:: Profit and loss, 손익
 
 POD:: 개념 증명(槪念證明, POC, Proof of Concept)
