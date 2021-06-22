@@ -1,0 +1,8 @@
+= STAR+LP
+
+* Situation
+* Task
+* Action
+* Result
+* Learned
+* Plan
