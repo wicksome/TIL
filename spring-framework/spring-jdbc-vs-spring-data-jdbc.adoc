@@ -1,0 +1,67 @@
+= JDBC 관련 라이브러리 비교
+
+++++
+<p align="center">
+  <img src="https://i.imgur.com/ial4kTJ.jpg">
+  <br>(▲ https://hackmd.io/@ddubson/rkn-sR4wU)
+</p>
+++++
+
+== JDBC
+
+* JDBC 드라이버 로딩, DBMS 연결, SQL 전송 및 결과 반환 등의 처리.
+* 핵심 키워드: `Connection`, `Statement`
+
+== spring-jdbc
+
+[subs="quotes"]
+----
+*org.springframework.boot:spring-jdbc:5.2.9.RELEASE*
+> org.springframework:spring-beans:5.2.9.RELEASE
+> org.springframework:spring-core:5.2.9.RELEASE
+> org.springframework:spring-tx:5.2.9.RELEASE
+----
+
+* JDBC에서 처리하는 데이터베이스 관련 작업들을 스프링 프레임워크로 위임하고, 별도 API를 통해 데이터베이스 연결 및 쿼리 실행을 함.
+* `DataSource` 를 생성하고, `JdbcTemplate` 에 주입하여 사용.
+* `JdbcTemplate` 를 통해 JDBC를 편리하게 사용할 수 있음.
+
+== spring-boot-starter-jdbc
+
+[subs="quotes"]
+----
+*org.springframework.boot:spring-boot-starter-jdbc:2.3.4.RELEASE*
+> com.zaxxer:HikariCP:3.4.5
+> org.springframework.boot:spring-boot-starter:2.3.4.RELEASE
+> org.springframework:spring-jdbc:5.2.9.RELEASE
+----
+
+* spring-jdbc에 대하여 스프링부트 의존성 관리를 한번에 하고자 wrapping된 모듈.
+
+== https://spring.io/projects/spring-data-jdbc[spring-data-jdbc]
+
+[subs="quotes"]
+----
+*org.springframwork.data:spring-data-jdbc:2.0.4.RELEASE*
+> org.slf4j-api:1.7.30
+> org.springframework.data:spring-data-commons:2.3.4.RELEASE
+> org.springframework.data:spring-data-relational:2.0.4.RELEASE
+> org.springframework:spring-beans:5.2.9.RELEASE
+> org.springframework:spring-context:5.2.9.RELEASE
+> org.springframework:spring-core:5.2.9.RELEASE
+> org.springframework:spring-jdbc:5.2.9.RELEASE
+> org.springframework:spring-tx:5.2.9.RELEASE
+----
+
+* https://spring.io/projects/spring-data[Spring Data]의 미션은 데이터 액세스를 위해 친숙하고 일관된 Spring 기반의 프로그래밍 모델을 제공하는 동시에 기본 데이터 저장소의 특수한 특성을 유지하는 것.
+* https://spring.io/projects/spring-data-jdbc[Spring Data JDBC]는 Spring Data의 여러 모듈중 하나로, 말 그대로 JDBC를 지원하는 모듈.
+* `CrudRepository` 를 활용하여 기본적인 CRUD 구현을 쉽게 함.
+
+== https://github.com/naver/spring-jdbc-plus[spring-jdbc-plus]
+
+* https://github.com/naver[네이버]에서 제공하는 Spring Data JDBC 확장 라이브러리.
+
+== References
+
+* https://skyblue300a.tistory.com/7
+* https://brunch.co.kr/@springboot/107
