@@ -7,7 +7,7 @@
 </p>
 ++++
 
-== JDBC
+== https://www.oracle.com/java/technologies/javase/javase-tech-database.html[JDBC]
 
 * JDBC 드라이버 로딩, DBMS 연결, SQL 전송 및 결과 반환 등의 처리.
 * 핵심 키워드: `Connection`, `Statement`
