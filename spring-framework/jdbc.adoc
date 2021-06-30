@@ -12,7 +12,7 @@
 * JDBC 드라이버 로딩, DBMS 연결, SQL 전송 및 결과 반환 등의 처리.
 * 핵심 키워드: `Connection`, `Statement`
 
-== spring-jdbc
+== https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc[spring-jdbc]
 
 [subs="quotes"]
 ----
