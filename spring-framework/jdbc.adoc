@@ -38,6 +38,10 @@
 
 * spring-jdbc에 대하여 스프링부트 의존성 관리를 한번에 하고자 wrapping된 모듈.
 
+== ORM^Object{sp}Relational{sp}Mapping^
+
+TODO
+
 == https://spring.io/projects/spring-data-jdbc[spring-data-jdbc]
 
 [subs="quotes"]
