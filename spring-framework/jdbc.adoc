@@ -61,6 +61,15 @@ TODO
 * https://spring.io/projects/spring-data-jdbc[Spring Data JDBC]는 Spring Data의 여러 모듈중 하나로, 말 그대로 JDBC를 지원하는 모듈.
 * `CrudRepository` 를 활용하여 기본적인 CRUD 구현을 쉽게 함.
 
+== spring-boot-starter-data-jdbc
+
+[subs="quotes"]
+----
+*org.springframework.boot:spring-boot-starter-data-jdbc:2.3.4.RELEASE*
+> org.springframework.boot:spring-boot-starter-jdbc:2.3.4.RELEASE
+> org.springframework.data:spring-data-jdbc:2.0.4.RELEASE
+----
+
 == https://github.com/naver/spring-jdbc-plus[spring-jdbc-plus]
 
 * https://github.com/naver[네이버]에서 제공하는 Spring Data JDBC 확장 라이브러리.
