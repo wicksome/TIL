@@ -569,6 +569,7 @@ POS, Point of sale(or purchase) system::
 +
 POS 시스템의 비용 때문에 이베이 가이드는 연간 소득이 700,000 달러 (약 7억원) 임계를 초과하는 경우 POS 시스템 투자에 이득이 있다고 하였다.
 
+CVM, Cardholder Verification Method:: 본인확인을 얘기하며 No CVM은 무서명거래, 본인확인생략결제 등으로 말한다.
 
 == References
 
