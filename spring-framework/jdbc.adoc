@@ -1,4 +1,7 @@
-= JDBC 관련 라이브러리 비교
+= JDBC with Spring Framework
+:toc:
+
+== JDBC 관련 라이브러리 비교
 
 ++++
 <p align="center">
@@ -7,12 +10,12 @@
 </p>
 ++++
 
-== https://www.oracle.com/java/technologies/javase/javase-tech-database.html[JDBC]
+=== https://www.oracle.com/java/technologies/javase/javase-tech-database.html[JDBC]
 
 * JDBC 드라이버 로딩, DBMS 연결, SQL 전송 및 결과 반환 등의 처리.
 * 핵심 키워드: `Connection`, `Statement`
 
-== https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc[spring-jdbc]
+=== https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc[spring-jdbc]
 
 [subs="quotes"]
 ----
@@ -26,7 +29,7 @@
 * `DataSource` 를 생성하고, `JdbcTemplate` 에 주입하여 사용.
 * `JdbcTemplate` 를 통해 JDBC를 편리하게 사용할 수 있음.
 
-== spring-boot-starter-jdbc
+=== spring-boot-starter-jdbc
 
 [subs="quotes"]
 ----
@@ -38,7 +41,7 @@
 
 * spring-jdbc에 대하여 스프링부트 의존성 관리를 한번에 하고자 wrapping된 모듈.
 
-== ORM^Object{sp}Relational{sp}Mapping^
+=== ORM^Object{sp}Relational{sp}Mapping^
 
 TODO
 
@@ -61,7 +64,7 @@ TODO
 * https://spring.io/projects/spring-data-jdbc[Spring Data JDBC]는 Spring Data의 여러 모듈중 하나로, 말 그대로 JDBC를 지원하는 모듈.
 * `CrudRepository` 를 활용하여 기본적인 CRUD 구현을 쉽게 함.
 
-== spring-boot-starter-data-jdbc
+=== spring-boot-starter-data-jdbc
 
 [subs="quotes"]
 ----
@@ -70,11 +73,18 @@ TODO
 > org.springframework.data:spring-data-jdbc:2.0.4.RELEASE
 ----
 
-== https://github.com/naver/spring-jdbc-plus[spring-jdbc-plus]
+=== https://github.com/naver/spring-jdbc-plus[spring-jdbc-plus]
 
 * https://github.com/naver[네이버]에서 제공하는 Spring Data JDBC 확장 라이브러리.
 
-== References
+=== References
 
 * https://skyblue300a.tistory.com/7
 * https://brunch.co.kr/@springboot/107
+
+== JDBC
+
+* `JdbcTemplate`: 가장 저수준에서 동작하며, Spring 내부적으로 `JdbcTemplate` 을 사용함
+** thread-safe 하므로, DAO등에서 맴버 변수로 저장. `DataSource` 만 외부에서 유입받아 초기화해둘 수 있음.
+** `NamedParameterJdbcTemplate`: `JdbcTemplate` 을 래핑해서 `?` 가 아닌 이름이 붙은 파라미터 사용할 수 있게함.
+* `RowMapper`: `ResultSet`(쿼리 결과)에서 원하는 객체로 타입을 변환하는 역할
