@@ -45,7 +45,7 @@
 
 TODO
 
-== https://spring.io/projects/spring-data-jdbc[spring-data-jdbc]
+=== https://spring.io/projects/spring-data-jdbc[spring-data-jdbc]
 
 [subs="quotes"]
 ----
