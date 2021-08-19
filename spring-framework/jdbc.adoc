@@ -88,3 +88,8 @@ TODO
 ** thread-safe 하므로, DAO등에서 맴버 변수로 저장. `DataSource` 만 외부에서 유입받아 초기화해둘 수 있음.
 ** `NamedParameterJdbcTemplate`: `JdbcTemplate` 을 래핑해서 `?` 가 아닌 이름이 붙은 파라미터 사용할 수 있게함.
 * `RowMapper`: `ResultSet`(쿼리 결과)에서 원하는 객체로 타입을 변환하는 역할
+
+=== References
+
+* https://godekdls.github.io/Spring%20Data%20Access/dataaccesswithjdbc/[Spring Data Access - Data Access with JDBC]
+* https://github.com/benelog/spring-jdbc-tips/blob/master/spring-jdbc-core.md[Spring JDBC의 핵심 사용법]
