@@ -1,4 +1,41 @@
+= Gradle
+
+== Install
+
 [source, bash]
 ----
 brew install gradle
 ----
+
+== `PluginDependencySpec.apply`?
+
+* 현재 프로젝트에 플러그인의 적용 여부를 지정, 설정하지 않으면 프로젝트의 classpath에만 설정.
+* default: `true`
+* 플러그인의 클래스를 재사용하거나 하위 프로젝트에 적용할 때 유용함
++
+[source, gradle]
+----
+plugins {
+   id "org.company.myplugin" version "1.0" apply false
+}
+
+subprojects {
+   if (someCondition) {
+       apply plugin: "org.company.myplugin"
+   }
+}
+----
+
+
+== scope
+
+`core` <- `web-core` <- `web`
+
+=== api
+
+* web에서 `api("web-core")` 하면 `core` 코드까지 사용 가능
+* `core` 수정 시 `web-core`, `web` 빌드
+
+=== implementation
+
+* web에서 `implementation: web-core` 하면  바로 `web-core` 코드만 사용 가능
