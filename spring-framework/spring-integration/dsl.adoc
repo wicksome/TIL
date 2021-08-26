@@ -1,0 +1,26 @@
+= DSL Basics
+
+https://docs.spring.io/spring-integration/reference/html/dsl.html#java-dsl-basics
+
+패키지 `org.springframework.integration.dsl` 에는 앞에서 언급한 `IntegrationFlowBuilder` API와 
+builder이면서 구체적인 endpoint를 구성하기 위한 fluent API를 제공하는 여러 `IntegrationComponentSpec` 구현체가 있습니다.
+`IntegrationFlowBuilder` 구조는 채널^channels^, 엔드포인트^endpoints^, 풀러^pollers^ 및 채널 인터셉터^channel{sp}interceptor^와 같은 
+메세지-기반 어플리케이션을 위한 EIP(enterprise integration patterns)를 제공합니다.
+
+엔드포인트는 가독성을 향상시키기 위해 DSL에서 동사도 표현됩니다. 다음은 공통 DSL 메서드 이름과 연결된 EIP 엔드포인트입니다.
+
+* transform → `Transformer`
+* filter → `Filter`
+* handle → `ServiceActivator`
+* split → `Splitter`
+* aggregate → `Aggregator`
+* route → `Router`
+* bridge → `Bridge`
+
+...
+
+[WARNING]
+.Lambdas And `Message<?>` Arguments
+====
+
+====
