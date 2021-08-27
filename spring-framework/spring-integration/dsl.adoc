@@ -38,9 +38,10 @@ public IntegrationFlow integerFlow() {
 }
 ----
 
-The transform method accepts a lambda as an endpoint argument to operate on the message payload. The real argument of this method is GenericTransformer<S, T>. Consequently, any of the provided transformers (ObjectToJsonTransformer, FileToStringTransformer, and other) can be used here.
+`transform` 메서드는 메시지 페이로드에서 작동하는 엔드포인트 인수를 람다를 허용합니다. 이 메서드의 실제 인수는 `GenericTransformer<S, T>` 입니다.
+따라서 제공된 트랜스포머(`ObjectToJsonTransformer`, `FileToStringTransformer` 등) 중 하나를 여기에서 사용할 수 있습니다.
 
-Under the covers, IntegrationFlowBuilder recognizes the MessageHandler and the endpoint for it, with MessageTransformingHandler and ConsumerEndpointFactoryBean, respectively. Consider another example:
+내부적으로 `IntegrationFlowBuilder` 는 각각 `MessageTransformingHandler` 및 `ConsumerEndpointFactoryBean` 을 사용하여 `MessageHandler` 및 이에 대한 엔드포인트를 인식합니다. 다른 예를 고려하십시오:
 
 [source, java]
 ----
