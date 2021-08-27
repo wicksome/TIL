@@ -1,7 +1,7 @@
 = DSL Basics
 
 |===
-| ver
+| Version
 
 | https://docs.spring.io/spring-integration/reference/html/dsl.html#java-dsl-basics[5.5.3]
 |===
@@ -56,7 +56,6 @@ public IntegrationFlow myFlow() {
 ----
 
 The preceding example composes a sequence of Filter → Transformer → Service Activator. The flow is "'one way'". That is, it does not provide a reply message but only prints the payload to STDOUT. The endpoints are automatically wired together by using direct channels.
-
 
 [WARNING]
 .Lambdas And `Message<?>` Arguments
