@@ -20,7 +20,7 @@ builder이면서 구체적인 endpoint를 구성하기 위한 fluent API를 제�
 개념상으로, 인티그레이션 프로세스는 이러한 엔드포인트를 하나 이상의 메세지 흐름으로 구성하여 작성된다. EIP는 공식적으로 '메세지 흐름'이라는 용어를 정의하진 않았지만, 
 잘 알려진 메세징 패턴을 사용하는 작업 단위로 생각하는 것이 유용하다. DSL은 채널 및 엔드포인트의 구성을 정의하기 위해 `IntegrationFlow` 컴포넌트를 제공하지만,
 현재 `IntegrationFlow` 는 어플리케이션 컨텍스트에서 실제 빈을 채우는 구성 역할만 수행하며 런타임에는 사용되지 않습니다. 그러나 `IntegrationFlow` 를 위한 빈은 
-`IntegrationFlow` 와 관련한 모든 Spring Integration 컴포넌트에 위임된 전체 흐름에 대한 `start()`, `stop()` 을 제어하기 위해 `Lifecycle`로 오토와이어드 될 수 있다.
+`IntegrationFlow` 와 관련한 모든 Spring Integration 컴포넌트에 위임된 전체 흐름에 대한 `start()`, `stop()` 을 제어하기 위해 `Lifecycle` 로 오토와이어드 될 수 있다.
 다음 예제에서는 `IntegrationFlowBuilder` 의 EIP-메서드를 사용하여 `IntegrationFlow` 빈을 정의하기 위해 `IntegrationFlows` 팩토리를 사용합니다.
 
 [source, java]
@@ -57,16 +57,16 @@ The preceding example composes a sequence of Filter → Transformer → Service 
 [WARNING]
 .Lambdas And `Message<?>` Arguments
 ====
-When using lambdas in EIP methods, the "input" argument is generally the message payload. If you wish to access the entire message, use one of the overloaded methods that take a Class<?> as the first parameter. For example, this won’t work:
+EIP 메서드에서 람다를 사용할 때 "input" 인수^argument^는 일반적으로 메세지 페이로드입니다. 전체 메세지에 접근하려면 `Class<?>` 를 첫번째 파라미터로 사용하는 오버로드된 메서드 중 하나를 사용하세요. 예를 들어 다음 코드는 동작하지 않습니다:
 
 [source, java]
 ----
 .<Message<?>, Foo>transform(m -> newFooFromMessage(m))
 ----
 
-This will fail at runtime with a ClassCastException because the lambda doesn’t retain the argument type and the framework will attempt to cast the payload to a Message<?>.
+이는 람다가 인수 타입을 유지하지 않고 프레임워크가 페이로드를 `Message<?>` 로 캐스팅하려고 시도하기 때문에 런타임에 `ClassCastException` 과 함께 실패합니다.
 
-Instead, use:
+대신 다음과 같이 사용하세요:
 
 [source, java]
 ----
