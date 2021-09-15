@@ -1,0 +1,32 @@
+= Spring Data JDCB - Reference Documentation
+:toc:
+
+https://docs.spring.io/spring-data/jdbc/docs/2.2.4/reference/html/[doc]
+
+== Preface
+
+=== 1. Learning Spring
+
+=== 2. Requirements
+
+=== 3. Additional Help Resources
+
+Community Forum::
+
+=== 4. Following Development
+
+=== 5. Project Metadata
+
+* Release repository: https://repo.spring.io/libs-release
+* Milestone repository: https://repo.spring.io/libs-milestone
+* Snapshot repository: https://repo.spring.io/libs-snapshot
+
+=== 6. New & Noteworthy
+
+=== 7. Dependencies
+
+=== 8. Working with Spring Data Repositories
+
+== Refernece Documentation
+
+=== 9. JDBC Repositories
