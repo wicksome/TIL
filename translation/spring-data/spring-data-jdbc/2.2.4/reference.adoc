@@ -1,9 +1,15 @@
-= Spring Data JDCB - Reference Documentation
+= Spring Data JDBC - Reference Documentation
 :toc:
 
 https://docs.spring.io/spring-data/jdbc/docs/2.2.4/reference/html/[doc]
 
 == Preface
+
+Spring Data JDBC 프로젝트는 핵심 스프링 컨셉을 https://docs.spring.io/spring-data/jdbc/docs/2.2.4/reference/html/#jdbc.domain-driven-design[Domain-driven design principles]에 맞춰 JDBC 데이터베이스를 사용하는 솔루션 개발에 적용합니다. 그래서 우리는 Aggregate 저장 및 쿼리를 위한 high-level 추상화로 "template"을 제공합니다.
+
+이 문서는 Spring Data JDBC 지원을 위한 문서이며, 그 개념과 의미 및 구문을 설명합니다.
+
+이 섹션에서는 몇 가지 기본적인 소개를 제공합니다. 문서의 나머지 부분은 Spring Data JDBC 기능만 언급하고 사용자가 SQL 및 스프링 개념을 잘 알고 있다고 가정합니다.
 
 === 1. Learning Spring
 
@@ -30,3 +36,9 @@ Community Forum::
 == Refernece Documentation
 
 === 9. JDBC Repositories
+
+이 장에서는 JDBC를 지원하기 위한 repository의 전문성에 대해 설명합니다. 이 기능은 https://docs.spring.io/spring-data/jdbc/docs/2.2.4/reference/html/#repositories[Working with Spring Data Repositories]에 설명된 코어 레파지토리 지원을 기반으로 합니다. 그러므로 링크에 설명된 기본 개념을 제대로 이해하고 있어야 합니다.
+
+==== 9.1. Why Spring Data JDBC?
+
+
