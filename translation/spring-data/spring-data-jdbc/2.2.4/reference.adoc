@@ -13,6 +13,14 @@ Spring Data JDBC 프로젝트는 핵심 스프링 컨셉을 https://docs.spring.
 
 === 1. Learning Spring
 
+Spring Data는 다음을 포함한 Spring 프레임워크의 https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/core.html#spring-core[core] 기능을 사용합니다.:
+
+* https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/core.html#beans[IoC] container
+* https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/core.html#validation[type conversion system]
+* https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/core.html#expressions[expression language]
+* https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/integration.html#jmx[JMX integration]
+* https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/data-access.html#dao-exceptions[DAO exception hierarchy].
+
 === 2. Requirements
 
 === 3. Additional Help Resources
