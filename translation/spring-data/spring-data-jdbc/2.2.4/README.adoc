@@ -1,0 +1,25 @@
+= https://spring.io/projects/spring-data-jdbc#overview[Spring Data JDBC] `2.2.4`
+
+== Overview
+
+Spring Data의 일부인 Spring Data JDBC는 JDBC 기반 repository들을 쉽게 구현할 수 있게 합니다. 이 모듈은 JDBC 기반의 데이터 엑세스 레이어에 대해서 보다 나은 서포트를 다루며,
+데이터 액세스 기술을 사용하는 Spring 기반 애플리케이션을 더 쉽게 구축할 수 있습니다.
+
+Spring Data JDBC는 개념적으로 쉬운 것을 목표로 합니다. 이를 달성하기 위해 caching, lazy loading, write-behind 등 JPA의 여러 기능들을 제공하지 않습니다.
+이것들은 Spring Data JDBC를 단순하고 제한적이며 독단적인 ORM으로 만듭니다.
+
+== The Aggregate Root
+
+Spring Data 저장소들은 Eric Evans의 책, Domain Driven Design에 설명된 repository에서 영감을 받았습니다. 이것의 한가지 결과는 Aggregate Root 당 repository가 있어야 한다는 점입니다.
+Aggregate Root는 앞서 말한 책에 있는 또 다른 개념이며, Aggregate인 다른 엔티티의 생명주기를 제어하는 엔티티를 말합니다. Aggregate는 Aggregate Root에 대한 메서드 호출간에 일관된 모델의 서브셋입니다.
+
+Spring Data JDBC는 이러한 아이디어에 따라 도메인 모델링을 장려하기 위해 최선을 다합니다.
+
+== Features
+
+* 커스터마이즈할 수 있는 `NamingStrategy` 를 사용하여 단순 집계에 대한 CRUD 오퍼레이션.
+* `@Query` 어노테이션 지원.
+* Mybatis 쿼리 지원.
+* 이벤트.
+* `@EnableJdbcRepositories` 를 도입하여 JavaConfig 기반의 repository 구성.
+
