@@ -1,0 +1,35 @@
+= commands
+
+https://git-scm.com/docs/git-checkout[`checkout`]:: 
+Switch branches or restore working tree files
+
+https://git-scm.com/docs/git-switch[`switch`]::
+Switch branches `2.23.0`
+
+https://git-scm.com/docs/git-restore[`restore`]::
+Restore working tree files `2.23.0`
+
+|===
+| Description | AS-IS | TO-BE
+
+| 신규 브랜치로 교체하기
+| `git checkout -b <new_branch>`
+| `git switch -c <non_existing_branch>`
+
+| 기존 존재하는 브랜치로 변경하기
+| `git checkout <existing_branch>`
+| `git switch <existing_branch>`
+
+| 원격 저장소 브랜치 가져오기
+| `git checkout -b <new_branch> <origin_branch>`
+| `git checkout -t <origin_branch>`
+
+| 수정한 파일 되돌리기
+| `git checkout -- <file>`
+| `git restore <file>`
+
+| 스테이징 되돌리기
+| `git reset HEAD <file>`
+| `git restore --staged <file>`
+
+|===
