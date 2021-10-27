@@ -15,6 +15,9 @@ WHERE ALL_TAB_COLS='payments';
 select *
 from ALL_IND_COLUMNS
 where TABLE_NAME='payments';
+
+-- 버전 조회
+select * from v$version;
 ----
 
 == SEQUENCE
@@ -76,4 +79,7 @@ CREATE TABLE member (
   detail_json VARCHAR2(4000)
   CONSTRAINT ensure_json CHECK (detail_json IS JSON)
 );
+
+-- or
+ALTER TABLE member ADD CONSTRAINT ensure_json CHECK (detail_json IS JSON);
 ----
