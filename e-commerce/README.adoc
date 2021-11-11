@@ -496,6 +496,18 @@ Buyer::
 
 == 기타 용어
 
+AML:: Anti Money Laundering, 자금 세탁 방지. +
+범죄행위로부터 얻은 불법재산을 합법적인 재산인 것처럼 위장하는 과정
+
+STR:: Suspicious Transaction Report, 의심 거래 보고. +
+의심스러운 거래는 감독당국에 보고
+
+TMS:: Transaction Monitoring System, 의심 거래 모니터링. +
+전체 거래를 모니터링하여 분석
+
+CTR:: Currency Transaction Report, 고액현금거래보고. +
+현금 1,000만원 이상의 거래가 발생할 경우 KoFIU/국세청 등에 자동적으로 보고하는 절차
+
 BIN, Bank Identification Number::
 Bank Information Number +
 https://rpgc.com/bins-and-you-a-guide-for-merchants/
