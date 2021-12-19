@@ -1,20 +1,24 @@
 = Hive 데이터 타입
 
-* decimal
+* https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706456#LanguageManualTypes-decimal[`DECIMAL`]
 +
 [source]
 ----
-DECIMAL[(precision[, scale])]
+DECIMAL(precision, scale)
 ----
-** Precision: 소수점 위치에 관계 없이 표현할 수 있는 총 자릿수(1 ~ 38, default: 9).
+** Precision
+*** 소수점 위치에 관계 없이 표현할 수 있는 총 자릿수.
+*** Hive 0.11, 0.12 에서는 38 digits로 고정. scale 기본 값은 0 (소수 없음), precison 기본 값은 10.
 +
 ____
 Introduced in Hive https://issues.apache.org/jira/browse/HIVE-2693[0.11.0] with a precision of 38 digits
 ____
+*** Hive 0.13부터 `DECIMAL(precision, scale)` 구문 사용 가능
 ** Scale: 소수 자릿수. 정밀도보다 작거나 같아야 하며, 기본값은 0.
 +
 ____
 Hive https://issues.apache.org/jira/browse/HIVE-3976[0.13.0] introduced user-definable precision and scale
 ____
-* timestamp: 년월일 시간 취급
+** Hive 3.0.0(HIVE-16764)에서 `NUMERIC` 은 `DECIMAL` 과 동일함
+* `TIMESTAMP`: 년월일 시간 취급
 * date: 년월일 취급
