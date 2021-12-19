@@ -7,6 +7,14 @@
 DECIMAL[(precision[, scale])]
 ----
 ** Precision: 소수점 위치에 관계 없이 표현할 수 있는 총 자릿수(1 ~ 38, default: 9).
++
+____
+Introduced in Hive https://issues.apache.org/jira/browse/HIVE-2693[0.11.0] with a precision of 38 digits
+____
 ** Scale: 소수 자릿수. 정밀도보다 작거나 같아야 하며, 기본값은 0.
++
+____
+Hive https://issues.apache.org/jira/browse/HIVE-3976[0.13.0] introduced user-definable precision and scale
+____
 * timestamp: 년월일 시간 취급
 * date: 년월일 취급
