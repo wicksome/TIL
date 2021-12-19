@@ -22,4 +22,5 @@
 
 === References
 
+* https://www.culture.go.kr/deduction/companyGuide.do[소득공제 대상 사업자]
 * https://bm.cyber.co.kr/download/book_guide.pdf[180725-도서공연비 소득공제 시행Q&A-사업자대상 대외배포.hwp]
