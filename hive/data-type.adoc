@@ -1,0 +1,12 @@
+= Hive 데이터 타입
+
+* decimal
++
+[source]
+----
+DECIMAL[(precision[, scale])]
+----
+** Precision: 소수점 위치에 관계 없이 표현할 수 있는 총 자릿수(1 ~ 38, default: 9).
+** Scale: 소수 자릿수. 정밀도보다 작거나 같아야 하며, 기본값은 0.
+* timestamp: 년월일 시간 취급
+* date: 년월일 취급
