@@ -20,7 +20,7 @@ ____
 Hive https://issues.apache.org/jira/browse/HIVE-3976[0.13.0] introduced user-definable precision and scale
 ____
 ** Hive 3.0.0(HIVE-16764)에서 `NUMERIC` 은 `DECIMAL` 과 동일함
-* `TIMESTAMP`: 년월일 시간 취급
+* https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=82706456#LanguageManualTypes-timestamp[`TIMESTAMP`]: 년월일 시간 취급
 +
 [source, sql]
 .string to timestamp
