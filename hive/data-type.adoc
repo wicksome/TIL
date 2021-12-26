@@ -21,4 +21,21 @@ Hive https://issues.apache.org/jira/browse/HIVE-3976[0.13.0] introduced user-def
 ____
 ** Hive 3.0.0(HIVE-16764)에서 `NUMERIC` 은 `DECIMAL` 과 동일함
 * `TIMESTAMP`: 년월일 시간 취급
-* date: 년월일 취급
++
+[source, sql]
+.string to timestamp
+----
+sql> 
+
+SELECT
+  CAST(FROM_UNIXTIME(UNIX_TIMESTAMP('2021-12-01', 'yyyy-MM-dd')) AS TIMESTAMP) AS ddtn_strt_ymdt,
+  CAST(FROM_UNIXTIME(UNIX_TIMESTAMP('2021-12-11', 'yyyy-MM-dd') + 86399) AS TIMESTAMP) AS ddtn_end_ymdt;
+
+
+result>
+
+| ddtn_strt_ymdt        | ddtn_end_ymdt         |
+|-----------------------|-----------------------|
+| 2021-12-01 00:00:00.0 | 2021-12-11 23:59:59.0 |
+----
+* `DATE`: 년월일 취급
