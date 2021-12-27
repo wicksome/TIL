@@ -88,9 +88,12 @@ ____
 ** 리뷰를 너무 미루지 말자
 *** 코드 리뷰에 집중할 수 있는 시간 확보 필요
 
+=== https://blog.banksalad.com/tech/banksalad-code-review-culture/[코드 리뷰 in 뱅크샐러드 개발 문화] - 뱅크샐러드
+
+
 ---
 
-* https://blog.banksalad.com/tech/banksalad-code-review-culture/[코드 리뷰 in 뱅크샐러드 개발 문화] - 뱅크샐러드
+
 * https://engineering.linecorp.com/ko/blog/effective-codereview/[효과적인 코드 리뷰를 위해서] - LINE
 * https://techblog.woowahan.com/2712/[코드리뷰가 쏘아올린 작은공] - 우아한형제들
 * https://www.youtube.com/watch?v=FJNV_qoRRks[CodeReview에대해] - 11st
