@@ -19,6 +19,12 @@
 
 * "코드리뷰란, 한 명 또는 여러 명의 개발자가 본인이 만들지 않은 코드의 내용을 점검(examining)하고, 피드백을 주는 과정을 말합니다."
 * 코드에 대한 책임이 모두에게 있다는 문화를 만드는 목적
+* 코드 컴플릿(Code Complete)의 저자 스티브 맥코넬은 책에서 다음과 같은 실험결괄르 통해 코드리뷰의 중요성을 강조함
++
+[quote, https://www.amazon.com/Code-Complete-Practical-Handbook-Construction/dp/0735619670/ref=sr_1_1?ie=UTF8&qid=1537771351&sr=8-1&keywords=code+complete[by Steve McConnell (Code Complete)]]
+----
+소프트웨어를 유지보수하는 조직에서 코드 한 줄을 변경한다고 했을 때, 코드리뷰가 도입되기 전에는 그러한 변경의 55% 정도가 문제를 일으켰다. 그러나 리뷰 과정이 도입된 이후에는 그러한 변경의 2% 정도에서만 문제가 발생했다.
+----
 
 ---
 
