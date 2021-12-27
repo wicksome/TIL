@@ -7,6 +7,13 @@
 
 .1
 * https://www.samsungsds.com/kr/insights/global_code_review.html[글로벌기업은 코드 리뷰를 어떻게 할까요?] - SAMSUNG SDS
+** Google은 https://google.github.io/eng-practices/review/[코드 리뷰 개발자 가이드]를 통해 주요 원칙을 정함
+** Google은 코드 리뷰가 요청되고나서 1영업일 이내에 반드시 완료되어야 하는 것을 원칙으로 함 → 코드 리뷰가 늦어지면 팀 전체의 개발 일정이 문제가 된다고 판단
+** Google의 코드 리뷰는 작은 변경은 1시간 이내, 큰 변경은 5시간 이래에 검토가 완료됨. (평균 4시간)
+** Google의 코드 리뷰의 90%는 10개 미만의 파일로 구성되며, 리뷰의 75%는 리뷰어가 한명뿐.
+*** 주요 부분을 작게 나누어 리뷰할 수 있도록 변경 요구사항(Change List; CL)을 여러 개의 CL로 분할한 다음 적절한 순서로 살펴보도록 권장함
+** Microsoft의 개발자라면 매일 코드 리뷰를 해야함
+** Microsoft의 전체 개발자중 75%가 매일 코드 리뷰를 하고 있다고 함
 * https://blog.logi-spot.com/%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0%EC%9D%98-%EC%A7%84%EC%A7%9C-%EB%AA%A9%EC%A0%81%EC%9D%80-%EB%94%B0%EB%A1%9C%EC%9E%88%EB%8B%A4/[코드리뷰의 진짜 목적은 따로있다] - LOGISPOT
 * https://blog.banksalad.com/tech/banksalad-code-review-culture/[코드 리뷰 in 뱅크샐러드 개발 문화] - 뱅크샐러드
 * https://engineering.linecorp.com/ko/blog/effective-codereview/[효과적인 코드 리뷰를 위해서] - LINE
