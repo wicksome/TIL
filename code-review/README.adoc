@@ -1,0 +1,37 @@
+= 코드리뷰
+:tod:
+
+== References
+
+.1
+* https://www.samsungsds.com/kr/insights/global_code_review.html[글로벌기업은 코드 리뷰를 어떻게 할까요?] - SAMSUNG SDS
+* https://blog.logi-spot.com/%EC%BD%94%EB%93%9C%EB%A6%AC%EB%B7%B0%EC%9D%98-%EC%A7%84%EC%A7%9C-%EB%AA%A9%EC%A0%81%EC%9D%80-%EB%94%B0%EB%A1%9C%EC%9E%88%EB%8B%A4/[코드리뷰의 진짜 목적은 따로있다] - LOGISPOT
+* https://blog.banksalad.com/tech/banksalad-code-review-culture/[코드 리뷰 in 뱅크샐러드 개발 문화] - 뱅크샐러드
+* https://engineering.linecorp.com/ko/blog/effective-codereview/[효과적인 코드 리뷰를 위해서] - LINE
+* https://techblog.woowahan.com/2712/[코드리뷰가 쏘아올린 작은공] - 우아한형제들
+* https://www.youtube.com/watch?v=FJNV_qoRRks[CodeReview에대해] - 11st
+** 신입보단 경력자가 보는 게 좋아보임
+** https://fastcampus.co.kr/dev_red_bcr[백발의 개발자를 꿈꾸며: 코드리뷰, 레거시와 TDD] - 패스트캠퍼스 (유료강의)
+* [카카오스토리 팀의 코드 리뷰 도입 사례 – 코드 리뷰, 어디까지 해봤니?](https://tech.kakao.com/2016/02/04/code-review/) - 카카오
+* [코드 리뷰를 대하는 개발자의 자세](https://blog.linewalks.com/archives/7128) - linewalks
+* [코드 리뷰 이야기(1)](https://www.popit.kr/%ec%bd%94%eb%93%9c-%eb%a6%ac%eb%b7%b0-%ec%9d%b4%ec%95%bc%ea%b8%b0-1/) - popit
+* [코드 리뷰 이야기(2)](https://www.popit.kr/%EC%BD%94%EB%93%9C-%EB%A6%AC%EB%B7%B0-%EC%9D%B4%EC%95%BC%EA%B8%B02/) - popit
+
+.2
+* [매끄러운 '코드 리뷰'를 돕는 10가지 방법](https://www.bloter.net/newsView/blt201509170001) - 블로터
+* [구글의 코드 리뷰 가이드](https://soojin.ro/review/) - 개인 블로그
+* [SW개발, 제대로 된 코드리뷰가 힘든 이유](https://zdnet.co.kr/view/?no=20131223174623) - ZDNet
+
+.3
+* [좋은 고드리뷰에 대한 고찰](https://veluxer62.github.io/explanation/consideration-of-good-code-review/)
+* [코드 리뷰프로세스를 도입/개선하고자 하는데 어떻게 해야할까요?](https://medium.com/elecle-bike/%EC%BD%94%EB%93%9C-%EB%A6%AC%EB%B7%B0%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4%EB%A5%BC-%EB%8F%84%EC%9E%85-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B3%A0%EC%9E%90-%ED%95%98%EB%8A%94%EB%8D%B0-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%B4%EC%95%BC%ED%95%A0%EA%B9%8C%EC%9A%94-1e5df5f8949b)
+* [개발자들이 코드리뷰를 하는 이유](https://greypencil.tistory.com/141)
+* [코드 리뷰는 어떻게 하나요?](http://sv-story.blogspot.com/2013/04/blog-post_28.html)
+* [[개발문화탐구] 코드리뷰 (Code Review)](https://blog.sonim1.com/228)
+* [코드 리뷰 가이드](https://edykim.com/ko/post/code-review-guide/)
+** https://github.com/thoughtbot/guides/blob/main/code-review/README.md 번역
+* [PR / 코드 리뷰는 어떻게 하는게 좋을까?](https://android-blog.dev/68)
+* [코드 리뷰 - 1. 코드 리뷰 기법들에 대한 소개](https://bcho.tistory.com/276) - 조대협의 블로그(개인 블로그)
+* [클린 코드를 위한 코드 리뷰](https://huni.org/%ED%81%B4%EB%A6%B0-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%BD%94%EB%93%9C-%EB%A6%AC%EB%B7%B0-4687714dc830)
+* [늦어지는 코드 리뷰 문화 개선하기](https://brunch.co.kr/@algocare/7)
+* [코드 리뷰: 어떻게 해야 할까?](https://technical-leader.tistory.com/61) 
