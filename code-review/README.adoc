@@ -90,6 +90,31 @@ ____
 
 === https://blog.banksalad.com/tech/banksalad-code-review-culture/[코드 리뷰 in 뱅크샐러드 개발 문화] - 뱅크샐러드
 
+* "코드 리뷰란 개발자가 작성한 코드를 다른 사람들이 검토하고 피드백을 전달하며, 다시 작성자가 반영하는 과정을 말합니다."
+* 코드 리뷰 프로세스는 팀의 규모, 업무 진행 방식, 회사의 특성에 따라 다양한 방식으로 진행됨
+** 그러므로, 코드 리뷰 프로세스를 보는 것은 그 회사의 개발 문화를 이해할 수 있는 힌트가 되기도 함
+* 비동기 커뮤니케이션
+** Jira, Slack, 메일등을 활용하므로 개인의 업무시간을 존중
+** 커뮤니케이션 비용을 줄임
+* GitHub PR을 통해 코드리뷰 진행
+** Approce, Comment, Request Changes 명확하게 표현 가능
+* 작은 PR 규칙
+** 코드 리뷰 문화가 성숙해지기 전엔 LoC 규칙이 없었음
+** LoC가 길어질수록 리뷰어의 집중도 저하, 이해 시간 증가, 리뷰 목표 일정 미완료 → 병목
+** "1개 PR은 1,000 라인을 넘을 수 없다"
+** 계속 구체화해나감
+*** PR, Commit의 단위는 최소의 기능 단위로 세분화한다.
+*** 테스트 코드는 제한을 두지 않음
+* https://blog.banksalad.com/tech/birth-of-a-genuine-experiment-organization/[실험 플랫폼]
+** 커밋이 작아지니 브랜치 전략을 커스터마이징해 실험 조직에서 다양한 실험을 해볼 수 있게됨
+* Low Context 커뮤니케이션을 지향하는 문화
++
+[quote]
+____
+뱅크샐러드는 저 문맥(Low Context) 커뮤니케이션을 지향합니다. 질문을 하거나 대답을 할 때, 내가 알고 있는 것을 상대방도 알고 있을 것이라는 가정을 하지 않고 충분한 문맥을 전달해야 한다는 의무를 가집니다. 상대방의 의도를 파악하기 위한 추가적인 커뮤니케이션 또는 미스 커뮤니케이션으로 발생하는 비용을 매우 비싼 비용이라는 문제의식을 갖고 있습니다.
+____
+* TODO
+
 === https://engineering.linecorp.com/ko/blog/effective-codereview/[효과적인 코드 리뷰를 위해서] - LINE
 === https://techblog.woowahan.com/2712/[코드리뷰가 쏘아올린 작은공] - 우아한형제들
 === https://www.youtube.com/watch?v=FJNV_qoRRks[CodeReview에대해] - 11st
