@@ -23,6 +23,8 @@
 
 image:https://docs.microsoft.com/ja-jp/azure/hdinsight/media/hdinsight-hadoop-hive-out-of-memory-error-oom/hive-out-of-memory-error-oom-tez-container-memory.png[tez config]
 
+image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B15831A51F/image-dimensions/2500?v=v2&px=-1[tez properties]
+
 * AM(Application Master) 설정
 ** `tex.am.resource.memory.mb=2048`: AM의 메모리
 ** `tex.am.java.opts=-Xmx1600m`: AM이 사용할 힙-메모리 사이즈(`tex.am.resource.memory.mb` 의 80%)
