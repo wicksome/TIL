@@ -18,11 +18,12 @@ SET hive.auto.convert.join;
 SET hive.tez.container.size;
 ----
 
-* `hive.auto.convert.join=true`: 맵-조인시 사용.
+* `hive.auto.convert.join=true`: 맵-조인시 사용. (default: `true`)
 * `hive.auto.convert.join.noconditionaltask.size=100000000`: 메모리 사이즈(기본 10MB)
 + 
 메모리에 올라가는 데이터 기준 사이즈이므로, 파일의 사이즈와는 다름. `desc formatted` 로 테이블 정보를 확인하여 화깅ㄴ할 수 있는 테이블 파라미터의 `rawDataSize` 기준으로 설정해야 함.
 Tez 컨테이너의 1/3 권장.
+* `hive.mapjoin.smalltable.filesize`: 조인할때 작은 테이블인지 판단하는 기준. 기본 25MB
 
 === Yarn
 
