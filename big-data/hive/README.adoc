@@ -3,6 +3,12 @@
 
 == HiveQL
 
+== Zeppelin
+
+> 제플린
+
+* notebook 안에 여러 paragraph 
+
 == Configuration
 
 [source, sql]
@@ -100,9 +106,3 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 
 .References
 * https://wikidocs.net/23573
-
-== Zeppelin
-
-> 제플린
-
-* notebook 안에 여러 paragraph 
