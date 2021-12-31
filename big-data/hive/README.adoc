@@ -55,7 +55,7 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 * 컨테이너 설정
 ** `hive.tez.container.size=2048`: tez 작업을 진행하는 컨테이너의 크기
 +
-일반적으로 YARN 컨테이너 크기(`yarn.scheduler.minimum-allocation-mb`)와 같거나 1~2배수이며, `yarn.scheduler.maximum-allocation-mb` 보다 초과해서는 안됨.
+일반적으로 YARN 컨테이너 크기와 같거나 1~2배수이며, `yarn.scheduler.maximum-allocation-mb` 보다 초과해서는 안됨.
 ** `tez.task.resource.memory.mb`: Tez 컨테이너에서 시작된 작업이 사용하는 메모리 크기. 기존값은 1024MB.
 ** `hive.tez.java.opts=-Xmx1600m`: 컨테이너에서 사용할 수 있는 힙메모리 크기(`hive.tez.container.size` 의 80%)
 ** `tez.runtime.io.sort.mb=800`: 출력 결괄르 정렬해야 할 때 사용할 메모리(`hive.tez.container.size` 의 40%)
