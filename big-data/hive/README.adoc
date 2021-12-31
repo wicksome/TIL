@@ -1,4 +1,5 @@
 = Hive
+:toc:
 
 == 설정
 
@@ -37,6 +38,9 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 ** `tez.runtime.io.sort.mb=800`: 출력 결괄르 정렬해야 할 때 사용할 메모리(`hive.tez.container.size` 의 40%)
 ** `hive.auto.convert.join.noconditionaltask.size=600`: 맵조인에 사용하는 메모리(`hive.tez.container.size` 의 33%)
 
-
 .References
 * https://wikidocs.net/23573
+
+== Zeppelin
+
+* notebook 안에 여러 paragraph 
