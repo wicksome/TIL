@@ -42,6 +42,8 @@
 **** 열심히는 누구나
 **** 잘 / 성장
 
+image:no-thanks-were-too-busy.jpeg[]
+
 image:https://martinfowler.com/articles/preparatory-refactoring-example/jessitron.png[link="https://martinfowler.com/articles/preparatory-refactoring-example.html"]
 
 [quote, Benjamin Barber]
