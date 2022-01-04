@@ -41,4 +41,15 @@
 *** 내가 제어할 수 있는 것에 집중 필요
 **** 열심히는 누구나
 **** 잘 / 성장
+
+image:https://martinfowler.com/articles/preparatory-refactoring-example/jessitron.png[link="https://martinfowler.com/articles/preparatory-refactoring-example.html"]
+
+[quote, Benjamin Barber]
+____
+I don't divide the world into the weak and the stong, or the successes and failures...
+I devide the world into the learners and non-learners.
+____
+
+* 세상을 배우는 사람과 배우지 않는 사람으로 나눈다.
+
 * 좋은 리더가 되려면?
