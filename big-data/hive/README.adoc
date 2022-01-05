@@ -98,7 +98,7 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 | 컨테이너에서 사용할 수 있는 힙메모리 크기(`hive.tez.container.size` 의 80%)
 
 | `tez.task.resource.memory.mb`
-a| 작업에서 사용할 메모리 크기(MB). 모든 vertex의 모든 작업에 적용됨. 모든 작업에 동일한 값으로 적용하면 컨테이너 재사용에 도움이 되므로 일반적으로 성능에 좋음.
+a| 작업에서 사용할 메모리 크기(MB). 모든 vertex의 모든 작업에 적용됨. 모든 작업에 동일한 값으로 적용하면 컨테이너 재사용에 도움이 되므로 일반적으로 성능에 좋음. (default: 1024)
 
 Vertex:: 사용자 로직을 실행하는 데 필요한 리소스 및 환경을 정의합니다. 사용자는 작업의 각 단계별로 Vertex 개체를 만들고 DAG에 추가합니다.
 
