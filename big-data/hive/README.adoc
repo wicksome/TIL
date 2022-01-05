@@ -74,10 +74,10 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 |===
 | 설정 | 설명
 
-| `tex.am.resource.memory.mb=2048`
+| `tez.am.resource.memory.mb=2048`
 | AM의 메모리
 
-| `tex.am.java.opts=-Xmx1600m`
+| `tez.am.java.opts=-Xmx1600m`
 | AM이 사용할 힙-메모리 사이즈(`tex.am.resource.memory.mb` 의 80%)
 |===
 
