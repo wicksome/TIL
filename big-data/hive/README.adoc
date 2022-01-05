@@ -97,6 +97,11 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 |`hive.tez.java.opts=-Xmx1600m`
 | 컨테이너에서 사용할 수 있는 힙메모리 크기(`hive.tez.container.size` 의 80%)
 
+| `tez.task.resource.memory.mb`
+a| 작업에서 사용할 메모리 크기(MB). 모든 vertex의 모든 작업에 적용됨. 모든 작업에 동일한 값으로 적용하면 컨테이너 재사용에 도움이 되므로 일반적으로 성능에 좋음.
+
+Vertex:: 사용자 로직을 실행하는 데 필요한 리소스 및 환경을 정의합니다. 사용자는 작업의 각 단계별로 Vertex 개체를 만들고 DAG에 추가합니다.
+
 | `tez.runtime.io.sort.mb=800`
 | 출력 결과를 정렬해야 할 때 사용할 메모리(`hive.tez.container.size` 의 40%)
 
@@ -107,3 +112,4 @@ image:https://community.cloudera.com/t5/image/serverpage/image-id/12674iB463D7B1
 
 .References
 * https://wikidocs.net/23573
+* https://tez.apache.org/releases/0.8.2/tez-api-javadocs/configs/TezConfiguration.html[TezConfiguration]
