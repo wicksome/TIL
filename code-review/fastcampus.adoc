@@ -227,7 +227,39 @@ ____
 
 == 코드리뷰
 
-* 상호성장할 수 있는 코드리뷰 기법
+=== 왜 코드리뷰를 해야 하나?
+
+* 대충 안다. 왜 하는지에 대해서 설명해줬으면...
+* 시장과 비지니스의 요구사항
+** 시장은 VUCA(Volatile, Uncertain, Complex and Ambiguous) 환경
+** 사업은 더 빨리, 혁신적으로
+** 개발은 더 빠르게, 더 자주, 더 안정적으로 배포해야 함
+*** CI/CD에서 문제 없었다고 안정적일 수는 없음
+* 배포별 개발 리소스 증가
++ image:https://miro.medium.com/max/1400/1*XnKchZ-i7gbtvaDfQKnmJw.png[]
+* 배포횟수의 생산성
++
+image:https://miro.medium.com/max/1400/1*3OEgLiNnZ-33MvxO5rZz-g.png[]
+* 배포별 라인당 개발 비용
++
+image:https://miro.medium.com/max/1400/1*xVjf850sWUaopX8UvWxZ4w.png[]
+* 배포별 생산성
++
+image:https://miro.medium.com/max/1400/1*f2CcfUVs4L7IJNuiGiEzGw.png[]
++
+** 새로운 기능을 추가해야하므로 생선성이 100%
+** 시간이 지날수록 기존코드를 읽는데 시간을 소비함
+
+image:https://www.sandimetz.com/s/012-designStaminaGraph.gif[]
+
+
+=== 코드 리뷰의 정의 / 목적 / 절차
+
+=== 왜 코드리뷰가 어려운가?
+
+=== 기법들
+
+=== 추가적인 사례
 
 == 레거시와 리팩토링
 
