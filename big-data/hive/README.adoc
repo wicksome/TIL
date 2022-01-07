@@ -3,6 +3,19 @@
 
 == HiveQL
 
+[source, diff]
+----
+SEELCT *
+FROM (
+  SELECT ...
+  FROM
+- )
++ ) AS tmp <1>
+WHERE ...
+GROUP BY ...
+----
+<1> `FROM` 절 안에 있는 서브쿼리에 `AS` 없으면 에러 발생
+
 == Zeppelin
 
 > 제플린
