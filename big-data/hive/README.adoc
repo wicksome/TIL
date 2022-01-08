@@ -3,6 +3,28 @@
 
 == HiveQL
 
+=== row_number
+
+[source, sql]
+----
+SELECT
+  ROW_NUMBER() OVER(ORDER BY name ASC) AS rno, // 1
+  *
+FROM database.table
+----
+<1> https://hivemall.incubator.apache.org/userguide/tips/rowid.html
+
+[source, sql]
+----
+SELECT
+  ROW_NUMBER() OVER(ORDER BY (SELECT 0)) AS rno, // 1
+  *
+FROM database.table
+----
+<1> https://www.mytecbits.com/microsoft/sql-server/row-number-without-using-order-by
+
+=== subquery 에러
+
 [source, diff]
 ----
 SEELCT *
