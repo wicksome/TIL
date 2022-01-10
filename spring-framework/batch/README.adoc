@@ -214,3 +214,9 @@ https://docs.spring.io/spring-batch/docs/current/reference/html/common-patterns.
 * https://kwonnam.pe.kr/wiki/springframework/batch
 * https://jamong-icetea.tistory.com/228
 * https://balhae79.tistory.com/376
+
+== 노트
+
+* `chunk` 사이즈: 한번에 처리될 트랜잭션 단위 (spring batch)
+* `fetchSize`: JDBC로 DB에서 한번에 가져올 데이터 양
+
