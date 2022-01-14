@@ -5,13 +5,26 @@
 
 [plantuml]
 ....
-activate HW
-rnote over HW : Fill buffer 0
-HW -> IRQ
-deactivate HW
-IRQ -[hidden]> HW
-activate HW
-rnote over HW : Fill buffer 1
-HW -> IRQ
-deactivate HW
+@startuml
+
+A -> B: choice
+activate B
+alt case1
+  ...
+  B -> B: proc
+  B --> A: res
+  deactivate B
+else 
+  B -[hidden]-> B
+  activate B
+  ...
+  B -> B: proc
+  B -> C: api
+  activate C
+  c --> B: res
+  deactivate C
+  B --> A: res
+  deactivate B
+end
+@enduml
 ....
