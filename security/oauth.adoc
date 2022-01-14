@@ -188,6 +188,13 @@ ditaa
 @enduml
 ----
 
+* JavaScript 애플리케이션에서 많이 사용됨
+* access token이 노출되는 것을 전제로 함
+* refresh token을 지원하지 않음
+* 인증용 웹페이지에 접근하여 로그인/동의하고, 전달받은 리다이렉트 URL로 access token을 전달하는 것으로 이해함
+** 그럼, 모바일에서는 redirect 처리를 어떻게 할 것인지?
+** redirect url을 전달받으면 변경될 가능성이 있으므로 별도 개발자센터를 통해서 전달받은 URL로 리다이렉트해줘야 할 것으로 보임
+
 === Resource Owner Password Credentials
 
 [plantuml]
@@ -231,6 +238,7 @@ ditaa
      +---------+                                  +---------------+
 @enduml
 ----
+
 == Etc
 
 User:: 서비스 제공자와 소비자를 사용하는 계정을 가지고 있는 개인
