@@ -190,7 +190,14 @@ ditaa
 
 * JavaScript 애플리케이션에서 많이 사용됨
 * access token이 노출되는 것을 전제로 함
+** PKCE(Proof Key for Code Exchange)
++
+[quote, https://www.ibm.com/docs/ko/sva/9.0.7?topic=support-proof-key-code-exchange]
+____
+PKCE(Proof Key for Code Exchange) 지원은 모바일 디바이스에서 권한 코드 플로우를 수행할 때 보안을 추가하는 기능(RFC 7636에 정의됨)입니다.
+____
 * refresh token을 지원하지 않음
+** 이것을 가로채 사용자의 상호작용 없이 갱신이 가능하므로?
 * 인증용 웹페이지에 접근하여 로그인/동의하고, 전달받은 리다이렉트 URL로 access token을 전달하는 것으로 이해함
 ** 그럼, 모바일에서는 redirect 처리를 어떻게 할 것인지?
 ** redirect url을 전달받으면 변경될 가능성이 있으므로 별도 개발자센터를 통해서 전달받은 URL로 리다이렉트해줘야 할 것으로 보임
