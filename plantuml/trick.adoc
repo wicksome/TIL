@@ -1,0 +1,17 @@
+= PlantUML tricks
+:toc:
+
+== alt 에서 activate 이어지는 듯한 느낌 만들기
+
+[plantuml]
+....
+activate HW
+rnote over HW : Fill buffer 0
+HW -> IRQ
+deactivate HW
+IRQ -[hidden]> HW
+activate HW
+rnote over HW : Fill buffer 1
+HW -> IRQ
+deactivate HW
+....
