@@ -1,3 +1,1 @@
-[study design patterns in blog](https://wickso.me/tags/design-pattern/)
-
-![Design Pattern Relationships](http://r3dux.org/wp-content/uploads/2011/06/DesignPatternRelationships.png)
+![image](https://user-images.githubusercontent.com/5036939/151174407-d8391bdc-c53f-46a0-aaa9-8c584e46843f.png)
