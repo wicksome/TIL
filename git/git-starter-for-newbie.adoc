@@ -25,3 +25,4 @@
 .. git을 통해 어떻게 협업이 되고있는가?
 ... github enterprise
 .. git을 어떻게 활용하는가?
+https://blog.outsider.ne.kr/849
