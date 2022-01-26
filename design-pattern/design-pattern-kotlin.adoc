@@ -308,3 +308,10 @@ interface Element {
 
 
 ```
+
+
+== References
+
+* https://github.com/dbacinski/Design-Patterns-In-Kotlin
+* https://bearhunter49.tistory.com/16
+* https://drkein.github.io/kotlin/2018/03/20/kotlin_design_patterns/
