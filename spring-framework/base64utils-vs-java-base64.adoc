@@ -1,1 +1,84 @@
+= Base64Utils vs. java.util.Base64
 
+[NOTE]
+.Package
+====
+* https://docs.spring.io/spring-framework/docs/5.3.9/javadoc-api/org/springframework/util/Base64Utils.html[`org.springframework.util.Base64Utils`] (5.3.9 버전 기준)
+* `java.util.Base64`
+====
+
+* `Base64Utils` 의 Javadoc을 보면 아래와 같이 나와있음
++
+[source, java]
+----
+/**
+ * A simple utility class for Base64 encoding and decoding.
+ *
+ * <p>Adapts to Java 8's {@link java.util.Base64} in a convenience fashion.
+ *
+ * @author Juergen Hoeller
+ * @author Gary Russell
+ * @since 4.1
+ * @see java.util.Base64
+ */
+public abstract class Base64Utils {
+  ...
+}
+----
+* 즉, Java 8의 Base64를 보다 편리한 방법으로 wrapping한 유틸리티.
+* 실제 내부 코드를 보면 Base64를 사용하고 있음
++
+[source, java]
+----
+/**
+ * Base64-encode the given byte array.
+ * @param src the original byte array
+ * @return the encoded byte array
+ */
+public static byte[] encode(byte[] src) {
+  if (src.length == 0) {
+    return src;
+  }
+  return Base64.getEncoder().encode(src);
+}
+
+/**
+ * Base64-decode the given byte array.
+ * @param src the encoded byte array
+ * @return the original byte array
+ */
+public static byte[] decode(byte[] src) {
+  if (src.length == 0) {
+    return src;
+  }
+  return Base64.getDecoder().decode(src);
+}
+
+/**
+ * Base64-encode the given byte array using the RFC 4648
+ * "URL and Filename Safe Alphabet".
+ * @param src the original byte array
+ * @return the encoded byte array
+ * @since 4.2.4
+ */
+public static byte[] encodeUrlSafe(byte[] src) {
+  if (src.length == 0) {
+    return src;
+  }
+  return Base64.getUrlEncoder().encode(src);
+}
+
+/**
+ * Base64-decode the given byte array using the RFC 4648
+ * "URL and Filename Safe Alphabet".
+ * @param src the encoded byte array
+ * @return the original byte array
+ * @since 4.2.4
+ */
+public static byte[] decodeUrlSafe(byte[] src) {
+  if (src.length == 0) {
+    return src;
+  }
+  return Base64.getUrlDecoder().decode(src);
+}
+----
