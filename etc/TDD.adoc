@@ -1,0 +1,15 @@
+= TDD
+
+== unit test
+
+* given/when/then 템플릿
+
+== test double, 대역
+
+* stub: 구현을 최대한 단순한 것으로 대체
+* fake: 기능을 구현해서 진짜와 유사하게 동작(경량 버전)
+** like 인메모리 디비?를 사용한 repository
+* spy: 호출된 내역을 기록
+** 나중에 이런 파라미터가, 이렇게 호출되었구나 검증
+* mock 객체: 기대한대로 상호작용하는지 행위를 검증
+** stub, spy도 할 수 있어서 mock 객체를 만들어서 stub, spy로 사용할 수 있음
