@@ -1,7 +1,7 @@
 = Kotlin 
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2020-03-01T15:09:00+09:00
-:toc:
+:toc: left
 :source-highlighter: highlight.js
 
 ====
@@ -3017,3 +3017,8 @@ https://kotlinlang.org/docs/reference/whatsnew14.html
 
 * Gradle
 * `fun interface` 
+
+== Code Quality Tools
+
+* https://github.com/detekt/detekt[detekt/detekt] (디텍ㅌ)
+* https://github.com/pinterest/ktlint[pinterest/ktlint]
