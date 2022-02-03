@@ -494,6 +494,7 @@ Buyer::
 * https://www.merchantinspired.com/single-post/2017/06/21/Merchant-vs-Buyer
 * https://wikidiff.com/merchant/shopkeeper
 
+[glossary]
 == 기타 용어
 
 AML:: Anti Money Laundering, 자금 세탁 방지. +
