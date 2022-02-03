@@ -2,7 +2,10 @@
 Yeongjun Kim <opid911@gmail.com>
 :revdate: 2020-03-01T15:09:00+09:00
 :toc: left
+:toclevels: 1
 :source-highlighter: highlight.js
+:sectnums:
+:sectnumlevels: 1
 
 ====
 아래 교재 및 문서를 보고 공부한 내용을 정리한 공간입니다.
@@ -25,7 +28,7 @@ Yeongjun Kim <opid911@gmail.com>
 
 == Type
 
-[source, kt]
+[source, kotlin]
 ----
 val name: String = "yeongjun" // value (read-only)
 var nickname: String = "jun" // variable
@@ -801,7 +804,7 @@ fun runSimulation(
 * Kotlin 라이브러리에 있는 표준 함수는 보편적으로 사용할 수 있는 유틸리티 함수이며, 람다를 인자로 받아 동작한다.
 ** (`Standard.kt` 에 있어서 표준 함수라고 말한 것 같다)
 ** 표준 함수는 내부적으로 확장 함수^extension{sp}function^이며, 확장 함수를 실행하는 주체를 수신자 또는 **수신자 객체**라고 한다.
-* 원칙적으로 중첩은 하지 않는 것이 좋다.
+* **원칙적으로 중첩은 하지 않는 것이 좋다.**
 ** 스코프 함수가 중첩되면 코드의 가독성이 떨어지고 파악하기 어려워 진다.
 ** 수신자 객체의 람다에 수신 객체가 암시적으로 전달되는 `apply`, `run`, `with` 는 중첩하지 말아라.
 *** 위 함수들은 수신 객체를 `this` 또는 생략하여 사용하며, 수신 객체 이름을 다르게 지정할 수 없으므로 혼동하기 쉬워진다.
@@ -822,9 +825,55 @@ fun runSimulation(
 |===
 <1> param이 lambda일 때 lambda에 전달되는 파라미터를 의미한다.
 
+[NOTE]
+.사용하면 괜찮은 예
+====
+* `let`
+** `null` 이 아닌 객체에서 람다 실행시
+** 로컬 범위에서 표현식을 실행하고자 할 때
+* `apply`
+** 상태를 가진 객체를 초기화/설정할 때
+* `run`
+** 객체 설정 및 결과를 계산할 떄
+* `with`
+** 객체에 대한 그룹화 및 함수 호출시
+** '이 객체를 사용하여 다음을 수행합니다'를 표현하고자 할 때
+* `also`
+** 추가 효과
+* `takeIf`
+* `takeUnless`
+====
+
 ==== it vs this
 
-TODO
+* 스코프가 다름
+* `it` 을 파라미터로 받을 경우 파라미터를 통한 외부 참조
+* `this` 는 자기자신 내부 참조
+
+==== let
+
+[source, kt]
+----
+// as-is
+val firstElement = listOf(1,2,3).first()
+val firstItemSquared = firstElement * firstElement
+
+// to-be
+val firstItemSquared = listOf(1,2,3).first().let { it * it }
+----
+
+* 이 함수는 인자로 전달된 람다를 실행한 후 결과를 반환해 준다.
+* 연산하기 위한 값을 따로 변수로 지정할 일이 없어진다.
+** 연산에 필요한 부분(scope)에서만 사용하고 버린다.
+* null 복합 연산자와 같이 사용하면 NPE 예외 처리 및 기본값을 지정할 수 있다.
++
+[source, kt]
+----
+fun appendPrefix(str: String?): String {
+  val prefix = "[0jun]"
+  return str?.let { "$prefix $str" } ?: "$prefix empty string"
+}
+----
 
 ==== apply
 
@@ -866,41 +915,20 @@ File file = new File("test.txt") {{
 }};
 ----
 
-코드만 보기엔 비슷해보이지만 동작은 전혀 다르다. Kotlin의 apply 결과는 우리가 as-is로 작성한 코드와 같이
+코드만 보기엔 비슷해보이지만 동작은 전혀 다르다. Kotlin의 `apply` 결과는 우리가 as-is로 작성한 코드와 같이
 컴파일되는데, Java는 내부적으로 익명 클래스를 생성하고 여기에 값을 할당한다. 즉, 매 실행시마다 익명 클래스를 
 생성하므로 자원을 낭비한다. (Java단에서도 위 문법은 그닥 추천하는 문법은 아니고, TC에서나 몇번 사용한다.)
 ====
 
-==== let
-
-[source, kt]
-----
-// as-is
-val firstElement = listOf(1,2,3).first()
-val firstItemSquared = firstElement * firstElement
-
-// to-be
-val firstItemSquared = listOf(1,2,3).first().let { it * it }
-----
-
-* 이 함수는 인자로 전달된 람다를 실행한 후 결과를 반환해 준다.
-* 연산하기 위한 값을 따로 변수로 지정할 일이 없어진다.
-** 연산에 필요한 부분(scope)에서만 사용하고 버린다.
-* null 복합 연산자와 같이 사용하면 NPE 예외 처리 및 기본값을 지정할 수 있다.
-+
-[source, kt]
-----
-fun appendPrefix(str: String?): String {
-  val prefix = "[0jun]"
-  return str?.let { "$prefix $str" } ?: "$prefix empty string"
-}
-----
-* `apply` vs `let`
-** `apply` 는 아무것도 전달하지 않는다.
-** `apply` 는 람다의 실행이 끝나면 현자의 수신자 객체를 반환한다.
-** `let` 은 수신자 객체를 람다로 전달한다.
-** `let` 은 람다에 포함된 마지막 코드 줄의 실행 결과를 반환한다.
-** `let` 이 람다에 전달하는 인자는 읽기 전용의 함수 매개변수다. -> 변수의 값이 변경되는 위험을 줄인다.
+[NOTE]
+.`apply` vs. `let`
+====
+* `apply` 는 아무것도 전달하지 않는다.
+* `apply` 는 람다의 실행이 끝나면 현자의 수신자 객체를 반환한다.
+* `let` 은 수신자 객체를 람다로 전달한다.
+* `let` 은 람다에 포함된 마지막 코드 줄의 실행 결과를 반환한다.
+* `let` 이 람다에 전달하는 인자는 읽기 전용의 함수 매개변수다. -> 변수의 값이 변경되는 위험을 줄인다.
+====
 
 ==== run
 
@@ -2938,17 +2966,14 @@ fun main(args: Array<String>) {
 
 == Coroutine
 
-coroutine.adoc 참고
+include::coroutine.adoc[leveloffset=+2]
 
-== Tip
-
-* https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
-* https://github.com/Kotlin/KEEP[KEEP - Kotlin Evolution and Enhancement Process]
-
+[appendix]
 == TODO
 
 * https://kotlinlang.org/docs/reference/returns.html#return-at-labels[Return at Labels]
 
+[appendix]
 == Spring Framework in Kotlin
 
 === Validation
@@ -2958,6 +2983,7 @@ coroutine.adoc 참고
 * https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
 * https://www.baeldung.com/spring-boot-bean-validation
 
+[appendix]
 == Test
 
 * Behavior Driven Development(BDD) 스타일
@@ -3005,6 +3031,7 @@ coroutine.adoc 참고
 ** Utility class 혹은 외부 서비스 client 용 class 대상의 unit test
 
 
+[appendix]
 == Kotlin version
 
 === 1.3
@@ -3018,7 +3045,14 @@ https://kotlinlang.org/docs/reference/whatsnew14.html
 * Gradle
 * `fun interface` 
 
+[appendix]
 == Code Quality Tools
 
 * https://github.com/detekt/detekt[detekt/detekt] (디텍ㅌ)
 * https://github.com/pinterest/ktlint[pinterest/ktlint]
+
+[bibliography]
+== Tip
+
+* https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
+* https://github.com/Kotlin/KEEP[KEEP - Kotlin Evolution and Enhancement Process]
