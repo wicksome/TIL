@@ -22,6 +22,8 @@
 .References
 * https://johngrib.github.io/wiki/test-terms/#%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%8D%94%EB%B8%94
 
+== Test Double 종류
+
 Dummy:: 전달되지만 실제로는 사용하지 않는 객체. 일반적으로 매개 변수 목록을 채우기 위해 사용
 
 Fake:: 실제로 작동하는 구현체지만 일반적으로 프로덕션에는 적합하지 않은 꼼수 사용 (e.g. `InMemoryTestDatabase`)
