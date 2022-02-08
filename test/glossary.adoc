@@ -1,6 +1,9 @@
-# Test Double
+= 테스트 관련 용어
+:toc:
 
-## Stub
+== Test Double
+
+=== Stub
 
 > Test Stub
 
@@ -25,7 +28,7 @@ void stubTest() {
 }
 ```
 
-## Mock
+=== Mock
 
 > Mock Object
 
@@ -39,16 +42,16 @@ Mock은 "어떤 메서드가 호출될 것이다"는 행위에 대한 예상만 
 
 ```
 
-## Dummy
+=== Dummy
 
 > Dummy Object
 
 
-## Fake
+=== Fake
 
 > Fake Object
 
-## Spy
+=== Spy
 
 > Test Spy
 
@@ -60,7 +63,7 @@ Mock은 "어떤 메서드가 호출될 것이다"는 행위에 대한 예상만 
 
 
 
-# Mock, Stub 차이점
+== Mock, Stub 차이점
 
 - "행위를 테스트(모의 객체 스타일)", "상태 테스트(고전적 스타일)"로 나눠짐
 - 고전적 스타일, 모의 객체 스타일
@@ -80,13 +83,13 @@ Mock은 "어떤 메서드가 호출될 것이다"는 행위에 대한 예상만 
 
 
 
-## Driving TDD
+=== Driving TDD
 
 todo
 
 
 
-# Fixture
+== Fixture
 
 > Test Spy
 
@@ -96,13 +99,13 @@ todo
 
 
 
-# BDD
+== BDD
 
 > BDD(Behaviour Driven Development, 행위 주도 개발)
 
 
 
-# DDD
+== DDD
 
 
 
