@@ -1,6 +1,14 @@
 = 테스트 관련 용어
 :toc:
 
+== sut, system under test
+
+http://xunitpatterns.com/SUT.html
+
+* https://johngrib.github.io/wiki/test-terms/
+
+== uut
+
 == Test Double
 
 === Stub
@@ -93,19 +101,30 @@ todo
 
 > Test Spy
 
+* 
 - 단위 테스트의 실행 시 필요한 요소로서 많이 사용
 - 때로는 테스트에 대한 성격이나 실행되는 단위 테스트의 그룹화를 일걸을 때도 사용
 - 소프트웨어 테스트에서 반복적이고 동일한 결과를 얻는 테스트를 실행하기 위한 기반이 되는 정적인 상태들과 환경
 
+.References
+* https://junit.org/junit4/cookbook.html#Fixture
 
 
-== BDD
+== TDD, Test-Driven Development
 
-> BDD(Behaviour Driven Development, 행위 주도 개발)
+테스트 주도 개발 
 
+[NOTE]
+.BDD, Behaviour-Driven Development
+====
+행위 주도 개발
+====
 
-
-== DDD
+[NOTE]
+.DDD, Domain-Driven Development
+====
+도메인 주도 개발
+==== 
 
 
 
