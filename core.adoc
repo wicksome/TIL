@@ -1,17 +1,30 @@
 = 프로젝트 구조
+:toc:
 
-== Core, Common
+* 작은 토이 프로젝트가 아닌 이상 프로젝트는 점차 커지고 효율적인 관리를 위해 소스코드를 분리하게 됨
+* Spring Framework 기반에서 주로 아래와 같은 빌드 툴과 기능을 활용함
+** Gradle: https://docs.gradle.org/current/userguide/multi_project_builds.html[multi-project] 활용
+** Maven: https://maven.apache.org/guides/mini/guide-multiple-modules-4.html[Module] 활용
+* 프로젝트가 단위별로 나눠지는 것은 당연한 일이라고 할 수 있지만, 어떤 관점으로 어떻게 나누냐는 팀마다 다를 수 있음
 
-* 중복되는 코드들을 모두 Core(or Common)으로 불려오는 패키지(or 모듈, 저장소 등)로 모아두는 구조
+== Core
 
-== 장점
+* 재활용이 가능한 중복 코드를 Core라는 패키지, 모듈, 프로젝트 혹은 저장소에 모아두는 구조
+* 코어 기반 구조는 Common, Parent 등으로도 불려짐
 
+=== 장점
+
+* 중복 코드 제거
 * 중복 코드를 제거할 수 있다.
 * 코드 재활용에 수월하다.
+* 수정해야하는 비지니스를 한번에 관리할 수 있다.
 
-## 단점
-* 점점 비대해진다
-* 누구나 비지니스 로직을 넣기 쉬워진다.
+=== 단점
+
+* 크기
+** 시간이 지남에 따라 점점 비대해진다. 팀원이 많다면 더 빠른 속도로 증가한다.
+* 접근성
+** 누구나 비지니스 로직을 넣기 쉬워진다. 이는 다양한 
 * 컴포넌트를 분리하기 어려워진다(싫어진다)
 * 빌드시간이 길어진다 (테스트 포함)
 * 사이드 이펙트
@@ -29,11 +42,18 @@
 ** 엔티티가 비지니스를 가졌다고 생각든다면 DB 테이블에 대해 추상화가 안된게 아닐까
 * client
 
-# multi module(gradle)
+== Multi Module Project
+
+.References
+* https://spring.io/guides/gs/multi-module/
+
+=== 특징
 
 * API 클라이언트들이 각 모듈로 나눠져있을 때, `build.gradle.kt` 만으로 어떤 클라이언트들을 사용하지는지 명확하게 알 수 있음
 * API 클라이언트들이 각 모듈로 나눠져있을 때, 새로운 클라이언트 의존성을 추가할 때 gradle 리로드가 필요함(개발 속도)
 * 너무 잘게 나눠져있을 경우, 새로운 코드짤 때 어디에 넣어야할지 고민하게 됨
+* 불가피한 코드 중복이 발생하게 됨
+** e.g. DB저장용 Country, API 인터페이스용 Country, VO 개념의 Country
 
 ## 각각 분리?
 
