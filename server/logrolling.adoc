@@ -35,3 +35,16 @@ $ vi tomcat
 * dateext
 * missingok
 * rotate 60
+
+```bash
+# logrotate 위치
+$ whereis logrotate
+/usr/sbin/logrotate
+
+# 로그 롤링 상태
+$ cat /var/lib/logrotate/logrotate.status
+"/var/log/yum.log" 2022-1-1-3:48:10
+"/var/log/sudo.log" 2020-9-1-13:0:0
+...
+
+```
