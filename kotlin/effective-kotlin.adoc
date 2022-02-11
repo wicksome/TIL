@@ -131,6 +131,15 @@ if (list is MutableList) {
 
 ==== 변수의 스코프를 최소화하라
 
+* 상태를 정의할 떄 변수나 프로퍼티의 스코프를 최소화하라
+* 프로그램을 추적하고 관리하기 쉬워짐
+* 다른 개발자에 의해 잘못 사용되는 것을 막음
+* 코틀린의 if, when, try-catch, Elvis 표현식 활용 가능
+* 구조분해 선언(destructuring declaration) 활용 가능
+* 람다에서 변수를 캡쳐하는 것 주의
+
+[#item3]
+==== 최대한 플랫폼 타입을 사용하지 말라
 
 _The Pragmatic Programmer_ <<pp>> should be required reading for all developers.
 To learn all about design patterns, refer to the book by the "`Gang of Four`" <<gof>>.
