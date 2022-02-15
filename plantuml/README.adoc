@@ -9,3 +9,21 @@ but, "Note: draw.io for Confluence Server and data center do not support PlantUM
 
 
 github action: https://github.com/grassedge/generate-plantuml-action
+
+>>>
+
+== Example
+
+=== 글꼴 지정
+
+[plnatuml]
+----
+@startuml
+skinparam defaultFontName "NanumGothic"
+
+@enduml
+----
+
+== Trick
+
+link:tricks.adoc[]
