@@ -53,8 +53,33 @@ A -> B
 === group 배경 투명하게 하기
 
 [plantuml]
+.AS-IS
 ....
 @startuml
+box "actor1" #lightblue
+  participant A
+  participant B
+end box
+participant C
+
+A -> B
+group group1
+  B -> C
+  C --> B
+end group
+@enduml
+....
+
+[plantuml]
+.TO-BE
+....
+@startuml
+box "actor1" #lightblue
+  participant A
+  participant B
+end box
+participant C
+
 A -> B
 group #transparent group1
   B -> C
