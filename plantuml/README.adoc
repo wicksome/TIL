@@ -24,6 +24,16 @@ skinparam defaultFontName "NanumGothic"
 @enduml
 ----
 
+=== footer 설정
+
+[plnatuml]
+----
+@startuml
+center footer © NAVER FINANCIAL Corp. All Rights Reserved.
+
+@enduml
+----
+
 == Trick
 
-include:trick.adoc[]
+include::trick.adoc[]
