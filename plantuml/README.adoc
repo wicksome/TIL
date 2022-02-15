@@ -17,22 +17,29 @@ github action: https://github.com/grassedge/generate-plantuml-action
 === 글꼴 지정
 
 [plnatuml]
-----
+....
 @startuml
 skinparam defaultFontName "NanumGothic"
 
 @enduml
-----
+....
 
 === footer 설정
 
 [plnatuml]
-----
+....
 @startuml
 center footer © NAVER FINANCIAL Corp. All Rights Reserved.
 
 @enduml
-----
+....
+
+=== 외부 puml 파일 참조하기
+
+[plantuml,align="center"]
+....
+include::example-diagram.puml[]
+....
 
 == Trick
 
