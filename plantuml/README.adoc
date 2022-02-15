@@ -36,9 +36,18 @@ center footer © NAVER FINANCIAL Corp. All Rights Reserved.
 
 === 외부 puml 파일 참조하기
 
-[plantuml,align="center"]
+[plantuml]
 ....
 include::example-diagram.puml[]
+....
+
+=== 다이어그램 가운데 정렬하기
+
+[planuml,align="center"]
+....
+@startuml
+A -> B
+@enduml
 ....
 
 == Trick
