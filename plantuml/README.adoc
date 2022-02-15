@@ -43,10 +43,23 @@ include::example-diagram.puml[]
 
 === 다이어그램 가운데 정렬하기
 
-[planuml,align="center"]
+[plantuml,align="center"]
 ....
 @startuml
 A -> B
+@enduml
+....
+
+=== group 배경 투명하게 하기
+
+[plantuml]
+....
+@startuml
+A -> B
+group #transparent group1
+  B -> C
+  C --> B
+end group
 @enduml
 ....
 
