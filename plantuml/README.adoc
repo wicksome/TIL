@@ -10,6 +10,10 @@ but, "Note: draw.io for Confluence Server and data center do not support PlantUM
 
 github action: https://github.com/grassedge/generate-plantuml-action
 
+== References
+
+* https://plantuml.info/
+
 <<<
 
 == Example
