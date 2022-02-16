@@ -91,6 +91,11 @@ end group
 @enduml
 ....
 
+[NOTE]
+====
+2022-02-10, 새로운 스타일 적용되면서 기본 투명으로 적용된 것 같음. https://twitter.com/PlantUML/status/1491847768436060168[ref]
+====
+
 === 이모지 추가
 
 [plantuml]
