@@ -93,6 +93,19 @@ end group
 @enduml
 ....
 
+=== 이모지 추가
+
+[plantuml]
+....
+@startuml
+A -> B: <:lock:> 잠금
+@enduml
+....
+
+.References
+* https://plantuml.com/ko/creole#68305e25f5788db0
+* https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
+
 == Trick
 
 include::trick.adoc[]
