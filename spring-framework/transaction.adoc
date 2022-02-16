@@ -26,12 +26,14 @@ package org.springframwork.transaction {
   PlatformTransactionManager <|-- AbstractPlatformTransactionManager
 }
 
-package org.springframework.jdbc.datasource {
-  class DataSourceTransactionManager
-}
+package org.springframework.jdbc {
+  package org.springframework.jdbc.datasource {
+    class DataSourceTransactionManager
+  }
 
-package org.springfremework.jdbc.support {
-  class JdbcTransactionManager 
+  package org.springfremework.jdbc.support {
+    class JdbcTransactionManager 
+  }
 }
 
 package org.springframework.orm.jpa {
