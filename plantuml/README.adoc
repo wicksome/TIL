@@ -1,4 +1,5 @@
 = PlantUML
+:toc:
 
 * https://drawio-app.com/use-plantuml-in-draw-io/[Use PlantUML in draw.io]
 +
