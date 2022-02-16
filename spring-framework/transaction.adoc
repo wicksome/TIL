@@ -1,0 +1,51 @@
+= Transation
+
+[plantuml]
+....
+@startuml
+skinparam defaultFontName "NanumGothic"
+
+package org.springframwork.transaction {
+  interface TransationManager
+  interface PlatformTransactionManager
+  interface ReactiveTransactionManager
+  
+  package org.springframwork.transaction.support {
+    interface ResourceTransactionManager
+    abstract class AbstractPlatformTransactionManager
+    abstract class AbstractReactiveTransactionManager
+  }
+  
+  package org.springframework.transaction.annotation {
+    annotation Transactional
+  }
+
+  TransationManager <|-- PlatformTransactionManager
+  TransationManager <|-- ReactiveTransactionManager
+  PlatformTransactionManager <|-- ResourceTransactionManager
+  PlatformTransactionManager <|-- AbstractPlatformTransactionManager
+}
+
+package org.springframework.jdbc.datasource {
+  class DataSourceTransactionManager
+}
+
+package org.springfremework.jdbc.support {
+  class JdbcTransactionManager 
+}
+
+package org.springframework.orm.jpa {
+  class JpaTransactionManager
+}
+
+AbstractPlatformTransactionManager <|-- DataSourceTransactionManager
+ResourceTransactionManager <|-- DataSourceTransactionManager
+DataSourceTransactionManager <|-- JdbcTransactionManager 
+
+AbstractPlatformTransactionManager <|-- JpaTransactionManager
+ResourceTransactionManager <|-- JpaTransactionManager
+
+@enduml
+....
+
+* `PlatformTransactionManager`: 트랜잭션의 경계를 지정하는데 사용. `commit`, `rollback` 인터페이스
