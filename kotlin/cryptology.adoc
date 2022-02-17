@@ -148,6 +148,14 @@ ____
 
 * https://gist.github.com/wicksome/309ad433392db38ebcf9a2da5427b1d4
 
+=== MAC, Message Authenication Code
+
+* 해싱보다는 알고리즘
+* 대칭키/공개치 같은 암호화 알고리즘 보다 빠르다?
+* 현재 메시지가 진짜임을 인증하는 것
+* reversible하지 않다
+* https://stackoverflow.com/questions/2836100/what-is-the-difference-between-a-%20hash-and-mac-message-authentication-code
+
 === HMAC, Hash-based Message Authentication Code
 
 ==== HMAC-SHA256
@@ -158,4 +166,3 @@ ____
 * 해시 함수를 통과하기 전 데이터를 message라 함. (payload = message)
 * 해시 함수를 통과한 데이터는 digest라 함. (signature = digest)
 * SHA-256 해시 알고리즘을 사용했으므로 다이제스트는 256 bytes
-* 
