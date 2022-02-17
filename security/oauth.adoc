@@ -246,6 +246,8 @@ ditaa
 @enduml
 ----
 
+* https://datatracker.ietf.org/doc/html/rfc6749#section-4.4
+
 == Etc
 
 User:: 서비스 제공자와 소비자를 사용하는 계정을 가지고 있는 개인
