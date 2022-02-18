@@ -100,6 +100,13 @@ ____
 
 * 그럼 언제 구조를 변경할 것인가? core -> core-less or multomodule, ...
 
+== 개인고민
+
+팀원 모두 기술 수준, 이해도가 높다면 걱정 x
+어떻게 얼만큼 제한할 수 있는지?
+최소한의 제약을?? 패키지로?? 도메인으로?(이게 젤 어려움), 의존성으로?
+
+
 == References
 
 * https://kwonnam.pe.kr/wiki/web/%EC%8B%A0%EA%B7%9C%EC%84%9C%EB%B9%84%EC%8A%A4
