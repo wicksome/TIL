@@ -31,6 +31,9 @@
 * 런타임 오버헤드
 ** 쓰지도 않는 빈이 같이 올라간다. 부팅시간 올라감
 * 빅브라더
+* 스파게티 코드
+** 한곳만 수정하면 되니 장점으로 말하는 사람도 있을테지만, 장점보다 단점이 더 크지 않은가?
+* 의존성 덩어리
 
 ## 그럼?
 
@@ -99,4 +102,5 @@ ____
 
 == References
 
-- https://kwonnam.pe.kr/wiki/web/%EC%8B%A0%EA%B7%9C%EC%84%9C%EB%B9%84%EC%8A%A4
+* https://kwonnam.pe.kr/wiki/web/%EC%8B%A0%EA%B7%9C%EC%84%9C%EB%B9%84%EC%8A%A4
+* https://kwonnam.pe.kr/wiki/web/신규서비스
