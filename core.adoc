@@ -99,6 +99,10 @@ ____
 == Etc
 
 * 그럼 언제 구조를 변경할 것인가? core -> core-less or multomodule, ...
+* 어떻게 나누냐에 따라 빌드 속도 향상 가능 (gradle cache)
+** https://docs.gradle.org/current/userguide/build_cache.html
+** https://docs.gradle.org/current/userguide/more_about_tasks.html#sec:up_to_date_checks
+** https://docs.gradle.org/current/userguide/build_cache.html#sec:build_cache_configure_remote
 
 == 개인고민
 
