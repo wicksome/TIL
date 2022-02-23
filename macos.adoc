@@ -1,0 +1,7 @@
+= tip
+:toc:
+
+== windowserver
+
+* https://ko.ihowto.tips/osx-apps-download-tutorials-tips-hacks-news/ce-este-windowserver-si-de-ce-consuma-multe-resurse-cpu-si-ram-pe-macos.html
+* Acceeibity > Display > Reduce transparency 체크 해제
