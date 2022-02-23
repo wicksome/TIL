@@ -566,6 +566,8 @@ MS::
 * Magnetic Stripe
 * 마그네틱 카드
 
+MST, Magnetic Secure Transmission::
+
 IC::
 +
 * Integrated Curcuit
