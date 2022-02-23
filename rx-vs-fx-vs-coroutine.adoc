@@ -1,7 +1,7 @@
 = RxJS vs. FxTS vs. Coroutine
 :toc:
 
-== RxJS: Reatie Extensions For JavaScript
+== RxJS: Reactive Extensions For JavaScript
 
 * https://reactivex.io/[ReactiveX]
 
