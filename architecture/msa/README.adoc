@@ -5,3 +5,10 @@
 * 지속적 배포^continuous{sp}delivery^는 체크인^check-in^한 모든 것을 릴리스 후보로 대해야 한다.
 * 앨리스테어 콕번^Alistair{sp}Cockburn^의 육각형 아키텍처^hexagonal{sp}architecture^개념은 우리가 비지니스 로직이 숨을 수 있는 계층형 아키텍처로부터 멀어지도록 안내한다.
 ** Ports and Adapters 패턴이라고도 하며, 외부 세계와 인터페이스를 담당하는 프레임워크(Ports and Adapters) 계층, 비지니스 로직의 애플리케이션 계층, 도메인 계층으로 분리하여 서비스의 이식성, 테스트 가용성, 변화를 최소화할 수 있는 아키텍처다. [https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture/[참고]]
+
+== Strangler application
+
+image:https://microservices.io/i/decompose-your-monolith-devnexus-feb-2020.001.jpeg[]
+
+* 레거시 모놀리틱 어플리케이션을 msa로 마이그레이션하는 방안
+* https://microservices.io/patterns/refactoring/strangler-application.html
