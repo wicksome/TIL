@@ -1,3 +1,8 @@
 = 아키텍처
 
 * https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture/
+* 의존성을 없애려고하니 계층이 계속 생기는데..?
+** 제한을 어떻게 나눌것인가?
+** 이것이 도메인에 대한 지식 수준 차이일까?
+** Service/Component/Repository/Controller와 같은 계층으로 나눌수는 없을까?
+*** 이것으로 나누면 결국 계층형 아키텍처이지 않을까?
