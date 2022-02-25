@@ -147,6 +147,7 @@ ____
 ==== Examples
 
 * https://gist.github.com/wicksome/309ad433392db38ebcf9a2da5427b1d4
+* https://gist.github.com/wicksome/a0e00cf7d5520f607d4691a97781af46
 
 === MAC, Message Authenication Code
 
