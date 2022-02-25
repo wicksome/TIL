@@ -1,0 +1,3 @@
+= 아키텍처
+
+* https://engineering.linecorp.com/ko/blog/port-and-adapter-architecture/
