@@ -1,10 +1,11 @@
 = 소리치는 아키텍처
+:source-highlighter: highlight.js
 
 * 소리치는 아키텍처(screaming architecture)
 ** 의도를 우리에게 소리치는 아키텍처
 ** 유스케이스를 구현한 코드는 클래스명만으로도 찾을 수 있게 됨
 +
-[soruce, diff]
+[source, diff]
 .'송금하기' 유스케이스
 ----
 - AccountService
