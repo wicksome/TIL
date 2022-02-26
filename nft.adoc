@@ -1,7 +1,12 @@
 = NFT
 
+* Non-fungible token
 * 대체 불가능한 토큰
 * 블록체인을 기반으로 하는 디지털 파일 자산화 지원 기술
+
+== PFP(Profile Picture)
+
+* 프로필 이미지로 사용 가능한 NFT 유형
 
 == Minging
 
