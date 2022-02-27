@@ -47,6 +47,10 @@
 
 * 충성도 높은 고객..?
 
+== Etc.
+
+* 토큰 전환: https://bridge.orbitchain.io/
+
 ---
 
 == bunny buddies
