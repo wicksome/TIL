@@ -14,3 +14,101 @@
 ** 아키텍처를 다시보면 도메인에 접근/도메인으로부터 반환되는 모든 것을 별도 객체로 만들어야 함(DB, Web 모두 동일한 추상화단계)
 * 특정 API에 비지니스는 어디에 둬야하는가? 컨트롤러? 웹용 서비스를 따로?
 ** ex) 생성 API는 이미 있을 경우 에러에 기존 리소스를 포함해야 할 경우
+
+== 대략적인 유스케이스 구조
+
+[plantuml]
+....
+@startuml
+component adapter
+component usecase
+component "persistence\nadapter" as persistence
+component "outgoing\nadapter" as outgoing
+
+adapter -> usecase: (1) 입력
+usecase -> usecase: (2) 비지니스 규칙 검증
+usecase --> persistence: (3) 상태 저장
+usecase --> outgoing: (3)
+outgoing ..> usecase: (4) output
+usecase .> adapter: (5) output 변환 후 반환
+
+@enduml
+....
+
+[plantuml]
+....
+@startuml
+hide empty field
+hide empty method
+
+package application.port.in {
+  interface SendMoneyUseCase
+  class SendMoneyCommand
+}
+
+package application.port.out {
+  interface UpdateAccountStatePort
+}
+
+package application.service {
+  class SendMoneyService
+}
+
+package domain {
+  class Account
+}
+
+SendMoneyService -left-|> SendMoneyUseCase
+SendMoneyUseCase -down-> SendMoneyCommand
+SendMoneyService -down-> Account
+SendMoneyService -> UpdateAccountStatePort
+
+@enduml
+....
+
+[source, kt]
+----
+// package application.port.in
+// 인커밍 포트 인터페이스
+interface SendMoneyUserCase {
+    fun sendMoney(command: SendMoneyCommand): Boolean
+}
+
+// package application.port.in
+// 입력 모델(input model)
+data class SendMoneyCommand(
+    val sourceAccountId: AccountId,
+    val targetAccountId: AccountId,
+    val money: Money,
+) {
+    init {
+        require(money > 0)
+    }
+}
+
+class AccountId
+data class Money(
+    val value: BigDecimal,
+) {
+    operator fun compareTo(i: BigDecimal): Int = value.compareTo(i)
+
+    operator fun compareTo(i: Int): Int = compareTo(i.toBigDecimal())
+}
+
+interface LoadAccountPort // 아웃고잉 포트 인터페이스
+class AccountLock
+class UpdateAccountStatePort // 영속성 어댑터?
+
+class SendMoneyService(
+    private val loadAccountPort: LoadAccountPort,
+    private val accountLock: AccountLock,
+    private val updateAccountStatePort: UpdateAccountStatePort,
+) : SendMoneyUserCase {
+
+    override fun sendMoney(command: SendMoneyCommand): Boolean {
+        TODO("비즈니스 규칙 검증")
+        TODO("모델 상태 조작")
+        TODO("출력 값 반환")
+    }
+}
+----
