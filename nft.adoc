@@ -13,6 +13,15 @@
 
 * 프로필 이미지로 사용 가능한 NFT 유형
 
+== Staking, 스테이킹
+
+* 암호화폐의 일정량을 지분으로 고정하는 행위
+
+=== De-Fi, 디파이
+
+* Decentralized Finance 의 약자
+* 블록체인 기술을 기반으로 한 탈중앙화 금융을 의미
+
 == DAO
 
 * 탈중앙화된 자율조직(Decentralized Autonomous Organization)의 약자
