@@ -16,6 +16,7 @@
 == Staking, 스테이킹
 
 * 암호화폐의 일정량을 지분으로 고정하는 행위
+* 홀더들 대상으로 스테이킹 나온다는 것?
 
 === De-Fi, 디파이
 
@@ -141,3 +142,8 @@ ERC:: Ethereum request for comment
 ====
 계약 지향 프로그래밍 언어로 다양한 블록체인 플랫폼의 스마트 컨트랙트(Smart Contract) 작성 및 구현에 사용된다.
 ====
+
+---
+
+.채팅하려면 알아두자
+* tbh: to be honest, 솔직히 말하면. ex) I don't care tbh.
