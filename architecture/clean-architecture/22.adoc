@@ -1,0 +1,18 @@
+= 클린 아키텍처
+
+* 시스템 아키텍처와 관련한 다양한 아이디어들
+** *육각형 아키텍처^Hexagonal{sp}Architecture^*
+*** 포트와 어댑터(Ports and Adapters)라고도 알려졌으며, 앨리스터 코오번(Alistair Cockburn)이 개발
+*** 스티브 프리먼(Steve Freeman)과 냇 프라이스(Nat Pryce)가 그들의 훌륭한 저서인 'http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9788966260836[테스트 주도 개발로 배우는 객체 지향 설계과 실천]'에서 차용
+** *DCI^Data,{sp}Context{sp}and{sp}Interaction^*
+*** 제임스 코플리언(James Coplien)과 트리그베 린스쿠주(Trygve Reenskaug)가 만듬
+** *BCA^Boundary-Control-Entity^* (= ECB)
+*** 이바 야콥슨이 자진의 저서인 'Object Oriented Software Engineering'에서 소개
+* 위 아키텍처들의 목표는 '관심사의 분리^separation{sp}of{sp}concerns^'로 모두 같음
+** 소프트웨어를 계층으로 분리함으로써 관심사의 분리라는 목표를 달성하고자 함
+* 위 아키텍처들은 모두 시스템이 다음과 같은 특징을 지니도록 만듬
+** *프레임워크 독립성*
+** *테스트 용이성*
+** *UI 독립성*
+** *데이터베이스 독립성*
+** *모든 외부 에이전시에 대한 독립성*
