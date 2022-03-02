@@ -16,3 +16,6 @@
 ** *UI 독립성*
 ** *데이터베이스 독립성*
 ** *모든 외부 에이전시에 대한 독립성*
+
+!image:https://user-images.githubusercontent.com/5036939/156284879-b15b6943-546e-4fb7-9bb5-871ce5ef9227.png[]
+
