@@ -22,6 +22,7 @@ insert:: 어떤 것에 넣는다는 의미로 생성의 의미는 아니며 '데
 * `INSERT INTO <TABLE> ...`
 
 <<<
+---
 
 * generate 대신 make나 create 사용 가능
 * 그러나, make와 create는 동일하지 않음
