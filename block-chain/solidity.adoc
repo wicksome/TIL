@@ -1,0 +1,141 @@
+= Solidity
+:toc:
+
+https://github.com/ethereum/solidity[Solidity]란 이더리움 스마트 컨트랙트를 구현하기 위해서 만들어진 이더리움 전용 언어.
+
+* EVM^Ethereum{sp}Virtual{sp}Machine^에서 구동.
+* 코인이 전달되는 코드이기 때문에 베스트 프랙티스를 참고해서 작성하길 권유.
+* 지원 개발 환경(IDE)
+** Remix
+** https://plugins.jetbrains.com/plugin/9475-solidity[IntelliJ IDEA plugin]
+** ...
+
+== Hello World
+
+[source, sol]
+----
+// SPDX-License-Identifier: MIT // <1>
+pragma solidity ^0.8.12; // <2>
+
+contract HelloWorld { // <3>
+    function helloWorld() external pure returns (string memory) { <4>
+        return "Hello, World!";
+    }
+}
+----
+<1> 저작권
+<2> 컴파일러 버전 설정
+<3> 컨트랙트명을 `HelloWorld` 로 지정
+<4> `function <함수명>() `
+
+== 자료형
+
+=== value types
+
+* `uint`: 부호 없는 정수형. 기본적으로 256비트 자료형(`uint256`). `uint32`, `uint64` 선언 가능.
+* `int`: 정수형
+* `bool`: 논리 자료형
+* `string`: UTF-8 인코딩 문자열
+* `bytes`:  바이트
+* `address`: 20 바이트 이더리움 주소 값
+
+=== reference types
+
+* `storage`
+* `memory`
+* 구조체
++
+[source, sol]
+----
+struct Zombie {
+    string name;
+    uint dna;
+}
+----
+* 배열
++
+[source, sol]
+----
+uint[4] fixedArray; <1>
+uint[] dynamicArray; <2>
+new uint[](5); <3>
+uint[5] public publicArray; <4>
+----
+<1> 크기 고정
+<2> 계속 커질 수 있는 배열
+<3> `new` 키워드 활용한 선언
+<4> `public` 키워드 선언을 통해 다른 컨트랙트에서 조회 가능 (just 조회)
+
+=== 맵핑
+
+[source, sol]
+----
+mapping(_KeyType => _ValueType) public <name>;
+----
+
+* `_KeyType`: 매핑, 동적 크기 배열, 컨트랙트, 열거형, 구조체를 제외한 모든 유형
+* `_ValueType`: 매핑 타입을 포함한 모든 유형
+
+=== enum
+
+== 함수
+
+[source, sol]
+----
+contract ZombieFactory {
+
+    function createZombie(string _name, uint _dna) { <1>
+
+    }
+
+    function processDna(uint _dna) private { <2>
+
+    }
+
+    function convertDna(uint _dna) public returns (string) { <3>
+        return "converted";
+    }
+
+    function rollbackDna(uint _dna) private pure returns (string) { <4>
+        require(_dna > 0, "message"); <5>
+    }
+}
+----
+<1> `function` 키워드를 통해 선언 가능.
+<2> `public`, `private` 접근자를 통해 외부 컨트랙트의 호출 제한 설정 가능. (default: `public`)
+<3> `returns (<type>)` 키워드를 통해 반환 타입 지정 가능
+<4> 함수 제어자 설정 가능 +
+* `view`: 컨트랙트의 변수를 읽기만 할 때.
+* `pure`: 컨트렉트의 변수를 읽지도, 쓰지도 않을 때 (순수 함수를 의미하는 것 같음)
+<5> `require(<conditional>, <message>)` 를 통해 사전 검증 가능
+
+[source, sol]
+----
+function multiReturn() public pure returns (
+    uint a;
+    uint b;
+    uint c;
+) {
+    return (10, 20, 30); <1>
+}
+
+uint number;
+(, , number) = multipleReturn(); <2>
+----
+<1> 한번에 여러 값 반환 가능
+<2> 세번째 값만 사용하고자 할 경우
+
+== 난수 생성
+
+* `keccak256` 해시 함수 제공
+** SHA-3 사용
+** 충돌이 희박함
+
+[source, sol]
+----
+keccak256("aaa")
+----
+
+== References
+
+* https://solidity-kr.readthedocs.io/ko/latest/index.html[한국어 문서]
