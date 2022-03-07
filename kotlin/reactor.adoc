@@ -102,6 +102,17 @@ Mono.error가 반횐되었을 떄 `block()` 호출하면 안에서 에러를 던
 === onErrorStop
 
 
+== subscribe vs. subscribeOn
+
+* `subscribe` 는 현재 스레드에서 시작됨.
+* `subscribeOn` 은 실행할 스레드를 지정함.
+
+[NOTE]
+.Lettuce의 `ReactiveRedisTemplate` 사용시 비동기 처리
+====
+Redis를 Lettuce 라이브러리 사용하여 `ReactiveRedisTemplate` 로 통신시 `subscribeOn` 없이도 비동기로 실행되는 것을 볼 수 있다. 이는 해당 라이브러이에서 netty EventLoop에서 실행하도록 구현해두었기 때문이다. (https://lettuce.io/core/release/reference/#reactive.5.creating-flux-and-mono-using-lettuce[참고링크])
+====
+
 == Etc
 
 * 마블 다이어그램: https://brunch.co.kr/@lonnie/20

@@ -194,3 +194,20 @@ EXEC
 * https://jacking75.github.io/DB_Redis_service/
 * https://github.com/redis-study/redis-summary
 * https://zdnet.co.kr/view/?no=20131119174125
+
+== delete vs. unlink
+
+* `UNLINK`
+** Redis 4.0에서 추가
+** `DEL` 과 다른 점은 비동기로 별도 스레드에서 백그라운드로 실행됨
+** 컬렉션에 데이터가 많은 결루 `DEL` 보다 빠름
+** 키 삭제는 sync로 하고, 값 삭제를 별도 쓰레드에서 async로 처리. +
+(맴버수가 64개 이하일 경우 `DEL` 과 같이 sync로 처리)
+** 메인 스레드는 백그라운드 스레드와 동기화를 해야하며 이것도 비용으로 볼 수 있음
+* `DEL`
+** 블록킹 모드에서 값을 제거함
+** 제거할 값이 클 경우(큰 리스트나 해시에 할당이 많을 경우) redis가 오랫동안 블락킹됨
+** 이를 해결하기 위해 redis는 non-blocking' delete 로 `UNLINK` 를 제공함
+* UPDATE:
+** Redis 6.0부터 신규 설정이 추가됨 → lazyfree-lazy-user-del
+*** 해당 값을 true로 설정시 `DEL` 을 `UNLINK` 와 같이 실행함
