@@ -1,6 +1,8 @@
 == shell
 :toc:
 
+https://github.com/wicksome/TIL/blob/master/shell/cheatsheet-for-new-script.adoc[CheatSheet]
+
 == 파일 딜리미터로 분리하기
 
 [source, bash]
