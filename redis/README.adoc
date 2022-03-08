@@ -211,3 +211,21 @@ EXEC
 * UPDATE:
 ** Redis 6.0부터 신규 설정이 추가됨 → lazyfree-lazy-user-del
 *** 해당 값을 true로 설정시 `DEL` 을 `UNLINK` 와 같이 실행함
+
+== version check
+
+[source, bash]
+----
+$ telnet <ip> <port>
+Trying <ip>...
+Connected to <ip> (<ip>).
+Escape character is '^]'.
+info
+$3506
+# Server
+redis_version:5.0.5
+...
+# Cluster
+cluster_enabled:1
+...
+----
