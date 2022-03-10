@@ -1,6 +1,19 @@
 = 프로젝트 구조
 :toc:
 
+== 종류
+
+=== Monorepo
+
+* Monorepo ≠ Monolith
+* https://news.hada.io/topic?id=6061
+
+=== Polyrepo
+
+* submodule(git)
+
+---
+
 * 작은 토이 프로젝트가 아닌 이상 프로젝트는 점차 커지고 효율적인 관리를 위해 소스코드를 분리하게 됨
 * Spring Framework 기반에서 주로 아래와 같은 빌드 툴과 기능을 활용함
 ** Gradle: https://docs.gradle.org/current/userguide/multi_project_builds.html[multi-project] 활용
