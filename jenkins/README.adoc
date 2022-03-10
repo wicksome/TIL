@@ -39,3 +39,4 @@
 * slave → agent 용어 변경
 ** https://www.jenkins.io/blog/2020/06/18/terminology-update/
 ** https://www.jenkins.io/blog/2020/05/06/docker-agent-image-renaming/ 
+** (github master → main: https://github.com/github/renaming)
