@@ -15,7 +15,7 @@
 
 ---
 
-블록체인? 토큰? 코인? web3, 암호화폐, 비트코인, 이더리움?
+블록체인? 토큰? 코인? web3, 암호화폐, 비트코인, 이더리움? 네트워크?
 
 * https://ko.wikipedia.org/wiki/%EB%B8%94%EB%A1%9D%EC%B2%B4%EC%9D%B8
 * https://www.banksalad.com/contents/%EB%B8%94%EB%A1%9D%EC%B2%B4%EC%9D%B8-%EA%B0%9C%EB%85%90-%EC%99%84%EB%B2%BD-%EC%A0%95%EB%A6%AC-dh1do
