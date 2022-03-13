@@ -1,0 +1,57 @@
+= Actions
+:toc:
+
+== runner 추가
+
+GitHub Actions https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#workflows[workflow]가 실행될 서버 설정
+
+* self-hosted runner
+* shared runner
+.. 사용중인 organization의 'Settings'의 'Actions'을 들어가면 조회 가능
+.. 해당 runner 설정('Edit repository access')을 통해 사용할 repository에 권한 설정
+
+== 환경변수 설정
+
+. Repository의 'Settings > Secrets'
+. 환경변수 추가
+. yaml에서 아래와 같이 가져다 쓸 수 있음
++
+[source, yaml]
+----
+env:
+  KEY: ${{ secrets.DEPLOY_KEY }}
+
+steps:
+  - name:
+    run: echo $KEY
+----
+
+== 트리거
+
+[source, yaml]
+----
+name: workflow-2
+
+on:
+  workflow_run:
+    workflows: [ "workflow-1" ]
+  type: [ complate ]
+----
+
+== 병렬 작업
+
+https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow#defining-prerequisite-jobs[Defining prerequisite jobs]
+
+[source, yaml]
+----
+jobs:
+  job1:
+  job2:
+    needs: job1
+  job3:
+    needs: [job1, job2]
+----
+
+== submodules
+
+https://github.com/marketplace/actions/checkout-submodules
