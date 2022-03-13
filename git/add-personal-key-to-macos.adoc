@@ -1,0 +1,10 @@
+= macos
+
+. Settings
+. Developer settings
+. Personal access tokens
+
+
+```
+$ git credential-osxkeychain erase
+```
