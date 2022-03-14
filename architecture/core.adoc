@@ -6,14 +6,30 @@
 * 어떤 스타일의 팀에, 어느정도 규모의 팀에 어울릴지. 무조건 좋은건 없음.
 * 누구는 복합적으로 사용한다고 말할수도 있을텐데, 정확히 어떻게 나눠서 얘기할수있는가?
 
+=== Monolith
+
+* https://news.hada.io/topic?id=6061[Monorepo ≠ Monolith]
+
+=== Multorepo
+
+* 독자적인 repository로 소스를 관리하는 방법
+* git을 사용할 경우 독자적인 repository를 하나의 repository 안에서 submodule로 구성/관리할 수 있음
+* Polyrepo 구조라고도 불림
+* 각 프로젝트는 높은 자율성을 가지며, 독자적인 개발, 린트, 테스트, 빌드, 게시, 배포 파이프라인을 갖게 됨
+* 팀의 자율성 때문에 선호하기도 함
+* https://monorepo.tools/#polyrepo-concept[자율성은 고립(Isolation)에 의해 제공되고 고립은 협업을 방해함]
+* 단점
+** 번거로운 프로젝트 생성
+** 패키지의 중복 코드 가능성
+** 관리 포인트 증가
+** 일관성 없는 개발자 경험
+** 다른 패키지의 변경 사항 파악
+** 교차 리포지토리의 리팩터링 비용
+* 일부 단점에 대해서 IntelliJ를 통해서 어느정도 해소 가능하나, 개발자 개개인의 도구 숙련도가 필요함
+
 === Monorepo
 
-* Monorepo ≠ Monolith
-* https://news.hada.io/topic?id=6061
 
-=== Polyrepo
-
-* submodule(git)
 
 === ?
 
