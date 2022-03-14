@@ -15,6 +15,14 @@
 
 * submodule(git)
 
+=== ?
+
+* monorepo + 1 git repo
+** 어떤 관심사로 repo를 모을 것인가?
+* multi git repo (monolithic?)
+** git submodules + multi git repo
+** intellij 에서 multi git repo에 대한 지원 활용
+
 ---
 
 * 작은 토이 프로젝트가 아닌 이상 프로젝트는 점차 커지고 효율적인 관리를 위해 소스코드를 분리하게 됨
