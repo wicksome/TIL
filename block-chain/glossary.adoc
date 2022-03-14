@@ -1,5 +1,8 @@
-= NFT
+= Glossary
+
 :toc:
+
+== NFT
 
 * Non-fungible token
 * 대체 불가능한 토큰
