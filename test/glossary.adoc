@@ -145,3 +145,9 @@ class Boilerplate {
 <body></body>
 </html>
 ```
+
+== learning test
+== stress test
+== unit test
+== integration test
+== ab test
