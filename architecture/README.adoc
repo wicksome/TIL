@@ -112,3 +112,11 @@ class SendMoneyService(
     }
 }
 ----
+
+
+== 읽어볼 자료
+
+* https://github.com/donnemartin/system-design-primer
+* https://github.com/dustinsand/hex-arch-kotlin-spring-boot
+* https://github.com/kamranahmedse/developer-roadmap
+* https://github.com/iluwatar/java-design-patterns
