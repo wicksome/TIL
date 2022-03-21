@@ -584,3 +584,4 @@ final Strin goutputDir = ctxt.getOptions().getScratchDir().getAbsolutePath();
 * https://www.facebook.com/shinsoojungceo/posts/2262773417273895[비효율의 숙달화]
 * https://likejazz.com/post/136399435650/%ED%81%B4%EB%A6%B0-%EC%BD%94%EB%93%9C%EB%A5%BC-%EB%8B%A4%EC%8B%9C-%EC%9D%BD%EA%B3%A0[클린 코드를 다시 읽고]
 * https://brunch.co.kr/@cleancode/19["클린 코드를 다시 읽고"를 읽고]
+* https://github.com/qkraudghgh/clean-code-javascript-ko
