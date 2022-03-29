@@ -39,3 +39,4 @@ subprojects {
 === implementation
 
 * web에서 `implementation: web-core` 하면  바로 `web-core` 코드만 사용 가능
+* core 수정시 web-core까지만 재빌드
