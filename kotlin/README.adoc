@@ -705,9 +705,10 @@ fun main(args: Array<String>) {
 ** 이러한 단축 문법으로 코드를 더 깔끔하게 작성할 수 있고, 함수 호출의 핵심부분을 더 빨리 파악할 수 있다.
 ** (내 생각) `runSimulation` 이 일인수(single-argument) 함수가 된 것 같다. 커링된 결과라고 볼 수 있을까?
 
-[TIP]
-.람다 최적화 방법: `inline` 키워드
-====
+=== Inline functions
+
+Kotlin에서 람다를 사용할 때 람다 함수를 최적화하는 방법으로 https://kotlinlang.org/docs/inline-functions.html[인라인 함수](`inline fun`)가 있다.
+
 람다를 정의하면 JVM에서 객체로 생성된다. 또한, JVM은 람다를 사용하는 모든 변수의 메모리 할당을 수행하므로 메모리가 많이 사용된다.
 결국 람다는 성능에 영향을 줄 수 있는 메모리 부담을 초래할 수 있다.
 
@@ -751,15 +752,39 @@ public static final void main(@NotNull String[] args) {
 }
 ----
 
+함수 자체가 호출 코드안에 들어간다. 이러한 점이 컴파일된 바이트 코드의 양은 많아질 수 있겠지만, 함수 호출을 하거나 추가 객체 생성하는 런타임 오버헤드를 줄일 수 있게 된다.
+(호출되는 곳에 코드 블럭이 인라인 된다고 해서 inline fun 인건가..?)
+
 그러나 이렇게 할 수 없는 경우가 더러 있다. 예를 들어 람다를 인자로 받는 재귀 함수(recursive function)의 경우다.
 재귀 함수는 자신의 몸체 코드를 여러 번 반복 호출하여 실행하므로 이것을 인라인 처리하면 같은 코드가 무수히 많이 복사 및 붙여넣기 된다.
 따라서 Kotlin Compiler는 재귀 함수를 단순히 인라인 처리하지 않고 효율성이 좋은 루트 형태로 변경한다.
+
+또한, inline 함수는 내부적으로 코드를 복사하기 때문에 인자로 받은 함수를 다른 함수로 전달되거나 참조될 수 없다.
+해결 방법으로 함수로 받은 특정 인자만 인라인하지 않고자 할 경우 `noinline` 키워드를 사용한다.
+
+[source, diff]
+----
+- inline fun newMethod(a: Int, func: () -> Unit, func2: () -> Unit) {
++ inline fun newMethod(a: Int, func: () -> Unit, noinline func2: () -> Unit) {
+    func()
+    someMethod(10, func2)
+}
+
+fun someMethod(a: Int, func: () -> Unit):Int {
+    func()
+    return 2*a
+}
+
+fun main(args: Array<String>) {
+    newMethod(2, {println("Just some dummy function")},
+            {println("can't pass function in inline functions")})
+}
+----
 
 (+)
 
 TODO: scala랑 동일한 기능인지 찾아볼 것 +
 Scala에는 `@inline` 과 `@noinline` 어노테이션이 있다.
-====
 
 === Function reference
 
@@ -2637,6 +2662,7 @@ class Child2(value: String) : Parent(value)
 
 === reified keyword
 
+* 제네릭으로 인라인 함수에서 사용되며, 런타임에 타입 정보를 알고 싶을 때 사용된다.
 * 컴파일된 JVM 바이드코드에는 제네릭 타입 매개변수의 정보가 수록되지 않고 소거된다.
 ** 제네릭 타입 매개변수가 지정된 클래스로 인스턴스를 생성할 때 어떤 타입의 인자가 사용되었는지 알기 위해 타입을 검사할 수 없다. +
    따라서 제네릭 타입 매개변수가 지정된 클래스를 타입 검사에 사용될 수 없다.
@@ -2680,6 +2706,9 @@ inline fun <reified T> reifiedTest(func: () -> T): T {
 }
 ----
 <1> `reified` 키워드를 추가함으로써 바이트코드에 `T` 는 전달된 인자의 타입이 삽입된다.
+
+.참고
+* https://codechacha.com/ko/kotlin-reified-keyword/
 
 === where
 

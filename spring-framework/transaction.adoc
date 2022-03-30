@@ -6,7 +6,7 @@
 skinparam defaultFontName "NanumGothic"
 
 package org.springframwork.transaction {
-  interface TransationManager
+  interface TransactionManager
   interface PlatformTransactionManager
   interface ReactiveTransactionManager
   
@@ -20,8 +20,8 @@ package org.springframwork.transaction {
     annotation Transactional
   }
 
-  TransationManager <|-- PlatformTransactionManager
-  TransationManager <|-- ReactiveTransactionManager
+  TransactionManager <|-- PlatformTransactionManager
+  TransactionManager <|-- ReactiveTransactionManager
   PlatformTransactionManager <|-- ResourceTransactionManager
   PlatformTransactionManager <|-- AbstractPlatformTransactionManager
 }
@@ -53,3 +53,95 @@ ResourceTransactionManager <|-- JpaTransactionManager
 * `PlatformTransactionManager`: 트랜잭션의 경계를 지정하는데 사용. `commit`, `rollback` 인터페이스
 * https://godekdls.github.io/Spring%20Data%20Access/transactionmanagement/
 * https://kouzie.github.io/spring/Spring-%EC%8A%A4%ED%94%84%EB%A7%81-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98/#
+
+== 격리 수준(Isolation)
+
+* 동시에 여러 트랜잭션이 처리될 때, 트랜잭션끼리 얼마나 서로 고립되어 있는지는 나타내는 것
+* 특정 트랜잭션이 다른 트랜잭션에 변경한 데이터를 볼 수 있도록 허용할지 말지를 결정하는 것
+
+=== ANSI/ISO SQL Standard (SQL192)
+
+[NOTE]
+.ANSI SQL
+====
+DBMS(Oracle, My-SQL, DB2 등등)들에서 각기 다른 SQL를 사용하므로, 미국 표준 협회^American{sp}National{sp}Standards{sp}Institute^에서 이를 표준화하여 표준 SQL문을 정립 시켜 놓은 것이다.
+====
+
+
+==== Level 0. Read Uncommitted
+
+[source]
+----
+1. A 트랜잭션에서 ID가 1인 사용자 나이를 20에서 21로 변경함
+2. 아직 커밋하지 않음
+3. B 트랜잭션에서 ID가 1인 사용자의 나이를 조회함
+4. 21이 조회됨 <1>
+5. A 트랜잭션에서 문제가 발생하여 롤백함
+6. B 트랜잭션은 ID가 1인 사용자의 나이가 여전히 21이라고 생각하고 로직 수행함
+----
+<1> 이를 Dirty Read라고 함
+
+[]
+* 이 경우 커밋되지 않은 데이터를 다른 트랜잭션이 조회하여 사용함
+* 트랜잭션에서 처리중인/아직 커밋되지 않은 데이터를 다른 트랜잭션이 읽는 것을 허용
+* Dirty Read, Non-Repeatable Read, Phantom Read 현상 발생
+
+[NOTE]
+.Dirty Read
+====
+* 커밋되지 않은 데이터 읽기
+* 더티 페이지란 데이터 캐시에는 변경 되었지만, 아직 디스크에는 변경되지 않은 데이터(페이지)
+* Uncommitted Dependency
+====
+
+[NOTE]
+.Non-Repeatable Read
+====
+* 최초에 읽기 작업 후, 다른 트랜잭션이 데이터를 변경시키고, 그 다음 읽기 작업이 변경된 사항을 읽어들여 최초의 읽기와 두 번째 읽기 작업의 결과가 불일치하는 경우
+* Inconsistent Analysis
+====
+
+[NOTE]
+.Phantom Read
+====
+한 트랜잭션 안에서 일정범위의 레코드를 두번 이상 읽을 때, 첫번째 쿼리에서 없던 유령 레코드가 두번째 쿼리에서 나타나는 현상
+====
+
+==== Level 1. Read Committed
+
+[source]
+----
+1. B 트랜잭션에서 ID가 1인 사용자 나이 조회
+2. 20이 조회됨
+3. A 트랜잭션에서 ID가 1인 사용자 나이를 20에서 21로 변경하고 커밋함
+4. B 트랜잭션에서 ID가 1dl 사용자 나이 재조회
+5. 21이 조회됨 <1>
+----
+<1> 하나의 트랜잭션에서 똑같은 쿼리를 수행했을 때 같은 결과를 반환해야한다는 Repeatable Read 정합성이 어긋남
+
+[]
+* 커밋되어야만 다른 트랜잭션에서 조회 가능함
+
+==== Level 2. Repeatable Read
+
+[]
+* 트랜잭션이 시작되지 전에 커밋된 내용에 대해서만 조회할 수 있는 격리 수준
+* Non-Repeatable Read 부정합이 발생하지 않음
+* 자신의 트랜잭션보다 낮은 트랜잭션 번호에 변경된(커밋된) 것만 보게 되는 것
+* 트랜잭션이 길어질수록 버전을 유지해야하는 단점 존재
+
+==== Level 3. Serializable Read
+
+* 가장 단순하고 엄격한 격리수준
+* 읽기 작업에도 락 설정
+* 동시 처리 능력이 다른 격리 수준보다 떨어짐
+
+== 전파(Propagation)
+
+* REQUIRED
+* MANDATORY
+* NEVER
+* NESTED
+
+
+
