@@ -1227,6 +1227,8 @@ File("/home/aasmund/test.txt").inputStream().use {
 
 == Collection
 
+* Kotlin의 collection은 Eager evaluation으로 동작한다.
+** Java의 Stream처럼 Lay evaluation으로 동작하고자 한다면 Kotlin의 Sequence를 사용하면 된다.
 * Kotlin의 collection에는 mutable 타입과 read-only 타입이 있다.
 * Kotlin 컬렉션은 기본적으로 read-only이다.
 * Kotlin의 표준 라이브러리의 모든 클래스나 함수 등은 `import` 를 지정하지 않아도 바로 사용할 수 있다.
@@ -2862,7 +2864,7 @@ val names = users
 * 다른 컬렉션으로는 지연 컬렉션^lazy{sp}collection^이 있다.
 ** 변수가 최초 사용될 때 초기화되는 지연 초기화와 유사하게 필요할 때만 값이 생성된다.
 ** 지연 컬렉션 타입은 더 좋은 성능을 제공한다(특히 매우 큰 컬렉션을 사용할 때).
-* Kotlin은 시퀀스^sequence^라는 내정된 지연 컬렉션 타입을 제공한다.
+* Kotlin은 시퀀스^sequence^라는 내정된 지연 컬렉션 타입을 제공한다. (https://kotlinlang.org/docs/sequences.html#sequence[ref])
 ** 인덱스를 사용하지 않으며, 크기 정보도 유지하지 않는다.
 * 시퀀스는 저장되는 항목의 갯수에 제한이 없다. → 무한 수열
 * 시퀀스를 사용할 때는 새로운 값이 요청될 때마다 참조되는 반복자 함수^iterator{sp}function^를 정의한다.
@@ -2883,6 +2885,90 @@ val oneThousandPrimes = generateSequence(3) { it + 1 }
   .filter { it.isPrime() }
   .talk(1000)
 ----
+
+[NOTE]
+.Collections vs. Sequences
+====
+Collections은 기본적으로 Eager evaluation으로 동작하고, Sequences는 Lazy evaluation으로 동작한다.
+
+* Kotlin Collections: Eager evaluation
+* Kotlin Sequences: Lazy evaluation
+* Java Stream: Lazy evaluation
+
+다음은 https://kotlinlang.org/docs/sequences.html#sequence-processing-example[공식 문서]에 나와있는 예제 코드이다. 이 코드를 통해 조급한 평가와 지연 평가의 동작 순서를 보자.
+
+[source, kotlin]
+.Iterable example
+----
+val words = "The quick brown fox jumps over the lazy dog".split(" ")
+val lengthsList = words
+	.filter { println("filter: $it"); it.length > 3 } // <1>
+    .map { println("length: ${it.length}"); it.length } // <2>
+    .take(4)
+
+println("Lengths of first 4 words longer than 3 chars:") // <3>
+println(lengthsList)
+----
+----
+filter: The <1>
+filter: quick
+filter: brown
+filter: fox
+filter: jumps
+filter: over
+filter: the
+filter: lazy
+filter: dog
+length: 5 <2>
+length: 5
+length: 5
+length: 4
+length: 4
+Lengths of first 4 words longer than 3 chars: <3>
+[5, 5, 5, 4]
+----
+
+위 예제 코드에서 볼 수 있듯이 조급한 평가를 하는 iterable의 경우엔 코드 선언시부터 모든 엘리먼트에 대해서 `filter` 함수가 실행되었고,
+다음 길이가 4 이상인 단어에 대해서 `map` 함수가 실행되었다. `map` 함수가 모두 실행된 이후에 `take` 함수를 통해 4개만 추출되었다.
+
+다음은 지연 평가를 하는 sequence 의 예제이다.
+
+[source, kotlin]
+.Sequence example
+----
+val words = "The quick brown fox jumps over the lazy dog".split(" ")
+//convert the List to a Sequence
+val wordsSequence = words.asSequence()
+
+val lengthsSequence = wordsSequence
+	.filter { println("filter: $it"); it.length > 3 } // <1>
+    .map { println("length: ${it.length}"); it.length } // <2>
+    .take(4)
+
+println("Lengths of first 4 words longer than 3 chars") // <3>
+// terminal operation: obtaining the result as a List
+println(lengthsSequence.toList())
+----
+----
+Lengths of first 4 words longer than 3 chars <3>
+filter: The <1>
+filter: quick <1>
+length: 5 <2>
+filter: brown
+length: 5
+filter: fox
+filter: jumps
+length: 5
+filter: over
+length: 4
+[5, 5, 5, 4]
+----
+
+재미난 점은 `take` 가 종단 함수가 아니라는 것이다. 실행 예시에서 보이듯이 3번 코드가 실행된 이후에 평가가 이뤄졌다.
+즉 `toList()` 가 종단 함수로 이 함수가 호출되지 전까지 모든 평가를 미루고 있는 상황이다.
+
+
+====
 
 * 함수형 프로그래밍에서는 새로운 컬렉션을 자주 생성해야 한다.
 ** 함수의 연쇄 호출에 따른 중간 과정의 결과를 임시 컬렉션에 저장해야 하기 때문이다.
