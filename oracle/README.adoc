@@ -1,6 +1,12 @@
 = Oracle
 :toc:
 
+== REDO, UNDO
+
+* REDO
+** 로그. 모든 변경사항을 기록함
+** 데이터 복구 등에 사용됨
+
 [source, sql]
 ----
 -- 한 줄 출력하기
