@@ -415,8 +415,17 @@ val healthStatus = when (healthPoints) {
 }
 ----
 
+[NOTE]
+.Java에서의 Switch
+====
+https://docs.oracle.com/en/java/javase/17/language/pattern-matching-switch-expressions-and-statements.html
+====
+
 .References
 * https://kotlinlang.org/docs/tutorials/kotlin-for-py/conditionals.html[Conditionals - Kotlin Programming Language]
+* Java에서의 Swtich
+** https://openjdk.java.net/jeps/406[JEP 406: Pattern Matching for switch (Preview)]
+** https://docs.oracle.com/en/java/javase/17/language/pattern-matching-switch-expressions-and-statements.html[Pattern Matching for switch Expressions and Statements] - Oracle
 
 == Function
 
