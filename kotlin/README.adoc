@@ -2147,6 +2147,12 @@ fun print(any: Any) {
 
 * 타입 변환은 유용하지만 우리가 안전하게 사용해야 한다.
 
+[NOTE]
+.JDK 17에서의 타입 체크
+====
+Java에서 https://openjdk.java.net/jeps/394[JEP 394: Pattern Matching for instanceof]를 통해 Kotlin과 비슷한 문법을 사용할 수 있다. 이 때, Kotlin의 스마트 캐스팅과 같이 컴파일 단계에서 클래스 타입 추론이 된다.
+====
+
 [TIP]
 .Any 클래스
 ====
