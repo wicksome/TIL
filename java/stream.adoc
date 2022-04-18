@@ -510,6 +510,18 @@ list.stream()
     .collect(Collectors.toList())
 ----
 
+[NOTE]
+.JDK 버전업에 따른 변화
+====
+. JDK8: `.collect(Collectors.toList())` 추가. but, mutable list 반환
+. JDK10: `.collect(Collectors.toUnmodifiableList())` 추가.
+. JDK16: `Stream.toList()` 추가.
+
+`toUnmodifiableList()` 의 경우 엘리먼트로 `null` 을 허용하지 않으므로 스트림에 `null` 이 있을 경우 NPE가 발생한다. 이와 달리, `Stream.toList()` 은 `null` 을 허용하므로 NPE가 발생하지 않는다.
+
+https://stackoverflow.com/questions/65969919/differences-of-java-16s-stream-tolist-and-stream-collectcollectors-tolist[reference]
+====
+
 ====== _Collectors.toMap()_
 
 `List<T>` 에서 특정 값을 key로 사용하여 `Map` 으로 변환하는 메서드이다.
