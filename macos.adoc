@@ -20,6 +20,14 @@
 * Postman
 * https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
 * https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
+* 1Password
+* VS Code
+
+== 필수 CLI 도구
+
+* autojump
+* tree
+* jq
 
 == 추천 어플리케이션
 
