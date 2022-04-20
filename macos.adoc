@@ -27,6 +27,8 @@
 * https://www.mowglii.com/itsycal/[Itsycal] - 심플 캘린더 위젯
 * https://giphy.com/[GIPHY] - gif 도구
 * asciinema
+* PostMan
+* Docker
 
 == windowserver
 
