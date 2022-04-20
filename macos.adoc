@@ -1,6 +1,33 @@
 = tip
 :toc:
 
+== 필수 어플리케이션
+
+* https://apps.apple.com/kr/app/runcat/id1429033973?mt=12[RunCat] - 시스템 모니터링
+* https://www.macbartender.com/[Bartender] - 메뉴바 관리
+* https://gikken.co/mate-translate/[mate] - 번역기
+* https://github.com/Clipy/Clipy[Clipy] - 클립보드
+* https://www.hammerspoon.org/[Hammerspoon] - 유틸리티
+* https://www.busymac.com/busycal/[BusyCal] - 달력
+* https://iterm2.com/index.html[iTerm2] - 터미널
+* zsh + p10k?
+* https://folivora.ai/[BetterTouchTool] - 창 관리
+* https://www.taskpaper.com/[TaskPaper] - 할일 관리
+* MindNode - 마인드맵
+* https://freemacsoft.net/appcleaner/[AppCleaner] - 어플리케이션 삭제툴
+* https://github.com/michaelvillar/timer-app[Timer] - 타이머
+* https://theunarchiver.com/[Unarchiver]
+* Postman
+* https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
+* https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
+
+== 추천 어플리케이션
+
+* https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저
+* https://www.mowglii.com/itsycal/[Itsycal] - 심플 캘린더 위젯
+* https://giphy.com/[GIPHY] - gif 도구
+* asciinema
+
 == windowserver
 
 * https://ko.ihowto.tips/osx-apps-download-tutorials-tips-hacks-news/ce-este-windowserver-si-de-ce-consuma-multe-resurse-cpu-si-ram-pe-macos.html
