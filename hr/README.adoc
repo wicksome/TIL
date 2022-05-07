@@ -1,0 +1,11 @@
+= HR
+
+[NOTE]
+.HR?
+====
+HR:: Human Resource, 인적자원
+====
+
+LTV:: 주택담보대출비율?
+
+Multiple
