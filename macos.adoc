@@ -1,4 +1,4 @@
-= tip
+= MacOS 셋팅 가이드
 :toc:
 
 == 필수 어플리케이션
@@ -86,6 +86,54 @@ $ mkdir -p ~/.vim/autoload
 $ curl --insecure -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim
 $ vim +PlugInstall +qall
 ----
+
+== Git 설정
+
+. ~/.gitconfig 추가
++
+[source]
+----
+[user]
+	useConfigOnly = true
+
+[includeIf "gitdir:~/workspace/wicksome/"]
+    path = ~/workspace/wicksome/.gitconfig
+
+[includeIf "gitdir:~/workspace/flex-team/"]
+    path = ~/workspace/flex-team/.gitconfig
+
+[alias]
+    lg1 = log --graph --abbrev-commit --decorate --date=format:'%y/%m/%d %H:%M' --format=format:'%C(bold blue)%h%C(reset) %C(dim blue)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+----
+. 개인/업무 디렉토리 분리
++
+[source, bash]
+----
+$ mkdir -p ~/workspace/wicksome
+$ mkdir -p ~/workspace/flex-team
+----
+. 디렉토리별 .gitconfig 파일 생성
++
+[source]
+.~/workspace/wicksome/.gitconfig
+----
+[user]
+    name = yeongjun.kim
+    email = opid911@gmail.com
+[core]
+    sshCommand = "ssh -i ~/.ssh/wicksome"
+----
++
+[source]
+.~/workspace/flex-team/.gitconfig
+----
+[user]
+    name = yeongjun.kim
+    email = <work-email>
+[core]
+    sshCommand = "ssh -i ~/.ssh/<ssh-for-work>"
+----
+
 
 == 추천 어플리케이션
 
