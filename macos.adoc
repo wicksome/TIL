@@ -29,10 +29,11 @@
 
 == 필수 CLI 도구
 
-* zsh + p10k?
-* autojump
-* tree
-* jq
+* https://brew.sh/index_ko[brew]
+* zsh + p10k
+* https://github.com/wting/autojump[autojump]: `brew install autojump`
+* tree: `brew install tree`
+* https://stedolan.github.io/jq/download/[jq]: `brew install jq`
 
 == 추천 어플리케이션
 
