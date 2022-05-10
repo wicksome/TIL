@@ -225,7 +225,7 @@ fi
 == #!/bin/sh vs #!/usr/bin/env bash
 
 ...aa
-
+hashbang
 [#prepare-sudo]
 == sudo 권한 미리 받기
 
