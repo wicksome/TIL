@@ -27,9 +27,16 @@
 * https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
 * https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
 
-== 필수 CLI 도구
+== 필수 cli 설치
 
 * https://brew.sh/index_ko[brew]
+* https://github.com/wting/autojump[autojump]: `brew install autojump`
+* tree: `brew install tree`
+* https://stedolan.github.io/jq/download/[jq]: `brew install jq`
+* https://github.com/junegunn/fzf[fzf]: `brew install fzf`
+
+== Prompt 설정
+
 * https://ohmyz.sh/#install[zsh] + https://github.com/romkatv/powerlevel10k[p10k] + plugins
 +
 [source, diff]
@@ -69,10 +76,6 @@ $ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTO
 +   kubectl
 + )
 ----
-* https://github.com/wting/autojump[autojump]: `brew install autojump`
-* tree: `brew install tree`
-* https://stedolan.github.io/jq/download/[jq]: `brew install jq`
-* https://github.com/junegunn/fzf[fzf]: `brew install fzf`
 
 == VIM 설정 및 플러그인 설치
 
@@ -97,10 +100,10 @@ $ vim +PlugInstall +qall
 	useConfigOnly = true
 
 [includeIf "gitdir:~/workspace/wicksome/"]
-    path = ~/workspace/wicksome/.gitconfig
+	path = ~/workspace/wicksome/.gitconfig
 
 [includeIf "gitdir:~/workspace/flex-team/"]
-    path = ~/workspace/flex-team/.gitconfig
+	path = ~/workspace/flex-team/.gitconfig
 
 [alias]
     lg1 = log --graph --abbrev-commit --decorate --date=format:'%y/%m/%d %H:%M' --format=format:'%C(bold blue)%h%C(reset) %C(dim blue)%ad%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
