@@ -30,7 +30,13 @@
 == 필수 CLI 도구
 
 * https://brew.sh/index_ko[brew]
-* zsh + p10k
+* https://ohmyz.sh/#install[zsh] + https://github.com/romkatv/powerlevel10k[p10k]
++
+[source, diff]
+----
+- ZSH_THEME="robbyrussell"
++ ZSH_THEME="powerlevel10k/powerlevel10k"
+----
 * https://github.com/wting/autojump[autojump]: `brew install autojump`
 * tree: `brew install tree`
 * https://stedolan.github.io/jq/download/[jq]: `brew install jq`
