@@ -12,20 +12,20 @@
 * https://iterm2.com/index.html[iTerm2] - 터미널
 * https://folivora.ai/[BetterTouchTool] - 창 관리
 * https://www.taskpaper.com/[TaskPaper] - 할일 관리
-* MindNode - 마인드맵
-* https://freemacsoft.net/appcleaner/[AppCleaner] - 어플리케이션 삭제툴
-* https://github.com/michaelvillar/timer-app[Timer] - 타이머
-* https://theunarchiver.com/[Unarchiver]
 * 1Password
+* MindNode - 마인드맵
+* https://github.com/michaelvillar/timer-app[Timer] - 타이머
+* https://freemacsoft.net/appcleaner/[AppCleaner] - 어플리케이션 삭제툴
+* https://theunarchiver.com/[Unarchiver]
 
 == 개발 도구
 
+* https://www.jetbrains.com/ko-kr/idea/[IntelliJ]
 * VS Code
-* IntelliJ
+* Docker
 * Postman
 * https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
 * https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
-* Docker
 
 == 필수 CLI 도구
 
