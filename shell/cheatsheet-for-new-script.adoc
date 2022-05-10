@@ -226,6 +226,8 @@ fi
 
 ...aa
 hashbang
+https://en.wikipedia.org/wiki/Shebang_(Unix)[shebang]
+
 [#prepare-sudo]
 == sudo 권한 미리 받기
 
