@@ -5,7 +5,7 @@
 
 * https://apps.apple.com/kr/app/runcat/id1429033973?mt=12[RunCat] - 시스템 모니터링
 * https://www.macbartender.com/[Bartender] - 메뉴바 관리
-* https://gikken.co/mate-translate/[mate] - 번역기
+* https://gikken.co/mate-translate/[Mate Translate] - 번역기
 * https://github.com/Clipy/Clipy[Clipy] - 클립보드
 * https://www.hammerspoon.org/[Hammerspoon] - 유틸리티
 * https://www.busymac.com/busycal/[BusyCal] - 달력
