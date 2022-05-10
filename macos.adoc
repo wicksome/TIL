@@ -37,6 +37,12 @@
 - ZSH_THEME="robbyrussell"
 + ZSH_THEME="powerlevel10k/powerlevel10k"
 ----
++
+[source, zsh]
+..zshrc에 https://github.com/wicksome/TIL/blob/master/dotfiles/.alias.zsh[alias] 추가
+----
+source ~/.alias.zsh
+----
 * https://github.com/wting/autojump[autojump]: `brew install autojump`
 * tree: `brew install tree`
 * https://stedolan.github.io/jq/download/[jq]: `brew install jq`
