@@ -30,22 +30,49 @@
 == 필수 CLI 도구
 
 * https://brew.sh/index_ko[brew]
-* https://ohmyz.sh/#install[zsh] + https://github.com/romkatv/powerlevel10k[p10k]
+* https://ohmyz.sh/#install[zsh] + https://github.com/romkatv/powerlevel10k[p10k] + plugins
 +
 [source, diff]
+.p10k 적용 → `~/.zshrc`
 ----
 - ZSH_THEME="robbyrussell"
 + ZSH_THEME="powerlevel10k/powerlevel10k"
 ----
 +
 [source, zsh]
-..zshrc에 https://github.com/wicksome/TIL/blob/master/dotfiles/.alias.zsh[alias] 추가
+.https://github.com/wicksome/TIL/blob/master/dotfiles/.alias.zsh[alias] 추가 및 적용 → `~/.zshrc`
 ----
 source ~/.alias.zsh
+----
++
+[source, bash]
+.plugin 설치
+----
+$ git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+$ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+$ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+----
++
+[source, diff]
+.plugin 적용 → `~/.zshrc`
+----
+- plugins=(git)
++ plugins=(
++   git
++   iterm2
++   zsh-completions
++   zsh-syntax-highlighting
++   zsh-autosuggestions
++   autojump
++   fzf
++   docker
++   kubectl
++ )
 ----
 * https://github.com/wting/autojump[autojump]: `brew install autojump`
 * tree: `brew install tree`
 * https://stedolan.github.io/jq/download/[jq]: `brew install jq`
+* https://github.com/junegunn/fzf[fzf]: `brew install fzf`
 
 == VIM 설정 및 플러그인 설치
 
@@ -54,8 +81,7 @@ source ~/.alias.zsh
 +
 [source, bash]
 ----
-# benmills/vimux 플러그인 때문에 설치함
-$ brew isntall tmux
+$ brew isntall tmux # benmills/vimux 플러그인 때문에 설치함
 $ mkdir -p ~/.vim/autoload
 $ curl --insecure -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim
 $ vim +PlugInstall +qall
