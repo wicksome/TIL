@@ -41,6 +41,18 @@
 * tree: `brew install tree`
 * https://stedolan.github.io/jq/download/[jq]: `brew install jq`
 
+== VIM 설정 및 플러그인 설치
+
+. https://github.com/wicksome/TIL/blob/master/dotfiles/.vimrc[`~/.vimrc`] 파일 생성
+. https://github.com/junegunn/vim-plug/[vim-plug] 설치
++
+[source, bash]
+----
+$ mkdir -p ~/.vim/autoload
+$ curl --insecure -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim
+$ vim +PlugInstall +qall
+----
+
 == 추천 어플리케이션
 
 * https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저
