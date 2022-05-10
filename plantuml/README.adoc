@@ -109,6 +109,37 @@ A -> B: <:lock:> 잠금
 * https://plantuml.com/ko/creole#68305e25f5788db0
 * https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md
 
+== 메모 넣기
+
+[plantuml]
+.https://stackoverflow.com/questions/45794732/plantuml-nested-components-with-text-possible/46386222#46386222[ref]
+....
+@startuml
+skinparam rectangle<<desc>> {
+    backgroundColor Transparent
+    borderColor Transparent
+    titleFontColor Red
+    stereotypeFontColor Transparent
+}
+
+folder folder2 {
+    folder folder3 [
+        text bla bla
+    ]
+    artifact art2 [
+        more text
+    ]
+    rectangle f2<<desc>> [
+        Here you can have some explanation with
+        ====
+        --Markdown-- //formatting// ~~elements~~
+    ]
+
+    folder3 -[hidden]- f2
+}
+@enduml
+....
+
 == Trick
 
 include::trick.adoc[]
