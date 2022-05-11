@@ -27,6 +27,10 @@
 * https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
 * https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
 
+== IntelliJ 설정
+
+* "cmd + shift + A" 단축키 충돌 제거 → 맥 설정에 '키보드 > 단축키 > 서비스 > 터미널에서 man 페이지 인덱스 검색' 단축키 제거
+
 == 필수 cli 설치
 
 * https://brew.sh/index_ko[brew]
