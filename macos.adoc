@@ -140,7 +140,7 @@ $ mkdir -p ~/workspace/flex-team
 
 == 추천 어플리케이션
 
-* https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저
+* https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저 `brew install --cask keycastr`
 * https://www.mowglii.com/itsycal/[Itsycal] - 심플 캘린더 위젯
 * https://giphy.com/[GIPHY] - gif 도구
 * asciinema
