@@ -45,6 +45,7 @@
 * tree: `brew install tree`
 * https://stedolan.github.io/jq/download/[jq]: `brew install jq`
 * https://github.com/junegunn/fzf[fzf]: `brew install fzf`
+* graphviz: `brew install graphviz`
 
 == Prompt 설정
 
