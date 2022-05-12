@@ -29,7 +29,22 @@
 
 == IntelliJ 설정
 
-* Find Action(cmd + shift + A) 단축키 충돌 제거 → 맥 설정에 '키보드 > 단축키 > 서비스 > 터미널에서 man 페이지 인덱스 검색' 단축키 제거
+* 단축키 관련
++
+|===
+| Name | Shortcut
+
+| Branches... 
+| `⌃⌘B`
+
+| Editor Actions > Clone Caret Above
+| `⌥⌘↑`
+
+| Editor Actions > Clone Caret Below
+| `⌥⌘↓`
+
+|===
+** Find Action(cmd + shift + A) 단축키 충돌 제거 → 맥 설정에 '키보드 > 단축키 > 서비스 > 터미널에서 man 페이지 인덱스 검색' 단축키 제거
 * 플러그인 설치
 ** AsciiDoc
 ** String Manipulation
