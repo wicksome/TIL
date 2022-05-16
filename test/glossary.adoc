@@ -13,6 +13,8 @@
 
 테스트중인 단위
 
+== CUT, code under test
+
 == Test Double
 
 * 테스트 코드를 작성할 때 의존 컴포넌트(DOC, depended-on component)를 사용할 수 없다면, DOC 대신 테스트 더블로 대체할 수 있음
