@@ -40,3 +40,10 @@ subprojects {
 
 * web에서 `implementation: web-core` 하면  바로 `web-core` 코드만 사용 가능
 * core 수정시 web-core까지만 재빌드
+
+
+== getting
+
+https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/getting.html
+
+대리자 속성(delegate property)을 통해 컬렉션의 기존 요소(element)를 참조하는 관용적 방법.
