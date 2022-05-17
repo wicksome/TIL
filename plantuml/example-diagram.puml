@@ -1,4 +1,4 @@
-@startuml
+@startuml "name"
 A -> B
 B --> A
 @enduml
