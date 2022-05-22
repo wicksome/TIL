@@ -119,7 +119,7 @@ class AppService {
 }
 ----
 <1> `launch` 함수는 코루팀을 생성하며, `launch` 함수는 블록안에 지정한 람다(코루틴 코드)를 시작시킨다.
-<1> `launch` 함수의 파라미터에는 해당 작업이 실행되는 스레드를 나타낸다. `Dispatcher.Main` 은 안드로이드의 UI 스레드이다.
+<2> `launch` 함수의 파라미터에는 해당 작업이 실행되는 스레드를 나타낸다. `Dispatcher.Main` 은 안드로이드의 UI 스레드이다.
 <3> 이 코드를 안드로이드로 예를 들었을 때, `displayData()` 함수는 UI를 변경시키는 작업이므로, UI 스레드를 지정시켰다.
 <4> 코루틴 컨텍스트의 기본 인자는 `CommonPool` 이다. 이것은 코루틴이 실행될 때 사용될 수 있는 백그라운드 스레드 풀이다. +
     따라서 `await` 를 호출할 때 해당 작업은 CommonPool의 스레드 중 하나를 사용한다.
@@ -188,4 +188,83 @@ suspend fun fundPayment(@PathVariable id: String): PaymentView {
 
 
 
-* 
+== Flow
+
+[source, kotlin]
+.List > Collection > Iterable
+----
+fun simple(): List<Int> = listOf(1, 2, 3)
+
+fun main() {
+  simple().forEach { println(it) }
+}
+----
+
+[source, kotlin]
+.Sequence
+----
+fun simple(): Sequence<Int> = sequence {
+  for (i in 1..3) {
+    Thread.sleep(100)
+    yield(i)
+  }
+}
+
+fun main() {
+  simple().forEach { println(it) }
+}
+----
+
+* 첫번째 코드와 동일하지만 각 숫자를 출력할 때마다 100ms를 기다림
+* (위 코드 기준으로) 메인 스레드를 스탑함
+
+[source, kotlin]
+.suspend funtion
+----
+suspend fun simple(): List<Int> {
+  delay(100)
+  return listOf(1, 2, 3)
+}
+
+fun main() = runBlocking<Unit> {
+  simple().forEach { println(it) }
+}
+----
+
+[source, kotlin]
+.Flow
+----
+suspend fun simple(): Flow<Int> = flow{
+  for (i in 1..3) {
+    delay(100)
+    emit(i)
+  }
+}
+
+fun main() = runBlocking<Unit> {
+  simple().collect { println(it) }
+}
+----
+
+* `List<Int>` 를 반환하면 한번에 모든 값을 반환함
+* 동기식으로 계산된 값에 `Sequence<Int>` 를 사용하것처럼 비동기식으로 계산되는 값의 스트림을 나타내기 위해 `Flow<Int>` 를 사용할 수 있음
+* Flow는 cold stream.
+** collect가 호출될때까지 실행되지 않음
+* multiple flow로 동작하도록 하지 않는이상 sequential하게 동작함
+
+---
+
+* Iterator
+* Mono, Flux, Flow, Sequence
+* Channel
+* Sequence는 코루틴 빌더가 아닌 kotlin 에서 제공하는 빌더
+* suspend
+
+=== cold strean vs hot stream
+
+
+=== Referneces
+
+* https://kotlinlang.org/docs/flow.html
+* https://medium.com/mobile-app-development-publication/kotlin-slow-list-and-lazy-sequence-61691fc974c5
+* https://medium.com/mobile-app-development-publication/kotlin-flow-a-much-better-version-of-sequence-d2555ba9eb94
