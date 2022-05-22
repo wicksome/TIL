@@ -45,3 +45,38 @@ class UserControllerTest {
 === @AutoConfigureMockMvc
 
 * `MockMvc` 를 Builder 없이 주입 받을 수 있다.
+
+== Context
+
+* bean을 다루기 위한 공간?
+* root-context
+** 여기에 등록된 빈들은 컨텍스트들에 공유함
+** 스프링에 의해 생성되는 빈에 대한 spring ioc container
+** 여러 서블릿에서 공통으로 사용할 빈을 등록하는 컨텍스트
+** service, repository
+* servlet-context
+** 빈을 공유하지 않고, 빈이 없으면 root-context에서 찾음
+** 서블릿 단위로 생성
+** controller
+
+
+== @SpringBootConfiguration
+
+[plantuml]
+....
+@startuml
+[Configuration] <|-- [SpringBootConfiguration]
+[SpringBootConfiguration] <|-- [SpringBootApplication]
+[EnableAutoConfiguration] <|-- [SpringBootApplication]
+[ComponentScan] <|-- [SpringBootApplication]
+@enduml
+....
+
+* `@SpringBootConfiguration` 은 `@Configuration` 의 대안.
+* `@SpringBootConfiguration` 은 Spring Boot 어플리케이션의 `@Configuration` 들을 제공함
+* `@SpringBootConfiguration` 을 사용하면 설정을 자동으로 찾을 수 있으므로 단위, 통합 테스트에서 유용.
+* Spring Boot 어플리케이션에서는 하나의 `@SpringBootConfiguration` 만을 포함해야함
+** 대부분의 Spring Boot 어플리케이션들은 `@SpringBootApplication` 을 사용함으로써 `@SpringBootConfiguration` 을 사용함. 
+* `@EnableAutoConfiguration` 은 대게 `@Conditional` 한 설정을들 위해 사용한다 함. 하지만 프로젝트에서 모듈을 나누고 의존성 추가만으로 설정 주입 받기를 원하면서 `@Conditional` 이 아닌 congiguration을 사용함
++
+(spring.factories > org.springframework.boot.autoconfigure.EnableAutoConfiguration)
