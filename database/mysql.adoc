@@ -25,6 +25,10 @@ CURRENT_TIMESTAMP(): Returns the current date time with your timezone configured
 UTC_TIMESTAMP(): Returns the current date and time using UTC timezone.
 ____
 
+* `UTC_TIMESTAMP` 는 mysql 8 이상에 추가된것으로 보임
+** https://dba.stackexchange.com/a/279140
+** https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp
+
 .References
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
 * https://mariadb.com/kb/en/utc_timestamp/
