@@ -17,3 +17,14 @@ ____
 * http://underpop.online.fr/m/mysql/manual/mysql-data-types-datetime.html
 * https://mariadb.com/kb/en/timestamp/
 * https://mariadb.com/kb/en/datetime/
+
+=== CURRENT_TIMESTAMP vs. UTC_TIMESTAMP
+
+____
+CURRENT_TIMESTAMP(): Returns the current date time with your timezone configured.
+UTC_TIMESTAMP(): Returns the current date and time using UTC timezone.
+____
+
+.References
+* https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
+* https://mariadb.com/kb/en/utc_timestamp/
