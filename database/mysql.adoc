@@ -28,6 +28,8 @@ ____
 * `UTC_TIMESTAMP` 는 mysql 8 이상에 추가된것으로 보임
 ** https://dba.stackexchange.com/a/279140
 ** https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp
+* aurora db의 버전2는 mysql 5 버전과 호환. 버전3은 mysql 8과 호환
+** https://docs.aws.amazon.com/ko_kr/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.CompareMySQL57.html
 
 .References
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
