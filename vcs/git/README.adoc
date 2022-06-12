@@ -1,7 +1,17 @@
 = Git
 :toc:
 
-== 원격 브랜치를 로컬에 생성할 때
+== Branch strategy
+
+* xref:git-flow.adoc[git-flow]
+
+== Workflow
+
+* https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow[Forking Workflow]
+
+== Cheat sheet
+
+=== 원격 브랜치를 로컬에 생성할 때
 
 [source, bash]
 ----
@@ -18,7 +28,7 @@ $ git checkout -t origin/develop # develop으로 브랜치 생성됨
 $ git branch -d master # master 브랜치 삭제
 ----
 
-== commands
+=== commands
 
 https://git-scm.com/docs/git-checkout[`checkout`]:: 
 Switch branches or restore working tree files
