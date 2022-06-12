@@ -1,0 +1,104 @@
+= Gitflow
+:toc:
+
+== Gitflow
+
+* 이름 때문에 표준(?) 느낌이 있지만, Git을 활용한 워크플로중 하나의 아이디어일 뿐이다.
+* 기본적으로 두 개의 브랜치에서 작업이 이뤄진다. `main`, `develop`
+** 즉, 두 개의 브랜치에서 해당 프로젝트의 작업 이력을 관리/기록한다.
+* `main` 브랜치는 공식적인 릴리즈 이력을 저장한다.
+** 보통 `main` 브랜치내 커밋에 버전 번호로 https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8[태그]를 지정하여 버전 관리를 한다.
+* 첫 `develop` 브랜치는 `main` 브랜치에서 만들어진다.
++
+[source, bash]
+----
+git branch develop
+git push -u origin develop
+----
+* `develop` 브랜치는 프로젝트의 전체 이력이 포함되는 반면, `main` 브랜치에는 요약된 버전이 포함된다.
+* 모든 개발자들은 centeral(remote) repository를 등록하고, `develop` 브랜치의 추적 브랜치(https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches[tracking branch])를 만들어야 한다.
+
+== Feature branches
+
+* 새로운 기능 개발이 필요할 경우 백업/협업을 위해 별도 브랜치가 있어야 한다.
+* 기능 개발을 위한 별도 브랜치(`feature` 브랜치)는 최신 `develop` 브랜치에서 생성한다. ( `main` 브랜치 X)
++
+[source, bash]
+----
+git checkout develop
+git checkout -b feature/add-user-service # before git 2.23
+git switch -c feature/add-user-service # after git 2.23
+----   
+* 기능 개발이 완료되면 `develop` 브랜치로 다시 https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%99%80-Merge-%EC%9D%98-%EA%B8%B0%EC%B4%88[merge] 한다. `feature` 브랜치는 `main` 브랜치와 직접적인 상호작용해서는 안된다.
++
+[NOTE]
+====
+병합(merge) 되는 방법은 다양하다. 혼자서 개발하는 프로젝트라면 로컬에서 https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-%EB%B8%8C%EB%9E%9C%EC%B9%98%EC%99%80-Merge-%EC%9D%98-%EA%B8%B0%EC%B4%88[git merge] 명령어를 통해 병합할 수도 있다.
+많은 개발자들간에 협업 혹은 코드리뷰나 CI 결과를 통해 병합을 제어한다면 GitHub의 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests[Pull Request]를 활용할 수 있다.
+====
+
+== Release branches
+
+* 릴리즈 날짜가 다가오거나 릴리즈를 위한 기능이 충족되면 `develop` 브랜치에서 `release` 브랜치를 분기한다. (`main` 브랜치 X)
++
+[source, bash]
+----
+git checkout develop
+git switch -c release/v0.1.0
+----
+* `release` 브랜치가 생성되면 다음 릴리즈 주기가 시작된다.
+** `release` 브랜치는 버그 수정, 문서 생성, 해당 릴리즈에 포커싱된 작업만이 포함된다.
+** `develop` 브랜치를 다음 릴리즈를 준비할 수 있으며, 이 시기부터 다음 릴리즈를 위한 `feature` 브랜치를 병합할 수 있다.
+* 해당 릴리즈가 출시될 준비가 되면 `release` 브랜치를 `main` 브랜치에 병합하고, 버전 번호로 태그를 생성한다.
++
+[source, bash]
+----
+git switch main
+git merge release/v0.1.0
+git tag v0.1.0
+git push origin v0.1.0
+----
+** 또한, 릴리즈가 시작된 이후에 추가되었을 수 있는 작업들을 위해 `develop` 브랜치에도 병합(back merge)한다.
++
+[source, bash]
+----
+git switch develop
+git merge release/v0.1.0
+----    
+** 두 브랜치에 병합이 완료된 `release` 브랜치를 제거한다.
++
+[source, bash]
+----
+git branch -D release/v0.1.0
+----
+
+== Hotfix branches
+
+* `hotfix` 브랜치는 유지보수 및 긴급 대응을 위해 프로덕션 릴리즈를 빠르게 패치하기 위해 사용된다.
+** 버그 수정을 위한 전담 브랜치가 있으면 나머지 워크플로를 중단하거나 릴리즈 주기에 영향을 주지 않고도 문제를 해결할 수 있다.
+* `hotfix` 브랜치는 `main` 브랜치를 기반으로 생성되는 것을 제외하고는 `release` 브랜치와 유사하다.
+** `main` 브랜치에서 분기되는 유일한 브랜치다.
++
+[source, bash]
+----
+git switch main
+git switch -c hotfix/bugfix-branch
+----
+* 기능 수정이 완료되는 즉시 `main`, `develop` 브랜치에 병합되어야 한다. 이 후, `main` 브랜치에서 업데이트된 버전으로 태그를 생성해야 한다.
++
+[source, bash]
+----
+git switch main
+git merge hotfix/bugfix-branch
+git tab v0.1.1
+git push origin v0.1.1
+git switch develop
+git merge hotfix/bugfix-branch
+git branch -D hotfix/bugfix-branch
+----
+
+== References
+
+* https://nvie.com/posts/a-successful-git-branching-model/[A successful Git branching model] - Vincent Driessen’s Blog
+* https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow[Gitflow Rowkflow] - Atlassian
+* https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development?hl=ko[trunk-based development]
