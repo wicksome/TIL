@@ -96,6 +96,20 @@ git switch develop
 git merge hotfix/bugfix-branch
 git branch -D hotfix/bugfix-branch
 ----
++
+[WARNING]
+.(예외) RB가 존재할 경우 어디에 back merge를 할까?
+====
+RB가 이미 있을 경우 `hotfix`는 `develop` 브랜치가 아닌 RB에 merge한다. (https://community.atlassian.com/t5/Sourcetree-questions/Gitflow-hotfix-backmerge-into-release-when-release-exists/qaq-p/711966#M20073[참고])
+
+RB가 병합될 때 develop 브랜치에도 함께 반영되고, bugfix 된 RB를 배포시에도 포함할 수 있기 때문이다.
+
+커밋 로그가 복잡하지 않다면 hotfix 백머지된 이후에 다시 RB를 다시 생성하고 cherry-pick 하는 것도 방안일 수 있다.
+====
+
+== Support brnaches
+
+ref: https://stackoverflow.com/questions/37889187/what-is-support-command-in-git-flow
 
 == References
 
