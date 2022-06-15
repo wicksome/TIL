@@ -107,9 +107,11 @@ RB가 병합될 때 develop 브랜치에도 함께 반영되고, bugfix 된 RB�
 커밋 로그가 복잡하지 않다면 hotfix 백머지된 이후에 다시 RB를 다시 생성하고 cherry-pick 하는 것도 방안일 수 있다.
 ====
 
-== Support brnaches
+== Support branches
 
-ref: https://stackoverflow.com/questions/37889187/what-is-support-command-in-git-flow
+* `support` 브랜치는 GItFlow에서 다루는 개념은 아니지만, 특정 시기동안에 병렬로 다양한 버전을 관리하려면 필수이다.
+* major 버전업이 된 이후에 이전 버전의 hotfix를 지원해야할 때 사용할 수 있다.
+* ref: https://stackoverflow.com/questions/37889187/what-is-support-command-in-git-flow
 
 == References
 
