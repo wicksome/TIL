@@ -20,6 +20,20 @@
 ├── heads/
 └── tags/
 ----
+** 변경 방법: `git update-ref refs/heads/master cac0ca`
+** `HEAD` 파일은 현 브랜치를 가르키는 간접(symbolic) Refs
+*** refs를 가르키는 겂이라서 SHA-1 값을 저장하지 않는다.
++
+[source, bash]
+----
+$ cat .git/HEAD
+ref: refs/heads/master
+----
+* Branch
+** 브랜치는 결국 어떤 작업 중 마지막 작업을 가르키는 포인터 or refs
+
+.References
+* https://www.atlassian.com/git/tutorials/refs-and-the-reflog
 
 == Workflow
 
