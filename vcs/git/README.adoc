@@ -5,6 +5,22 @@
 
 * xref:git-flow.adoc[git-flow]
 
+== 미분류
+
+=== reference, revision, branch, tag
+
+* Git Refs
+** SHA-1(commit hash) 값보다 사용하기 쉬운 이름으로 된 포인터를 사용하기 위해 https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-Refs[reference], refs를 사용한다.
+** `.git/refs` 디렉토리에 SHA-1 값을 외우기 쉬운 이름으로 된 파일에 저장한다.
++
+[source]
+.`.git/refs` 디렉토리 구조
+----
+./
+├── heads/
+└── tags/
+----
+
 == Workflow
 
 * https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow[Forking Workflow]
