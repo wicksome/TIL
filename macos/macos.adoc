@@ -24,7 +24,7 @@
 * https://www.jetbrains.com/ko-kr/idea/[IntelliJ]
 * VS Code
 * Docker
-* Postman
+* Postman or https://paw.cloud/
 * https://github.com/qishibo/AnotherRedisDesktopManager[AnotherRedisDesktopManager] - Redis 클라이언트
 * https://sequelpro.com/[Sequel Pro] - MySQL 클라이언트
 
