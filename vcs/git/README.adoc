@@ -29,8 +29,14 @@
 $ cat .git/HEAD
 ref: refs/heads/master
 ----
+* https://git-scm.com/docs/revisions[Revision]
+** extended SHA-1 사용
 * Branch
 ** 브랜치는 결국 어떤 작업 중 마지막 작업을 가르키는 포인터 or refs
+* Tag
+** Annotated 태그, Lightweight 태그로 나뉨
+** Lightweight 태그
+*** 브랜치랑 비슷하지만 브랜치처럼 옮길 수 없음
 
 .References
 * https://www.atlassian.com/git/tutorials/refs-and-the-reflog
