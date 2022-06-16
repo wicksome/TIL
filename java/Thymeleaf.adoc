@@ -11,3 +11,7 @@
 ** devtools 받으면 그 파일만 리컴파일하면 반영됨
 ** `devtools` 라이브러리를 넣으면 캐시도 없고 리로딩도 하게 해줌
 * 정적파일은 `resource/static` 디렉토리에 저장
+
+== https://www.thymeleaf.org/doc/articles/standardurlsyntax.html[Standard URL Syntax]
+
+* Thmeleaf 표준 표현식중 한 유형으로 link expressions 라고 부르는 `@{...}` 을 사용함
