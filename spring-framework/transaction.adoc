@@ -1,4 +1,5 @@
 = Transation
+:source-highlighter: highlight.js
 
 [plantuml]
 ....
