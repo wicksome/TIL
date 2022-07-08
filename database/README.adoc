@@ -1,0 +1,5 @@
+= Database 관련
+
+distinct::
+일부 컬럼에 대해서만 중복 제거하지 않고, select한 전체 row에서 중복을 제거하므로 속도가 느려진다고 한다.
+distinct 사용시 temp tablespace에 임시로 저장하고 작업하는 방식이라 시스템에 부하를 줄 수 있다고 한다.
