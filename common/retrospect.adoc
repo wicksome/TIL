@@ -37,3 +37,8 @@ TODO: 정리 필요
 
 - Keep, Problem은 이전의 Try에서 나열할 수도 있음
 - Try에 "OO을 조심하자"는 해결 방안이 될 수 있다. 구체적인 액션에서 구체과 시키는 것이 중요하게 봐야 한다.
+
+
+== 4 Ls
+
+https://www.funretrospectives.com/the-4-ls-liked-learned-lacked-longed-for/
