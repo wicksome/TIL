@@ -1,0 +1,11 @@
+= Kotin Multiplatform
+
+== https://kotlinlang.org/docs/multiplatform.html[Kotlin Multiplatform]
+
+== https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html[Kotlin Multiplatform Mobile] (KMM)
+
+* https://kotlinlang.org/lp/mobile/[KMM]은 iOS, Android 앱 개발을 위한 SDK.
+* https://kotlinlang.org/docs/kmm-samples.html[sample projects]
+* https://kotlinlang.org/docs/multiplatform.html[Kotlin Multiplatform]을 사용하면 모바일 넘어 크로스-플랫폼 개발 가능
++
+image:https://kotlinlang.org/lp/mobile/static/multiplatform-diagram-1fcaa736e6ad76e58b455b41bd6e8e34.svg[]

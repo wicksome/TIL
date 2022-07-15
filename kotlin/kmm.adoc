@@ -1,3 +1,0 @@
-= Kotin Multiplatform Mobile (KMM)
-
-* https://kotlinlang.org/lp/mobile/
