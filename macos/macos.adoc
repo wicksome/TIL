@@ -175,6 +175,8 @@ $ mkdir -p ~/workspace/flex-team
 * tab
 ** https://contexts.co/
 ** https://alt-tab-macos.netlify.app/
+* 스
+** https://shottr.cc/
 
 == windowserver
 
