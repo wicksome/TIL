@@ -3180,3 +3180,5 @@ https://kotlinlang.org/docs/reference/whatsnew14.html
 
 * https://plugins.jetbrains.com/plugin/10081-edutools[kotlin 실습으로 배우기]
 * https://github.com/Kotlin/KEEP[KEEP - Kotlin Evolution and Enhancement Process]
+* https://kotlinlang.org/docs/kapt.html[kapt is in maintenance mode].
+** alternative: https://kotlinlang.org/docs/ksp-overview.html[ksp](Kotlin Symbol Processing)
