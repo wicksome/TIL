@@ -789,6 +789,8 @@ fun main(args: Array<String>) {
 TODO: scala랑 동일한 기능인지 찾아볼 것 +
 Scala에는 `@inline` 과 `@noinline` 어노테이션이 있다.
 
+재귀 관련해서 `tailrec` 이런 예약어도 있음.
+
 === Function reference
 
 * 함수 참조(function reference)는 이름이 있는 함수가 인자로 전달될 수 있게 한다.
