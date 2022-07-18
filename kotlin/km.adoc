@@ -12,6 +12,7 @@
 * 테스트도 `commonTest` 에 한번만 작성해둘수 있음 → 이미 `actual` 을 통해 인터페이스가 있으므로 가능해짐
 * 플랫폼 개별 테스트는 `jvmTest` 하위에 둘 수 있음
 * `maven-publish` 를 사용하면 각 타겟에 따라 자동으로 생성함 (Android 제외)
+** Android는 추가 구성이 필요함 (https://kotlinlang.org/docs/multiplatform-publish-lib.html#publish-an-android-library[ref])
 ** Maven
 ** CocoaPods
 ** NPM?
