@@ -53,6 +53,7 @@
 ** GitToolBox
 ** PlantUML Integration
 ** Grep Console
+** https://plugins.jetbrains.com/plugin/8183-gitlink[GitLink] ?
 
 == 필수 cli 설치
 
