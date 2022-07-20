@@ -2459,6 +2459,12 @@ sealed class StudentStatus {
 ----
 typealias NodeSet = Set<Network, Node>
 ----
+* 오브젝트로 함께 사용할 수 있다.
++
+[source, kt]
+----
+typealias UserFactory = User.Companion
+----
 
 .References
 * https://kotlinlang.org/docs/reference/type-aliases.html[Type aliases - Kotlin Guide]
