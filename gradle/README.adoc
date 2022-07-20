@@ -1,4 +1,6 @@
-= Gradle
+= https://gradle.org/[Gradle]
+
+빌드 자동화 도구. (오픈 소스)
 
 == Install
 
