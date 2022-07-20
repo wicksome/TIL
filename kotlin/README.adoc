@@ -304,6 +304,10 @@ TODO
 .References
 * https://okky.kr/article/649639
 
+=== Nothing
+
+* 실행될 수 없는 표현식을 나타낸다. 기본적으로 예외를 던진다.
+
 == Conditionals
 
 === if/else
@@ -2312,6 +2316,17 @@ class Grade(val name: String, val rate: Double) {
   operator fun component2() = rate
 }
 ----
+====
+
+[NOTE]
+.Canonical method
+====
+카노니컬 메서드^Canonical{sp}methods^는 `Any` 에 선언된 메서드다. 즉 코틀린의 모든 인스턴스가 갖는다.
+데이터 클래스의 경우 코틀린의 모든 카노니컬 메서드를 올바르게 구현한다.
+
+* `equals(other: Any?): Boolean`
+* `hashCode(): Int`
+* `toString(): String`
 ====
 
 === Enum
