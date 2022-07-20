@@ -54,6 +54,7 @@
 ** PlantUML Integration
 ** Grep Console
 ** https://plugins.jetbrains.com/plugin/8183-gitlink[GitLink] ?
+** https://plugins.jetbrains.com/plugin/14221-git-machete
 
 == 필수 cli 설치
 
