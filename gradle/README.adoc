@@ -41,10 +41,26 @@ subprojects {
 * web에서 `implementation: web-core` 하면  바로 `web-core` 코드만 사용 가능
 * core 수정시 web-core까지만 재빌드
 
-== NamedDomainObjectCollection
+== NamedDomainObjectContainerExtensions
 
-== getting
+=== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/org.gradle.api.-named-domain-object-container/creating.html[creating]
 
-https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/getting.html
+주어진 설정으로 기본 컬렉션을 생성
+
+[source, kt]
+----
+val myElement by myContainer.creating { myProperty = 42 }
+----
+
+== NamedDomainObjectCollectionExtensions
+
+=== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/getting.html[getting]
+
+[source, kt]
+.build.gradle.kts
+----
+val commonMain by getting
+val commonMain by getting { }
+----
 
 대리자 속성(delegate property)을 통해 컬렉션의 기존 요소(element)를 참조하는 관용적 방법.
