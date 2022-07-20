@@ -308,6 +308,27 @@ TODO
 
 * 실행될 수 없는 표현식을 나타낸다. 기본적으로 예외를 던진다.
 
+=== Annotation
+
+[source, kt]
+----
+annotation class ClientIp
+----
+
+[source, kt]
+----
+@Target(AnnotationTarget.CLASS) // <1>
+@Retention(AnnotationRetention.RUNTIME) // <2>
+annotation class ClientIp
+----
+<1> 어노케이션을 선언할 수 있는 대상
+<2> 어노테이션의 라이프라이클. 언제까지 살아 남을지
++
+* SOURCE: 소스(.java) 코드까지 남음
+* CLASS: 클래스(.class) 파일까지 남음 = 바이트 코드
+* RUNTIME: 런타임까지 남음
+
+
 == Conditionals
 
 === if/else
@@ -543,9 +564,9 @@ fun toArray2(ids: Array<out String>) = ids // <1>
 (제네릭 타입의 슈퍼-서브 타입 관계를 나타낸다).
 
 [NOTE]
-.Unit 타입 vs Noting 타입
+.Unit 타입 vs Nothing 타입
 ====
-Noting 타입도 Unit 타입처럼 값을 반환하지 않는 함수를 나타나는대 사용한다. 
+Nothing 타입도 Unit 타입처럼 값을 반환하지 않는 함수를 나타나는대 사용한다. 
 하지만 함수의 실행이 끝나더라도 호출 코드로 제어가 복귀되지 않는다.
 
 [source. kt]
@@ -554,7 +575,7 @@ Noting 타입도 Unit 타입처럼 값을 반환하지 않는 함수를 나타�
  * Always throws [NotImplementedError] stating that operation is not implemented.
 */
 @Kotlin.internal.InlineOnly
-public inline fun TODO(): Noting = throw NotImplementedError()
+public inline fun TODO(): Nothing = throw NotImplementedError()
 ----
 
 [source, kt]
@@ -564,16 +585,16 @@ fun shouldReturnAString(): String {
 }
 ----
 
-`TODO` 함수는 예외를 발생시키며, Noting 타입을 반환한다. 
+`TODO` 함수는 예외를 발생시키며, Nothing 타입을 반환한다. 
 
 개발자는 `shouldReturnAString` 함수가 String 타입의 문자열을 반환해햐 한다는 것을 알고 있다.
 그러나 이 함수를 구현하는 데 필요한 다른 기능이 아직 완성되지 않아서 개발을 보류하고 `TODO` 함수를 호출함으로 나중에 할 일을 알 수 있도록 한 것이다.
 
 `shouldReturnAString` 함수는 String 반환타입으로 선언되었지만, 현재 어떤 것도 반환하지 않으므로 
-컴파일러가 에러로 처리해야 할 것이다. 하지만 그렇지 않다. Noting 타일을 반환하는 `TODO` 함수가 예외를 
+컴파일러가 에러로 처리해야 할 것이다. 하지만 그렇지 않다. Nothing 타일을 반환하는 `TODO` 함수가 예외를 
 발생시킨 후 `shouldReturnAString` 함수로 제어가 복귀되지 않도록 보장하기 때문이다.
 
-코드를 개발할 때 Noting 타입을 사용하면 또 다른 장점이 있다. 
+코드를 개발할 때 Nothing 타입을 사용하면 또 다른 장점이 있다. 
 제어가 복귀되지 않기 때문에 이 함수의 다음 코드는 절대 실핼될 수 없다는 것을 컴파일러는 알고 있다.
 그러므로 컴파일러는 절대 실행될 수 없는(unreachable) 코드임을 나타내는 경고를 알려준다.
 ====
