@@ -66,3 +66,9 @@ val commonMain by getting { }
 ----
 
 대리자 속성(delegate property)을 통해 컬렉션의 기존 요소(element)를 참조하는 관용적 방법.
+
+== scan 옵션
+
+* https://scans.gradle.com/#gradle
+* `--scan` 옵션을 추가하면 결과를 웹 UI로 볼 수 있음
+* 다만, gradle에 결과를 전송해서 보는 방식
