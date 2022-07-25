@@ -33,15 +33,50 @@ subprojects {
 
 `core` <- `web-core` <- `web`
 
-=== api
-
+[NOTE]
+.api
+====
 * web에서 `api("web-core")` 하면 `core` 코드까지 사용 가능
 * `core` 수정 시 `web-core`, `web` 빌드
+====
 
-=== implementation
 
+[NOTE]
+.implementation
+====
 * web에서 `implementation: web-core` 하면  바로 `web-core` 코드만 사용 가능
 * core 수정시 web-core까지만 재빌드
+====
+
+=== :web-code 모듈에 :core 모듈이 api 일 때
+
+[source, kotlin]
+.build.gradle.kts in :web-core
+----
+dependencies {
+   api(project(:core))
+}
+----
+
+==== :web 모듈에 :web-core 모듈이 api 일 때
+
+[source, kotlin]
+.build.gradle.kts in :web
+----
+dependencies {
+   api(project(:web-core))
+}
+----
+
+=== :web-code 모듈에 :core 모듈이 implementation 일 때
+
+[source, kotlin]
+.build.gradle.kts in :web-core
+----
+dependencies {
+   implementation(project(:core))
+}
+----
 
 == NamedDomainObjectContainerExtensions
 
