@@ -10,6 +10,27 @@
 brew install gradle
 ----
 
+== task
+
+=== projects
+
+[source, bash]
+----
+./gradlew -q projects
+----
+
+multi-project 빌드 구조를 파악할 수 있음. 
+
+`-q`(`--quiet`) 옵션은 "Log errors only." 오류만 로깅하는 설정.
+
+=== tasks
+
+[source, bash]
+----
+./gradlew tasks --all
+----
+
+
 == `PluginDependencySpec.apply`?
 
 * 현재 프로젝트에 플러그인의 적용 여부를 지정, 설정하지 않으면 프로젝트의 classpath에만 설정.
