@@ -2350,6 +2350,15 @@ class Grade(val name: String, val rate: Double) {
 * `toString(): String`
 ====
 
+=== Value Class
+
+* 데이터가 있는 불변 엔티티를 나타낸다.
+* `value` 키워드를 사용한다.
+* 단 하나의 프로퍼티만 가진다.
+* 모든 프로퍼티는 `val` 이어야 한다.
+* `===` 을 지원하지 않는다.
+* `@JvmInline` annotation
+
 === Enum
 
 [source, kt]
@@ -3232,6 +3241,11 @@ https://kotlinlang.org/docs/reference/whatsnew14.html
 
 * Gradle
 * `fun interface` 
+
+=== 1.5
+
+* value class
+* sealed interface
 
 [appendix]
 == Code Quality Tools
