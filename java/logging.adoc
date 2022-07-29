@@ -1,12 +1,41 @@
-= log4j xml로 log 롤링하기
-Yeongjun kim <opid911@gmail.com>
-:revdate: 2019-08-05T09:00:00+09:00
+= Log
 
-<<<
+* level
+** ERROR, WARN, INFO, DEBUG, TRACE
+** 선택한 레벨의 왼쪽 레벨은 로깅에 포함된다.
+** e.g. INFO 선택시 ERROR, WARN, INFO 로깅됨
+* `additivity` 옵션
+** 중복 출력 제외
+** 상위 appender 상속받는 것을 제어
+** root 로거에 출력을 제외시킴
+
+== Logging frameworks
+
+Log4J → Logback → Log4J2
+
+=== Log4J
+
+* Apache에서 개발
+* 2015년 개발팀에서 개발 중단 발표
+* log4j 메머
+
+=== Logback
+
+* log4j를 구현한 개발자가 개발
+
+=== Log4J2
+
+== SLF4J(Simple Logging Facade for Java)
+
+image::https://i.stack.imgur.com/Gxcuh.png[]
+
+* Log4J, Logback과 같은 back-end logger framework의 facade pattern
+
+== log4j xml로 log 롤링하기
 
 로그 롤링^Log{sp}Rolling^
 
-== 파일 사이즈로 롤링하기
+=== 파일 사이즈로 롤링하기
 
 [source, xml]
 ----
@@ -21,7 +50,7 @@ Yeongjun kim <opid911@gmail.com>
 </appender>
 ----
 
-== 날짜별로 롤링하기
+=== 날짜별로 롤링하기
 
 [source, xml]
 ----
