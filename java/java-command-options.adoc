@@ -12,7 +12,7 @@ Yeongjun Kim <opid911@gmail.com>
 == Options
 `java` 커맨드는 다음 범주로 나눌 수 있는 다양한 옵션을 지원한다
 
-* link:../java-standard-options.adoc[Standard Options]
+* xref:java-standard-options.adoc[Standard Options]
 * link:../java-non-standard-options.adoc[Non-Standard Options]
 * link:../java-advanced-runtime-options.adoc[Advanced Runtime Options]
 * link:../java-advanced-jit-compiler-options.adoc[Advanced JIT Compiler Options]
