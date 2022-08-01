@@ -10,6 +10,10 @@
 brew install gradle
 ----
 
+== 버전 관리
+
+* version catalog
+
 == 구성 방법
 
 === Cross project configuration
