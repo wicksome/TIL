@@ -86,6 +86,11 @@ dependencies {
 }
 ----
 
+== build
+
+fat jar:: Fat JAR란 모든 의존성에 있는 라이브러리가 자체 포함되어 있는 JAR 파일을 뜻한다. Fat JAR는 java -jar 명령어로 단독 실행할 수 있다.
+
+
 == build.gradle.kts
 
 === `PluginDependencySpec.apply`?
