@@ -10,9 +10,17 @@
 brew install gradle
 ----
 
-== 버전 관리
+== Version Catalog
 
-* version catalog
+* https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
+* 버전 관리하기 위한 방법
+* 기본적으로 버전을 한곳으로 모아줌 -> Gradle 7.4 에서 생긴 의존성 버전 중앙 집중관리 방식.
+* 세가지 그룹을 가짐
+** versions: 라이브러리 버전
+** libraries: 라이브러리 의존성
+** bundles: 라이브러리들을 묶어서 한번에 선언
+* 참고
+** https://yjyoon-dev.github.io/android/2022/07/01/android-07/
 
 == 구성 방법
 
