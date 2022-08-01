@@ -42,6 +42,25 @@ https://docs.gradle.org/7.4/userguide/sharing_build_logic_between_subprojects.ht
 
 * gradle task의 집합
 
+=== `PluginDependencySpec.apply`?
+
+* 현재 프로젝트에 플러그인의 적용 여부를 지정, 설정하지 않으면 프로젝트의 classpath에만 설정.
+* default: `true`
+* 플러그인의 클래스를 재사용하거나 하위 프로젝트에 적용할 때 유용함
++
+[source, gradle]
+----
+plugins {
+   id "org.company.myplugin" version "1.0" apply false
+}
+
+subprojects {
+   if (someCondition) {
+       apply plugin: "org.company.myplugin"
+   }
+}
+----
+
 == task
 
 === projects
@@ -128,25 +147,6 @@ fat jar:: Fat JAR란 모든 의존성에 있는 라이브러리가 자체 포함
 
 
 == build.gradle.kts
-
-=== `PluginDependencySpec.apply`?
-
-* 현재 프로젝트에 플러그인의 적용 여부를 지정, 설정하지 않으면 프로젝트의 classpath에만 설정.
-* default: `true`
-* 플러그인의 클래스를 재사용하거나 하위 프로젝트에 적용할 때 유용함
-+
-[source, gradle]
-----
-plugins {
-   id "org.company.myplugin" version "1.0" apply false
-}
-
-subprojects {
-   if (someCondition) {
-       apply plugin: "org.company.myplugin"
-   }
-}
-----
 
 === NamedDomainObjectContainerExtensions
 
