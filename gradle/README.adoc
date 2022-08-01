@@ -10,6 +10,22 @@
 brew install gradle
 ----
 
+== 구성 방법
+
+=== Cross project configuration
+
+https://docs.gradle.org/7.4/userguide/sharing_build_logic_between_subprojects.html#sec:convention_plugins_vs_cross_configuration
+
+* 하위 프로젝트 간에 빌드 로직을 공유하는 방법으로 `subproject {}`, `allprojects {}` DSL을 통한 구성
+** 권장하지 않은 방식
+* 이 방식을 사용하면 하위 프로젝트에 빌드 로직을 주입할 수 있는데, 이는 하위 프로젝트에서 보기에 명확하지 않아 로직을 이해하기 어렵게 만듦.
+* 장기적으로 이 구성방법은 점점 더 많은 조건부 논리와 높은 유지보수 부담으로 복잡해짐
+* 설정 시점에 https://docs.gradle.org/7.4/userguide/multi_project_configuration_and_execution.html#sec:decoupled_projects[프로젝트 간에 커플링]이 생기기 때문에 https://docs.gradle.org/7.4/userguide/multi_project_configuration_and_execution.html#sec:configuration_on_demand[configuration-on-demand]와 같은 최적화가 제대로 작동하지 않는다.
+* 이를 해결하기 위해 특정 타입의 하위 프로젝트에 플러그인 또는 설정을 적용
+
+
+=== Convention Plugins
+
 == task
 
 === projects
