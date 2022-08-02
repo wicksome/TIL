@@ -2361,6 +2361,7 @@ class Grade(val name: String, val rate: Double) {
 * 단 하나의 프로퍼티만 가진다.
 * 모든 프로퍼티는 `val` 이어야 한다.
 * `===` 을 지원하지 않는다.
+* https://kotlinlang.org/docs/inline-classes.html[inline class] 였다.
 * `@JvmInline` annotation
 
 === Enum
