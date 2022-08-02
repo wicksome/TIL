@@ -823,7 +823,11 @@ fun main(args: Array<String>) {
 TODO: scala랑 동일한 기능인지 찾아볼 것 +
 Scala에는 `@inline` 과 `@noinline` 어노테이션이 있다.
 
-재귀 관련해서 `tailrec` 이런 예약어도 있음.
+[NOTE]
+.recursive function
+====
+코틀린에서 재귀 함수는 스택을 유지하지만 `tailrec` 예약어를 통해 최적화할 수 있다.
+====
 
 === Function reference
 
