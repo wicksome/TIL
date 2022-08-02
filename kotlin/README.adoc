@@ -740,7 +740,7 @@ fun main(args: Array<String>) {
 ----
 ** 이러한 단축 문법으로 코드를 더 깔끔하게 작성할 수 있고, 함수 호출의 핵심부분을 더 빨리 파악할 수 있다.
 ** (내 생각) `runSimulation` 이 일인수(single-argument) 함수가 된 것 같다. 커링된 결과라고 볼 수 있을까?
-* 이 기능은 코틀린으로 도메인 특화 언어<sup>DSL, Domain Specific Language</sup>를 생성할 수 있는 가능성을 열어준다.
+* 이 기능은 코틀린으로 도메인 특화 언어^DSL,{sp}Domain{sp}Specific{sp}Language^를 생성할 수 있는 가능성을 열어준다.
 
 === Inline functions
 
