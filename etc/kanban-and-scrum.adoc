@@ -64,3 +64,25 @@ image:https://cloudmt.co.kr/wp-content/uploads/2021/04/sprint-jake.png[]
 * https://agilemanifesto.org/iso/ko/manifesto.html[애자일 소프트웨어 개발 선언]
 * https://news.hada.io/topic?id=7086&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[좋은 개발자 경험의 일반적인 함정] (https://developerexperience.io/practices/good-developer-experience[origin])
 ** "애자일 = 개발자들에게 더 많은 일을 시킬 핑계"
+
+== 유저 스토리
+
+* Jira 기반으로 정리 (https://www.atlassian.com/ko/agile/project-management/epics-stories-themes[참고])
+* https://www.atlassian.com/ko/agile/project-management/user-stories[스토리]
+** 사용자 스토리, 최종 사용자의 관점에서 작성한 짧은 요구 사항 or 요청
+** 요약: 사용자 스토리는 최종 사용자의 관점에서 작성한 소프트웨어 기능에 대한 일반적인 비공식 설명입니다. 목적은 소프트웨어 기능이 고객에게 가치를 제공하는 방법을 명확히 설명하는 것입니다.
+** 소프트웨어 시스템 요구 사항으로 볼 수 있지만 사용자를 우선시하여 최종 사용자를 대화의 중심으로 둠
+** 애자일 프레임워크에서
+*** 스크럼에서 사용자 스토리가 스프린트에 추가되고 그 기간동안 번다운된다.
+*** 칸반에서 사용자 스토리를 백로그로 가져와서 워크플로를 통해 실행한다.
+* 에픽
+** 스토리의 집합
+** 여러 개의 작은 스토리로 나눌 수 있는 대규모 작업
+** 실질적인 관점에서 볼 때 에픽은 작업 계층 구조의 최상위 계층
+* 이니셔티브
+** 공통의 목표를 추구하는 에픽의 모음
+** 이니셔치브를 에픽으로 분할하면 팀의 일상 업무가 전반적인 비즈니스 목표와 연결될 수 있음
+* 테마
+** 에픽과 이니셔티브의 창출을 주도하는 조직 목표
+* 스토리, 작업, 에픽
+* 
