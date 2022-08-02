@@ -589,6 +589,33 @@ assertEquals(losAngeles.toInstant(), seoul.toInstant()); // false
 * Tzdata 버전은 tzdata2016g이 반영되야함. https://www.oracle.com/technetwork/java/javase/tzdata-versions-138805.html[오라클 문서]
 * https://stackoverflow.com/questions/40400793/java-timezone-in-turkey-rejected-daylight-saving
 
+=== Timestamp
+
+* 사무실에서 문서를 받은 시간을 기록하기 위해 현재 날짜 or 시간을 기록하기 위해 사용하는 고무 스탬프에서 파생되었다.
+* 타임스탬프는 특정 이벤트가 발생한 시간을 식별하는 일련의 문자 또는 인코딩된 정보이다.
+* 일반적으로 날짜와 시간을 제공하며 때로는 아주 작은 단위까지도 나타낸다.
+* 보통 TimeStamp 보단 Timestamp 이렇게 쓰이는 것 같다.
+* Unix (POSIX) timestamp는 Unix time 참고
+* 번외로, DB에서 TIMESTAMP 타입은 https://ko.wikipedia.org/wiki/2038%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K38] 문제가 있다. (기타 https://ko.wikipedia.org/wiki/2000%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K])
+* 유틸성 페이지
+** https://www.unixtimestamp.com/
+** https://www.epochconverter.com/
+
+=== Unix time
+
+* 특정 시점(point in time, timestamp)를 설명하는 시스템이다.
+* 윤초를 제외한 Unix epoch 이후 경과된 초(second)를 나타낸다.
+** Unix epoch: 1970년 1월 1일 00:00:00 UTC
+* 여러 이름으로 사용된다.
+** Epoch time, Posix time, seconds since the Epoch, Unix timestamp, UNIX Epoch time
+** posix는 unix os를 기반으로 둔 os interface여서 같은 의미로 사용된다.
+* Unix time은 UTC의 진정한 표현이 아니다. 윤초와 윤초 앞의 초는 동일한 Unix time을 갖기 때문이다.
+** Unix time의 하루는 정확히 86400초를포함한다. 양수/음수의 운초의 결과를 하루에 포함하거나 제외하지 않는다.
+
+=== Kotlin
+
+* ISO 8601을 기반으로 하는 kotlin muliplatform library로는 https://github.com/Kotlin/kotlinx-datetime[kotlinx-datetime]이 있다.
+
 == References
 
 ++++
