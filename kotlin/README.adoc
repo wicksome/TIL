@@ -2947,6 +2947,8 @@ public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that) // <1>
 ** 결합^combine^: `zip`, `fold`, ...
 *** 서로 다른 컬렉션을 인자로 받아서 모든 요소들이 합쳐진 새로운 컬렉션을 반환한다.
 *** `fold` 는 최초 누적값을 인자로 받는다.
+*** `fold` 는 누적 값을 유지하면서 컬렉션을 반복한다.
+*** `reduce` 는 `fold` 와 비슷하게 누적기를 통해 컬렉션에서 반복을 줄이지만 초깃 값은 없다.
 
 .References
 * 공식 문서: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/[Package kotlin.collections]
