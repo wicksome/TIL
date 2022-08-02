@@ -740,6 +740,8 @@ fun main(args: Array<String>) {
 ----
 ** 이러한 단축 문법으로 코드를 더 깔끔하게 작성할 수 있고, 함수 호출의 핵심부분을 더 빨리 파악할 수 있다.
 ** (내 생각) `runSimulation` 이 일인수(single-argument) 함수가 된 것 같다. 커링된 결과라고 볼 수 있을까?
+* ㄷ
+** (내 생각) `runSimulation` 이 일인수(single-argument) 함수가 된 것 같다. 커링된 결과라고 볼 수 있을까
 
 === Inline functions
 
@@ -852,6 +854,9 @@ fun runSimulation(
 }
 ----
 <1> 함수 참조를 얻을 때는 참조하고자 하는 함수 이름 앞에 `::` 연산자를 사용한다.
+
+* Java에는 https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html[method reference]가 있다.
+
 
 === Closure
 
@@ -2925,8 +2930,9 @@ public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that) // <1>
 
 * 함수형 프로그래밍
 ** 람다 대수를 기반으로 1950년대에 개발되었다.
-** 일반적으로 상업용 소프트웨어보다는 학계에서 만이 사용되지만, 기본 원리는 어떤 언어에도 유용하다.
+** 일반적으로 상업용 소프트웨어보다는 학계에서 많이 사용되지만, 기본 원리는 어떤 언어에도 유용하다.
 ** 컬렉션을 사용하도록 설계된 소수의 고차 함수(higher-order function)가 반환하는 데이터에 의존한다.
+** 함수를 다른 타입으로 취급한다. → first-class functions
 * 함수형 프로그램을 구형하는 함수의 유형에는 크게 세 가지가 있다.
 ** 변환^transform^: `map`, `flatMap`, ...
 *** 변환 함수는 입력 컬렉션의 변경 요소를 갖는 새로운 컬렉션을 생성하고 반환한다.
