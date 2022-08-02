@@ -42,3 +42,24 @@
 ** 적응적: 지켜야 할 규칙이 적다.
 ** 칸반의 제약 사항이라고는 단지 **일의 흐름을 시각화하라는 것**과, **작업 중인 일의 양을 제한하라**는 것뿐이다. '멋대로'와 종이 한 장 차이지만 놀랄 만큼 막강하다.
 * 스스로를 한 가지 도구에 제한하지 말라!
+
+== 메모장
+
+=== 스프린트
+
+* '짧은 거리를 전력 질주하다'라는 뜻의 Sprint
+* 단기간 내에 프로토타입을 제작하고 테스트하여 중요한 문제들에 대한 답을 찾아가는 과정
+* 구글 스프린트 방식에 의하면 5일이면 충분 (https://designsprintkit.withgoogle.com/methodology/overview[Design Sprint Methodology])
++
+image:https://cloudmt.co.kr/wp-content/uploads/2021/04/sprint-jake.png[]
++
+** 1일차 - 문제 인식, 목표 설정 (map)
+** 2일차 - 아이디에이션, 그에 대한 설명을 통해 아이디어 구체화 (sketch)
+** 3일차 - 어떤 솔루션으로 갈지 투표로 결정하고, 스토리보드 생성 (decide)
+** 4일차 - 정해진 스토리보디에 따라 제품이나 아이디어의 프로토타입 제작 (prototype)
+** 5일차 - 프로토타입을 잠재 고객에세 보여주면서 피드백 (test)
+
+=== 애자일 
+
+* https://news.hada.io/topic?id=7086&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[좋은 개발자 경험의 일반적인 함정] (https://developerexperience.io/practices/good-developer-experience[origin])
+** "애자일 = 개발자들에게 더 많은 일을 시킬 핑계"
