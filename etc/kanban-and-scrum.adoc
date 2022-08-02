@@ -65,6 +65,18 @@ image:https://cloudmt.co.kr/wp-content/uploads/2021/04/sprint-jake.png[]
 * https://news.hada.io/topic?id=7086&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[좋은 개발자 경험의 일반적인 함정] (https://developerexperience.io/practices/good-developer-experience[origin])
 ** "애자일 = 개발자들에게 더 많은 일을 시킬 핑계"
 
+=== 업무 방식
+
+. 모든 작업은 Initiative를 달성하기 위해 진행한다.
+. 큰 작업 단위가 있다면 Epic을 생성한다.
+** Epic은 여러 프로젝트의 여러 팀을 포괄하여, 여러 보드에서 추적할 수 있다.
+** ex) “2050년 3월 우주 관광 로켓 발사”
+. Epic을 이루기 위한 Story(= User Story)를 작성한다.
+** Story는 최종 사용자의 관점에서 작성된 요구 사항이다.
+** ex) “2050년 4월 발사 날짜를 포함하도록 날짜 범위 업데이트”
+. Story를 달성하기 위한 Subtask(혹은 checklist)를 생성한다.
+** Checklist는 Issue로 전활할 수 있다.
+
 == 유저 스토리
 
 image:https://wac-cdn.atlassian.com/dam/jcr:a679339b-0098-4c88-acdb-7009b0de6efb/epics-vs-stories-agile-development.png?cdnVersion=461[]
