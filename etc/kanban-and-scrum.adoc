@@ -61,5 +61,6 @@ image:https://cloudmt.co.kr/wp-content/uploads/2021/04/sprint-jake.png[]
 
 === 애자일 
 
+* https://agilemanifesto.org/iso/ko/manifesto.html[애자일 소프트웨어 개발 선언]
 * https://news.hada.io/topic?id=7086&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[좋은 개발자 경험의 일반적인 함정] (https://developerexperience.io/practices/good-developer-experience[origin])
 ** "애자일 = 개발자들에게 더 많은 일을 시킬 핑계"
