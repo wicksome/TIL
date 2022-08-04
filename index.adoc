@@ -1,4 +1,5 @@
 = TIL
+:source-highlighter: highlight.js
 
 https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 파일로 변환되어 https://github.com/wicksome/TIL/actions/workflows/pages.yml[github pages]를 통해 배포된다.
 
