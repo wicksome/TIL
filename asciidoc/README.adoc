@@ -1,0 +1,27 @@
+= Asciidoc
+:toc:
+ifdef::env-github[]
+:note-caption: :information_source:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+== github에 tip, warning 아이콘 추가하기
+
+문서 상단에 아래 코드 추가하기
+
+[source]
+----
+\ifdef::env-github[]
+:note-caption: :information_source:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+\endif::[]
+----
+
+
+NOTE: note
+
+TIP: tip
+
+WARNING: warning
