@@ -1,0 +1,8 @@
+= resolver
+:toc:
+
+== HandlerMethodArgumentResolver
+
+* spring 3.1 부터 제공
+* 주어진 요청을 처리할 때, 메서드 파라미터에 인자 값들을 주입해주는 전략 인터페이스
+
