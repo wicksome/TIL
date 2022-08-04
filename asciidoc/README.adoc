@@ -1,8 +1,10 @@
 = Asciidoc
 :toc:
 ifdef::env-github[]
-:note-caption: :information_source:
 :tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
 
@@ -13,8 +15,10 @@ endif::[]
 [source]
 ----
 \ifdef::env-github[]
-:note-caption: :information_source:
 :tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
 :warning-caption: :warning:
 \endif::[]
 ----
