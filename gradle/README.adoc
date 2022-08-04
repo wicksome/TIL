@@ -1,4 +1,5 @@
 = https://gradle.org/[Gradle]
+:toc:
 
 빌드 자동화 도구. (오픈 소스)
 
@@ -9,7 +10,39 @@
 brew install gradle
 ----
 
-== `PluginDependencySpec.apply`?
+== Version Catalog
+
+* https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
+* 버전 관리하기 위한 방법
+* 기본적으로 버전을 한곳으로 모아줌 -> Gradle 7.4 에서 생긴 의존성 버전 중앙 집중관리 방식.
+* 세가지 그룹을 가짐
+** versions: 라이브러리 버전
+** libraries: 라이브러리 의존성
+** bundles: 라이브러리들을 묶어서 한번에 선언
+* 참고
+** https://yjyoon-dev.github.io/android/2022/07/01/android-07/
+
+== 구성 방법
+
+=== Cross project configuration
+
+https://docs.gradle.org/7.4/userguide/sharing_build_logic_between_subprojects.html#sec:convention_plugins_vs_cross_configuration
+
+* 하위 프로젝트 간에 빌드 로직을 공유하는 방법으로 `subproject {}`, `allprojects {}` DSL을 통한 구성
+** 권장하지 않은 방식
+* 이 방식을 사용하면 하위 프로젝트에 빌드 로직을 주입할 수 있는데, 이는 하위 프로젝트에서 보기에 명확하지 않아 로직을 이해하기 어렵게 만듦.
+* 장기적으로 이 구성방법은 점점 더 많은 조건부 논리와 높은 유지보수 부담으로 복잡해짐
+* 설정 시점에 https://docs.gradle.org/7.4/userguide/multi_project_configuration_and_execution.html#sec:decoupled_projects[프로젝트 간에 커플링]이 생기기 때문에 https://docs.gradle.org/7.4/userguide/multi_project_configuration_and_execution.html#sec:configuration_on_demand[configuration-on-demand]와 같은 최적화가 제대로 작동하지 않는다.
+* 이를 해결하기 위해 특정 타입의 하위 프로젝트에 플러그인 또는 설정을 적용
+
+
+=== Convention Plugins
+
+== plugins
+
+* gradle task의 집합
+
+=== `PluginDependencySpec.apply`?
 
 * 현재 프로젝트에 플러그인의 적용 여부를 지정, 설정하지 않으면 프로젝트의 classpath에만 설정.
 * default: `true`
@@ -28,6 +61,37 @@ subprojects {
 }
 ----
 
+== task
+
+=== projects
+
+[source, bash]
+----
+./gradlew -q projects
+----
+
+multi-project 빌드 구조를 파악할 수 있음. 
+
+`-q`(`--quiet`) 옵션은 "Log errors only." 오류만 로깅하는 설정.
+
+=== tasks
+
+[source, bash]
+----
+./gradlew tasks --all
+----
+
+=== Etc
+
+* assembleRelease: .apk 파일 만들어주는 android 태스크
+
+== option
+
+=== scan
+
+* https://scans.gradle.com/#gradle
+* `--scan` 옵션을 추가하면 결과를 웹 UI로 볼 수 있음
+* 다만, gradle에 결과를 전송해서 보는 방식
 
 == scope
 
@@ -39,7 +103,6 @@ subprojects {
 * web에서 `api("web-core")` 하면 `core` 코드까지 사용 가능
 * `core` 수정 시 `web-core`, `web` 빌드
 ====
-
 
 [NOTE]
 .implementation
@@ -78,9 +141,16 @@ dependencies {
 }
 ----
 
-== NamedDomainObjectContainerExtensions
+== build
 
-=== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/org.gradle.api.-named-domain-object-container/creating.html[creating]
+fat jar:: Fat JAR란 모든 의존성에 있는 라이브러리가 자체 포함되어 있는 JAR 파일을 뜻한다. Fat JAR는 java -jar 명령어로 단독 실행할 수 있다.
+
+
+== build.gradle.kts
+
+=== NamedDomainObjectContainerExtensions
+
+==== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/org.gradle.api.-named-domain-object-container/creating.html[creating]
 
 주어진 설정으로 기본 컬렉션을 생성
 
@@ -89,9 +159,9 @@ dependencies {
 val myElement by myContainer.creating { myProperty = 42 }
 ----
 
-== NamedDomainObjectCollectionExtensions
+=== NamedDomainObjectCollectionExtensions
 
-=== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/getting.html[getting]
+==== https://gradle.github.io/kotlin-dsl-docs/api/org.gradle.kotlin.dsl/getting.html[getting]
 
 [source, kt]
 .build.gradle.kts
@@ -101,9 +171,3 @@ val commonMain by getting { }
 ----
 
 대리자 속성(delegate property)을 통해 컬렉션의 기존 요소(element)를 참조하는 관용적 방법.
-
-== scan 옵션
-
-* https://scans.gradle.com/#gradle
-* `--scan` 옵션을 추가하면 결과를 웹 UI로 볼 수 있음
-* 다만, gradle에 결과를 전송해서 보는 방식
