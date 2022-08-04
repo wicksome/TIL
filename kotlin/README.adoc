@@ -6,6 +6,11 @@ Yeongjun Kim <opid911@gmail.com>
 :source-highlighter: highlight.js
 :sectnums:
 :sectnumlevels: 1
+ifdef::env-github[]
+:note-caption: :information_source:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
 
 ====
 아래 교재 및 문서를 보고 공부한 내용을 정리한 공간입니다.
@@ -696,6 +701,13 @@ val greetingFunction = { year: Int -> // <1>
 * 익명 함수를 **람다(lambda)**라고 한다.
 * 익명 함수 정의를 **람다 표현식(lambda expression, 또는 줄여서 람다식)**이라고 한다.
 * 익명 함수의 반환 결과를 **람다 결과(lambda result)**라고 한다.
+====
+
+[NOTE]
+.Lambda?
+====
+* 1930년대 프린세톤 대학교에서 수학을 공부하던 알론조 처치느 ㄴ함수라고 불렀던 것을 나타내기 위해 그리스 알파벳, 특히 람다를 사용했다. 주목해야 할 점은 그 당시 컴퓨터에는 익명 함수만 있었다는 점이다.
+* 알론조 처치의 이러한 관행으로 람다라는 단어는 익명 함수에 붙이게 됐고(함수의 유일한 타입), 이것이 현재까지 같은 식으로 참조된 것이다.
 ====
 
 * 함수에서 마지막 매개변수로 함수 타입을 받을 때는 람다 인자를 둘러싼 괄호를 생략할 수 있다.
