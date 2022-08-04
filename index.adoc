@@ -1,3 +1,11 @@
 = TIL
 
-https://github.com/wicksome/TIL
+TIL에 있는 모든 `.adoc` 파일은 `.html` 파일로 변환되어 github pages를 통해 배포된다.
+
+각 asciidoc 파일은 URL prefix를 변경하여 접근 가능하다.
+
+[source, diff]
+----
+- https://github.com/wicksome/TIL
++ https://wicksome.github.io/TIL
+----
