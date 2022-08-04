@@ -52,19 +52,16 @@ desc: chapter 8. gerneral programming in effective java
 
 최적화 관련 격언(자바 언어가 나오기 20년 전에 나온 것들)
 
-{% blockquote 윌리엄 울프(William A. Wulf) %}
-맹목적인 어리석음(blind stupidity)을 비롯한 다른 어떤 이유보다도, 효율성이라는 이름으로 저질러지는 죄악이 더 많다(효율성을 반드시 성취하는 것도 아니면서 말이다).
-{% endblockquote %}
+> "맹목적인 어리석음(blind stupidity)을 비롯한 다른 어떤 이유보다도, 효율성이라는 이름으로 저질러지는 죄악이 더 많다(효율성을 반드시 성취하는 것도 아니면서 말이다)."<br/>
+> 윌리엄 울프(William A. Wulf)
 
-{% blockquote 도널드 커누스(Donald E. Knuth) %}
-작은 효율성(small effciency)에 대해서는, 말하자면 97% 정도에 대해서는, 잊어버려라. 섣부른 최적화(premature optimization)는 모든 악의 근원이다.
-{% endblockquote %}
+> "작은 효율성(small effciency)에 대해서는, 말하자면 97% 정도에 대해서는, 잊어버려라. 섣부른 최적화(premature optimization)는 모든 악의 근원이다."<br/>
+> 도널드 커누스(Donald E. Knuth)
 
-{% blockquote M.A. 잭슨(M. A. Jackson) %}
-최적화를 할 때는 아래의 두 규칙을 따르라.
-규칙 1: 하지 마라.
-규칙 2: (전문가들만 따를 것)아직은 하지 마라 - 완벽히 명료한, 최적화되지 않은 해답을 얻을 때까지는.
-{% endblockquote %}
+> "최적화를 할 때는 아래의 두 규칙을 따르라.<br/>
+> 규칙 1: 하지 마라.<br/>
+> 규칙 2: (전문가들만 따를 것)아직은 하지 마라 - 완벽히 명료한, 최적화되지 않은 해답을 얻을 때까지는."<br/>
+> M.A. 잭슨(M. A. Jackson)
 
 #### 핵심
 - 빠른 프로그램이 아닌, 좋은 프로그램을 만들려 노력하라.
