@@ -5,21 +5,47 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - uses: actions/checkout@v3
-    # Includes the AsciiDoctor GitHub Pages Action to convert adoc files to html and publish to gh-pages branch
-    - name: asciidoctor-ghpages
-      uses: manoelcampos/asciidoctor-ghpages-action@v2.2.4
-      # with:
-        # pdf_build: true
-        # asciidoctor_params: --attribute=nofooter
-        # adoc_file_ext: .ascii # default is .adoc
-        # source_dir: docs/ # default is .
-        # slides_build: true
-        # pre_build:
-        # post_build:
+      - name: Checkout
+        uses: actions/checkout@v3  
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v1
+      # Includes the AsciiDoctor GitHub Pages Action to convert adoc files to html and publish to gh-pages branch
+      - name: asciidoctor-ghpages
+        uses: manoelcampos/asciidoctor-ghpages-action@v2.2.4
+        # with:
+          # pdf_build: true
+          # asciidoctor_params: --attribute=nofooter
+          # adoc_file_ext: .ascii # default is .adoc
+          # source_dir: docs/ # default is .
+          # slides_build: true
+          # pre_build:
+          # post_build:
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main
