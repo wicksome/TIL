@@ -17,3 +17,7 @@ Finally the then section describes the changes you expect due to the specified b
 ```
 
 https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler
+
+
+* 스모크 테스트
+* 새너티 테스크
