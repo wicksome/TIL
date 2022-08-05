@@ -3,10 +3,14 @@
 
 https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 파일로 변환되어 https://github.com/wicksome/TIL/actions/workflows/pages.yml[github pages]를 통해 배포된다.
 
-각 asciidoc 파일은 URL prefix를 변경하여 접근 가능하다.
+각 asciidoc 파일은 URL 변경을 통해 static page에 접근 가능하다.
+
+* 주소: `https://github.com/wicksome` → `https://wicksome.github.io`
+* 경로: `/TIL/blob/master` → `/TIL`
+* 확장자: `/index.adoc` → `/index` or `/index.html`
 
 [source, diff]
 ----
-- https://github.com/wicksome/TIL
-+ https://wicksome.github.io/TIL
+- https://github.com/wicksome/TIL/blob/master/index.adoc
++ https://wicksome.github.io/TIL/index.html
 ----
