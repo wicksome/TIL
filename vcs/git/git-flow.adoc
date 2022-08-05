@@ -1,5 +1,13 @@
 = Gitflow
-:toc:
+:toc: left
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
 
 == Gitflow
 
@@ -46,6 +54,14 @@ git switch -c feature/add-user-service # after git 2.23
 git checkout develop
 git switch -c release/v0.1.0
 ----
++
+[NOTE]
+.릴리즈 조건
+====
+위에 적혀있듯이 “릴리즈 날짜가 다가오거나 릴리즈를 위한 기능이 충족되면”이 릴리즈 브랜치가 생성되는 조건이다. develop은 언제든 prodction에 배포되는 브랜치가 아니며, 릴리즈가 준비되면 함께 해당 릴리즈 버전에 배포되어야 할 작업이 머지되어야 한다. 
+
+main 브랜치만 관리하고, 이 브랜치가 어느 때든 배포가 가능한 브랜치 전략은 [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)를 참고하길 바란다.
+====
 * `release` 브랜치가 생성되면 다음 릴리즈 주기가 시작된다.
 ** `release` 브랜치는 버그 수정, 문서 생성, 해당 릴리즈에 포커싱된 작업만이 포함된다.
 ** `develop` 브랜치를 다음 릴리즈를 준비할 수 있으며, 이 시기부터 다음 릴리즈를 위한 `feature` 브랜치를 병합할 수 있다.
