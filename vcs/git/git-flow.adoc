@@ -60,7 +60,19 @@ git switch -c release/v0.1.0
 ====
 위에 적혀있듯이 “릴리즈 날짜가 다가오거나 릴리즈를 위한 기능이 충족되면”이 릴리즈 브랜치가 생성되는 조건이다. develop은 언제든 prodction에 배포되는 브랜치가 아니며, 릴리즈가 준비되면 함께 해당 릴리즈 버전에 배포되어야 할 작업이 머지되어야 한다. 
 
-main 브랜치만 관리하고, 이 브랜치가 어느 때든 배포가 가능한 브랜치 전략은 [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)를 참고하길 바란다.
+main 브랜치만 관리하고, 이 브랜치가 어느 때든 배포가 가능한 브랜치 전략은 https://docs.github.com/en/get-started/quickstart/github-flow[GitHub flow]를 참고하길 바란다.
+====
++
+[NOTE]
+.GitHub flow vs. Trunk-Based Development
+====
+Trunk-Based Development::
+모든 개발자가 트렁크(trunk or main)라는 단일 브랜치에서 직접 모든 작업을 하는 것이다. 다만 몇가지 규칙이 있다.
+* Pair or Mob Programming - 짝을 이뤄서 혹은 전체 팀이 동일한 컴퓨터에서 함께 작업을 수행하는 개발 방식이다.
+* 코드 베이스가 항상 릴리즈 가능한 상태임을 확신해야 한다. 그러기 위해 자동 테스트가 실행되어야 하며, 효과적이고 우수한 테스트 전략이 필요하다.
+* https://cloud.google.com/architecture/devops/devops-process-working-in-small-batches[소규모 배치]로 작업한다. 작업 단위를 며칠이 아닌 몇시간 안에 완료할 수 있는 소규모 변경사항으로 쪼갠다.
+* 빠른 빌드 속도가 필요하다. 이 것이 안된다면 시스템 아키텍터 개선이 필요하다는 것을 의미한다.
+
 ====
 * `release` 브랜치가 생성되면 다음 릴리즈 주기가 시작된다.
 ** `release` 브랜치는 버그 수정, 문서 생성, 해당 릴리즈에 포커싱된 작업만이 포함된다.
