@@ -764,6 +764,22 @@ fun main(args: Array<String>) {
 
 === Inline functions
 
+고차 함수는 매우 유용하고 멋지지만 주의할 점이 있다. 성능 패널티다. 코틀린의 컴파일러는 컴파일 시간에 바로가기 구문을 완벽한 함수 오브젝트로 변환할 수 있다.
+다시 말해, 컴파일 시간에 람다가 할당된 오브젝트로 변환되고, 개발자는 그것의 invoke 연산자를 호출한다는 것이다. 이러한 작업은 얼마나 작은지는 관계 없이 CPU 파워와 메모리를 소모한다.
+
+[source, kt]
+----
+// 실제 코드
+val capitalize = { str: String -> str.capitalize() }
+
+// 컴파일된 코드
+val capitalize = object : Function1<String, String> {
+  override fun invoke(p1: String): String{
+    return p1.capitalize()
+  }
+}
+----
+
 Kotlin에서 람다를 사용할 때 람다 함수를 최적화하는 방법으로 https://kotlinlang.org/docs/inline-functions.html[인라인 함수](`inline fun`)가 있다.
 
 람다를 정의하면 JVM에서 객체로 생성된다. 또한, JVM은 람다를 사용하는 모든 변수의 메모리 할당을 수행하므로 메모리가 많이 사용된다.
@@ -828,26 +844,31 @@ public static final void main(@NotNull String[] args) {
 }
 
 fun someMethod(a: Int, func: () -> Unit):Int {
-    func()
-    return 2*a
+  func()
+  return 2*a
 }
 
 fun main(args: Array<String>) {
-    newMethod(2, {println("Just some dummy function")},
-            {println("can't pass function in inline functions")})
+  newMethod(2, {println("Just some dummy function")},
+    {println("can't pass function in inline functions")})
 }
 ----
 
-(+)
-
+[NOTE]
+====
 TODO: scala랑 동일한 기능인지 찾아볼 것 +
 Scala에는 `@inline` 과 `@noinline` 어노테이션이 있다.
+====
 
 [NOTE]
 .recursive function
 ====
 코틀린에서 재귀 함수는 스택을 유지하지만 `tailrec` 예약어를 통해 최적화할 수 있다.
 ====
+
+==== noinline
+
+==== crossinline
 
 === Function reference
 
