@@ -567,6 +567,14 @@ fun toArray2(ids: Array<out String>) = ids // <1>
 ----
 <1> `out` 키워드는 오른쪽 타입을 포함해서 서브 타입도 타입 인자가 될 수 있다는 것을 뜻한다. +
 (제네릭 타입의 슈퍼-서브 타입 관계를 나타낸다).
++
+[source, kt]
+----
+fun multipleVarargs(vararg names: String, vararg sizes: Int) { // <1>
+  // 컴파일 에러
+}
+----
+<1> 다중 vararg 파라미터는 가질 수 없으며, 다른 타입이라도 불가능하다.
 
 [NOTE]
 .Unit 타입 vs Nothing 타입
