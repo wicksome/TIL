@@ -1137,6 +1137,57 @@ val content = File("file.txt")
 * takeIf와 비슷하지만 lambda의 결과가 false일때 수신자 객체를 반환한다.
 * 복작한 조건을 검사할 때는 takeUnless를 제한적으로 사용할 것을 권한다. 코드를 이해하는 데 더 많은 시간이 걸리기 때문이다.
 
+=== Invoke
+
+* `invoke` 함수는 연산자다. `invoke` 연산자는 이름 없이 호출될 수 있다.
++
+[source, kt]
+----
+enum class UserType {
+  STUDENT, WORKER
+}
+
+internal class Tests {
+  @Test
+  fun test() {
+    val user = User("jun")
+    user(UserType.STUDENT)
+
+    Users("학생입니다.")
+    Users(UserType.WORKER)
+    User(1)
+  }
+}
+
+class User(val name: String) {
+  operator fun invoke(type: UserType) = when (type) {
+    UserType.STUDENT -> "학생"
+    UserType.WORKER -> "회사원"
+  }
+
+  companion object {
+    operator fun invoke(value: Int) = User(value.toString())
+  }
+}
+
+object Users {
+  operator fun invoke(name: String) = User(name)
+  operator fun invoke(type: UserType) = User(
+    when (type) {
+      UserType.STUDENT -> "학생"
+      UserType.WORKER -> "회사원"
+    }
+  )
+}
+----
++
+[WARNING]
+====
+이러한 방식으로 invoke를 사용하는 것이 맞는지 확인이 필요하다. 문제가 없다면 invoke를 활용하여 생성자를 추가하지 않고도 생성자와 같이 사용할 수 있다.
+====
+
+* 이것이 괄호로 람다 함수를 직접 호출할 수 있는 이유다.
+
 == Null-Safety
 
 [source, kt]
