@@ -1,4 +1,5 @@
 = Delegation
+:toc:
 
 :misconception_of_gof_dp: https://architecture101.blog/2009/02/18/misconception_of_gof_dp/
 
@@ -24,7 +25,9 @@
 ** 캡슐화 위반
 ====
 
-== 구현
+== Object Composition
+
+== Delegation
 
 * 위임의 가장 중요한 장점은 런타임에 행동의 복합을 가능하게 하고, 복합하는 방식도 변경해 준다는 것이다.
 * 위임의 단점은 객체 합성을 통해 소프트웨어 설계의 유연성을 보장하는 방법과 동일하게 동적인데다가 고도로 매개변수화된 소프트웨어는 정적인 소프트웨어 구조보다 이해하기가 더 엷다는 것이다.
