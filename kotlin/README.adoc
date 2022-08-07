@@ -2956,6 +2956,9 @@ val String.masked
 * 확장 속성은 후원 필드를 갖지 않으므로 초기화할 수 없기 때문이다.
 * 따라서 var 대신 val을 지정하고 원하는 값을 반환하는 get을 정의해야 한다.
 
+=== Dispather reveiver
+
+
 === infix
 
 [source, kt]
