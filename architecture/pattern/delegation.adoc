@@ -46,3 +46,4 @@ Concrete Class::
 * GoF의 디자인 패턴
 * 함수형 코틀린
 * {misconception_of_gof_dp}[잘못 알려진 디자인 패턴의 두번째 원칙]
+* https://occamsrazr.net/tt/88[favor object composition over class inheritance의 두 가지 해석]
