@@ -2958,6 +2958,22 @@ val String.masked
 
 === Dispather reveiver
 
+* 확장 함수가 선언된 클래스의 인스턴스를 디스패치 리시버라 함
+* 참고: https://blog.kotlin-academy.com/programmer-dictionary-extension-receiver-vs-dispatch-receiver-cd154e57e277
+
+[source, kt]
+----
+class Dispather {
+  val dispatcher: Dispatcher = this // <1>
+  fun Int.extension() {
+    val receiver: Int = this // <2>
+    val dispather: Dispather = this@Dispatcher // <3>
+  }
+}
+----
+<1> 클래스 내에서 `this` 는 클래스의 인스턴스
+<2> 확장 함수 내에서 `this` 는 좋은 구문이 있는 유틸리티 함수의 첫 번째 파라미터 같은 리시버 타입의 인스턴스를 뜻한다?
+<3> 디스패처 리시버
 
 === infix
 
