@@ -1188,6 +1188,12 @@ object Users {
 
 * 이것이 괄호로 람다 함수를 직접 호출할 수 있는 이유다.
 
+=== Type-safe builders
+
+* 타입 안전 빌더는 데이터를 선언적 방식으로 정의할 수 있게 해준다.
+* https://kotlinlang.org/docs/type-safe-builders.html#how-it-works
+* Scope control: @DslMarker
+
 == Null-Safety
 
 [source, kt]
