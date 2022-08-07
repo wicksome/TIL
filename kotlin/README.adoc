@@ -499,7 +499,7 @@ private fun getPoint(defaultPoint: Int = 100) {
 }
 ----
 * Kotlin은 함수 오버로딩(function overloading)을 지원한다.
-* Kotlin은 하나의 표현식만 갖는 함수는 대입 연산자(`=`)를 통해 단일 표현식 함수로 표현할 수 있다.
+* Kotlin은 하나의 표현식만 갖는 함수는 대입 연산자(`=`)를 통해 단일 표현식^single-expression^ 함수로 표현할 수 있다.
 +
 [source, kt]
 ----
