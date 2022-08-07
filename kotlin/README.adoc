@@ -2858,6 +2858,33 @@ fun String.addEnthusiasm(amount: Int = 1) = this + "!".repeat(amount)
 fun Any.easyPrint() = println(this)
 ----
 ** `Any` 의 확장 함수를 추가하면 `Any` 의 모든 하위 클래스에 대해 호출될 수 있다.
+* 상속 관계에서의 확장 함수
++
+[source, kt]
+----
+import org.junit.jupiter.api.Test
+
+internal class Tests {
+    @Test
+    fun test() {
+        printSpeak(Feline()) // "일반적인 고양잇과 소리"
+        printSpeak(Cat()) // "일반적인 고양잇과 소리"
+    }
+}
+
+open class Feline
+
+fun Feline.speak() = "일반적인 고양잇과 소리"
+
+class Cat : Feline()
+
+fun Cat.speak() = "야옹!!"
+
+fun printSpeak(feline: Feline) {
+    println(feline.speak()) // <1>
+}
+----
+<1> `printSpeak` 에 전달된 파라미터가 `Feline` 이기 때문에 `Feline.speak()` 가 두 번 호출된다. 이것이 상속 관계와 확장 함수의 차이다.
 * 제네릭 확장 함수
 ** 아래와 같이 `this` 를 반환하면 연쇄 호출(체이닝)이 가능하다.
 +
