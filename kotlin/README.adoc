@@ -2865,11 +2865,11 @@ fun Any.easyPrint() = println(this)
 import org.junit.jupiter.api.Test
 
 internal class Tests {
-    @Test
-    fun test() {
-        printSpeak(Feline()) // "일반적인 고양잇과 소리"
-        printSpeak(Cat()) // "일반적인 고양잇과 소리"
-    }
+  @Test
+  fun test() {
+    printSpeak(Feline()) // "일반적인 고양잇과 소리"
+    printSpeak(Cat()) // "일반적인 고양잇과 소리"
+  }
 }
 
 open class Feline
