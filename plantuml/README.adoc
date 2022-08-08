@@ -148,3 +148,30 @@ include::trick.adoc[]
 
 * https://plantuml.info/
 * https://real-world-plantuml.com/
+
+
+== Class diagram
+
+|===
+| https://plantuml.com/ko/class-diagram 
+|===
+
+* 일반화^generalization^: `--|>`
+* 실체화^Realization^: `..|>`
+* 의존^dependency^: `..>`
+* 연관^association^: `--`
+* 직접 연관^directed{sp}association^: `-->`
+* 집합^aggregation^, 집합 연관: `o--`, `o-->`
+* 합성^composition^, 복합 연관: `\*--`, `*-->`
+
+=== Generalization
+
+상속
+
+[plantuml]
+....
+class User
+class HeadUser
+
+User <|-- HeadUser
+....
