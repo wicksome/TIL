@@ -120,7 +120,7 @@ HeadUser .[dashed,thickness=2].> Schedule
 @enduml
 ....
 
-== Association
+=== Association
 
 * 일반적인 연관은 실선으로 연결
 * Directed Association은 실선 후 끝에 화살표 추가
@@ -135,7 +135,7 @@ HeadUser .[dashed,thickness=2].> Schedule
 
 ....
 
-== Composition
+=== Composition
 
 * Composite Aggregation 이라고도 함
 * 강한 집합을 의미
