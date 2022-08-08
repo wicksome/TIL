@@ -170,8 +170,10 @@ include::trick.adoc[]
 
 [plantuml]
 ....
+@startuml
 class User
 class HeadUser
 
 User <|-- HeadUser
+@enduml
 ....
