@@ -120,6 +120,31 @@ HeadUser .[dashed,thickness=2].> Schedule
 @enduml
 ....
 
+== Association
+
+* 일반적인 연관은 실선으로 연결
+* Directed Association은 실선 후 끝에 화살표 추가
+
+=== Aggregation
+
+* 집합
+* Shared Aggregation
+
+[plantuml]
+....
+
+....
+
+== Composition
+
+* Composite Aggregation 이라고도 함
+* 강한 집합을 의미
+
+[plantuml]
+....
+
+....
+
 == Example
 
 === 글꼴 지정
@@ -253,3 +278,7 @@ include::trick.adoc[]
 
 * https://plantuml.info/
 * https://real-world-plantuml.com/
+
+== References
+
+* https://www.nextree.co.kr/p6753/
