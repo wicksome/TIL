@@ -166,14 +166,91 @@ include::trick.adoc[]
 
 === Generalization
 
-상속
+* 상속 구조
+* "is a kine of" 관계
 
 [plantuml]
 ....
 @startuml
+hide empty field
+hide empty method
+
 class User
 class HeadUser
 
 User <|-- HeadUser
+@enduml
+....
+
+=== Realization
+
+* interface에 있는 명세를 오버라이딩하여 구현하는 것
+* "can do this" 관계
+* 두 가지 표현법이 존재함
+
+[plantuml]
+.스테레오 타입으로 정의
+....
+@startuml
+hide empty field
+hide empty method
+
+class User
+interface Changeable {
+  +changeNickName(nickName: String): Unit
+}
+class HeadUser {
+  +changeNickName(nickName: String): Unit
+}
+
+User <|-- HeadUser
+Changeable <|.. HeadUser
+@enduml
+....
+
+[plantuml]
+.circle 형태로 정의
+....
+@startuml
+hide empty field
+hide empty method
+
+class User
+circle Changeable
+class HeadUser {
+  +changeNickName(nickName: String): Unit
+}
+
+User <|-- HeadUser
+Changeable -- HeadUser
+@enduml
+....
+
+=== Dependency
+
+* 클래스간 참조가 일어나는 것 중 하나
+* 메서드 내에서 대상 클래스의 객체를 생성하거나 사용, 리턴 받아 사용하는 것을 말함
+* 이 참조는 해당 클래스와의 관계를 계속 유지하지 않음
+
+[plantuml]
+....
+@startuml
+hide empty field
+hide empty method
+
+class User
+interface Changeable {
+  +changeNickName(nickName: String): Unit
+}
+class HeadUser {
+  +changeNickName(nickName: String): Unit
+  +<b>createSchedule(): Schedule
+  +<b>useSchedule(schedule: Schedule): Unit
+}
+class Schedule
+
+User <|-- HeadUser
+Changeable <|.. HeadUser
+HeadUser .[dashed,thickness=2].> Schedule
 @enduml
 ....
