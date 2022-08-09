@@ -31,8 +31,17 @@ github action: https://github.com/grassedge/generate-plantuml-action
 
 === Generalization
 
-* 상속 구조
+* 일반화, 상속 구조
 * "is a kine of" 관계
+* overriding되면 서브 클래스에 해당 함수/필드를 정의
+
+++++
+<table>
+++++
+
+++++
+<tr><td>
+++++
 
 [plantuml]
 ....
@@ -40,12 +49,42 @@ github action: https://github.com/grassedge/generate-plantuml-action
 hide empty field
 hide empty method
 
-class User
-class HeadUser
+class User {
+  +isHead(): Boolean
+}
+class HeadUser {
+  +isHead(): Boolean
+}
+class AdminUser
 
 User <|-- HeadUser
+User <|-- AdminUser
 @enduml
 ....
+
+++++
+</td><td>
+++++
+
+[source, kotlin]
+----
+class User {
+  fun isHead(): Boolean = false
+}
+class HeadUser: User() {
+  override fun isHead(): Boolean = true
+}
+class AdminUser: User()
+----
+
+++++
+</td></tr>
+++++
+
+
+++++
+</table>
+++++
 
 === Realization
 
