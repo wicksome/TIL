@@ -32,3 +32,18 @@ WARNING: warning
 IMPORTANT: important
 
 CAUTION: caution
+
+== 파일 조각 넣기
+
+[source]
+----
+include::other.adoc[]
+include::subdir/other.adoc[leveloffset=+1]
+----
+
+== 소스코드 하이라이팅
+
+[source]
+----
+:source-highlighter: highlight.js
+----
