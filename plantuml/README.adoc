@@ -270,6 +270,24 @@ folder folder2 {
 @enduml
 ....
 
+[plantuml]
+....
+@startuml
+
+folder folder2 {
+    folder folder3 [
+        text bla bla
+    ]
+    artifact art2 [
+        more text
+    ]
+    
+    label "간략한 내용을 남겨높는다" as simple_label
+    folder3 -[hidden]down- simple_label
+}
+@enduml
+....
+
 == Trick
 
 include::trick.adoc[]
