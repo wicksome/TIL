@@ -2168,6 +2168,8 @@ Kotlin에서 위임한다는 것을 나타낼 때는 `by` 키워드를 사용한
 대리자^delegate^를 지정한다. 대리자로는 커스텀 함수나 코틀린 표준 라이브러리 함수를 사용할 수 있다.
 
 참고: https://kotlinlang.org/docs/reference/delegated-properties.html
+
+프로퍼티를 맵에 위임하는 방법: https://kotlinlang.org/docs/delegated-properties.html#local-delegated-properties
 ====
 
 == Inheritance
