@@ -47,3 +47,22 @@ CAUTION: caution
 ----
 :source-highlighter: highlight.js
 ----
+
+== 다이어그램 추가하기
+
+[source]
+----
+[plantuml]
+....
+@startuml
+A -> B
+@enduml
+....
+----
+
+[plantuml]
+....
+@startuml
+A -> B
+@enduml
+....
