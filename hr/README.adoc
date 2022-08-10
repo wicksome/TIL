@@ -1,4 +1,5 @@
 = HR
+:toc: left
 
 [NOTE]
 .HR?
@@ -9,3 +10,5 @@ HR:: Human Resource, 인적자원
 LTV:: 주택담보대출비율?
 
 Multiple
+
+근태:: 출근(出勤)과 결근(缺勤)
