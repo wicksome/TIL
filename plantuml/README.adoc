@@ -136,6 +136,14 @@ Changeable -- HeadUser
 * 메서드 내에서 대상 클래스의 객체를 생성하거나 사용, 리턴 받아 사용하는 것을 말함
 * 이 참조는 해당 클래스와의 관계를 계속 유지하지 않음
 
+++++
+<table>
+++++
+
+++++
+<tr><td>
+++++
+
 [plantuml]
 ....
 @startuml
@@ -158,6 +166,38 @@ Changeable <|.. HeadUser
 HeadUser .[dashed,thickness=2].> Schedule
 @enduml
 ....
+
+++++
+</td><td>
+++++
+
+[source, kotlin]
+----
+class HeadUser {
+  override fun changeNickName(nickName: String): Unit { ... }
+
+  fun createSchedule(): Schedule {
+    return Schedule() // 객체 생성 및 반환
+  }
+  
+  fun useSchedule(schedule: Schedule): Unit {
+    // 객체를 매개변수로 받아서 사용
+  }
+}
+class HeadUser: User() {
+  override fun isHead(): Boolean = true
+}
+class AdminUser: User()
+----
+
+++++
+</td></tr>
+++++
+
+
+++++
+</table>
+++++
 
 === Association
 
