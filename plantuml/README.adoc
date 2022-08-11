@@ -184,10 +184,6 @@ class HeadUser {
     // 객체를 매개변수로 받아서 사용
   }
 }
-class HeadUser: User() {
-  override fun isHead(): Boolean = true
-}
-class AdminUser: User()
 ----
 
 ++++
