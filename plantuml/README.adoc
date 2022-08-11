@@ -173,7 +173,7 @@ HeadUser .[dashed,thickness=2].> Schedule
 
 [source, kotlin]
 ----
-class HeadUser {
+class HeadUser: User, Changeable {
   override fun changeNickName(nickName: String): Unit { ... }
 
   fun createSchedule(): Schedule {
