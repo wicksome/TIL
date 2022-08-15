@@ -1,0 +1,18 @@
+= 이벤트루프
+
+* 작업 루프를 돌면서 하나씩 실행시키는 역할
+* async의 핵심
+* 동시에 여러 태스크가 처리되는 것처럼 느끼는 것을 가능하게 해주는 것
+
+== JavaScript
+
+* 브라우저 측 자바스크립트 실행 흐름은 nodejs와 마찬가지로 이벤트 루프에 기반함
+* js 함수는 콜스택에 쌓이고, 팝 되어 실행됨
+* 브라우저 메인 스레드 동작 타이밍을 관리하는 관리자라고 할 수 있다?
+* 자바스크립트 엔진은 memoty heap과 call stack으로 구성됨 = v8 engine
+* 자바스크립트는 single thread 프로그래밍 언어로, call stack이 하나
+* memory head: 메모리 할당이 일어나는 곳
+* call stack: 코드가 실행될 때 쌓이는 곳
+* callback queue: 비동기적으로 실행된 콜백함수가 보관되는 영역
+* event loop는 call stack과 callback queue의 상태를 체크하여 call stack이 빈 상태가 되면 callback queue의 첫번째 콜백을 call stack에 밀어 넣는다.
+** 이런 반복적인 행동을 tick이라 부른다.
