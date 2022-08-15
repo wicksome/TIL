@@ -1,7 +1,7 @@
 = 클린 아키텍처
 :toc:
 
-* 육각형 아키텍처^Hexagonal{sp}Architecture^ = 포트와 어댑터(Ports and Adapters) 패턴
+* 육각형 아키텍처^Hexagonal{sp}Architecture^ = 포트와 어댑터^Ports{sp}and{sp}Adapters^ 패턴
 * 육각형 아키텍처
 ** 비즈니스 관심사를 다루는 내부(inside)와 기술적입 관심사를 다루는 외부(outside)로 분해
 ** 외부에 포함된 기술적인 컴포넌트를 어댑터(adpater)
