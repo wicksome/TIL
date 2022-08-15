@@ -4,8 +4,25 @@
 [#chapter-3-reusability]
 == 재사용성
 
+* 프로그래밍 언어의 핵신 특징: 재사용성^reusability^
+
 [#item-19]
 === knowledge를 반복하여 사용하지 말라
+
+[quote]
+____
+"프로젝트에서 이미 있던 코드를 복사해서 붙여넣고 있다면, 무언가가 잘못된 것이다."
+____
+
+* 많은 곳에서 같은 이야기를 한다.
+** 'Don't Repeat Yourself', 'DRY 규칙' - 실용주의 프로그래머
+** WET 안티패턴
+*** We Enjoy Typing, Waste Everyone's Time or Write Everything Twice
+*** 개발자는 타이핑하는 것을 좋아하므로, 많은 사람의 시간을 낭비하게 만들거나 같은 코드를 두 번씩 작성한다.
+** SSOT(Single Source of Truth)
+* knowledge는 넓은 의미로 '의도적인 정보'
+** 상속을 하는데도 불구하고 특정 메서드를 오버라이드하지 않게 강제한다는 것은, '해당 메서드가 슈퍼클래스와 동일하게 동작하기 원한다'는 의미이다.
+
 
 [#item-20]
 === 일반적인 알고리즘을 반복해서 구현하지 말라
