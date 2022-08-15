@@ -122,8 +122,31 @@ https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler
 
 == Integration Test
 == AB Test
+== User Test
+
 == Smoke Test
+
+* 개발팀 or 검증팀이 진행
+* 프로그램의 주요 기능을 테스트함
+* 빌드, 릴리즈 후 테스트함
+
 == Sanity Test
+
+* 개발팀 or 개발자가 테스트 주체가 되어 주요한 단위/시스템 모듈을 테스트하는 기법
+* 새로운 기능이 추가됐을 때 그 기능에 대해 테스트 해보는 것
+* 새로 추가된 기능, 수정된 버그 테스트
+* 빌드, 릴리즈 전 테스트
+
+== Regression Test
+
+* 회귀 테스트
+* 수정으로 인해 변경되지 않은 소프트웨어 영역에 새로운 결함이 유입되지 않았는지 테스트
+* 기존에 숨어있던 결함이 노출되지 않았는지 확인하기 위해 테스트
+* 이전에 테스트된 프로그램을 다시 테스트해보는 것
+
+== Alpha Testing
+
+== Beta Testing
 
 
 == TDD, Test-Driven Development
