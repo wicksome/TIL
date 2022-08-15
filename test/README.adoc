@@ -101,11 +101,6 @@ $ sar # 주로 CPU 사용량을 측정할 때 많이 이용
 ----
 
 == Unit Test
-== Integration Test
-== AB Test
-== Smoke Test
-== Sanity Test
-
 
 * given
 * when
@@ -124,6 +119,11 @@ Finally the then section describes the changes you expect due to the specified b
 ```
 
 https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler
+
+== Integration Test
+== AB Test
+== Smoke Test
+== Sanity Test
 
 
 == TDD, Test-Driven Development
