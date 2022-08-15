@@ -140,30 +140,7 @@ https://velog.io/@pop8682/%EB%B2%88%EC%97%AD-Given-When-Then-martin-fowler
 .DDD, Domain-Driven Development
 ====
 도메인 주도 개발
-==== 
-
-
-[1] boilerplate 코드: 꼭 필요하면서 간단한 기능인데 많은 코드를 필요로 하는 코드, 예로 getter/setter, html/head/body
-마크업이 있다. [wiki](https://en.wikipedia.org/wiki/Boilerplate_code)
-
-```java
-// as-is
-class Boilerplate {
-	private int var;
-	public void setVar(int var) {
-		this.var = var;
-	}
-	public int getVar() {
-		return this.var;
-	}
-}
-
-// to-be: lombok 적용
-@Data
-class Boilerplate {
-	private int var;
-}
-```
+====
 
 ```html
 <html>
@@ -187,3 +164,28 @@ class Boilerplate {
 테스트중인 단위
 
 === CUT, code under test
+
+
+---
+
+[1] boilerplate 코드: 꼭 필요하면서 간단한 기능인데 많은 코드를 필요로 하는 코드, 예로 getter/setter, html/head/body
+마크업이 있다. [wiki](https://en.wikipedia.org/wiki/Boilerplate_code)
+
+```java
+// as-is
+class Boilerplate {
+	private int var;
+	public void setVar(int var) {
+		this.var = var;
+	}
+	public int getVar() {
+		return this.var;
+	}
+}
+
+// to-be: lombok 적용
+@Data
+class Boilerplate {
+	private int var;
+}
+```
