@@ -1,1 +1,8 @@
 = 좋은 코드
+:toc:
+
+[#chapter-1-safety]
+== 안정성
+
+[#chapter-2-readability]
+== 가독성
