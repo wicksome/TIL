@@ -1,0 +1,9 @@
+= Apache Kafka
+:toc:
+
+== 1
+
+* 카프카: 대용량, 대규모 메시지 데이터를 빠르게 처리하도록 개발된 메시징 플랫폼
+* 링크드인에서 처음 출발한 기술
+* OLTP^Online{sp}Transaction{sp}Processing^: 네트워크상 온라인 사용자들의 DB에 대한 트랜잭션 처리
+* OLAT^Online^
