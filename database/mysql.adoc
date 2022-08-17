@@ -42,6 +42,7 @@ CURRENT_TIMESTAMP(): Returns the current date time with your timezone configured
 ____
 
 * 현재 DB 타임존 기준으로 생성 
+* current_timestamp(6) https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html[ref]
 
 === UTC_TIMESTAMP
 
