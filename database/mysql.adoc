@@ -17,6 +17,7 @@ ____
 .References
 * http://underpop.online.fr/m/mysql/manual/mysql-data-types-datetime.html
 * https://mariadb.com/kb/en/datetime/
+* https://nesoy.github.io/articles/2020-02/mysql-datetime-timestamp
 
 
 == timestamp
