@@ -43,6 +43,12 @@ ____
 
 * 현재 DB 타임존 기준으로 생성 
 * current_timestamp(6) https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html[ref]
+* 아래와 같이 설정이 가능해보이는데 mysql 버전에 따라 다른듯...
++
+[sql]
+----
+created_at bigint not null default current_timestamp(6)
+----
 
 === UTC_TIMESTAMP
 
