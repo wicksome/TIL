@@ -18,10 +18,17 @@ ____
 * https://mariadb.com/kb/en/timestamp/
 * https://mariadb.com/kb/en/datetime/
 
-=== CURRENT_TIMESTAMP vs. UTC_TIMESTAMP
+=== CURRENT_TIMESTAMP
 
+[quote]
 ____
 CURRENT_TIMESTAMP(): Returns the current date time with your timezone configured.
+____
+
+=== UTC_TIMESTAMP
+
+[quote]
+____
 UTC_TIMESTAMP(): Returns the current date and time using UTC timezone.
 ____
 
@@ -30,6 +37,15 @@ ____
 ** https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp
 * aurora db의 버전2는 mysql 5 버전과 호환. 버전3은 mysql 8과 호환
 ** https://docs.aws.amazon.com/ko_kr/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.CompareMySQL57.html
+
+=== UNIX_TIMESTAMP
+
+[quote]
+____
+UNIX_TIMESTAMP(): 현재 유닉스 타임스탬프 반환
+
+UNIX_TIMESTAMP(str): `str` 을 유닉스 타임스탬프로 반환
+____
 
 .References
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
