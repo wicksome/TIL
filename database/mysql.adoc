@@ -1,22 +1,31 @@
 = MySQL
 :toc:
 
-== timestamp vs datetime
+== 타입
+
+== datetime
 
 ____
 The `DATETIME` type is used for values that contain both date and time parts. MariaDB retrieves and displays `DATETIME` values in 'YYYY-MM-DD HH:MM:SS' format. The supported range is '1000-01-01 00:00:00' to '9999-12-31 23:59:59'.
-____
-
-____
-The `TIMESTAMP` data type is used for values that contain both date and time parts. `TIMESTAMP` has a range of '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC.
 ____
 
 예전에 cubrid 였는지 oracle이었는지 찾아봤던 것 같은데.. datetime은 내부적으로 string으로 저장했던것 같음. (https://github.com/wicksome/TIL/issues/5)
 
 .References
 * http://underpop.online.fr/m/mysql/manual/mysql-data-types-datetime.html
-* https://mariadb.com/kb/en/timestamp/
 * https://mariadb.com/kb/en/datetime/
+
+
+=== timestamp
+
+____
+The `TIMESTAMP` data type is used for values that contain both date and time parts. `TIMESTAMP` has a range of '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC.
+____
+
+.References
+* https://mariadb.com/kb/en/datetime/
+
+== 함수
 
 === CURRENT_TIMESTAMP
 
