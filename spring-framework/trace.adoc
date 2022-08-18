@@ -6,6 +6,13 @@
 * Trace ID: 첫번째 요청에서 생성된 ID. 서비스간 통신에서 하나의 ID가 사용
 * Span ID: 컴포넌트에 도착하고 시스템 내부에서 돌아다닐 때 사용하는 ID
 
+== trace key format
+
+* https://github.com/openzipkin/b3-propagation[B3] - openzipkin의 trace id format
+* https://github.com/w3c/trace-context/blob/main/spec/60-trace-id-format.md[W3C], https://github.com/w3c/trace-context/blob/main/spec/20-http_request_header_format.md[format]
+* https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html[AWS], https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-request-tracing.html[format]
+* https://github.com/open-telemetry/opentelemetry-specification/blob/eeef21259a12d61100804eff2e12ba06523821c3/specification/trace/api.md#retrieving-the-traceid-and-spanid[OTEL Tracing]
+
 == Spring Cloud
 
 * https://docs.spring.io/spring-cloud-sleuth/docs/current-SNAPSHOT/reference/html/[Spring Cloud Sleuth^슬루스^]: Spring Cloud를 위한 분산 추적용 API를 제공하는 라이브러리.
