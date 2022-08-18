@@ -1,5 +1,0 @@
-= Diagram
-
-. https://sequencediagram.org/[SequenceDiagram]
-. https://www.websequencediagrams.com/[WebSequenceDiagrams]
-. draw.io
