@@ -1,0 +1,18 @@
+= web
+:toc:
+
+== SSE
+
+* https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events[Server-Send Events]
+* 서버의 데이터를 실시간으로 스트리밍하는 기술
+* 웹 표준
+* 이전에는 지속적으로 요청을 보내는 polling이 있었음
+* SSE는 기존 HTTP API 만으로 동작
+* 클라이언트 기술?
+* 효율적인 단방향 통신이 필요한 경우 사용
+* 예시: 피드 구독
+
+=== SSE vs. WebSocket
+
+* WebSocket 완전한 양방향 통신
+* WebSocket은 별도 프로토콜로 통신
