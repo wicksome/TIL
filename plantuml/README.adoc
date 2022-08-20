@@ -199,11 +199,17 @@ class HeadUser: User, Changeable {
 
 * 일반적인 연관은 실선으로 연결
 * Directed Association은 실선 후 끝에 화살표 추가
+* Composition은 전체와 부분이 강력한 연관 관계를 맺으며, 전체와 부분이 같은 생명 주기를 갖음
+* 독립적인 객체가 서로 상호작용하기 위해 맴버로 참조해야할 경우
+* ex) Car와 Engine의 관계
 
 === Aggregation
 
 * 집합
 * Shared Aggregation
+* Aggregation은 전체와 부분의 연관 관계를 맺지만, 그러나 동일한 생명 주기를 갖지는 않음
+** ex) Person, Address 관계
+* 전체가 부분을 포함(has-a)하는 경우. 약한 관계
 
 [plantuml]
 ....
