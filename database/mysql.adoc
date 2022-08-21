@@ -33,6 +33,7 @@ ____
 
 * UTC를 기준으로 '1970-01-01 00:00:01' ~ '2038-01-19 03:14:07'.
 * 입력받은 리터럴을 UTC로 변경하여 저장.
+** 즉 시간대 정보를 가지고 있음을 뜻함. (UTC 시간대)
 * https://ko.wikipedia.org/wiki/2000%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K], https://ko.wikipedia.org/wiki/2038%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K38]
 * 인덱스가 더 빠르게 생성된다?
 
