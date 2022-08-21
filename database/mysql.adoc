@@ -9,11 +9,15 @@ ____
 The `DATETIME` type is used for values that contain both date and time parts. MariaDB retrieves and displays `DATETIME` values in 'YYYY-MM-DD HH:MM:SS' format. The supported range is '1000-01-01 00:00:00' to '9999-12-31 23:59:59'.
 ____
 
-* "1000-01-01 00:00:00.000000 ~ 9999-12-31 23:59:59.999999"
+* "1000-01-01 00:00:00.000000 ~ 9999-12-31 23:59:59.999999"를 표현할 수 있음
+* 소수점까지 포함하려면 `DATETIME(6)` 과 같이 지정할 수 있음(기본 0, 최대 6)
 * 예전에 cubrid 였는지 oracle이었는지 찾아봤던 것 같은데.. datetime은 내부적으로 string으로 저장했던것 같음. (https://github.com/wicksome/TIL/issues/5)
 * 입력 받은 값 그대로를 저장
-
-* `DATETIME(6)` 과 같이 자릿수를 지정할 수 있음
+** 즉, 아예 시간대에 영향이 없음
+** 입력하고, 가져다 쓰는 곳에서 고민하면 됨
+* 이 값은 어플리케이션과 DB 서버 장비의 설정들만 처음에 잘 설정해두면 가장 깔끔할 것 같음
+** `Instant` 인스턴스 값이 나노초를 가지고 있고, 변환시 일부 날려먹거나 반올림 하는 것들을 아예 회피할 수 있으니....
+* MariaDB에서는 zero-date 값을 표현하기 위해 `0000-00-00` 을 지원함 (https://mariadb.com/kb/en/datetime/#supported-values[참고])
 
 .References
 * http://underpop.online.fr/m/mysql/manual/mysql-data-types-datetime.html
@@ -27,8 +31,8 @@ ____
 The `TIMESTAMP` data type is used for values that contain both date and time parts. `TIMESTAMP` has a range of '1970-01-01 00:00:01' UTC to '2038-01-19 03:14:07' UTC.
 ____
 
-* 입력받은 리터럴을 UTC로 변경하여 저장.
 * UTC를 기준으로 '1970-01-01 00:00:01' ~ '2038-01-19 03:14:07'.
+* 입력받은 리터럴을 UTC로 변경하여 저장.
 * https://ko.wikipedia.org/wiki/2000%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K], https://ko.wikipedia.org/wiki/2038%EB%85%84_%EB%AC%B8%EC%A0%9C[Y2K38]
 * 인덱스가 더 빠르게 생성된다?
 
@@ -60,7 +64,7 @@ ____
 UTC_TIMESTAMP(): Returns the current date and time using UTC timezone.
 ____
 
-* `UTC_TIMESTAMP` 는 mysql 8 이상에 추가된것으로 보임
+* mysql 8.x 부터 지원
 ** https://dba.stackexchange.com/a/279140
 ** https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_utc-timestamp
 * aurora db의 버전2는 mysql 5 버전과 호환. 버전3은 mysql 8과 호환
