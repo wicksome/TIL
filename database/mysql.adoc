@@ -83,3 +83,17 @@ ____
 .References
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
 * https://mariadb.com/kb/en/utc_timestamp/
+
+== 참고
+
+* MySQL v5.6 부터 `DATETIME` 타입에 기본으로 날짜/시간이 들어가게 설장할 수 있음
++
+[source, sql]
+----
+CREATED TABLE t1 (
+    col1 TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+----
+* MySQL v5.7.2 부터 log_timestamps 라는 시스템 변수 추가
+** 로그 파일들은 어떤 시간대로 저장할지 설정하는 값.
+** 운영중에 변경 가능하고, SYSTEM, UTC 둘 중 하나로 설정 가능 
