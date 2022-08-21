@@ -80,6 +80,8 @@ UNIX_TIMESTAMP(): 현재 유닉스 타임스탬프 반환
 UNIX_TIMESTAMP(str): `str` 을 유닉스 타임스탬프로 반환
 ____
 
+* 현재 시간을 Unix timestamp 형식으로 반환(second)
+
 .References
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
 * https://mariadb.com/kb/en/utc_timestamp/
