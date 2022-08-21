@@ -49,6 +49,13 @@ ____
 CURRENT_TIMESTAMP(): Returns the current date time with your timezone configured.
 ____
 
+
+[source, sql]
+----
+-- CURRENT_TIMESTAMP
+SELECT CURRENT_TIMESTAMP, CURRENT_TIMESTAMP+0, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6)+0;
+----
+
 * 현재 DB 타임존 기준으로 생성 
 * current_timestamp(6) https://dev.mysql.com/doc/refman/5.7/en/fractional-seconds.html[ref]
 * 아래와 같이 설정이 가능해보이는데 mysql 버전에 따라 다른듯...
@@ -79,6 +86,12 @@ UNIX_TIMESTAMP(): 현재 유닉스 타임스탬프 반환
 
 UNIX_TIMESTAMP(str): `str` 을 유닉스 타임스탬프로 반환
 ____
+
+[source, sql]
+----
+-- UTC_TIMESTAMP
+SELECT UTC_TIMESTAMP(), UTC_TIMESTAMP()+0, UTC_TIMESTAMP(6), UTC_TIMESTAMP(6)+0;
+----
 
 * 현재 시간을 Unix timestamp 형식으로 반환(second)
 
