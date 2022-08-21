@@ -84,6 +84,29 @@ ____
 * https://dba.stackexchange.com/questions/62466/mysql-timestamp-timezone-handling
 * https://mariadb.com/kb/en/utc_timestamp/
 
+== 파티션
+
+* MySQL 서버 입장에서는 데이터를 별도의 테이블로 분리해서 저장하지만, 사용자 입장에서는 여전히 하나의 테이블로 읽기와 쓰기를 할 수 있게 해주는 솔루션
+* 일반적으로 DBMS의 파티션은 하나의 서버에서 테이블을 분산하는 것이며, 원격 서버 간에 분산을 지원하는 것은 아니다.
+
+=== 파티션 종류
+
+* Range
+* List
+* Composite
+* Hash
+
+== 파티셔닝 방법
+
+* Horizontal
+* Vertical
+
+=== 샤딩, Sharding
+
+* 수평 파티셔닝하고 동일
+* join 연산을 사용할 수 없음
+* auto_increment를 사용하면 샤드별로 달라질 수 있음
+
 == 참고
 
 * MySQL v5.6 부터 `DATETIME` 타입에 기본으로 날짜/시간이 들어가게 설장할 수 있음
