@@ -120,3 +120,5 @@ CREATED TABLE t1 (
 * MySQL v5.7.2 부터 log_timestamps 라는 시스템 변수 추가
 ** 로그 파일들은 어떤 시간대로 저장할지 설정하는 값.
 ** 운영중에 변경 가능하고, SYSTEM, UTC 둘 중 하나로 설정 가능 
+* SQL92-Standard의 TIMESTAMP는 second까지 지원
+** https://dev.mysql.com/doc/relnotes/mysql/5.6/en/news-5-6-4.html[MySQL v5.6.4] 부터 TIME, DATETIME, TIMESTAMP 값에 대한 소수 자릿수 초도 지원함
