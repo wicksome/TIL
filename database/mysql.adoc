@@ -138,3 +138,13 @@ CREATED TABLE t1 (
 * SQL92-Standard의 TIMESTAMP는 second까지 지원
 ** https://dev.mysql.com/doc/relnotes/mysql/5.6/en/news-5-6-4.html[MySQL v5.6.4] 부터 TIME, DATETIME, TIMESTAMP 값에 대한 소수 자릿수 초도 지원함
 * 숫자 값에 의해서만 파티션 가능했으나, MySQL 5.5 부터는 문자열이나 날짜 타입모두 사용할 수 있도록 개선됨 
+* kotlin `Instant`를 그대로 저장할 때 지정된 타입에 따라 반올림되거나 밀리초 이하가 제거되는 이슈 발생할 수 있음. TC 비교시 시간 변환이 필요함
++
+[source, kotlin]
+----
+// 00:00:00.1234567 → 00:00:00.123
+private fun Instant.deleteNanoSecond(): Instant = this.truncatedTo(ChronoUnit.MILLIS)
+
+// 00:00:00.1234567 → 00:00:00
+private fun Instant.deleteMilliSecond(): Instant = this.truncatedTo(ChronoUnit.SECONDS)
+----
