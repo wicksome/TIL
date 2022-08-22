@@ -1,0 +1,29 @@
+= 정규식
+
+https://github.com/ziishaned/learn-regex/blob/master/translations/README-ko.md
+
+== 특정 단어 제외
+
+[source]
+----
+/^((?!three|one).)*$/gm
+----
+
+== 경계 지정
+
+* `\b` 메타 문자는 경계 위치를 가르킨다(boundary)
+
+=== Examples
+
+[source]
+----
+Raindrops on roses, and whiskers on kittens.
+----
+
+* 위 문자를 `\b` 로 평가할 때 
++
+[source]
+----
+|Raindrops| |on| |roses|, |and| |whiskers| |on| |kittens|.
+----
+* 
