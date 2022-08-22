@@ -22,6 +22,23 @@ brew install gradle
 * 참고
 ** https://yjyoon-dev.github.io/android/2022/07/01/android-07/
 
+== 빌드
+
+=== sourceCompatibility vs. targetCompatibility
+
+* sourceCompatibility
+** 소스 언어 수준을 나타냄
+** 컴파일에 사용하는 jdk 버전
+** 소스 코드를 사용할 수 있는 java버전을 제한함
+* targetCompatibility
+** 생성되는 바이크 코드의 수준을 나타냄
+** 특정 VM 버전에 대한 class file을 생성함
+** 클래스 파일은 이 설정에서 지정한 버전 이후는 실행되지만 이전 버전의 VM에서는 실행되지 않음
+** 클래스 파일의 버전을 제어
+** 프로그램에서 실행할 수 있는 가장 낮은 Java 버전을 의미
+* 이 값들을 1.5로 지정한다고해서 항상 jdk 1.5로 코드를 컴파일 할 수 있고, jdk 1.5에서 작동할 것으로 예상할 수 있는 것이 아니다. 사용 가능한 라이브러리라는 것.
+* https://stackoverflow.com/questions/16654951/gradle-sourcecompatibility-vs-targetcompatibility
+
 == 구성 방법
 
 === Cross project configuration
