@@ -635,6 +635,7 @@ assertEquals(losAngeles.toInstant(), seoul.toInstant()); // false
 2022-08-22T06:04:48.256750828Z
 ----
 ** 이걸 통해 확인해야할 점: DB 엔티티와 값 비교시 생성한 객체와 조회한 객체의 equals 비교에 문제가 발생할 수 있음
+*** MySQL DATETIME에서 fractional seconds part 는 0~6 지원
 
 == References
 
