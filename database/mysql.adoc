@@ -3,6 +3,18 @@
 
 == Types
 
+=== VARCHAR
+
+* 최대 65,535 Byte
+* MySQL 4.x 에서는 Byte 단위
+* https://dev.mysql.com/doc/refman/5.7/en/char.html[MySQL 5.x] 에서는 Character 단위
+** utf8 기준으로 문자당 최대 3Bytes이므로 최대 21,844자 선언 가능
+*** 테이블이 utf8 기준으로 생성되었다면 emoji 에러 발생할 수 있음
+*** == utf8mb3
+** utf8mb4
+*** 한 문자를 4Bytes로 취급
+* https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-sets.html[Unicode Character Sets]
+
 === DATETIME
 
 ____
