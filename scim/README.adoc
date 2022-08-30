@@ -42,3 +42,4 @@
 * https://github.com/Captain-P-Goldfish/SCIM-SDK
 * https://github.com/BetterCloud/scim2
 * https://github.com/apache/directory-scimple
+* https://help.salesforce.com/s/articleView?id=sf.identity_scim_rest_api.htm&type=5
