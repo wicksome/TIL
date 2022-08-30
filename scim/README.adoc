@@ -1,1 +1,44 @@
 = SCIM
+:toc:
+
+* System for Cross-domain Identity Management
+* 사용자 프로비저닝을 자동화할 수 있는 개방형 표준
+* SCIM은 identity 공급 업체(ex. 다수의 개별 사용자가 있는 회사)와 사용자 identity 정보가 필요한 서비스 공급 업체(ex. 기업 SaaS 앱) 간에 사용자 identity 데이터를 전송함
+* 1.1 or 2.0 버전
+* SCIM을 사용하는 이유
+** SCIM은 사용자 아이덴티티 수명 주기 관리 프로세스를 자동화하여 사용자 데이터의 보안을 강화하고 사용자 경험을 단순화함
+** SCIM에서는 사용자 아이덴티티를 Okta와 같은 툴에서 집적 생성하거나, HR 소프트웨어 또는 Active Directory와 같은 외부 시스템에서 가져올 수 있음
+** SCIM은 표준을 따르기 때문에 사용자 데이터가 일관된 방식으로 저장되고 다양한 앱 간에 전송이 가능함
+** https://www.okta.com/kr/blog/2017/01/what-is-scim/
+* SCIM은 클라이언트 및 서버 역할을 정의하는 REST, JSON 기반 프로토콜
+** 클라이언트는 보통 Okta와 같은 아이덴티티 공급업체(IDP)
+*** 견고한 사용자 아이덴티티 디렉토리를 가지고 있음
+** 서비스 공금업체(SP)는 일반적으로 Slack과 같은 SaaS 앱
+*** 이러한 아이덴티티에서 도출된 정보의 하위 집합을 필요로 함
+*** 생성, 업데이트 및 삭제를 포함해 IdP에서 아이덴티티의 변경 사항이 생기면 SCIM 프로토콜에 따라 변경 사항이 SP에 자동으로 동기화됨
+*** 또한, IdP는 SP에서 아이덴티티를 읽어와서 디렉토리에 추가하고 보안을 취약하게 할 수 있는 SP의 오류 값을 감지할 수 있음
+* SCIM을 사용하면 Okta 등과 같은 SCIM 지원 ID 공급자를 통해 SaaS 앱 사용자 생성 및 일시 중단을 자동으로 관리할 수 있음
+* IdP를 사용하여 SaaS 앱의 사용자 추가 또는 제거, 그룹의 맴버 추가/제거를 자동화 할 수 있음
+** SCIM은 User Identity의 교환을 자동화하기 위한 공개 표준
+* SCIM은 두 엔드포인트(/USers, /Groups)의 표준화된 정의
+
+
+== 용어
+
+* IdP: Identity Provider, ID 공급자. (okta, ...)
+* SP: Service Provider, 서비스 공급자. (slack, ...)
+
+== RFC
+
+* http://www.simplecloud.info/
+* https://www.rfc-editor.org/rfc/rfc7643.html[RFC7643] - System for Cross-domain Identity Management: Core Schema
+* https://www.rfc-editor.org/rfc/rfc7644.html[RFC7644] - System for Corss-domain Identity Management: Protocol
+
+== Reference
+
+* https://github.com/pingidentity/scim2
+* https://github.com/1Password/scim-examples
+* https://github.com/jelhub/scimgateway
+* https://github.com/Captain-P-Goldfish/SCIM-SDK
+* https://github.com/BetterCloud/scim2
+* https://github.com/apache/directory-scimple
