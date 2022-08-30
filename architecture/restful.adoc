@@ -88,6 +88,7 @@
 * 200: 정상
 * 201 Created: 성공적으로 리소스 생성
 * 202 Accepted: 요청은 성공적으로 접수되었으나 처리는 진행중이거나 시작전을 나타냄
+** polling, callback, websocket?, sse?
 * 204 No Content
 
 ==== 4xx
