@@ -2492,6 +2492,11 @@ fun getRate(grade: Grade) = when (grade) {
 * 열거형^enumerated{sp}type^은 enum 클래스로 정의할 수 있다.
 * Kotlin에서 enum 클래스의 각 항목에 대해 내부적으로 name과 ordinal 속성을 갖는다.
 ** Java 클래스의 ordinal과 동일하다면.. 이펙티브 자바(item 35)에서는 ordinal 메서드 사용을 지양한다.
+* `==` vs `===`
+** `==` 는 `equals()` 동작이고, `===` 는 참조가 동일한지를 확인한다.
+** `CurrencyCode.KRW == currency` 와 같은 코드는 문제 없다.
+** [.line-through]#but, `currency == CurrencyCode.KRW` 와 같은 코드는 NPE가 발생한다. `==` 는 내부적으로 `equals()` 로 동작하기 때문.#
+*** 라고 생각했지만, 정상 동작한다. 그냥 모두 `==` 를 사용하는 것이 편리할 것 같다. 굳이 `===` 의 동작을 생각하게끔 코딩할 필요 없이.
 
 [source, kt]
 ----
