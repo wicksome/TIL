@@ -1,0 +1,1 @@
+* ngram: https://esbook.kimjmin.net/06-text-analysis/6.6-token-filter/6.6.4-ngram-edge-ngram-shingle
