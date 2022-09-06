@@ -1,6 +1,33 @@
 = MySQL
 :toc:
 
+== DML
+
+DML:: Data Manipulation Language
+
+=== INSERT
+
+* ON DUPLICATE KEY UPDATE
+** 중복키 제약조건에 위배되면 지정한 데이터만 업데이트하는 명령어
+* NOT EXISTS
+** 이미 존재하는 것을 제외하는 명령어
++
+[source, sql]
+----
+INSERT INFO users (user_id, email, name, version)
+SELECT user_id, email, name, 'v2'
+FROM users AS u1
+WHERE version = 'v1'
+AND NOT EXISTS(
+    SELECT 1
+    FROM users AS u2
+    WHERE  u1.user_id = u2.user_id
+    AND u2.version = 'v2'
+);
+----
+* INSERT IGNORE INTO
+* REPLACE INFO
+
 == Types
 
 === VARCHAR
