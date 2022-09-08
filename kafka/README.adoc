@@ -7,3 +7,18 @@
 * 링크드인에서 처음 출발한 기술
 * OLTP^Online{sp}Transaction{sp}Processing^: 네트워크상 온라인 사용자들의 DB에 대한 트랜잭션 처리
 * OLAT^Online^
+
+== 자유롭게 정리하는 곳
+
+=== lag
+
+* topic 내의 partion에 데이터가 하나씩 들어가면 각 데이터에 offset이 붙음
+* producer가 데이터를 넣어주는 속도 < consumer가 데이터를 가져가는 속도 = consumer lag
+** 파티션을 기준으로 측정하므로 lag는 여러 개 존재할 수 있음
+*** 그중 가장 높은 숫자를 갖는 lag을 records-lag-max라고 함
+** 이 값을 통해 컨슈머 상태를 유추
+** 이 값이 높아지면...
+*** consumer의 성능에 비해 producer가 많은 record를 보내는 경우
+*** consumer의 polling 빈도 수가 느려지는 경우
+*** 네트워크 이슈
+*** kafka broker 내부 이슈
