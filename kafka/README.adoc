@@ -10,9 +10,17 @@
 
 == 자유롭게 정리하는 곳
 
-=== lag
+=== topic
+
+* producer는 topic에 message를 보냄
+
+
+=== offset
 
 * topic 내의 partion에 데이터가 하나씩 들어가면 각 데이터에 offset이 붙음
+
+=== lag
+
 * producer가 데이터를 넣어주는 속도 < consumer가 데이터를 가져가는 속도 = consumer lag
 ** 파티션을 기준으로 측정하므로 lag는 여러 개 존재할 수 있음
 *** 그중 가장 높은 숫자를 갖는 lag을 records-lag-max라고 함
@@ -22,3 +30,8 @@
 *** consumer의 polling 빈도 수가 느려지는 경우
 *** 네트워크 이슈
 *** kafka broker 내부 이슈
+
+=== consumer group
+
+* 하나의 프로세스, 서버라고도 볼 수 있음
+* consumer는 자신이 어디까지 데이터를 가져갔는지 offset을 통해 관리함
