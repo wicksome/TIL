@@ -1,0 +1,9 @@
+= Airflow
+
+* Apache Airflow
+* 프로그래밍 방식으로 워크플로우를 작성, 예약, 모니터링하는 오픈 소스 플랫폼
+* 하나의 작업을 DAG(Directed Acyclic Graph, 방향성 비순환 그래프)로 표현
+** 작업이 루프를 허용하지 않겠다는 것
+* HA를 지원하는 스케줄러
+** Jenkins보다 낫다?
+* Spring Cloud Data Flow 보단 뭐가좋지?
