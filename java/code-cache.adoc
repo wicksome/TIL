@@ -54,19 +54,26 @@ ____
 |===
 | Option | Description
 
-| `InitialCodeCacheSize` | 초기 코드 캐시 사이즈. 코드 캐시 사이즈가 증가할 때마다 overhead가 발생. 미리 크게 늘려놓고 사용하여 이 비용을 없앨 수 있을 것으로 보임.
-| `ReservedCodeCacheSize` | 예약된 코드 캐시 사이즈(최댓값)
-| `CodeCacheExpansionSize` | 코드 캐시 확장되는 단위 크기
+| `InitialCodeCacheSize` 
+| 초기 코드 캐시 사이즈. +
+코드 캐시 사이즈가 증가할 때마다 overhead가 발생. 미리 크게 늘려놓고 사용하여 이 비용을 없앨 수 있을 것으로 보임.
+
+| `ReservedCodeCacheSize` 
+| 예약된 코드 캐시 사이즈(최댓값)
+
+| `CodeCacheExpansionSize` 
+| 코드 캐시 확장되는 단위 크기
+
+| `CICompilerCount`
+| 컴파일러 스레드 개수. +
+요것까지 건드리는 것은 하지 않는 것이 좋을 것 같다..
+
+| `XX:CompileThreshold`
+| 서버 컴파일러의 기본값은 10,000 +
+어차피 10,000번 실행되서 컴파일될 코드라면 더 줄여도 괜찮을 것으로 보임. +
+이 부분을 좀 많이 낮춰보면 좋을 것 같음(`XX:ReservedCodeCacheSize`도 같이 고려할 필요도 있어보임).
 
 |===
-
-* `X:CICompilerCount` : 컴파일러 스레드 개수.
-** 요것까지 건드리는 것은 하지 않는 것이 좋을 것 같다..
-* `XX:CompileThreshold`
-** 서버 컴파일러의 기본값은 10,000
-** 어차피 10,000번 실행되서 컴파일될 코드라면 더 줄여도 괜찮을 것으로 보임.
-** 이 부분을 좀 많이 낮춰보면 좋을 것 같음.
-*** `XX:ReservedCodeCacheSize`도 같이 고려할 필요도 있어보임.
 
 === Java 8
 
