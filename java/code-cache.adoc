@@ -89,6 +89,9 @@ ____
 ** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
 * https://docs.oracle.com/en/java/javase/11/tools/java.html
 * `SegmentedCodeCache`
+** 코드 캐시를 특정 타입의 컴파일된 코드를 포함하는 별도의 세그먼트로 나누는 옵션.
+** non-method, profiled, non-profiled 코드 분리
+** 9부터 들어간 옵션(https://openjdk.org/jeps/197)
 
 === Java 17
 
