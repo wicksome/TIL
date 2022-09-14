@@ -100,7 +100,9 @@ ____
 ** limit: 2GB
 ** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
 
+.References
 * https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
+* https://chriswhocodes.com/corretto_jdk17_options.html
 
 == Tiered Compilation
 
