@@ -75,7 +75,16 @@ ____
 ** 이 부분을 좀 많이 낮춰보면 좋을 것 같음.
 *** `XX:ReservedCodeCacheSize`도 같이 고려할 필요도 있어보임.
 
-=== Tiered Compilation
+== Java 11
+
+* `ReservedCodeCacheSize`
+** default size: 240MB
+*** tiered compilation 옵션을 disable하면 default size: 48MB (`-XX:-TieredCompilation`)
+** limit: 2GB
+** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
+* https://docs.oracle.com/en/java/javase/11/tools/java.html
+
+== Tiered Compilation
 
 * java 11 기준으로 CodeHeap(Code Cache)가 3가지 공간으로 나뉨.
 ** 이것이 Tiered Compiliation 옵션이 생겨서임
