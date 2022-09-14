@@ -44,6 +44,22 @@
 
 == Code Cache
 
+컴파일된 메서드의 네이티브 코드 생성을 저장하는데 사용되는 영역.
+
+[quote, 'https://linux.systemv.pe.kr/%EC%9C%A0%EC%9A%A9%ED%95%9C-jvm-%ED%94%8C%EB%9E%98%EA%B7%B8%EB%93%A4-part-4-%ED%9E%99-%ED%8A%9C%EB%8B%9D/[유용한 JVM 플래그들 – PART 4 (힙 튜닝)]']
+____
+코드 캐쉬는 거의 성능문제를 발생시키지 않지만, 한번 코드 캐쉬 문제가 생기면 그 효과는 어마어마할 것이다. 만약 코드 캐쉬 메모리를 모두 사용하게 되면, JVM 은 경고 메시지를 출력하고 “interpreted-only mode” 로 전환한다. JIT 컴파일러는 정지되고 더이상 바이트코드(bytecode)는 네이티브 코드로 컴파일 될지 않을 것이다. 따라서 애클리케이션이 동작은 계속되지만 크기의 순서에따라 점점 느려진다.
+____
+
+|===
+| Option | Default | Description
+
+| `InitialCodeCacheSize` | | 초기 코드 캐시 사이즈
+| `ReservedCodeCacheSize` | 32M/48M | 예약된 코드 캐시 사이즈(최댓값)
+| `CodeCacheExpansionSize` | 32K/64K | 코드 캐시 확장되는 단위 크기
+
+|===
+
 * java 8 기존 default code cache: 24mb, max 240mb
 * java 11 기준 code heap 사이즈를 합쳐보면 240mb 정도, max 2gb
 * `XX:InitialCodeCacheSize` - 시작시 코드 캐시 사이즈
@@ -70,3 +86,4 @@
 
 * https://docs.oracle.com/javase/8/embedded/develop-apps-platforms/codecache.htm
 * https://www.oreilly.com/library/view/java-performance-2nd/9781492056102/ch04.html
+* https://practical.li/clojure/reference/jvm/java-17-flags.html
