@@ -32,16 +32,20 @@ redis > PUBLISH channel message
 
 
 
-== client
+== 클라이언트
 
+* redis-cli
++
 [source, bash]
 ----
 $ brew install redis
 $ redis-cli -h $host -p $port
 > config get *
 ----
++
+https://redis.io/docs/getting-started/installation/install-redis-on-mac-os/
 
-* ~https://github.com/luin/medis~
+* ~~https://github.com/luin/medis~~
 * https://github.com/qishibo/AnotherRedisDesktopManager
 
 == 자료구조
