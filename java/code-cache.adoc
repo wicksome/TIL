@@ -86,6 +86,8 @@ ____
 
 === Java 17
 
+==== Summary
+
 |===
 | Option | Default | Description
 
@@ -94,6 +96,11 @@ ____
 
 |===
 
+* `ReservedCodeCacheSize`
+** default size: 240MB
+*** tiered compilation 옵션을 disable하면 default size: 48MB (`-XX:-TieredCompilation`)
+** limit: 2GB
+** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
 * https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
 
 == Tiered Compilation
