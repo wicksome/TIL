@@ -100,3 +100,10 @@ image:https://wac-cdn.atlassian.com/dam/jcr:a679339b-0098-4c88-acdb-7009b0de6efb
 ** 에픽과 이니셔티브의 창출을 주도하는 조직 목표
 * 스토리, 작업, 에픽
 * 
+
+== estimate
+
+* 이것을 어떻게 측정할 것인가?
+* zenhub은 planing poker를 사용하기도 함 https://help.zenhub.com/support/solutions/articles/43000010347-estimating-work-using-story-points[link]
+* md는 아니다. 이것은 팀마다 상대적인 측정을 가져야 한다?
+* 이것을 시간으로 비교했을 때 우리팀은 어느정도의 estimate를 어느 시간에 해결하는지 알 수 
