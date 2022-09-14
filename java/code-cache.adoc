@@ -52,21 +52,14 @@ ____
 ____
 
 |===
-| Option | Default | Description
+| Option | Description
 
-| `InitialCodeCacheSize` | | 초기 코드 캐시 사이즈
-| `ReservedCodeCacheSize` | 32M/48M | 예약된 코드 캐시 사이즈(최댓값)
-| `CodeCacheExpansionSize` | 32K/64K | 코드 캐시 확장되는 단위 크기
+| `InitialCodeCacheSize` | 초기 코드 캐시 사이즈. 코드 캐시 사이즈가 증가할 때마다 overhead가 발생. 미리 크게 늘려놓고 사용하여 이 비용을 없앨 수 있을 것으로 보임.
+| `ReservedCodeCacheSize` | 예약된 코드 캐시 사이즈(최댓값)
+| `CodeCacheExpansionSize` | 코드 캐시 확장되는 단위 크기
 
 |===
 
-* java 8 기존 default code cache: 24mb, max 240mb
-* java 11 기준 code heap 사이즈를 합쳐보면 240mb 정도, max 2gb
-* `XX:InitialCodeCacheSize` - 시작시 코드 캐시 사이즈
-** 코드 캐시 사이즈가 증가할 때마다 overhead가 발생. 미리 크게 늘려놓고 사용하여 이 비용을 없앨 수 있을 것으로 보임.
-* `-XX:ReservedCodeCacheSize` - 코드 캐시 사이즈 최대치
-* `-XX:CodeCacheExpansionSize` - 코드 캐시 사이즈가 늘어나는 단위
-** 코드 캐시 사이즈가 다 차면 이 설정만큼씩 늘어남
 * `X:CICompilerCount` : 컴파일러 스레드 개수.
 ** 요것까지 건드리는 것은 하지 않는 것이 좋을 것 같다..
 * `XX:CompileThreshold`
@@ -75,19 +68,24 @@ ____
 ** 이 부분을 좀 많이 낮춰보면 좋을 것 같음.
 *** `XX:ReservedCodeCacheSize`도 같이 고려할 필요도 있어보임.
 
+=== Java 8
+
+* java 8 기존 default code cache: 24mb, max 240mb
+
 === Java 11
 
+* java 11 기준 code heap 사이즈를 합쳐보면 240mb 정도, max 2gb
 * `ReservedCodeCacheSize`
 ** default size: 240MB
 *** tiered compilation 옵션을 disable하면 default size: 48MB (`-XX:-TieredCompilation`)
 ** limit: 2GB
 ** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
 * https://docs.oracle.com/en/java/javase/11/tools/java.html
+* `SegmentedCodeCache`
 
 === Java 17
 
-==== Summary
-
+.Summary
 |===
 | Option | Default | Description
 
@@ -101,6 +99,7 @@ ____
 *** tiered compilation 옵션을 disable하면 default size: 48MB (`-XX:-TieredCompilation`)
 ** limit: 2GB
 ** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
+
 * https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
 
 == Tiered Compilation
