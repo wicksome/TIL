@@ -75,7 +75,7 @@ ____
 ** 이 부분을 좀 많이 낮춰보면 좋을 것 같음.
 *** `XX:ReservedCodeCacheSize`도 같이 고려할 필요도 있어보임.
 
-== Java 11
+=== Java 11
 
 * `ReservedCodeCacheSize`
 ** default size: 240MB
@@ -83,6 +83,18 @@ ____
 ** limit: 2GB
 ** 최대 값은 초기 코드캐시 값보다 작아서는 안됨 (`-XX:InitialCodeCacheSize`)
 * https://docs.oracle.com/en/java/javase/11/tools/java.html
+
+=== Java 17
+
+|===
+| Option | Default | Description
+
+| `InitialCodeCacheSize` | 플랫폼에 따라 다름 | 초기 코드 캐시 사이즈
+| `ReservedCodeCacheSize` | 240 MB | 예약된 코드 캐시 사이즈(최댓값)
+
+|===
+
+* https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html
 
 == Tiered Compilation
 
