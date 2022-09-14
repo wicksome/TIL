@@ -21,4 +21,5 @@
 
 == References
 
+* https://evernote.com/blog/ko/getting-things-done/
 * https://asana.com/ko/resources/getting-things-done-gtd
