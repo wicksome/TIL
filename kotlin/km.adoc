@@ -1,7 +1,11 @@
 = Kotin Multiplatform
 
-== https://kotlinlang.org/docs/multiplatform.html[Kotlin Multiplatform]
+:mpp: https://kotlinlang.org/docs/multiplatform.html
+:kmm: https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html
 
+== {mpp}[Kotlin Multiplatform]
+
+* MPP, multiplatform project
 * 다중 플랫폼간 코드 공유. KMM을 사용하면 Android, iOS 간에 비즈니스 로직 등의 공통 코드를 공유할 수 있음.
 
 === cross-platform code
@@ -17,7 +21,7 @@
 ** CocoaPods
 ** NPM?
 
-== https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html[Kotlin Multiplatform Mobile] (KMM)
+== {kmm}[Kotlin Multiplatform Mobile] (KMM)
 
 * https://kotlinlang.org/lp/mobile/[KMM]은 iOS, Android 앱 개발을 위한 SDK.
 * https://kotlinlang.org/docs/kmm-samples.html[sample projects]
