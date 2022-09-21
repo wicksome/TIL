@@ -1,0 +1,8 @@
+= AWS
+:toc:
+
+== Lambda
+
+* https://aws.amazon.com/ko/serverless/[서버리스] 컴퓨팅
+* Amazon API Gateway를 통한 HTTP 요청, Amazon Simple Storage Service(Amazon S3) 버킷에 있는 객체에 대한 변경 사항, 
+Amazon DynamoDB의 테이블 업데이트, AWS Step Functions의 상태 전화과 같은 다양한 이벤트에 대한 응답으로 코드를 자동 실행할 수 있음
