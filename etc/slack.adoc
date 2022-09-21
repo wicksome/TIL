@@ -6,9 +6,17 @@
 . 'https://api.slack.com/apps[Your Apps]'에서 App 생성
 . Features에서 어떻게 동작시킬 것인지 선택
 ** Incoming Webhooks: 외부 요청으로부터 슬랙으로 메시지를 전송하는 간단한 방법
+*** api → lambda → salck api 가능
+** Event Subscriptions: 이벤트를 구독할 별도 서버 연결
+*** https://api.slack.com/events/url_verification[인증 처리가 필요함]
 
 .References
 * https://blog.gangnamunni.com/post/typescript-slack-bot/
+
+=== 삽질
+
+* 앱이 등록 안될 때
+** 'App Home > Your App's Presence in Slack' 설정에서 Display Name, Default Name이 등록 되어 있는지 확인
 
 == Slack용 수신 웹후크
 
