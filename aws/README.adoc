@@ -6,3 +6,58 @@
 * https://aws.amazon.com/ko/serverless/[서버리스] 컴퓨팅
 * Amazon API Gateway를 통한 HTTP 요청, Amazon Simple Storage Service(Amazon S3) 버킷에 있는 객체에 대한 변경 사항, 
 Amazon DynamoDB의 테이블 업데이트, AWS Step Functions의 상태 전화과 같은 다양한 이벤트에 대한 응답으로 코드를 자동 실행할 수 있음
+
+=== Slack Bot 연동하기
+
+* https://api.slack.com/apps[Slack Bot 생성하기]
+* Slack Event를 전달 받을 URL 생성하기: **AWS API Gateway**
+** 신규 생성한 AWS API Gateway의 URL을 Slack 'Features > Event Subscriptions' 설정의 'Request URL'에 등록한다.
+** 이 때, 인증 실페 관련된 오류를 볼 수 있는데 이는 이벤트를 처리할 서버에서 추가 작업이 필요하다.
+* Slack Event를 처리할 서버 생성하기: **AWS Lambda**
+** 인증 실패 관련 오류를 처리할 예시 코드는 아래와 같다.
++
+[source, javascript]
+----
+const VERIFICATION_TOKEN = "<Verfication Token>" // <1>
+
+const response = (statusCode, body) => {
+    return {
+        statusCode: statusCode,
+        body: body
+    }
+}
+
+// Lambda handler
+exports.handler = async (event, context) => {
+    // init logging
+    console.log("event", event)
+    
+    // // Verify Url - https://api.slack.com/events/url_verification
+    if(
+        event.httpMethod === "POST" && 
+        event.resource === "/<resource>" && // <2>
+        !!event.body
+    ) {
+        const data = JSON.parse(event.body)
+        
+        
+        if (data.token === VERIFICATION_TOKEN) {
+            return response(200, JSON.stringify({ "challenge": data.challenge }));
+        } else {
+            return response(403, "verification failed");
+        }
+    }
+    
+    // custom actions
+    return {
+        statusCode: 200,
+        body: JSON.stringify(
+            {
+                message: "Hello world!"
+            }
+        )
+    }
+};
+----
+<1> Settings > Basic Information > App Credentials > Verification Token
+<2> API Gateway의 스테이지 값이 아닌 별도로 지정한 '경로'의 root를 지정한다.
