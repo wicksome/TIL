@@ -14,6 +14,7 @@ Amazon DynamoDB의 테이블 업데이트, AWS Step Functions의 상태 전화�
 ** 신규 생성한 AWS API Gateway의 URL을 Slack 'Features > Event Subscriptions' 설정의 'Request URL'에 등록한다.
 ** 이 때, 인증 실페 관련된 오류를 볼 수 있는데 이는 이벤트를 처리할 서버에서 추가 작업이 필요하다.
 * Slack Event를 처리할 서버 생성하기: **AWS Lambda**
+** 특정 람다 함수를 실행시키는 트리거는 AWS API Gateway를 활용할 수 있다.
 ** 인증 실패 관련 오류를 처리할 예시 코드는 아래와 같다.
 +
 [source, javascript]
@@ -61,3 +62,12 @@ exports.handler = async (event, context) => {
 ----
 <1> Settings > Basic Information > App Credentials > Verification Token
 <2> API Gateway의 스테이지 값이 아닌 별도로 지정한 '경로'의 root를 지정한다.
+
+* Slack 메시지를 전달하는 방법
+** https://api.slack.com/messaging/webhooks[Incoming Webhooks] - 메시지를 전달하는 가장 쉬운 방법
+** API로 전달하기
+*** https://api.slack.com/reference/messaging/payload[Message payloads]
+*** https://help.socialintents.com/article/148-how-to-find-your-slack-team-id-and-slack-channel-id[Team, Channel ID 얻는 방법]
+** 참고
+*** https://app.slack.com/block-kit-builder[Block Kit Builder] - 메시지 예시를 확인할 수 있는 빌더
+*** https://w3percentagecalculator.com/json-to-one-line-converter/[JSON 한 줄로 만들기] - 예시 데이터를 cURL 테스트할 때 활용
