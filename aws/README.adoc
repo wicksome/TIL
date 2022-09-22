@@ -65,6 +65,7 @@ exports.handler = async (event, context) => {
 
 * Slack 메시지를 전달하는 방법
 ** https://api.slack.com/messaging/webhooks[Incoming Webhooks] - 메시지를 전달하는 가장 쉬운 방법
+*** 이 방법으로는 게시된 메시지를 삭제할 수 없음. 좀 더 복잡한 채팅 흐름이 필요하다면 https://api.slack.com/methods/chat.postMessage[chat.postMessage] 사용
 ** API로 전달하기
 *** https://api.slack.com/reference/messaging/payload[Message payloads]
 *** https://help.socialintents.com/article/148-how-to-find-your-slack-team-id-and-slack-channel-id[Team, Channel ID 얻는 방법]
