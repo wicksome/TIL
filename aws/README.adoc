@@ -41,7 +41,6 @@ exports.handler = async (event, context) => {
     ) {
         const data = JSON.parse(event.body)
         
-        
         if (data.token === VERIFICATION_TOKEN) {
             return response(200, JSON.stringify({ "challenge": data.challenge }));
         } else {
@@ -105,6 +104,60 @@ curl -d '{"channel": "<C로 시작되는 채널 ID>", "text":"Hello World"}' \
 -H "Authorization: Bearer <xoxb-로 시작하는 토큰>" \
 -X POST https://slack.com/api/chat.postMessage
 ----
+
+.예제 코드
+[source, javascript]
+----
+const https = require('https')
+const qs = require('querystring')
+      
+const VERIFICATION_TOKEN = "<Verfication Token>"
+
+const response = (statusCode, body) => {
+    return {
+        statusCode: statusCode,
+        body: body
+    }
+}
+
+const getBody = (body, isBase64Encoded) => {
+    if(isBase64Encoded) {
+        return Buffer.from(body, 'base64').toString(); // <1>
+    } else {
+        return body
+    }
+}
+
+// Lambda handler
+exports.handler = async (event, context) => {
+    // init logging
+    console.log("event", event)
+    
+    // // Verify Url - https://api.slack.com/events/url_verification
+    if(
+        event.httpMethod === "POST" && 
+        event.resource === "/slack" &&
+        !!event.body
+    ) {
+        const data = JSON.parse(event.body)
+        if (data.token === VERIFICATION_TOKEN) {
+            return response(200, JSON.stringify({ "challenge": data.challenge }));
+        } else {
+            return response(403, "verification failed");
+        }
+    }
+    
+    // custom actions
+    const body = getBody(event.body, event.isBase64Encoded)
+    console.log("request.body", body)
+    
+    return {
+        statusCode: 200,
+        body: JSON.stringify(qs.parse(body))
+    }
+};
+----
+<1> atob 함수를 사용할 수 없어서 다른 방법으로 Base64 디코딩을 한다.
 
 === 참고
 
