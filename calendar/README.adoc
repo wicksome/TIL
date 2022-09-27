@@ -1,0 +1,10 @@
+= 캘린더 서비스를 위한 정리
+:toc:
+
+Calendar:: 달력, 일정표; 일정 기록.
+
+Schedule:: (작업) 일정
+
+Event:: 사건, 일(happening, occurrence)
+
+Task:: 할 일
