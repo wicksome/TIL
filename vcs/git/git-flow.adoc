@@ -47,6 +47,8 @@ git switch -c feature/add-user-service # after git 2.23
 
 == Release branches
 
+image:https://kroki.io/mermaid/svg/eNpLzyxxL0osyOBSAILk_NzczBIkpkJJYrqVUpmhnoGegRJYPKkoMS85QyEltSw1J78Auy5khUWpOamJxan6QDOApmCoz0hNzs4vLcFpHkyeSGNyEzPzwCK5qUXpqWi64J4xhHkGq_XYtGL3JwCvwl1D[]
+
 * 릴리즈 날짜가 다가오거나 릴리즈를 위한 기능이 충족되면 `develop` 브랜치에서 `release` 브랜치를 분기한다. (`main` 브랜치 X)
 +
 [source, bash]
@@ -137,6 +139,14 @@ RB가 이미 있을 경우 `hotfix` 는 `develop` 브랜치가 아닌 RB에 merg
 RB가 병합될 때 develop 브랜치에도 함께 반영되고, bugfix 된 RB를 배포시에도 포함할 수 있기 때문이다.
 
 커밋 로그가 복잡하지 않다면 hotfix 백머지된 이후에 다시 RB를 다시 생성하고 cherry-pick 하는 것도 방안일 수 있다.
+====
+
+[NOTE]
+.develop에 이미 반영된 commit을 hotfix로 배포하고자 할 떄 어떻게 해야하는가?
+====
+
+image:https://kroki.io/mermaid/svg/eNpTSM8scS9KLMjgUoCA5Pzc3MwS7LykosS85AyFlNSy1Jz8AmJ0oPEyUpOz80tLFHITM_PwaQAAuVUn6A[]
+
 ====
 
 == Support branches
