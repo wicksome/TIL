@@ -2424,6 +2424,42 @@ var age: Int by Delegates.vetoable(1) {
 === 클래스 위임
 
 * https://kotlinlang.org/docs/delegation.html
+* https://nwillc.medium.com/kotlin-data-class-inheritance-by-delegation-2ad3fe6f9bd7
+
+[source, kotlin]
+----
+data class PersonInfo(
+    val fName: String,
+    val lName: String,
+    val dob: LocalDate,
+)
+data class Person(
+    val fName: String,
+    val lName: String,
+    val dob: LocalDate,
+    val id: UUID
+)
+----
+
+[source, kotlin]
+----
+data class PersonInfo(
+    override val fName: String,
+    override val lName: String,
+    override val dob: LocalDate,
+) : PersonDefinition
+
+data class Person(
+    private val data: PersonInfo,
+    val id: UUID
+) : PersonDefinition by data
+
+interface PersonDefinition {
+    val fName: String
+    val lName: String
+    val dob: LocalDate
+}
+----
 
 == Another type of Class
 
