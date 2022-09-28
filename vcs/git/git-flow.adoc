@@ -49,6 +49,34 @@ git switch -c feature/add-user-service # after git 2.23
 
 image:https://kroki.io/mermaid/svg/eNpLzyxxL0osyOBSAILk_NzczBIkpkJJYrqVUpmhnoGegRJYPKkoMS85QyEltSw1J78Auy5khUWpOamJxan6QDOApmCoz0hNzs4vLcFpHkyeSGNyEzPzwCK5qUXpqWi64J4xhHkGq_XYtGL3JwCvwl1D[]
 
+.mermaid source code
+[%collapsible]
+====
+
+[mermaid]
+....
+gitGraph
+    commit
+    commit tag:"v1.0.0"
+    branch develop
+    commit
+    commit
+    branch release/v1.1.0
+    commit
+    checkout develop
+    commit
+    checkout release/v1.1.0
+    commit
+    checkout main
+    merge release/v1.1.0 tag:"v1.1.0"
+    checkout develop
+    merge release/v1.1.0
+    commit
+    commit
+....
+
+====
+
 * 릴리즈 날짜가 다가오거나 릴리즈를 위한 기능이 충족되면 `develop` 브랜치에서 `release` 브랜치를 분기한다. (`main` 브랜치 X)
 +
 [source, bash]
@@ -145,7 +173,26 @@ RB가 병합될 때 develop 브랜치에도 함께 반영되고, bugfix 된 RB�
 .develop에 이미 반영된 commit을 hotfix로 배포하고자 할 떄 어떻게 해야하는가?
 ====
 
-image:https://kroki.io/mermaid/svg/eNpTSM8scS9KLMjgUoCA5Pzc3MwS7LykosS85AyFlNSy1Jz8AmJ0oPEyUpOz80tLFHITM_PwaQAAuVUn6A[]
+[mermaid]
+....
+gitGraph
+    commit
+    commit tag:"v1.0.0"
+    branch develop
+    commit
+    commit id:"bug-patch1"
+    commit id:"bug-patch2"
+    commit
+    checkout main
+    branch hotfix/v1.0.1
+    cherry-pick id:"bug-patch1"
+    cherry-pick id:"bug-patch2"
+    checkout main
+    merge hotfix/v1.0.1 tag:"v1.0.1"
+    checkout develop
+    merge hotfix/v1.0.1
+    commit
+....
 
 ====
 
