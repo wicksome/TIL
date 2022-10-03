@@ -16,3 +16,14 @@
 
 * WebSocket 완전한 양방향 통신
 * WebSocket은 별도 프로토콜로 통신
+
+== Problem Details for HTTP APIs
+
+* https://datatracker.ietf.org/doc/html/rfc7807[RFC7807]
++
+.build.gradle.kts
+[source, kotlin]
+----
+api("org.zalando:problem-spring-web:0.25.2")
+----
+* https://kwonnam.pe.kr/wiki/springframework/problem_spring_web
