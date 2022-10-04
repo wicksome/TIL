@@ -167,4 +167,11 @@ curl -d '{"channel": "<C로 시작되는 채널 ID>", "text":"Hello World"}' \
 
 == 모니터링
 
-* "`p99 1.403` 은 10초간 가장 느린 요청 1%의 평균 지연 시간이 1.403초임을 뜻합니다." (https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/health-enhanced-metrics.html[참고])
+* p90, p95, p99
+** 백분위 수
+** 백분위수(percentile)에는 제1백분위수부터 제99백분위수까지 있다.
+** DD-Sketch
+*** VLDB19(데이터베이스 학회)에서 소개된 자료구조
+*** 모든 값을 가지고 있지 않아도 P95, p50등과 같은 백분위수를 계산 할 수 있음
+*** https://blog.imqa.io/statistical-info/
+** "`p99 1.403` 은 10초간 가장 느린 요청 1%의 평균 지연 시간이 1.403초임을 뜻합니다." (https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/health-enhanced-metrics.html[참고])
