@@ -1,6 +1,10 @@
 = Git
 :toc:
 
+== git
+
+* https://joone.net/2022/10/02/47-git/[만화로 보는 git]
+
 == Branch strategy
 
 * xref:git-flow.adoc[git-flow]
