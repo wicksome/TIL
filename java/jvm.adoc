@@ -137,6 +137,10 @@ JVM 메모리 영역은 'runtime data area'라고도 불리며 여러 영역으�
 .. cleanup
 .. copy
 
+==== References
+
+* https://docs.oracle.com/javase/10/gctuning/garbage-first-garbage-collector.htm#JSGCT-GUID-ED3AB6D3-FD9B-4447-9EDF-983ED2F7A573
+
 ==== Young Garbage Collections
 
 Young Garbage Collections::
