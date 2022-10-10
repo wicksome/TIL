@@ -1403,6 +1403,39 @@ File("/home/aasmund/test.txt").inputStream().use {
 
 == Collection
 
+[plantuml]
+----
+@startuml
+hide empty field
+hide empty method
+
+interface Iterable
+interface MutableIterable
+interface Collection
+interface MutableCollection
+interface List
+interface MutableList
+interface Set
+interface MutableSet
+interface Map
+interface MutableMap
+
+Iterable <-down- MutableIterable
+MutableIterable <-down- MutableCollection
+Iterable <-down- Collection
+Collection <-- List
+Collection <-- Set
+Collection <-- Map
+Collection <-left- MutableCollection
+List <-- MutableList
+Set <-- MutableSet
+Map <-- MutableMap
+MutableCollection <-- MutableList
+MutableCollection <-- MutableSet
+MutableCollection <-- MutableMap
+@enduml
+----
+
 * Kotlin의 collection은 Eager evaluation으로 동작한다.
 ** Java의 Stream처럼 Lay evaluation으로 동작하고자 한다면 Kotlin의 Sequence를 사용하면 된다.
 * Kotlin의 collection에는 mutable 타입과 read-only 타입이 있다.
