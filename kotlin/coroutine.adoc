@@ -198,14 +198,17 @@ class AppService {
 
 == reactive vs coroutine
 
+* 리액티브 프로그래밍은 현재의 프로그래밍 패러다임으로, 변화의 전파에 대해 말한다.
+** 즉, 일련의 상태를 월드로 표현하는 대신 리팩티브 프로그래밍 모델 행동으로 표현한다.
+* 리액티브 프로그래밍은 데이터 스트림과 변화의 전파를 중심으로 하는 비동기 프로그래밍 패러다임이다.
+** 간단히 말하자면 데이터/데이터 스트림에 영향을 주는 모든 변경점을 관련된 당사자에게 전파하는 프로그램을 리액티브 프로그램으로 부른다.
+* 리액티브 매니페스토^Reactive{sp}Manifesto^(https://www.reactivemanifesto.org/)는 다음과 같은 네가지 리액티브 원리를 정의하느 문서다.
+.. 반응^Responsive^
+.. 복원^Resilient^
+.. 탄력^Elastic^
+.. 메시지 중심^Message-driven^
+
 == Fiber
-
-== References
-
-* https://github.com/hikaMaeng/kotlinCoroutineKR[코루틴 번역]
-* https://wooooooak.github.io/kotlin/2019/08/25/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%BD%94%EB%A3%A8%ED%8B%B4-%EA%B0%9C%EB%85%90-%EC%9D%B5%ED%9E%88%EA%B8%B0/[코틀린 코루틴(coroutine) 개념 익히기]
-* https://stylishc.tistory.com/128
-
 
 == _WebClient_ with Coroutines
 
@@ -243,8 +246,6 @@ suspend fun fundPayment(@PathVariable id: String): PaymentView {
     return PaymentView()
 }
 ----
-
-
 
 == Flow
 
@@ -310,12 +311,10 @@ fun main() = runBlocking<Unit> {
 ** collect가 호출될때까지 실행되지 않음
 * multiple flow로 동작하도록 하지 않는이상 sequential하게 동작함
 
----
-
-* Iterator
-* Mono, Flux, Flow, Sequence
-* Sequence는 코루틴 빌더가 아닌 kotlin 에서 제공하는 빌더
-* suspend
+.Referneces
+* https://kotlinlang.org/docs/flow.html
+* https://medium.com/mobile-app-development-publication/kotlin-slow-list-and-lazy-sequence-61691fc974c5
+* https://medium.com/mobile-app-development-publication/kotlin-flow-a-much-better-version-of-sequence-d2555ba9eb94
 
 === cold stream vs. hot stream
 
@@ -426,8 +425,15 @@ fun main(args: Array<String>) = funBlocking<Unit> {
 * 액터는 메시지를 통해 외부 월드 및 다른 액터와 상호작용하는 일종의 오브젝트다.
 * 액터 오브젝트는 메시지를 통해 외부적으로 수정 및 접근할 수 있지만, 직접 할 수는 없는 private 내부 변경 가능한 상태를 가진다.
 
-== Referneces
+== ETC
 
-* https://kotlinlang.org/docs/flow.html
-* https://medium.com/mobile-app-development-publication/kotlin-slow-list-and-lazy-sequence-61691fc974c5
-* https://medium.com/mobile-app-development-publication/kotlin-flow-a-much-better-version-of-sequence-d2555ba9eb94
+* Iterator
+* Mono, Flux, Flow, Sequence
+* Sequence는 코루틴 빌더가 아닌 kotlin 에서 제공하는 빌더
+* suspend
+
+== References
+
+* https://github.com/hikaMaeng/kotlinCoroutineKR[코루틴 번역]
+* https://wooooooak.github.io/kotlin/2019/08/25/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%BD%94%EB%A3%A8%ED%8B%B4-%EA%B0%9C%EB%85%90-%EC%9D%B5%ED%9E%88%EA%B8%B0/[코틀린 코루틴(coroutine) 개념 익히기]
+* https://stylishc.tistory.com/128
