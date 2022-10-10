@@ -157,7 +157,7 @@ fun fetchCharacterData(): Deferred<CharacterGenerator.CharacterData> { // <1>
 }
 ----
 <1> `Deferred` 는 우리가 요청할 때까지 데이터를 반환하지 않는다.
-<2>  `async` 는 하나의 인자로 람다를 받으며, 람다에 백그라운드에서 처리할 작업을 지정한다.
+<2> `async` 는 하나의 인자로 람다를 받으며, 람다에 백그라운드에서 처리할 작업을 지정한다.
 
 
 [source, kt]
