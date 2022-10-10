@@ -49,6 +49,9 @@ ____
 * concurrency design pattern.
 * 코틀린 팀은 코루틴을 `경량 스레드: Light-weighted thread` 로 정의.
 ** 한 thread에서 다수의 coroutine을 수행할 수 있음과 Context Switching이 필요없기 때문에 이렇게 부름
+* 코루틴은 코드 블록을 실행하고 비슷한 라이프 사이클을 가졌지만 반환 값이나 예외를 사용해 완료할 수 있는 아주 가벼운 스레드다.
+* 기술적으로 코루틴은 중지 가능한 계산의 인스턴스며, 일시 중단할 수 있는 계산이다.
+* 코루틴은 특정 스레드에 바인딩되지 않으며, 한 스레드에서 일시 중지하고 다른 스레드에서 재개할 수 있다.
 
 코루틴을 사용하면...
 
@@ -311,14 +314,119 @@ fun main() = runBlocking<Unit> {
 
 * Iterator
 * Mono, Flux, Flow, Sequence
-* Channel
 * Sequence는 코루틴 빌더가 아닌 kotlin 에서 제공하는 빌더
 * suspend
 
-=== cold strean vs hot stream
+=== cold stream vs. hot stream
 
+== Coroutine Context
 
-=== Referneces
+* 코루틴은 항상 컨텍스트에서 실행된다.
+* asyncsk launch같은 코루틴 빌더는 기본적으로 DefaultDispatcher 디스페처를 사용한다(현재 코루틴 버전 0.2.1에서는 DefaultDispatcher와 CommonPool은 동일하다.)
+* 코루틴 컨텍스트는 값을 보유할 수도 있다.
+
+== Channel
+
+* 두 코루틴이 통신할 수 있는 방법
+** Deferred<T>: 값 하나는 가능하다 시쿼스나 스트림을 불가능
++
+[source, kotlin]
+----
+fun main(args: Array<String>) = runBlocking {
+  val result = CompletableDeferred<String>()
+
+  val world = launch {
+    delay(500)
+    result.complete("World")
+  }
+
+  val hello = launch {
+    println("Hello ${result.await()}")
+  }
+
+  hello.join()
+  world.join()
+}
+----
+** Channel
++
+[source, kotlin]
+----
+fun main(args: Array<String>) = runBlocking {
+  val channel = Channel<String>()
+
+  val world = launch {
+    delay(500)
+    channel.send("World")
+  }
+
+  val hello = launch {
+    println("Hello ${result.receive()}")
+  }
+
+  hello.join()
+  world.join()
+}
+----
+*** 당연히 이러한 코드는 채널의 의도된 용도가 아니다.
+* 일반적으로 단일 혹은 여러 코루틴은 채널로 메시지를 보낸다.
++
+[source, kotlin]
+----
+fun main(args: Array<String>) = funBlocking<Unit> {
+  val channel = Channel<Char>()
+
+  val sender = launch {
+    repeat(1000) {
+      delay(10)
+      channel.send('.')
+      delay(10)
+      channel.send(',')
+    }
+    channel.close()
+  }
+
+  for (msg in channel) { // <1>
+    println(mst)
+  }
+
+  sender.join()
+}
+----
+<1> 채널 자체는 반복자이므로 for 블록에서 사용할 수 있다.
+* 위 코드는 produce 빌드를 사용해서 더 간단하게 작성할 수 있다.
++
+[source, kotlin]
+----
+fun dotsAndCommas(size: Int) = produce { // <1>
+  repeat(size) {
+    delay(10)
+    channel.send('.')
+    delay(10)
+    channel.send(',')
+  }
+}
+
+fun main(args: Array<String>) = funBlocking<Unit> {
+  val channel = dotsAndCommas(1000)
+
+  for (msg in channel) { // <1>
+    println(mst)
+  }
+}
+----
+<1> produce 빌더는 수신만을 위한 채널 타입 ReceiveChannel<T>를 반환한다.
+* 채널 파이프라인
+** 채널이 있을 때 파이프라인과 같은 관련된 패턴을 가질 수 있다.
+** 파이프라인은 유닉스 파이프나 엔터프라이즈 인티그레이션 패턴^EIP,{sp}Enterprise{sp}Integration{sp}Pattern^ 같이 소비자와 생산자를 연결하는 일련의 채널이다.
+
+== Actor
+
+* 비동기 코드를 다를 때의 주요 관심사는 변경 가능한 상태를 처리하는 방법
+* 액터는 메시지를 통해 외부 월드 및 다른 액터와 상호작용하는 일종의 오브젝트다.
+* 액터 오브젝트는 메시지를 통해 외부적으로 수정 및 접근할 수 있지만, 직접 할 수는 없는 private 내부 변경 가능한 상태를 가진다.
+
+== Referneces
 
 * https://kotlinlang.org/docs/flow.html
 * https://medium.com/mobile-app-development-publication/kotlin-slow-list-and-lazy-sequence-61691fc974c5
