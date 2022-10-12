@@ -26,5 +26,11 @@ agent Event
 Calendar ||--o{ Event
 Schedule ||--o{ Event
 
+agent Task
+agent Reminder
+
+Event <|-- Task
+Event <|-- Reminder
+
 @enduml
 ----
