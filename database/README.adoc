@@ -3,3 +3,13 @@
 distinct::
 * 일부 컬럼에 대해서만 중복 제거하지 않고, select한 전체 row에서 중복을 제거하므로 속도가 느려진다고 한다.
 * distinct 사용시 temp tablespace에 임시로 저장하고 작업하는 방식이라 시스템에 부하를 줄 수 있다고 한다.
+
+
+== Connection Pool
+
+* 데이버테이스에 연결된 Connection을 미리 만들어 둔 후 Pool에 보관했다가, 필요할 때 가져다 사용한 후 반환하는 기법.
+* 매번 Connection을 생성하고 닫지 않아도되므로 성능 향상을 기대할 수 있다.
+* release를 하면 Pool에 Connection을 반환한다.
+
+.References
+* https://www.holaxprogramming.com/2013/01/10/devops-how-to-manage-dbcp/
