@@ -11,18 +11,19 @@ Event:: 사건, 일(happening, occurrence)
 
 Task:: 할 일
 
-
 Reminder:: https://en.dict.naver.com/#/entry/enko/112622646af24c9492b87ac934939a79[(이미 잊었거나 잊고 싶은 것을) 상기시키는{left_sb}생각나게 하는{rigth_sb} 것]
+
 
 [plantuml]
 ----
 @startuml
+allow_mixing
 
 agent Calendar
 agent Schedule
 agent Event
 
-Calendar ||--|{ Event
+Calendar ||--o{ Event
 Schedule ||--o{ Event
 
 @enduml
