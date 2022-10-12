@@ -1,10 +1,29 @@
 = 캘린더 서비스를 위한 정리
 :toc:
+:left_sb: &#91;
+:rigth_sb: &#93;
 
 Calendar:: 달력, 일정표; 일정 기록.
 
-Schedule:: (작업) 일정
+Schedule:: (작업) 일정. https://ko.dict.naver.com/#/entry/koko/145ccd8fc80e4c47aa84caf42518b131[일정한 기간 동안 해야 할 일의 계획을 날짜별로 짜 놓은 것. 또는 그 계획.]
 
 Event:: 사건, 일(happening, occurrence)
 
 Task:: 할 일
+
+
+Reminder:: https://en.dict.naver.com/#/entry/enko/112622646af24c9492b87ac934939a79[(이미 잊었거나 잊고 싶은 것을) 상기시키는{left_sb}생각나게 하는{rigth_sb} 것]
+
+[plantuml]
+----
+@startuml
+
+agent Calendar
+agent Schedule
+agent Event
+
+Calendar ||--|{ Event
+Schedule ||--o{ Event
+
+@enduml
+----
