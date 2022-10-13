@@ -63,6 +63,10 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 * {ical}[iCalendar]는 사용자가 이벤트, 할 일, 저널 항목, 약속 있음/없음 정보와 같은 일정 및 일정 정보를 저장하고 교환할 수 있는 미디어 유형입니다.
 * 파일 형식은 {rfc5545}[RFC 5545]
 
+==== References
+
+* https://developers.worksmobile.com/kr/document/1007011?lang=ko[일정 iCalendar 형식] - NAVER WORKS Developers
+
 === Webcal
 
 * {caldav}[CalDAV]와 GroupDAV는 모두 WebDAV 기반의 캘린더 저장소 액세스를 보다 세밀하게 제공하기 위한 노력입니다.
