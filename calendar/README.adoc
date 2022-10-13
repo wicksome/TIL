@@ -40,7 +40,7 @@ Event <|-- Reminder
 === CalDAV
 :caldav: https://en.wikipedia.org/wiki/CalDAV
 :webdav: https://en.wikipedia.org/wiki/WebDAV
-:ical: https://en.wikipedia.org/wiki/ICalendar#Free/busy_time_(VFREEBUSY)
+:ical: https://en.wikipedia.org/wiki/ICalendar
 :rfc4791: https://www.rfc-editor.org/rfc/rfc4791
 :rfc6638: https://datatracker.ietf.org/doc/html/rfc6638
 
@@ -57,7 +57,8 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 
 === iCalendar
 
-* {ical}[iCalendar]^Internet{sp}Calendaring{sp}and{sp}Scheduling{sp}Core{sp}Object{sp}Specification^는 사용자가 이벤트, 할 일, 저널 항목, 약속 있음/없음 정보와 같은 일정 및 일정 정보를 저장하고 교환할 수 있는 미디어 유형입니다.
+* Internet Calendaring and Scheduling Core Object Specification
+* {ical}[iCalendar]는 사용자가 이벤트, 할 일, 저널 항목, 약속 있음/없음 정보와 같은 일정 및 일정 정보를 저장하고 교환할 수 있는 미디어 유형입니다.
 
 
 === Webcal
