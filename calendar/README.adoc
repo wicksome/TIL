@@ -56,7 +56,7 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 == Webcal
 
 * {caldav}[CalDAV]와 GroupDAV는 모두 WebDAV 기반의 캘린더 저장소 액세스를 보다 세밀하게 제공하기 위한 노력입니다.
-* CalDAV 액세스 프로토콜은 IETF에 의해 표준화되었으며 {rfc4791}[RFC 4791]로 게시되었습니다. 자동 일정 관리를 위한 CalDAV 확장도 {rfc6638}][RFC 6638]로 표준화되었습니다.
+* CalDAV 액세스 프로토콜은 IETF에 의해 표준화되었으며 {rfc4791}[RFC 4791]로 게시되었습니다. 자동 일정 관리를 위한 CalDAV 확장도 {rfc6638}[RFC 6638]로 표준화되었습니다.
 
 == References
 
