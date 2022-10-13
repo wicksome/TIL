@@ -51,9 +51,9 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 * HTTP를 기반으로 {ical}[iCalendar] 포맷을 통해 데이터를 통신함. 프로토콜에 대한 상세 정보는 https://www.rfc-editor.org/rfc/rfc4791[RFC 4791]
 * 스케줄링 관리 관련해서는 {rfc6638}[RFC 6638: Scheduling Extensions to CalDAV]
 
-==== References
-
+.References
 * https://calyfactory.github.io/caldav-sync-1/
+* https://acshablog.wordpress.com/calendaring-extensions-to-webdav/1-introduction-2/
 
 === iCalendar
 
@@ -63,8 +63,20 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 * {ical}[iCalendar]는 사용자가 이벤트, 할 일, 저널 항목, 약속 있음/없음 정보와 같은 일정 및 일정 정보를 저장하고 교환할 수 있는 미디어 유형입니다.
 * 파일 형식은 {rfc5545}[RFC 5545]
 
+==== Recurrence Rule
+
+* Property Name: RRULE
+* Purpose: 반복 규칙 또는 이벤트, 할 일, 저널, 타임존에 대한 반복적인 패턴을 정의하는 프로퍼티
+* Value Type: RECUR
+* Property Parameters: IANA 및 비표준 프로퍼티들을 지정할 수 있습니다.
+
+.References
+* https://acshablog.wordpress.com/3-8-5-3-recurrence-rule/
+* https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=burin&logNo=40198125788
+
 ==== References
 
+* https://github.com/ical4j/ical4j[ical4j] - A Java library for parsing and building iCalendar data models
 * https://developers.worksmobile.com/kr/document/1007011?lang=ko[일정 iCalendar 형식] - NAVER WORKS Developers
 
 === Webcal
