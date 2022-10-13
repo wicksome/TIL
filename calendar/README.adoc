@@ -77,6 +77,7 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 ==== References
 
 * https://github.com/ical4j/ical4j[ical4j] - A Java library for parsing and building iCalendar data models
+** https://www.ical4j.org/examples/model/
 * https://developers.worksmobile.com/kr/document/1007011?lang=ko[일정 iCalendar 형식] - NAVER WORKS Developers
 
 === Webcal
