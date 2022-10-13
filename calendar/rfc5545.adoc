@@ -17,3 +17,63 @@ MIME 타입:: 클라이언트에게 전송된 문서의 다양성을 알려주�
 == Basic Grammar and Conventions
 
 이 문서에는 RFC5234에 정의된 Internet ABNF 기반의 컨텐트 타입 문법이 포함되어 있다.
+
+== iCalendar Object Specification
+
+=== Content Lines
+
+==== List and Field Separators
+
+==== Multiple Values
+
+==== Binary Content
+
+==== Character Set
+
+=== Property Parameters
+
+==== Alternate Text Representation
+
+==== Common Name
+
+==== Calendar User Type
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.3
+
+==== Delegators
+
+==== Delegatees
+
+==== Directory Entry Reference
+
+==== Inline Encoding
+
+==== Format Type
+
+==== Free/Busy Time Type
+
+==== Language
+
+==== Group or List Membership
+
+==== Participation Status
+
+==== Recurrence Identifier Range
+
+==== Alarm Trigger Relationship
+
+==== Relationship Type
+
+==== Participation Role
+
+==== RSVP Expectation
+
+==== Sent By
+
+==== Time Zone Identifier
+
+==== Value Data Types
+
+=== Property Value Data Types
+
+==== Binary
