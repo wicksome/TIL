@@ -1,0 +1,7 @@
+= Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+:toc: left
+:rfc5545: https://datatracker.ietf.org/doc/html/rfc5545
+
+****
+{rfc5545}[RFC 5545]
+****
