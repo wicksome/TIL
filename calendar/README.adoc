@@ -57,9 +57,11 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 
 === iCalendar
 
+:rfc5545: https://datatracker.ietf.org/doc/html/rfc5545
+
 * Internet Calendaring and Scheduling Core Object Specification
 * {ical}[iCalendar]는 사용자가 이벤트, 할 일, 저널 항목, 약속 있음/없음 정보와 같은 일정 및 일정 정보를 저장하고 교환할 수 있는 미디어 유형입니다.
-
+* 파일 형식은 {rfc5545}[RFC 5545]
 
 === Webcal
 
