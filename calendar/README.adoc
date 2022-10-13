@@ -35,7 +35,9 @@ Event <|-- Reminder
 @enduml
 ----
 
-== CalDAV
+== Protocols
+
+=== CalDAV
 :caldav: https://en.wikipedia.org/wiki/CalDAV
 :webdav: https://en.wikipedia.org/wiki/WebDAV
 :ical: https://en.wikipedia.org/wiki/ICalendar#Free/busy_time_(VFREEBUSY)
@@ -49,16 +51,15 @@ WebDAV:: WebDAV는 Web-based Distributed Authoring and Versioning(웹기반 분�
 * HTTP를 기반으로 {ical}[iCalendar] 포맷을 통해 데이터를 통신함. 프로토콜에 대한 상세 정보는 https://www.rfc-editor.org/rfc/rfc4791[RFC 4791]
 * 스케줄링 관리 관련해서는 {rfc6638}[RFC 6638: Scheduling Extensions to CalDAV]
 
-=== References
+==== References
 
 * https://calyfactory.github.io/caldav-sync-1/
 
-== Webcal
+=== Webcal
 
 * {caldav}[CalDAV]와 GroupDAV는 모두 WebDAV 기반의 캘린더 저장소 액세스를 보다 세밀하게 제공하기 위한 노력입니다.
 * CalDAV 액세스 프로토콜은 IETF에 의해 표준화되었으며 {rfc4791}[RFC 4791]로 게시되었습니다. 자동 일정 관리를 위한 CalDAV 확장도 {rfc6638}[RFC 6638]로 표준화되었습니다.
 
-== References
+=== References
 
 * https://en.wikipedia.org/wiki/Web_Calendar_Access_Protocol[WCAP]
-
