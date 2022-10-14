@@ -579,6 +579,42 @@ assertEquals(losAngeles.toInstant(), seoul.toInstant()); // false
 
 == 추가 정보
 
+=== ZonedDateTime 비교
+
+[quote]
+____
+The comparison is based first on the instant, then on the local date-time, then on the zone ID, then on the chronology. It is “consistent with equals”, as defined by Comparable.
+____
+
+[source, kotlin]
+----
+val kr = ZonedDateTime.of(
+    2022, 10, 12, 18, 0, 0, 0, ZoneId.of("Asia/Seoul")
+)
+// 2022-10-12T18:00:00+09:00
+// 2022-10-12T17:00:00+08:00
+// 2022-10-12T09:00:00Z
+
+val hk = ZonedDateTime.of(
+    2022, 10, 12, 17, 0, 0, 0, ZoneId.of("Asia/Hong_Kong")
+)
+// 2022-10-12T18:00:00+09:00
+// 2022-10-12T17:00:00+08:00
+// 2022-10-12T09:00:00Z
+
+logger.info { hk < kr } // true
+logger.info { hk == kr } // false
+logger.info { hk > kr } // false
+logger.info { hk.toInstant() < kr.toInstant() } // false
+logger.info { hk.toInstant() == kr.toInstant() } // true
+logger.info { hk.toInstant() > kr.toInstant() } // false
+hk.withZoneSameInstant(ZoneId.of("Asia/Seoul")).also {
+    logger.info { it < kr } // false
+    logger.info { it == kr } // true
+    logger.info { it > kr } // false
+}
+----
+
 === `Europe/Istanbul` 타임존
 
 * 터키는 타임존을 사용하지 않는다.
