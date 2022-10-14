@@ -124,3 +124,4 @@ class SendMoneyService(
 * https://github.com/dustinsand/hex-arch-kotlin-spring-boot
 * https://github.com/kamranahmedse/developer-roadmap
 * https://github.com/iluwatar/java-design-patterns
+* https://taeguk2.blogspot.com/2020/02/ddd-aggregate-pattern.html
