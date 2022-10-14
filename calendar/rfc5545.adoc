@@ -84,6 +84,100 @@ https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.3
 
 === Calendar Components
 
+==== Free/Busy Component
+
+* 컴포넌트명: VFREEBUSY
+* 목적: free/busy time 요청 혹은 응답과 publish된 busy time 셋을 설명하는 컴포넌트 속성들의 그룹을 제공한다.
+* 포맷 정의
++
+[source]
+----
+freebusyc  = "BEGIN" ":" "VFREEBUSY" CRLF
+             fbprop
+             "END" ":" "VFREEBUSY" CRLF
+
+fbprop     = *(
+             ;
+             ; The following are REQUIRED,
+             ; but MUST NOT occur more than once.
+             ;
+             dtstamp / uid /
+             ;
+             ; The following are OPTIONAL,
+             ; but MUST NOT occur more than once.
+             ;
+             contact / dtstart / dtend /
+             organizer / url /
+             ;
+             ; The following are OPTIONAL,
+             ; and MAY occur more than once.
+             ;
+             attendee / comment / freebusy / rstatus / x-prop /
+             iana-prop
+             ;
+             )
+----
+* 설명
+** "VFREEBUSY" 캘린더 컴포넌트는 free/busy time 정보의 요청, 요청에 대한 응답, busy time 정보를 게시하는 셋을 표현하는 컴포넌트 속성의 그룹이다.
+** free/busy time 정보 요청할 때 각 프로퍼티는 다음과 같다.
+*** "ATTENDEE" 프로퍼티는 free/busy time이 요청되는 캘린더 유저를 나타낸다.
+*** "ORGANIZER" 프로퍼티는 free/busy time을 요청하는 캘린더 유저를 나타낸다.
+*** "DTSTART", "DTEND" 프로퍼티는 free/busy time이 요청되는 시간 window를 나타낸다.
+*** "UID", "DTSTAMP" 프로퍼티는 여러 약속 있음/없음 시간 요청들의 적절한 순서를 지원하도록 기술한다.
+** When used to reply to a request for free/busy time, the "ATTENDEE" property specifies the calendar user responding to the free/busy time request; the "ORGANIZER" property specifies the calendar user that originally requested the free/busy time; the "FREEBUSY" property specifies the free/busy time information (if it exists); and the "UID" and "DTSTAMP" properties are specified to assist in proper sequencing of multiple free/busy time replies.
+** When used to publish busy time, the "ORGANIZER" property specifies the calendar user associated with the published busy time; the "DTSTART" and "DTEND" properties specify an inclusive time window that surrounds the busy time information; the "FREEBUSY" property specifies the published busy time information; and the "DTSTAMP" property specifies the DATE TIME that iCalendar object was created.
+** The "VFREEBUSY" calendar component cannot be nested within another calendar component.  Multiple "VFREEBUSY" calendar components can be specified within an iCalendar object.  This permits the grouping of free/busy information into logical collections, such as monthly groups of busy time information.
+** The "VFREEBUSY" calendar component is intended for use in iCalendar object methods involving requests for free time, requests for busy time, requests for both free and busy, and the associated replies.
+** Free/Busy information is represented with the "FREEBUSY" property. This property provides a terse representation of time periods. One or more "FREEBUSY" properties can be specified in the "VFREEBUSY" calendar component.
+** When present in a "VFREEBUSY" calendar component, the "DTSTART" and "DTEND" properties SHOULD be specified prior to any "FREEBUSY" properties.
+** The recurrence properties ("RRULE", "RDATE", "EXDATE") are not permitted within a "VFREEBUSY" calendar component.  Any recurring events are resolved into their individual busy time periods using the "FREEBUSY" property.
+* 예시
++
+[source]
+----
+BEGIN:VFREEBUSY
+UID:19970901T082949Z-FA43EF@example.com
+ORGANIZER:mailto:jane_doe@example.com
+ATTENDEE:mailto:john_public@example.com
+DTSTART:19971015T050000Z
+DTEND:19971016T050000Z
+DTSTAMP:19970901T083000Z
+END:VFREEBUSY
+----
++
+[source]
+.busy time 정보 요청의 응답에 사용되는 "VFREEBUSY" 캘린더 컴포넌트 예시
+----
+BEGIN:VFREEBUSY
+UID:19970901T095957Z-76A912@example.com
+ORGANIZER:mailto:jane_doe@example.com
+ATTENDEE:mailto:john_public@example.com
+DTSTAMP:19970901T100000Z
+FREEBUSY:19971015T050000Z/PT8H30M,
+ 19971015T160000Z/PT5H30M,19971015T223000Z/PT6H30M
+URL:http://example.com/pub/busy/jpublic-01.ifb
+COMMENT:This iCalendar file contains busy time information for
+ the next three months.
+END:VFREEBUSY
+----
++
+[source]
+.busy time 정보를 게시하는데 사용되는 "VFREEBUSY" 캘린더 컴포넌트 예시
+----
+BEGIN:VFREEBUSY
+UID:19970901T115957Z-76A912@example.com
+DTSTAMP:19970901T120000Z
+ORGANIZER:jsmith@example.com
+DTSTART:19980313T141711Z
+DTEND:19980410T141711Z
+FREEBUSY:19980314T233000Z/19980315T003000Z
+FREEBUSY:19980316T153000Z/19980316T163000Z
+FREEBUSY:19980318T030000Z/19980318T040000Z
+URL:http://www.example.com/calendar/busytime/jsmith.ifb
+END:VFREEBUSY
+----
+
+
 === Calendar Properties
 
 === Component Properties
