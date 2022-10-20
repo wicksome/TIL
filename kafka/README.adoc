@@ -40,3 +40,8 @@
 
 * 메세지에 키가 있으면 같은 파티션으로 쌓임
 * 키가 없으면 라운드 로빈으로 전송됨. 여러 파티션에 나눠짐
+
+
+== Etc
+
+* https://github.com/obsidiandynamics/kafdrop
