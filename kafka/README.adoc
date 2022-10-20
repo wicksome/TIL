@@ -45,3 +45,4 @@
 == Etc
 
 * https://github.com/obsidiandynamics/kafdrop
+* https://github.com/yahoo/CMAK
