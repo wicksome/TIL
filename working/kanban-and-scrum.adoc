@@ -114,3 +114,7 @@ image:https://wac-cdn.atlassian.com/dam/jcr:a679339b-0098-4c88-acdb-7009b0de6efb
 == epic
 
 * https://www.atlassian.com/agile/project-management/epics
+
+== etc
+
+* https://www.atlassian.com/ko/agile/manifesto
