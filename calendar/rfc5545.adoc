@@ -1,0 +1,390 @@
+= Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+:toc: left
+:rfc5545: https://datatracker.ietf.org/doc/html/rfc5545
+
+****
+{rfc5545}[RFC 5545]는 캘린더 서비스나 프로토콜에 관계 없이 events, to-dos, journal entries, free/busy information와 같은 캘린더 및 일정 정보를 표현하고 교환하기 위한 iCalendar 데이터 포맷을 정의한다.
+****
+
+== Introduction
+
+변화하는 인터넷 환경에서 사용할 수 있는 캘린더와 스케줄 데이이터를 교환하기 위해 Internet Calendaring and Scheduling Core Object Specification(이하 iCalendar)라 불리는 MIME 컨텐트 타입을 정의한다.
+
+또한, iCalendar 오브젝트인 회의나 설비(appointments), 할 일, 저널에 대한 요청, 응답, 수정 및 취소 메서드들과 바쁨 일정의 요청/응답과 같은 다양한 속성들을 정의한다. https://datatracker.ietf.org/doc/html/rfc5545#ref-2446bis[2446bis]에 정의된 iCalendar Transport-independent Interoperability Protocol (iTIP)에 일정 프로토콜을 정의한다.
+
+MIME 타입:: 클라이언트에게 전송된 문서의 다양성을 알려주기 위한 메커니즘이다. 웹에서 파일의 확장자는 의미가 없으며, 클라이언트에게 어떤 형식인지를 전달하기 위해 서버가 설정하는 타입이다. (https://developer.mozilla.org/ko/docs/Web/HTTP/Basics_of_HTTP/MIME_types[참고])
+
+== Basic Grammar and Conventions
+
+이 문서에는 RFC5234에 정의된 Internet ABNF 기반의 컨텐트 타입 문법이 포함되어 있다.
+
+== iCalendar Object Specification
+
+=== Content Lines
+
+==== List and Field Separators
+
+==== Multiple Values
+
+==== Binary Content
+
+==== Character Set
+
+=== Property Parameters
+
+==== Alternate Text Representation
+
+==== Common Name
+
+==== Calendar User Type
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.3
+
+==== Delegators
+
+==== Delegatees
+
+==== Directory Entry Reference
+
+==== Inline Encoding
+
+==== Format Type
+
+==== Free/Busy Time Type
+
+==== Language
+
+==== Group or List Membership
+
+==== Participation Status
+
+==== Recurrence Identifier Range
+
+==== Alarm Trigger Relationship
+
+==== Relationship Type
+
+==== Participation Role
+
+==== RSVP Expectation
+
+==== Sent By
+
+==== Time Zone Identifier
+
+==== Value Data Types
+
+=== Property Value Data Types
+
+==== Binary
+
+==== Boolean
+
+==== Calendar User Address
+
+==== Date
+
+==== Date-Time
+
+==== Duration
+
+==== Float
+
+==== Integer
+
+==== Period of Time
+
+==== Recurrence Rule
+
+|===
+| **Value Name** | `RECUR`
+|===
+
+===== 목적
+
+이 value type은 반복 규칙 사양이 포함된 속성을 식별하는데 사용한다. 
+
+===== 형식 정의
+
+[source]
+----
+       recur           = recur-rule-part *( ";" recur-rule-part )
+                       ;
+                       ; The rule parts are not ordered in any
+                       ; particular sequence.
+                       ;
+                       ; The FREQ rule part is REQUIRED,
+                       ; but MUST NOT occur more than once.
+                       ;
+                       ; The UNTIL or COUNT rule parts are OPTIONAL,
+                       ; but they MUST NOT occur in the same 'recur'.
+                       ;
+                       ; The other rule parts are OPTIONAL,
+                       ; but MUST NOT occur more than once.
+
+       recur-rule-part = ( "FREQ" "=" freq )
+                       / ( "UNTIL" "=" enddate )
+                       / ( "COUNT" "=" 1*DIGIT )
+                       / ( "INTERVAL" "=" 1*DIGIT )
+                       / ( "BYSECOND" "=" byseclist )
+                       / ( "BYMINUTE" "=" byminlist )
+                       / ( "BYHOUR" "=" byhrlist )
+                       / ( "BYDAY" "=" bywdaylist )
+                       / ( "BYMONTHDAY" "=" bymodaylist )
+                       / ( "BYYEARDAY" "=" byyrdaylist )
+                       / ( "BYWEEKNO" "=" bywknolist )
+                       / ( "BYMONTH" "=" bymolist )
+                       / ( "BYSETPOS" "=" bysplist )
+                       / ( "WKST" "=" weekday )
+
+       freq        = "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"
+                   / "WEEKLY" / "MONTHLY" / "YEARLY"
+
+       enddate     = date / date-time
+
+       byseclist   = ( seconds *("," seconds) )
+
+       seconds     = 1*2DIGIT       ;0 to 60
+
+       byminlist   = ( minutes *("," minutes) )
+
+       minutes     = 1*2DIGIT       ;0 to 59
+
+       byhrlist    = ( hour *("," hour) )
+
+       hour        = 1*2DIGIT       ;0 to 23
+
+       bywdaylist  = ( weekdaynum *("," weekdaynum) )
+
+       weekdaynum  = [[plus / minus] ordwk] weekday
+
+       plus        = "+"
+
+       minus       = "-"
+
+       ordwk       = 1*2DIGIT       ;1 to 53
+
+       weekday     = "SU" / "MO" / "TU" / "WE" / "TH" / "FR" / "SA"
+       ;Corresponding to SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY,
+       ;FRIDAY, and SATURDAY days of the week.
+
+       bymodaylist = ( monthdaynum *("," monthdaynum) )
+
+       monthdaynum = [plus / minus] ordmoday
+
+       ordmoday    = 1*2DIGIT       ;1 to 31
+
+       byyrdaylist = ( yeardaynum *("," yeardaynum) )
+
+       yeardaynum  = [plus / minus] ordyrday
+
+       ordyrday    = 1*3DIGIT      ;1 to 366
+
+       bywknolist  = ( weeknum *("," weeknum) )
+
+       weeknum     = [plus / minus] ordwk
+
+       bymolist    = ( monthnum *("," monthnum) )
+
+       monthnum    = 1*2DIGIT       ;1 to 12
+
+       bysplist    = ( setposday *("," setposday) )
+
+       setposday   = yeardaynum
+----
+
+===== 설명
+
+이 value type은 하나 혹은 여러개의 recurrence grammar part 목록으로 구성된 구조화된 값이다.
+각 규칙 부분(rule part)는 `NAME=VALUE` 쌍으로 정의되며, 세미콜론으로 구분하고, 특정 순서로 정렬되지 않는다.
+개별 규칙 부분은 한 번만 지정해야 한다(**MUST**).
+호환 응용프로그램은 규칙 부분의 순서와 상관없이 받아들여야 하지만, iCalendar의 리비전의 이전 버전의 응용프로그램과의 하위 호환성을 보장하기 위해 `FREQ` 규칙 부분은 `RECUR` 값에 첫번째 규칙 부분이어야 한다(**MUST**).
+
+`FREQ` 규칙 파트는 ...
+
+===== 예시
+
+[source]
+.격일로 10회를 나타내는 규칙
+----
+FREQ=DAILY;COUNT=10;INTERVAL=2
+----
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3[다른 예시 이동 (Section 3.8.5.3)]
+
+==== Text
+
+==== Time
+
+==== URI
+
+==== UTC offset
+
+|===
+| **Value Name** | `UTC-OFFSET`
+|===
+
+
+* 목적: UTC에서 local-time까지의 offset이 포함된 프로퍼티.
+* 형식 정의: 
++
+[source]
+----
+utc-offset = time-numzone
+time-numzone = ("+" / "-") time-hour time-minute [time-second] 
+----
+* 설명: `+` 는 **반드시** UTC 앞의 값을 표시. `-` 는 **반드시** UTC 뒷 값을 표시. `-0000`, `-000000` 과 같은 값은 허용하지 않음. 
+시간초가 있을 경우 이 값은 60이어서는 안되며, 기본값은 0입니다.
+이 값에는 추가 컨텐츠 값은 정의되지 않음.
+* 예제
++
+[source]
+----
+-0500
++0100
+----
+
+=== iCalendar Object
+
+=== Property
+
+=== Calendar Components
+
+==== Free/Busy Component
+
+* 컴포넌트명: VFREEBUSY
+* 목적: free/busy time 요청 혹은 응답과 publish된 busy time 셋을 설명하는 컴포넌트 속성들의 그룹을 제공한다.
+* 포맷 정의
++
+[source]
+----
+freebusyc  = "BEGIN" ":" "VFREEBUSY" CRLF
+             fbprop
+             "END" ":" "VFREEBUSY" CRLF
+
+fbprop     = *(
+             ;
+             ; The following are REQUIRED,
+             ; but MUST NOT occur more than once.
+             ;
+             dtstamp / uid /
+             ;
+             ; The following are OPTIONAL,
+             ; but MUST NOT occur more than once.
+             ;
+             contact / dtstart / dtend /
+             organizer / url /
+             ;
+             ; The following are OPTIONAL,
+             ; and MAY occur more than once.
+             ;
+             attendee / comment / freebusy / rstatus / x-prop /
+             iana-prop
+             ;
+             )
+----
+* 설명
+** "VFREEBUSY" 캘린더 컴포넌트는 free/busy time 정보의 요청, 요청에 대한 응답, busy time 정보를 게시하는 셋을 표현하는 컴포넌트 속성의 그룹이다.
+** free/busy time 정보 요청할 때 각 프로퍼티는 다음과 같다.
+*** "ATTENDEE" 프로퍼티는 free/busy time이 요청되는 캘린더 유저를 나타낸다.
+*** "ORGANIZER" 프로퍼티는 free/busy time을 요청하는 캘린더 유저를 나타낸다.
+*** "DTSTART", "DTEND" 프로퍼티는 free/busy time이 요청되는 시간 window를 나타낸다.
+*** "UID", "DTSTAMP" 프로퍼티는 여러 약속 있음/없음 시간 요청들의 적절한 순서를 지원하도록 기술한다.
+** When used to reply to a request for free/busy time, the "ATTENDEE" property specifies the calendar user responding to the free/busy time request; the "ORGANIZER" property specifies the calendar user that originally requested the free/busy time; the "FREEBUSY" property specifies the free/busy time information (if it exists); and the "UID" and "DTSTAMP" properties are specified to assist in proper sequencing of multiple free/busy time replies.
+** When used to publish busy time, the "ORGANIZER" property specifies the calendar user associated with the published busy time; the "DTSTART" and "DTEND" properties specify an inclusive time window that surrounds the busy time information; the "FREEBUSY" property specifies the published busy time information; and the "DTSTAMP" property specifies the DATE TIME that iCalendar object was created.
+** The "VFREEBUSY" calendar component cannot be nested within another calendar component.  Multiple "VFREEBUSY" calendar components can be specified within an iCalendar object.  This permits the grouping of free/busy information into logical collections, such as monthly groups of busy time information.
+** The "VFREEBUSY" calendar component is intended for use in iCalendar object methods involving requests for free time, requests for busy time, requests for both free and busy, and the associated replies.
+** Free/Busy information is represented with the "FREEBUSY" property. This property provides a terse representation of time periods. One or more "FREEBUSY" properties can be specified in the "VFREEBUSY" calendar component.
+** When present in a "VFREEBUSY" calendar component, the "DTSTART" and "DTEND" properties SHOULD be specified prior to any "FREEBUSY" properties.
+** The recurrence properties ("RRULE", "RDATE", "EXDATE") are not permitted within a "VFREEBUSY" calendar component.  Any recurring events are resolved into their individual busy time periods using the "FREEBUSY" property.
+* 예시
++
+[source]
+----
+BEGIN:VFREEBUSY
+UID:19970901T082949Z-FA43EF@example.com
+ORGANIZER:mailto:jane_doe@example.com
+ATTENDEE:mailto:john_public@example.com
+DTSTART:19971015T050000Z
+DTEND:19971016T050000Z
+DTSTAMP:19970901T083000Z
+END:VFREEBUSY
+----
++
+[source]
+.busy time 정보 요청의 응답에 사용되는 "VFREEBUSY" 캘린더 컴포넌트 예시
+----
+BEGIN:VFREEBUSY
+UID:19970901T095957Z-76A912@example.com
+ORGANIZER:mailto:jane_doe@example.com
+ATTENDEE:mailto:john_public@example.com
+DTSTAMP:19970901T100000Z
+FREEBUSY:19971015T050000Z/PT8H30M,
+ 19971015T160000Z/PT5H30M,19971015T223000Z/PT6H30M
+URL:http://example.com/pub/busy/jpublic-01.ifb
+COMMENT:This iCalendar file contains busy time information for
+ the next three months.
+END:VFREEBUSY
+----
++
+[source]
+.busy time 정보를 게시하는데 사용되는 "VFREEBUSY" 캘린더 컴포넌트 예시
+----
+BEGIN:VFREEBUSY
+UID:19970901T115957Z-76A912@example.com
+DTSTAMP:19970901T120000Z
+ORGANIZER:jsmith@example.com
+DTSTART:19980313T141711Z
+DTEND:19980410T141711Z
+FREEBUSY:19980314T233000Z/19980315T003000Z
+FREEBUSY:19980316T153000Z/19980316T163000Z
+FREEBUSY:19980318T030000Z/19980318T040000Z
+URL:http://www.example.com/calendar/busytime/jsmith.ifb
+END:VFREEBUSY
+----
+
+
+=== Calendar Properties
+
+=== Component Properties
+
+==== Recurrence Component Properties
+
+===== Exception Date-Times
+
+===== Recurrence Date-Times
+
+===== Recurrence Rule
+
+|===
+| **속성명** | `RRULE`
+|===
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3
+
+== iCalendar Object Examples
+
+'1996/09/18 14:30 UTC'에 시작하여 '1996/09/20 22:00 UTC'에 끝나는 3일 회의를 지정할 경우.
+
+[source]
+----
+BEGIN:VCALENDAR
+PRODID:-//xyz Corp//NONSGML PDA Calendar Version 1.0//EN
+VERSION:2.0
+BEGIN:VEVENT
+DTSTAMP:19960704T120000Z
+UID:uid1@example.com
+ORGANIZER:mailto:jsmith@example.com
+DTSTART:19960918T143000Z
+DTEND:19960920T220000Z
+STATUS:CONFIRMED
+CATEGORIES:CONFERENCE
+SUMMARY:Networld+Interop Conference
+DESCRIPTION:Networld+Interop Conference
+  and Exhibit\nAtlanta World Congress Center\n
+ Atlanta\, Georgia
+END:VEVENT
+END:VCALENDAR
+----
+
+== Recommended Practices
