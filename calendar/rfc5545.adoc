@@ -78,6 +78,172 @@ https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.3
 
 ==== Binary
 
+==== Boolean
+
+==== Calendar User Address
+
+==== Date
+
+==== Date-Time
+
+==== Duration
+
+==== Float
+
+==== Integer
+
+==== Period of Time
+
+==== Recurrence Rule
+
+|===
+| **Value Name** | `RECUR`
+|===
+
+===== 목적
+
+이 value type은 반복 규칙 사양이 포함된 속성을 식별하는데 사용한다. 
+
+===== 형식 정의
+
+[source]
+----
+       recur           = recur-rule-part *( ";" recur-rule-part )
+                       ;
+                       ; The rule parts are not ordered in any
+                       ; particular sequence.
+                       ;
+                       ; The FREQ rule part is REQUIRED,
+                       ; but MUST NOT occur more than once.
+                       ;
+                       ; The UNTIL or COUNT rule parts are OPTIONAL,
+                       ; but they MUST NOT occur in the same 'recur'.
+                       ;
+                       ; The other rule parts are OPTIONAL,
+                       ; but MUST NOT occur more than once.
+
+       recur-rule-part = ( "FREQ" "=" freq )
+                       / ( "UNTIL" "=" enddate )
+                       / ( "COUNT" "=" 1*DIGIT )
+                       / ( "INTERVAL" "=" 1*DIGIT )
+                       / ( "BYSECOND" "=" byseclist )
+                       / ( "BYMINUTE" "=" byminlist )
+                       / ( "BYHOUR" "=" byhrlist )
+                       / ( "BYDAY" "=" bywdaylist )
+                       / ( "BYMONTHDAY" "=" bymodaylist )
+                       / ( "BYYEARDAY" "=" byyrdaylist )
+                       / ( "BYWEEKNO" "=" bywknolist )
+                       / ( "BYMONTH" "=" bymolist )
+                       / ( "BYSETPOS" "=" bysplist )
+                       / ( "WKST" "=" weekday )
+
+       freq        = "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"
+                   / "WEEKLY" / "MONTHLY" / "YEARLY"
+
+       enddate     = date / date-time
+
+       byseclist   = ( seconds *("," seconds) )
+
+       seconds     = 1*2DIGIT       ;0 to 60
+
+       byminlist   = ( minutes *("," minutes) )
+
+       minutes     = 1*2DIGIT       ;0 to 59
+
+       byhrlist    = ( hour *("," hour) )
+
+       hour        = 1*2DIGIT       ;0 to 23
+
+       bywdaylist  = ( weekdaynum *("," weekdaynum) )
+
+       weekdaynum  = [[plus / minus] ordwk] weekday
+
+       plus        = "+"
+
+       minus       = "-"
+
+       ordwk       = 1*2DIGIT       ;1 to 53
+
+       weekday     = "SU" / "MO" / "TU" / "WE" / "TH" / "FR" / "SA"
+       ;Corresponding to SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY,
+       ;FRIDAY, and SATURDAY days of the week.
+
+       bymodaylist = ( monthdaynum *("," monthdaynum) )
+
+       monthdaynum = [plus / minus] ordmoday
+
+       ordmoday    = 1*2DIGIT       ;1 to 31
+
+       byyrdaylist = ( yeardaynum *("," yeardaynum) )
+
+       yeardaynum  = [plus / minus] ordyrday
+
+       ordyrday    = 1*3DIGIT      ;1 to 366
+
+       bywknolist  = ( weeknum *("," weeknum) )
+
+       weeknum     = [plus / minus] ordwk
+
+       bymolist    = ( monthnum *("," monthnum) )
+
+       monthnum    = 1*2DIGIT       ;1 to 12
+
+       bysplist    = ( setposday *("," setposday) )
+
+       setposday   = yeardaynum
+----
+
+===== 설명
+
+이 value type은 하나 혹은 여러개의 recurrence grammar part 목록으로 구성된 구조화된 값이다.
+각 규칙 부분(rule part)는 `NAME=VALUE` 쌍으로 정의되며, 세미콜론으로 구분하고, 특정 순서로 정렬되지 않는다.
+개별 규칙 부분은 한 번만 지정해야 한다(**MUST**).
+호환 응용프로그램은 규칙 부분의 순서와 상관없이 받아들여야 하지만, iCalendar의 리비전의 이전 버전의 응용프로그램과의 하위 호환성을 보장하기 위해 `FREQ` 규칙 부분은 `RECUR` 값에 첫번째 규칙 부분이어야 한다(**MUST**).
+
+`FREQ` 규칙 파트는 ...
+
+===== 예시
+
+[source]
+.격일로 10회를 나타내는 규칙
+----
+FREQ=DAILY;COUNT=10;INTERVAL=2
+----
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3[다른 예시 이동 (Section 3.8.5.3)]
+
+==== Text
+
+==== Time
+
+==== URI
+
+==== UTC offset
+
+|===
+| **Value Name** | `UTC-OFFSET`
+|===
+
+
+* 목적: UTC에서 local-time까지의 offset이 포함된 프로퍼티.
+* 형식 정의: 
++
+[source]
+----
+utc-offset = time-numzone
+time-numzone = ("+" / "-") time-hour time-minute [time-second] 
+----
+* 설명: `+` 는 **반드시** UTC 앞의 값을 표시. `-` 는 **반드시** UTC 뒷 값을 표시. `-0000`, `-000000` 과 같은 값은 허용하지 않음. 
+시간초가 있을 경우 이 값은 60이어서는 안되며, 기본값은 0입니다.
+이 값에는 추가 컨텐츠 값은 정의되지 않음.
+* 예제
++
+[source]
+----
+-0500
++0100
+----
+
 === iCalendar Object
 
 === Property
@@ -181,6 +347,20 @@ END:VFREEBUSY
 === Calendar Properties
 
 === Component Properties
+
+==== Recurrence Component Properties
+
+===== Exception Date-Times
+
+===== Recurrence Date-Times
+
+===== Recurrence Rule
+
+|===
+| **속성명** | `RRULE`
+|===
+
+https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3
 
 == iCalendar Object Examples
 
