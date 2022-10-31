@@ -381,7 +381,7 @@ Description:
 예시:
 
 [NOTE]
-Eastern Time(ET): EST and EDT
+.Eastern Time(ET): EST and EDT
 ====
 EST:: Eastern Standard Time. GMT-5
 EDT:: Eastern Daylight Time. GMT-4
