@@ -381,10 +381,11 @@ Description:
 예시:
 
 [NOTE]
-----
+Eastern Time(ET): EST and EDT
+====
 EST:: Eastern Standard Time. GMT-5
 EDT:: Eastern Daylight Time. GMT-4
-----
+====
 
 [source]
 .'1997/09/02 09:00:00'부터 매일 총 10번 반복
