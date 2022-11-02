@@ -78,6 +78,68 @@ subprojects {
 }
 ----
 
+=== https://docs.gradle.org/current/userguide/java_plugin.html#java_plugin[The Java Plugin]
+
+[source, kts]
+----
+plugins {
+    java
+}
+----
+
+Java 플러그인은 프로젝트에 테스트 및 번들링 기능과 할께 컴파일을 추가한다.
+
+다음과 같은 task를 제공한다.
+
+image:https://docs.gradle.org/current/userguide/img/javaPluginTasks.png[]
+
+* `compileJava` - java 소스 컴파일
+* `processResources` - 프로덕션 리소스를 프로덕션 리소스 디렉토리로 복사
+* `classes` - 
+* `compileTestJava` - 테스트 소스 코드 컴파일
+* `processTestResources`
+* `testClasses`
+* `jar` - `main` 소스셋에 있는 클래스, 리소스를 기반으로 프로덕션 jar 파일 생성
+* `javadoc` - Javadoc을 이용하여 프로덕션 java 소스의 API 문서 생성
+* `test` - JUnit or TestNG 유닛 테스트 실행
+* `clean` - 프로젝트 빌드 디렉토리 삭제
+* `cleanTaskName` - 각 태스트에서 생성된 파일 제거. `cleanJar`, `cleanTest`, ...
+
+.SourceSet Tasks
+* `compileSourceSetJava`
+* `processSourceSetResources`
+* `sourceSetClasses`
+
+.Lifecycle Tasks
+* `assemble` - 모든 아카이브를 취합하는 집계 작업
+* `check` - 테스트 같은 확인 작업을 수행하는 집계 작업
+* `build` - 프로젝트듸 전체 빌드 작업을 수행하는 집계 작업
+* `buildNeeded`
+* `buildDepencents`
+* `buildConfigName`
+* `uploadConfigName`
+
+==== 프로젝트 레이아웃
+
+기본적으로 아래와 같은 디렉토리를 따른다.
+
+* `src/main/java`
+* `src/test/java`
+* `src/test/resources`
+* `src/sourceSet/java`
+* `src/sourceSet/resources`
+
+==== 소스 셋
+
+* `main`, `test`
+
+
+=== The Java Libaray Plugins
+
+https://docs.gradle.org/current/userguide/java_library_plugin.html
+
+image:https://docs.gradle.org/current/userguide/img/java-library-ignore-deprecated-main.png[]
+
 == task
 
 === projects
@@ -188,3 +250,4 @@ val commonMain by getting { }
 ----
 
 대리자 속성(delegate property)을 통해 컬렉션의 기존 요소(element)를 참조하는 관용적 방법.
+
