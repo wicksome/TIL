@@ -133,6 +133,16 @@ image:https://docs.gradle.org/current/userguide/img/javaPluginTasks.png[]
 
 * `main`, `test`
 
+==== 의존성 관리
+
+* `implementation` - 구현 전용 의존성
+* `compileOnly` - 런타임에 사용하지 않고 컴파일에만 사용될 경우
+
+[WARN]
+====
+`api` 는 java plugin이 아니라 java library plugin에서 추가된 dependency configuration이다.
+====
+
 
 === The Java Libaray Plugins
 
