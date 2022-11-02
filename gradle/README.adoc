@@ -150,6 +150,8 @@ https://docs.gradle.org/current/userguide/java_library_plugin.html
 
 image:https://docs.gradle.org/current/userguide/img/java-library-ignore-deprecated-main.png[]
 
+* java plugin과 java library plugin의 주요 차이점은 java libaray plugin는 consumer에게 노출되는 `api` 개념을 도입한다는 것
+
 == task
 
 === projects
