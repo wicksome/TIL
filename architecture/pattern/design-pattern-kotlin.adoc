@@ -10,8 +10,8 @@ GoF, 김정아(옮긴이), Design Patterns, 개정판, 프로텍미디어, 2015.
 
 TODO: 전체 그림
 
-[source, puml]
-----
+[puml]
+....
 @startuml
 ' config
 hide empty field
@@ -20,14 +20,14 @@ hide empty method
 ' definition
 ' relation
 @enduml
-----
+....
 
 === 일반화(Generalization)
 
 * 부모 클래스와 자식 클래스간의 상속 관계를 나타냄
 
-[source, puml]
-----
+[puml]
+....
 @startuml
 ' config
 hide empty field
@@ -36,7 +36,7 @@ hide empty method
 ' relation
 Parent <|-- Children
 @enduml
-----
+....
 
 [source, kotlin]
 ----
