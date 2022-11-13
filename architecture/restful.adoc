@@ -1,12 +1,24 @@
 = RESTful API
 :toc:
 
+== REST
+
 * REST: Representational State Transfer의 줄임말.
 * 표현 방식
 ** 자원: URL
 ** 행위: HTTP Method
 ** 표현: 응답
 * 자원에 고유한 URI^Uniform{sp}Resource{sp}Identifier^를 할당함으로써 표현력 있는 API를 정의하기 위한 아키텍처
+
+=== representation
+
+* https://blog.npcode.com/2017/04/03/rest%EC%9D%98-representation%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/[이거]보고 정리
+* 서버가 보내준 '것'은 '리소스'가 아니다. 'representation data'이다.
+* GET 메서드가 하는 일
+** 'target resource'에 대해서 현재 선택된 'representation' 하나를 전달하는 것.
+* 'target resource'는 uri가 가르키는 리소스
+* 'representation'은 어떤 리소스의 특정 시점의 상태를 반영하고 있는 정보.
+* representation은 representation data와 representation metadat로 구성됨.
 
 == HATEOAS
 
