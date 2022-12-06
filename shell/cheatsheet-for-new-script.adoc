@@ -1,0 +1,483 @@
+= CheatSheet for a new shell script 
+:revdate: 2019-10-16T15:15:00+09:00
+:toc: left
+:page-toc: left
+
+[#check-os]
+== OS 확인
+
+[source, bash]
+----
+cat /etc/centos-release
+----
+
+[#get-arguments]
+== 인자 받기, 체크
+
+[source, bash]
+.인자 변수 할당하기
+----
+env_file="./.env.$1"
+shift
+args=$@ # 나머지는 arg에 할당
+----
+
+필수로 인자 받기
+
+[source, bash]
+----
+# Check branch name
+if [ -z "$1" ]; then
+  echo "usage: git-finish <refspec>"; exit 1
+fi
+----
+
+[source, bash]
+----
+IP=$1
+# 없으면 클립보드 확인
+if [ -z "$IP" ] && [ -t 0 ]; then
+  IP="$(pbpaste)"
+fi
+# 없으면 파이프라인
+if [ -z "$IP" ]; then
+  IP=$(</dev/stdin)
+fi
+----
+
+인자 값이 비어있으면 종료하기
+
+[source, bash]
+----
+if [ -z "$centos_version" ] || [ -z "$nginx_version" ]; then
+  echo
+  echo "Please enter a valid version."
+  exit 1
+fi
+----
+
+select 값 받기
+
+[source, bash]
+----
+isNginx=false
+
+# https://askubuntu.com/a/1716
+PS3='Please enter your choice: '
+options=("Nginx" "Nginx(b)")
+select opt in "${options[@]}"; do
+  case $opt in
+    "Nginx") isNginx=true; break;; 
+    "Nginx(b)") isNginxB=true; break;; 
+    *) echo "invalid option $REPLY";;
+  esac
+done
+
+echo $isNginx
+echo $isNginxB
+
+exit;
+----
+
+파라미터 체크
+
+[source, bash]
+----
+if [[ $1 =~ ^(local|alpha|beta)$ ]]; then
+  echo "env is valid(local, alpha, beta)"
+fi
+----
+
+[source, bash]
+----
+if [[ ! $1 =~ ^(local|alpha|beta)$ ]]; then
+  echo "not supported env: " $1
+  exit 1
+fi
+----
+
+[#check-exist-file]
+== 파일 존재 확인
+
+https://linuxize.com/post/bash-check-if-file-exists/
+
+[#colorful-prompt]
+== 컬러풀한 프롬프트
+
+[source, bash]
+----
+echo '$(tput bold)git$(tput sgr0)'
+----
+
+[#check-executable-command]
+== 실행 가능한 명령어인지 확인
+
+[source, bash]
+----
+if test ! $(which brew); then
+  echo "  Installing Homebrew for you."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /tmp/homebrew-install.log
+fi
+----
+
+[source, bash]
+----
+is_executable() {
+    local bin=$(command -v "$1" 2>/dev/null)
+    if [[ ! $bin == "" && -x $bin ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+if is_executable $1 ; then echo "true"; else echo "false"; fi
+----
+
+[#declare-function]
+== 함수 선언하기
+
+[source, bash]
+----
+function print_download_link() {
+  echo "Please check the version"
+  echo "  nginx: http://nginx.org/en/download.html"
+  echo
+}
+
+print_download_link
+----
+
+[source, bash]
+----
+function isExist(){
+    local path=$1
+    if [ -f $path ]; then
+        return 0 # true
+    else
+        return 1 # false
+    fi
+}
+----
+
+[#check-return-value]
+== 응답코드 확인후 종료하기
+
+[source, bash]
+----
+if [ $? -ne 0 ]; then
+  echo "Login failed"; exit 1
+fi
+
+if [ $? -eq 0 ]; then
+  echo "Login succeeded"; exit 1
+fi
+
+# 응답값이 0이 아니면 종료
+[ $? -eq 0 ]  || exit 1
+----
+
+https://www.tldp.org/LDP/abs/html/comparison-ops.html
+
+[#enter-continue]
+== 계속 진행할꺼면 엔터
+
+[source, bash]
+----
+echo Install all AppStore Apps at first!
+read -p "Press any key to continue... " -n1 -s
+echo ""
+----
+
+[#input-yn]
+== 사용자로부터 yn 받기 
+
+[source, bash]
+----
+read -r -p "Do you wanna install git? [y/n] " res
+if [[ "$res" =~ ^(yes|y)$ ]]; then
+  ln -sfv "$DOTFILES_DIR/git/.gitconfig" ~
+  ln -sfv "$DOTFILES_DIR/git/.gitignore_global" ~
+fi
+----
+
+[source, bash]
+----
+read -p "Are you sure? " -n 1
+[[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+----
+
+https://stackoverflow.com/questions/1885525/how-do-i-prompt-a-user-for-confirmation-in-bash-script
+
+[#check-env]
+== 환경변수 있는지 확인
+
+[source, bash]
+----
+if [ -z "$DOTFILES_DIR" ]; then
+    echo -e "$(tput setaf 1)$(tput bold)DOTFILES_DIR doesn't exist.$(tput sgr0)" && exit 1
+fi
+----
+
+== #!/bin/sh vs #!/usr/bin/env bash
+
+...aa
+hashbang
+https://en.wikipedia.org/wiki/Shebang_(Unix)[shebang]
+
+[#prepare-sudo]
+== sudo 권한 미리 받기
+
+[source, bash]
+----
+sudo -v
+----
+
+[#create-link]
+== 링크 만들기(이미 있으면 복사해두기)
+
+[source, bash]
+----
+ln -sfv "$DOTFILES_DIR/.npmrc" ~
+----
+
+[#conditional]
+== 조건문
+
+[source, bash]
+----
+if [ 조건식 ]; then
+    echo "case 1"
+elif [ $val -eq 12 ]; then # val == 12
+    echo "case 2"
+else
+    echo "case 3"
+fi
+
+# if 조건안에 사용자 함수 2개 사용하는 경우
+if isExist $path && ! isEmpty $path; then
+    echo "test"
+fi
+----
+
+문자열 비교할 때 아래와 같이 사용해야 함
+
+[source, bash]
+----
+# https://stackoverflow.com/questions/13617843/unary-operator-expected
+
+if [ "$env" = "real" ]; then
+  echo ""
+fi
+
+if [[ $env = "real" ]]; then
+  echo ""
+fi
+
+if [ "$BUILD_ENV" = "real" ] || [ "$BUILD_ENV" = "beta" ]; then
+  npm run build-prod
+else
+  npm run build
+fi
+----
+
+[#if-exist-file]
+=== 파일이 존재하는지 확인
+
+[source, bash]
+----
+BASEDIR=$(dirname "$0")
+
+if [ -f "$BASEDIR/nginx.conf" ]; then
+  echo "exist nginx.conf"
+fi
+----
+
+[#if-empty-value]
+=== 값이 있는지/없는지 확인
+
+[source, bash]
+----
+if [ ! -z "$value" ]; then
+  echo "not empty"
+fi
+
+if [ -n "$value"]; then
+  echo "not empty"
+fi
+
+if [ -z "$value" ]; then
+  echo "empty"
+fi
+----
+
+
+[#test-operation]
+== test 명령어 연산자 
+
+WARNING: 조건식 앞뒤에 빈칸 반드시 넣어야 함
+
+* `man test` 로 다른 연산자도 확인
+* `T` is true, `F` is false.
+
+.`test` 명령어 주요 연산자
+|===
+|예 |설명
+
+|`str = str`       | str == str
+|`str != str`      | str != str
+|`-z str`          | str.length == 0
+|`-n str`          | str.length != 0
+|`str`             | str != NULL
+|`val1 -eq val2`   | val1 == val2
+|`val1 -ne val2`   | val1 != val2
+|`val1 -gt val2`   | val1 {gt} val2
+|`val1 -ge val2`   | val1 {gt}= val2
+|`val1 -lt val2`   | val1 {lt} val2
+|`val1 -le val2`   | val1 {lt}= val2
+|`val1 -a val2`    | val1 && val2
+|`val1 -o val2`    | val1 {vbar}{vbar} val2
+|`-d file`         | 디렉토리라면 true
+|`-e file`         | 파일이 존재하면 true
+|`-f file`         | 보통 파일이면 true
+|`-L file`         | 심볼릭 링크면 true
+|`-r file`         | 읽기 가능이면 true
+|`-w file`         | 쓰기 가능이면 ture
+|`-x file`         | 실행 가능이면 true
+|`-s file`         | file size {gt} 0
+|`file1 -nt file2` | file1이 더 최신이면 T(newer then)
+|`file1 -ot file2` | file1이 예전 파일이면 T(older then)
+|`file1 -ef file2` | size가 같으면 T
+|===
+
+[#loop]
+== 반복문
+
+[source, bash]
+----
+ITEMS=("item1" "item2" "item3")
+for item in "${ITEMS[@]}"
+do
+    echo $item
+done
+----
+
+[source, bash]
+----
+ITEMS=("item1" "item2" "item3")
+for (( index=0; index<${#ITEMS[*]}; index++ ))
+do
+    echo ${ITEMS[$index]}
+done
+----
+
+[#set-var-by-command-result]
+== 커맨드 실행 결과를 변수로 사용하기
+
+`$()`
+
+[source, bash]
+----
+NGINX_PID=$(cat $DIR_NGINX/logs/nginx.pid)
+----
+
+* 산술연산: `$(())`
++
+[source, bash]
+----
+$((3 * 3))
+----
+
+[#import-env]
+== import, env 읽어오기
+
+[source, bash]
+----
+source ./common.sh
+. ./common.sh
+----
+
+[source, bash]
+.env 읽어오기
+----
+BASEDIR=$(dirname "$0")
+env_file="$BASEDIR/.env.$1"
+
+# Import the env_file
+set -a
+source $env_file
+set +a
+----
+
+=== 특정 env 만 읽어오기
+
+[source, bash]
+.`env` 명령어로 변수 읽어오기
+----
+BASEDIR=$(dirname "$0")
+env_file="$BASEDIR/.env.$1"
+nginx_env_names=$(grep "^NGINX\_" $env_file | cut -d '=' -f1 | paste -sd "$" -)
+if [ ! -z "$nginx_env_names" ]; then 
+  nginx_env_names="\$$nginx_env_names" 
+fi
+
+# Import the env_file
+set -a
+source $env_file
+set +a
+
+envsubst $usable_envs < $BASEDIR/nginx.conf.template > $BASEDIR/nginx.conf
+----
+
+[#prepend-string]
+== 파일 첫 부분에 주석 추가하기
+
+https://www.cyberciti.biz/faq/bash-prepend-text-lines-to-file/
+
+[source, bash]
+----
+# 가능한 sed 버전 확인 필요함
+sed -i '1s/^/# This config was generated by the build script using envsubst\n/' $BASEDIR/nginx.conf
+
+
+----
+
+
+
+[#clipboard]
+== 클립보드 값을 파일로 저장하기
+
+[source, bash]
+----
+# for macos
+$ pbpaste > file.md
+----
+
+== Shell Parameter Expansion
+
+[source, bash]
+----
+"${parameter}"
+----
+
+* https://www.gnu.org/software/bash/manual/bashref.html#Shell-Parameter-Expansion[Bash Reference Manual - 3.5.3 Shell Parameter Expansion]
+* Relations(shellcheck)
+** https://github.com/koalaman/shellcheck/wiki/SC2006[SC2006] - Use $(STATEMENT) instead of legacy \`STATEMENT\`
+** https://github.com/koalaman/shellcheck/wiki/SC2086[SC2086] - Double quote to prevent globbing and word splitting.
+
+<<<
+
+* `${param-$default}`: param이 정의되지 않았을 때, default 사용 
+* `${param:-$default}`: param이 정의되지 않았거나 null일 경우, default 사용 
+* `${param=$default}`: param이 정의되지 않았을 때, param에 default값 대입
+* `${param:=$default}`: param이 정의되지 않았거나 null일 경우, param에 default 대입
+* `${param+$default}`: param이 선언되었고 값이 정의되어 있을 때, default 사용
+* `${param:+$default}`: param이 선언되었고 값이 null일 때, default 사용
+* `${param?error_msg}`: param이 없을 경우 error_msg 표시하고 리턴 코드 1을 내며 스크립트 즉시 종료
+
+
+
+== References
+
+* Shell Style Guide: https://google.github.io/styleguide/shell.xml
