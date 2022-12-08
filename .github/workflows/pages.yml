@@ -32,10 +32,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+    
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+          
       - name: Setup Pages
         uses: actions/configure-pages@v1
+        
       - name: Generate static pages via asciidoctor
         uses: manoelcampos/asciidoctor-ghpages-action@v2.2.4
         # with:
@@ -46,11 +51,25 @@ jobs:
           # slides_build: true
           # pre_build:
           # post_build:
+          
+      - name: Generate the sitemap
+        id: sitemap
+        uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: https://wickso.me
+          
+      - name: Output stats
+        run: |
+          echo "sitemap-path = ${{ steps.sitemap.outputs.sitemap-path }}"
+          echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
+          echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
           path: '.'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main
