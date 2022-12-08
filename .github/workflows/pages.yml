@@ -35,6 +35,7 @@ jobs:
       contents: write
       packages: write
       id-token: write
+      pages: write
     steps:
     
       - name: Checkout
@@ -70,10 +71,8 @@ jobs:
           
       - name: Commit and push the sitemap
         run: |
+          # change permission for using git commands
           sudo chmod -R ugo+rwX .
-          whoami
-          ls -al .git
-          ls -al
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
           if [[ "$BRANCH" != "gh-pages" ]]; then
             echo "current branch is not gh-pages: $BRANCH";
