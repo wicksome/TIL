@@ -70,6 +70,9 @@ jobs:
       - name: Commit and push the sitemap
         run: |
           # sudo chown -R ubuntu:ubuntu ubuntu
+          whoami
+          ls -al .git
+          ls -al
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
           if [[ "$BRANCH" != "gh-pages" ]]; then
             echo "current branch is not gh-pages: $BRANCH";
