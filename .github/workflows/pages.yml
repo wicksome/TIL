@@ -64,7 +64,7 @@ jobs:
           echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
           echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
           
-      - name: Commit and push
+      - name: Commit and push the sitemap
         run: |
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
           if [[ "$BRANCH" != "gh-pages" ]]; then
@@ -72,11 +72,11 @@ jobs:
             exit 1;
           fi
           if [[ `git status --porcelain sitemap.xml` ]]; then
-            git config --global user.name 'github-actions'
-            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git config --global user.email "action@github.com"
+            git config --global user.name "GitHub Action"
             git add sitemap.xml
             git commit -m "Automated sitemap update" sitemap.xml
-            git push
+            git push origin gh-pages
           fi
           
       - name: Upload artifact
