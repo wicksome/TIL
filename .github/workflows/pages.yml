@@ -31,6 +31,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
     
       - name: Checkout
@@ -66,6 +69,7 @@ jobs:
           
       - name: Commit and push the sitemap
         run: |
+          # sudo chown -R ubuntu:ubuntu ubuntu
           BRANCH="$(git rev-parse --abbrev-ref HEAD)"
           if [[ "$BRANCH" != "gh-pages" ]]; then
             echo "current branch is not gh-pages: $BRANCH";
