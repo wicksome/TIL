@@ -64,6 +64,14 @@ jobs:
           echo "url-count = ${{ steps.sitemap.outputs.url-count }}"
           echo "excluded-count = ${{ steps.sitemap.outputs.excluded-count }}"
           
+      - name: Commit and push
+        run: |
+          if [[ `git status --porcelain sitemap.xml` ]]; then
+            git branch
+            git add sitemap.xml
+            git commit -m "Automated sitemap update" sitemap.xml
+          fi
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
