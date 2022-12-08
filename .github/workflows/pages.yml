@@ -69,7 +69,7 @@ jobs:
           
       - name: Commit and push the sitemap
         run: |
-          # sudo chown -R ubuntu:ubuntu ubuntu
+          sudo chmod -R ugo+rwX .
           whoami
           ls -al .git
           ls -al
