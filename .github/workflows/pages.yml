@@ -66,6 +66,11 @@ jobs:
           
       - name: Commit and push
         run: |
+          BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+          if [[ "$BRANCH" != "gh-pages" ]]; then
+            echo "current branch is not gh-pages: $BRANCH";
+            exit 1;
+          fi
           if [[ `git status --porcelain sitemap.xml` ]]; then
             git config --global user.name 'github-actions'
             git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
