@@ -5,12 +5,12 @@ https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 
 
 각 asciidoc 파일은 URL 변경을 통해 static page에 접근 가능하다.
 
-* 주소: `https://github.com/wicksome` → `https://wicksome.github.io`
-* 경로: `/TIL/blob/master` → `/TIL`
+* 주소: `https://github.com/wicksome/TIL` → `https://wickso.me`
+* 경로: `/TIL/blob/master` → `/`
 * 확장자: `/index.adoc` → `/index` or `/index.html`
 
 [source, diff]
 ----
 - https://github.com/wicksome/TIL/blob/master/index.adoc
-+ https://wicksome.github.io/TIL/index.html
++ https://wickso.me/index.html
 ----
