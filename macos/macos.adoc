@@ -48,13 +48,16 @@
 ** Find Action(cmd + shift + A) 단축키 충돌 제거 → 맥 설정에 '키보드 > 단축키 > 서비스 > 터미널에서 man 페이지 인덱스 검색' 단축키 제거
 * 플러그인 설치
 ** AsciiDoc
-** String Manipulation
+** https://plugins.jetbrains.com/plugin/2162-string-manipulation[String Manipulation]
 ** Rainbow Brackets
 ** GitToolBox
 ** PlantUML Integration
 ** Grep Console
 ** https://plugins.jetbrains.com/plugin/8183-gitlink[GitLink] ?
 ** https://plugins.jetbrains.com/plugin/14221-git-machete
+** https://plugins.jetbrains.com/plugin/9960-json-to-kotlin-class-jsontokotlinclass-[JSON To Kotlin Class]
+** https://plugins.jetbrains.com/plugin/10942-kotlin-fill-class[Kotlin Fill Class]
+** https://plugins.jetbrains.com/plugin/16873-test-data[Test Data]
 
 == 필수 cli 설치
 
