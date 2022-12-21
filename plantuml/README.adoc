@@ -190,7 +190,6 @@ class HeadUser: User, Changeable {
 </td></tr>
 ++++
 
-
 ++++
 </table>
 ++++
@@ -203,6 +202,8 @@ class HeadUser: User, Changeable {
 * 독립적인 객체가 서로 상호작용하기 위해 맴버로 참조해야할 경우
 * ex) Car와 Engine의 관계
 
+image:https://static.javatpoint.com/tutorial/uml/images/uml-association-vs-aggregation-vs-composition3.png[]
+
 === Aggregation
 
 * 집합
@@ -211,15 +212,53 @@ class HeadUser: User, Changeable {
 ** ex) Person, Address 관계
 * 전체가 부분을 포함(has-a)하는 경우. 약한 관계
 
+++++
+<table>
+++++
+
+++++
+<tr><td>
+++++
+
 [plantuml]
 ....
+@startuml
+hide empty field
+hide empty method
 
+class User
+class Car
+class Wheel
+
+Car *-- Whell
+@enduml
 ....
+
+++++
+</td><td>
+++++
+
+[source, kotlin]
+----
+class Car {
+  val wheel: Wheel
+}
+----
+
+++++
+</td></tr>
+++++
+
+++++
+</table>
+++++
 
 === Composition
 
 * Composite Aggregation 이라고도 함
 * 강한 집합을 의미
+* 전체와 부분이 같은 생명주기를 갖음
+* ex) Car-Engine, House-Room
 
 [plantuml]
 ....
