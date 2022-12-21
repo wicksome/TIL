@@ -226,11 +226,10 @@ image:https://static.javatpoint.com/tutorial/uml/images/uml-association-vs-aggre
 hide empty field
 hide empty method
 
-class User
 class Car
 class Wheel
 
-Car *-- Whell
+Car o-- Wheel
 @enduml
 ....
 
@@ -260,9 +259,63 @@ class Car {
 * 전체와 부분이 같은 생명주기를 갖음
 * ex) Car-Engine, House-Room
 
+++++
+<table>
+++++
+
+++++
+<tr><td>
+++++
+
 [plantuml]
 ....
+@startuml
+hide empty field
+hide empty method
 
+class Person
+class Brain
+class Heart
+class Legs
+
+Person *-- Brain
+Person *-- Heart
+Person *-- Legs
+@enduml
+....
+
+++++
+</td><td>
+++++
+
+[source, kotlin]
+----
+class Person {
+  val brain: Brain
+  val heart: Heart
+  val legs: Legs
+}
+----
+
+++++
+</td></tr>
+++++
+
+++++
+</table>
+++++
+
+[plantuml]
+....
+@startuml
+hide empty field
+hide empty method
+
+class Folder
+class File
+
+Folder "1" *-- "*" File
+@enduml
 ....
 
 == Example
