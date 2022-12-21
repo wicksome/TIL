@@ -202,13 +202,14 @@ class HeadUser: User, Changeable {
 * 독립적인 객체가 서로 상호작용하기 위해 맴버로 참조해야할 경우
 * ex) Car와 Engine의 관계
 
-image:https://static.javatpoint.com/tutorial/uml/images/uml-association-vs-aggregation-vs-composition3.png[]
+image:https://i.stack.imgur.com/jNyV5.jpg[]
 
 === Aggregation
 
 * 집합
 * Shared Aggregation
 * Aggregation은 전체와 부분의 연관 관계를 맺지만, 그러나 동일한 생명 주기를 갖지는 않음
+* 다른 어떤 것으로부터 빌린 객체가 존재. 전체가 죽어도 빌린 객체(부분)은 살 수 있음
 ** ex) Person, Address 관계
 * 전체가 부분을 포함(has-a)하는 경우. 약한 관계
 
@@ -226,10 +227,10 @@ image:https://static.javatpoint.com/tutorial/uml/images/uml-association-vs-aggre
 hide empty field
 hide empty method
 
-class Car
-class Wheel
+class Person
+class Address
 
-Car o-- Wheel
+Person o-- Address
 @enduml
 ....
 
@@ -239,8 +240,12 @@ Car o-- Wheel
 
 [source, kotlin]
 ----
-class Car {
-  val wheel: Wheel
+class Person {
+  private val address: Address
+  
+  constructor(address: Address) {
+    this.address = address
+  }
 }
 ----
 
@@ -257,6 +262,7 @@ class Car {
 * Composite Aggregation 이라고도 함
 * 강한 집합을 의미
 * 전체와 부분이 같은 생명주기를 갖음
+* 객체를 소유하고 그 생명주기에 대한 책임을 갖는 경우. 전체가 죽으면 부분도 죽음
 * ex) Car-Engine, House-Room
 
 ++++
@@ -291,9 +297,9 @@ Person *-- Legs
 [source, kotlin]
 ----
 class Person {
-  val brain: Brain
-  val heart: Heart
-  val legs: Legs
+  private val brain: Brain = Brain()
+  private val heart: Heart = Heart()
+  private val legs: Legs = Legs()
 }
 ----
 
