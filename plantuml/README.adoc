@@ -202,7 +202,11 @@ class HeadUser: User, Changeable {
 * 독립적인 객체가 서로 상호작용하기 위해 맴버로 참조해야할 경우
 * ex) Car와 Engine의 관계
 
+==== Association vs. Composition vs. Aggregation
+
 image:https://i.stack.imgur.com/jNyV5.jpg[]
+
+* https://stackoverflow.com/a/10394722
 
 === Aggregation
 
@@ -310,19 +314,6 @@ class Person {
 ++++
 </table>
 ++++
-
-[plantuml]
-....
-@startuml
-hide empty field
-hide empty method
-
-class Folder
-class File
-
-Folder "1" *-- "*" File
-@enduml
-....
 
 == Example
 
