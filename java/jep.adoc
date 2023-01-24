@@ -1,0 +1,2 @@
+* 생성자에 `super()`, `this()` 없어도 동작하도록 제안
+* https://news.hada.io/topic?id=8312&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[참고]
