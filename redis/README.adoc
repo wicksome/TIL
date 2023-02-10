@@ -16,7 +16,18 @@
 **** BGSAVE 방식은 fork() 명령을 통해 자식 프로세스를 생성하고 현재 매모리의 상태가 복제된 상태에서 데이터를 저장
 *** AOF(Append Only File): 데이터를 저장하기 전에 AOF 파일에 현재 수행할 명령어를 저장해놓고 장애가 발생하면 AOF를 기반으로 복구하는 것
 ** BGSAVE 방식에서 fork() 를 사용하면 COW(Copy On Write) 기술을 이용해서 부모 프로세스의 메모리에서 실제로 변경이 필요한 부분을 복사한다. 이때 메모리를 두 배로 사용하는 경우가 발생할 수 있다.
-    
+
+
+== 메모리 정책
+* volatile-lru: EXPIRE SET 안에 있는 키를 LRU 알고리즘 기반으로 키 삭제
+* allkeys-lru: LRU 알고리즘 기반으로 키 삭제
+
+[NOTE]
+.LRU
+====
+least recently used algorithm. 가장 오랫동안 참조되지 않는 페이지를 교체하는 방식
+====
+
 == pub/sub
 
 * Redis는 Key-Value 기능 외에도 pub/sub을 지원한다.
