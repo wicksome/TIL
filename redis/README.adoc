@@ -19,6 +19,8 @@
 
 
 == 메모리 정책
+
+* https://redis.io/docs/reference/eviction/
 * volatile-lru: EXPIRE SET 안에 있는 키를 LRU 알고리즘 기반으로 키 삭제
 * allkeys-lru: LRU 알고리즘 기반으로 키 삭제
 
