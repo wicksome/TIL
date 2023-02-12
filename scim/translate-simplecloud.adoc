@@ -3,6 +3,8 @@
 
 :ietf: https://www.ietf.org/about/who/?pk_campaign=ietf-google-ads&pk_source=google&pk_medium=cpc&pk_content=ietf-brand&gclid=EAIaIQobChMI0pKOy_7u-QIVmKmWCh0IjQXpEAAYASACEgLAyfD_BwE
 
+원문: https://www.simplecloud.info/
+
 ID 관리를 위한 오픈 API, SCIM 2가 완성되어 {ietf}[IETF]에 등록되었습니다.
 
 [NOTE]
