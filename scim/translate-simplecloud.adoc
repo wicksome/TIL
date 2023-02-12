@@ -70,4 +70,62 @@ image:http://www.simplecloud.info/img/model.png[]
 }
 ----
 
-=== 
+=== Example Group
+
+사용자 외에도 SCIM에는 그룹 정의가 포함됩니다. 그룹은 프로비저닝된 리소스의 조직 구조를 모델링하는데 사용됩니다. 그룹은 사용자 또는 다른 그룹을 포함할 수 있습니다.
+
+[source, json]
+----
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
+  "id":"e9e30dba-f08f-4109-8486-d5c6a331660a",
+  "displayName": "Sales Reps",
+  "members":[
+    {
+      "value": "2819c223-7f76-453a-919d-413861904646",
+      "$ref": "https://example.com/v2/Users/2819c223-7f76-453a-919d-413861904646",
+      "display": "Dwight Schrute"
+    },
+    {
+      "value": "902c246b-6245-4190-8e05-00816be7344a",
+      "$ref": "https://example.com/v2/Users/902c246b-6245-4190-8e05-00816be7344a",
+      "display": "Jim Halpert"
+    }
+  ],
+  "meta": {
+    "resourceType": "Group",
+    "created": "2010-01-23T04:56:22Z",
+    "lastModified": "2011-05-13T04:42:34Z",
+    "version": "W\/\"3694e05e9dff592\"",
+    "location": "https://example.com/v2/Groups/e9e30dba-f08f-4109-8486-d5c6a331660a"
+  }
+}
+----
+
+=== Operations
+
+리소스 조작을 위해 SCIM은 풍부하지만 간단한 작업 집합을 포함하는 REST API를 제공합니다. 이 작업 집합은 특정 사용자의 특정 속성을 패치하는 것부터 대규모 대량 업데이트를 수행하는 것까지 모든 것을 지원합니다.
+
+* **Create**: POST https://example.com/{v}/{resource}
+* **Read**: GET https://example.com/{v}/{resource}/{id}
+* **Replace**: PUT https://example.com/{v}/{resource}/{id}
+* **Delete**: DELETE https://example.com/{v}/{resource}/{id}
+* **Update**: PATCH https://example.com/{v}/{resource}/{id}
+* **Search**: GET https://example.com/{v}/{resource}?ﬁlter={attribute}{op}{value}&sortBy={attributeName}&sortOrder={ascending|descending}
+* **Bulk**: POST https://example.com/{v}/Bulk
+
+=== Discovery
+
+상호 운용성을 단순화하기 위해 SCIM은 지원되는 기능 및 특정 속성 세부 정보를 검색할 수 있는 세가지 엔드포인트를 제공합니다.
+
+* **GET /ServiceProviderConfig**
++
+Specification compliance, authentication schemes, data models.
+* **GET /ResourceTypes**
++
+An endpoint used to discover the types of resources available.
+* **GET /Schemas**
++
+Introspect resources and attribute extensions.
+
+=== Create Request
