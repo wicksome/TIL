@@ -19,17 +19,13 @@
     - Flyweight
     - Proxy
 - **행동 패턴(Behavioral Patterns)**
-    - Chain of Responsibility
     - Command
     - Interpreter
     - Iterator
-    - Mediator
     - Memento
     - Observer
     - State
     - Strategy
-    - Template Method
-    - Visitor
 
 ---
 
@@ -133,12 +129,6 @@ TO-DO
 
 ---
 
-# Chain of Responsibility
-
-TO-DO
-
----
-
 # Command
 
 TO-DO
@@ -152,12 +142,6 @@ TO-DO
 ---
 
 # Iterator
-
-TO-DO
-
----
-
-# Mediator
 
 TO-DO
 
@@ -187,15 +171,6 @@ TO-DO
 
 ---
 
-# Template Method
-
-- *[[GOF](http://wiki.c2.com/?GangOfFour){kr}:419] - 템플릿 메서드*
-
-TO-DO
-
----
-
-# Visitor
 
 ---
 
