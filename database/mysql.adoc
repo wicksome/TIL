@@ -79,6 +79,17 @@ ____
 .References
 * https://mariadb.com/kb/en/datetime/
 
+=== JSON
+
+* mariadb에선 LONGTEXT 의 alias라고 보고, 최대 4GB 까지 가능하다. (https://mariadb.com/kb/en/longtext/[참고])
+* mysql에서도 LONGTEXT or LONGBLOB이랑 거의 동일하나, JSON 문서의 크기는 `max_allowed_packet` 시스템 변수의 값으로 제한된다. (https://dev.mysql.com/doc/refman/8.0/en/json.html[참고])
++
+[source, sql]
+----
+show variables like 'max_allowed_packet';
+----
+
+
 == 함수
 
 === CURRENT_TIMESTAMP
