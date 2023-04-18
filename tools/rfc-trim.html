@@ -6,33 +6,58 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
-        .center {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        html, body {
+            height: 100%;
         }
 
-        button {
-            width: 300px;
-            height: 70px;
+        section {
+            height: 100%;
+        }
+
+        .content {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            /*align-items: center;*/
+            gap: 20px;
+        }
+
+        .each_content {
+            flex: 50%;
+            height: calc(100vh - 10rem);
+        }
+
+        .buttons {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            height: 100%;
+            max-height: 100%;
+            width: 100%;
         }
     </style>
     <title>trim RFC document</title>
 </head>
 <body>
-<section class="center">
-    <header>
-        <h1>RFC formatter</h1>
-    </header>
-    <div>
-        <label for="before"></label>
-        <textarea id="before" cols="90" rows="30"></textarea>
-        <label for="after"></label>
-        <textarea id="after" cols="90" rows="30" readonly></textarea>
+<header>
+    <h2>RFC formatter</h2>
+</header>
+<section>
+    <div class="buttons">
+        <button id="formatting">formatting</button>
+        <button id="copy">copy</button>
     </div>
-    <button id="formatting">formatting</button>
-    <button id="copy">copy</button>
+    <div class="content">
+        <div class="each_content">
+            <label for="before"></label>
+            <textarea id="before"></textarea>
+        </div>
+        <div class="each_content">
+            <label for="after"></label>
+            <textarea id="after" readonly></textarea>
+        </div>
+    </div>
 </section>
 
 <script>
