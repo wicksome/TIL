@@ -47,6 +47,7 @@
     <div class="buttons">
         <button id="formatting">formatting</button>
         <button id="copy">copy</button>
+        <label for="auto_format">Auto</label><input type="checkbox" id="auto_format">
     </div>
     <div class="content">
         <div class="each_content">
@@ -65,6 +66,7 @@
     const $after = document.querySelector("#after")
     const $button = document.querySelector("#formatting")
     const $copy = document.querySelector("#copy")
+    const $autoFormat = document.querySelector("#auto_format")
 
     $copy.addEventListener("click", (e) => {
         const content = $after.value
@@ -74,8 +76,10 @@
         navigator.clipboard.writeText(content)
     })
 
-    $button.addEventListener("click", (e) => {
+    let temp = ""
+    const format = () => {
         const content = $before.value
+        if (temp === content) return
 
         console.log(content)
         let result = content
@@ -87,6 +91,19 @@
         console.log(result)
 
         $after.value = result.trim()
+
+        temp = $before.value
+    }
+
+    $button.addEventListener("click", (e) => {
+        format()
+    })
+
+    $before.addEventListener("input", (e) => {
+        console.log($autoFormat.checked)
+        if (!$autoFormat.checked) return
+
+        format()
     })
 </script>
 </body>
