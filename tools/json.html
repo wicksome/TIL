@@ -5,6 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- https://ace.c9.io/ -->
+    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/css/ace.min.css" rel="stylesheet">
+
     <style>
         html, body {
             height: 100%;
@@ -36,8 +40,16 @@
             max-height: 100%;
             width: 100%;
         }
+
+        #after {
+            position: absolte;
+            height: 100%;
+            max-height: 100%;
+            width 100%;
+        }
     </style>
     <title>JSON formatter</title>
+
 </head>
 <body>
 <header>
@@ -55,13 +67,22 @@
             <textarea id="before"></textarea>
         </div>
         <div class="each_content">
-            <label for="after"></label>
-            <textarea id="after" readonly></textarea>
+            <!-- <label for="after"></label> -->
+            <div id="after"></div>
+            <!-- <textarea id="after" readonly></textarea> -->
         </div>
     </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/src-min-noconflict/ace.min.js"></script>
 <script>
+    const editor = ace.edit("after");
+    editor.setTheme("ace/theme/dawn");
+    editor.session.setMode("ace/mode/json");
+    editor.session.setUseWorker(false)
+    editor.setShowPrintMargin(false)
+    editor.setReadOnly(true)
+
     const $before = document.querySelector("#before")
     const $after = document.querySelector("#after")
     const $button = document.querySelector("#formatting")
@@ -69,11 +90,12 @@
     const $autoFormat = document.querySelector("#auto_format")
 
     $copy.addEventListener("click", (e) => {
-        const content = $after.value
-        if (content.length === 0) {
-            return
-        }
-        navigator.clipboard.writeText(content)
+        const sel = editor.selection.toJSON()
+        editor.selectAll()
+        editor.focus()
+        document.execCommand("copy")
+        editor.selection.fromJSON(sel)
+        // navigator.clipboard.writeText(content)
     })
 
     let temp = ""
@@ -87,7 +109,9 @@
         result = JSON.stringify(result, undefined, 2)
         console.log(result)
 
-        $after.value = result.trim()
+        // $after.value = result.trim()
+        editor.setValue("")
+        editor.insert(result.trim())
 
         temp = $before.value
     }
@@ -105,3 +129,4 @@
 </script>
 </body>
 </html>
+
