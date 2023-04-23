@@ -47,7 +47,7 @@ jobs:
         uses: actions/configure-pages@v1
         
       - name: Generate static pages via asciidoctor
-        uses: manoelcampos/asciidoctor-ghpages-action@v2.2.4
+        uses: manoelcampos/asciidoctor-ghpages-action@v2
         # with:
           # pdf_build: true
           # asciidoctor_params: --attribute=nofooter
