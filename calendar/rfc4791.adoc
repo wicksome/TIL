@@ -653,11 +653,193 @@ PUT 요청의 결과로 서버에 저장된 데이터가 제출된 캘린더 객
 
 == 6. Calendaring Access Control
 
-=== 6.1. Calendaring Privillege
+=== 6.1. Calendaring Privilege
 
-=== 6.2. Additional Principal
+CalDAV 서버는 WebDAV ACL [RFC3744]의 요구 사항을 지원 및 준수해야 합니다. WebDAV ACL은 WebDAV 컬렉션과 일반 리소스에 적용할 수 있는 확장 가능한 권한 집합을 위한 프레임워크를 제공합니다. CalDAV 서버는 이 섹션에 정의된 캘린더 권한도 지원해야 합니다.
+
+==== 6.1.1. CALDAV:read-free-busy Privilege
+
+캘린더 사용자는 종종 다른 사용자가 캘린더 구성 요소의 다른 세부 정보(예: 위치, 요약, 참석자)는 보지 않고 자신의 바쁜 시간 정보만 볼 수 있도록 허용하기를 원합니다. 이렇게 하면 사용자가 한가할 것 같은 시간에 다른 사용자가 미팅을 예약할 수 있도록 하면서도 상당한 수준의 프라이버시를 보호할 수 있습니다.
+
+CALDAV:읽기-바쁨 권한은 CALDAV:읽기-바쁨 쿼리 REPORT 요청이 처리될 때 검사할 캘린더 컬렉션, 일반 컬렉션 및 캘린더 객체 리소스를 제어합니다(섹션 7.10 참조). 이 권한은 캘린더 컬렉션, 일반 컬렉션 또는 캘린더 개체 리소스에 부여할 수 있습니다.
+
+서버는 모든 캘린더 컬렉션, 일반 컬렉션 및 캘린더 객체 리소스에서 이 권한을 지원해야 합니다.
+
+[source]
+----
+<!ELEMENT read-free-busy EMPTY>
+----
+
+CALDAV:read-free-busy 권한은 DAV:read 권한에 집계되어야 합니다. 서버는 DAV:read 권한이 부여되지 않은 상태에서 CALDAV:read-free-busy 권한이 부여되도록 허용해야 합니다.
+
+클라이언트는 리소스에 대해 CALDAV:read-free-busy 권한만 부여된 경우 리소스에 대한 GET, HEAD, OPTIONS 및 PROPFIND에 대한 액세스가 암시되지 않는다는 점에 유의해야 합니다(해당 작업은 DAV:read 권한의 적용을 받습니다).
+
+=== 6.2. Additional Principal Property
+
+이 섹션에서는 [RFC3744]에 정의된 대로 WebDAV 주 리소스에 대한 추가 속성을 정의합니다.
+
+==== 6.2.1. CALDAV:calendar-home-set Property
+
+Name:: calendar-home-set
+
+Namespace:: urn:ietf:params:xml:ns:caldav
+
+Purpose:: 연결된 주 리소스가 소유한 캘린더 컬렉션이 포함된 모든 WebDAV 컬렉션의 URL을 식별합니다.
+
+Conformance:: 이 속성은 주 리소스에 정의되어야 합니다. 정의된 경우, 이 속성은 보호될 수 있으며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).
+
+Description:: CALDAV:calendar-home-set 속성은 사용자가 주체가 소유한 캘린더 컬렉션을 쉽게 찾을 수 있도록 하기 위한 것입니다. 일반적으로 사용자는 자신이 소유한 모든 캘린더 컬렉션을 공통 컬렉션 아래에 그룹화합니다. 이 속성은 캘린더 컬렉션 또는 주체가 소유한 하위 또는 하위 캘린더 컬렉션이 있는 일반 컬렉션인 컬렉션의 URL을 지정합니다.
+
+Definition::
++
+[source]
+----
+<!ELEMENT calendar-home-set (DAV:href*)>
+----
+
+Example::
++
+[source]
+----
+<C:calendar-home-set xmlns:D="DAV:"
+                    xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:href>http://cal.example.com/home/bernard/calendars/</D:href>
+</C:calendar-home-set>
+----
 
 == 7. Calendaring Reports
+
+이 섹션에서는 캘린더 컬렉션 및 캘린더 객체 리소스에서 CalDAV 서버가 반드시 지원해야 하는 보고서를 정의합니다.
+
+CalDAV 서버는 모든 캘린더 컬렉션 및 캘린더 객체 리소스에서 [RFC3253]의 3.1.5절에 정의된 DAV: supported-report-set 속성을 사용하여 이러한 보고서에 대한 지원을 알려야 합니다. CalDAV 서버는 일반 컬렉션에서 이러한 보고서에 대한 지원을 광고할 수도 있습니다.
+
+이러한 보고서 중 일부는 여러 리소스에서 캘린더 데이터를 반환할 수 있습니다.
+
+=== 7.1. REPORT Method
+
+REPORT 메서드([RFC3253] 섹션 3.6에 정의됨)는 하나 이상의 리소스에 대한 정보를 얻기 위한 확장 가능한 메커니즘을 제공합니다. 하나 이상의 명명된 프로퍼티의 값을 반환하는 PROPFIND 메서드와 달리 REPORT 메서드는 더 복잡한 처리를 포함할 수 있습니다. REPORT는 서버가 쿼리와 같은 복잡한 요청을 수행하는 데 필요한 모든 정보에 액세스할 수 있고 클라이언트가 동일한 요청을 수행하는 데 필요한 정보를 검색하기 위해 여러 번 요청해야 하는 경우에 유용합니다.
+
+CalDAV 서버는 [RFC3253]의 섹션 3.8에 정의된 DAV:expand-property REPORT를 지원해야 합니다.
+
+=== 7.2. Ordinary Collections
+
+서버는 캘린더 컬렉션 또는 캘린더 객체 리소스 외에 일반 컬렉션(캘린더 컬렉션이 아닌 컬렉션)에 대해 이 문서에 정의된 보고서를 지원할 수 있습니다. 일반 컬렉션에 대한 보고서에 대한 응답을 계산할 때 서버는 깊이 요청 헤더의 값에 따라 REPORT 요청의 대상이 되는 캘린더 컬렉션에 포함된 캘린더 객체 리소스만 고려해야 합니다.
+
+=== 7.3. Date and Floating Time
+
+iCalendar는 특정 시간대에 구속되지 않는 DATE 및 DATE-TIME 값을 지정하는 방법을 제공합니다(이하 각각 "floating date" 및 "floating time"이라고 함). 이러한 값은 관찰 중인 표준 시간대에 관계없이 동일한 일, 시, 분, 초 값을 나타내는 데 사용됩니다. 예를 들어, DATE 값 "20051111"은 특정 시간대에 관계없이 2005년 11월 11일을 나타내며, DATE-TIME 값 "20051111T111100"은 특정 시간대에 관계없이 2005년 11월 11일 오전 11:11을 나타냅니다.
+
+CalDAV 서버는 캘린더 REPORT 요청을 처리할 때 날짜의 "floating date" 및 "floating time" 값을 UTC 시간 값으로 변환해야 할 수 있습니다.
+
+CALDAV:calendar-query REPORT의 경우, CalDAV 서버는 request body의 일부로 지정된 경우 "floating date" 및 "floating time" 값을 UTC 시간 값으로 날짜로 적절하게 변환하기 위해 CALDAV:timezone XML 요소의 값에 의존해야 합니다. 요청 본문에 CALDAV:timezone XML 요소가 지정되지 않은 경우, CalDAV 서버는 정의된 경우 CALDAV:calendar-timezone 속성의 값을 사용해야 하며, 그렇지 않은 경우 CalDAV 서버가 선택한 시간대를 사용할 수 있습니다.
+
+CALDAV:free-busy-query REPORT의 경우, CalDAV 서버는 "floating date" 또는 "floating time"으로 예약된 캘린더 구성 요소에 대해 UTC 시간이 포함된 날짜로 적절한 FREEBUSY 기간 값을 계산하기 위해 정의된 경우 CALDAV:calendar-timezone 속성의 값에 의존해야 합니다. CALDAV:calendar-timezone 속성이 정의되지 않은 경우, CalDAV 서버는 선택한 시간대를 사용할 수 있습니다.
+
+=== 7.4. Time Range Filtering
+
+이 섹션에 정의된 일부 보고서에는 반환되는 캘린더 객체 리소스 집합을 지정된 시간 범위와 겹치는 리소스로만 제한하는 데 사용되는 시간 범위 필터가 포함될 수 있습니다. 시간 범위 필터는 캘린더 구성요소 전체에 적용하거나 날짜 또는 DATE-TIME 값 유형이 있는 특정 캘린더 구성요소 속성에 적용할 수 있습니다.
+
+캘린더 객체 리소스가 시간 범위 필터 요소와 일치하는지 여부를 결정하기 위해 대상 구성요소 또는 속성의 시작 및 종료 시간을 결정한 다음 요청된 시간 범위와 비교합니다. 요청된 시간 범위와 겹치는 시간이 있으면 캘린더 객체 리소스가 필터 요소와 일치하는 것입니다. 캘린더 컴포넌트의 실제 시작 및 종료 시간을 결정하기 위해 [RFC2445]에 정의된 규칙을 사용해야 하며, 이러한 규칙은 이 문서의 섹션 9.9에 완전히 열거되어 있습니다.
+
+이러한 시간 범위 필터링을 사용할 때는 VEVENT 및 VTODO와 같은 반복 캘린더 컴포넌트에 대해 특별한 고려가 필요합니다. 서버는 반드시 반복 구성요소를 확장하여 지정된 시간 범위와 겹치는 반복 인스턴스가 있는지 확인해야 합니다. 하나 이상의 반복 인스턴스가 시간 범위와 겹치는 경우 캘린더 객체 리소스가 필터 요소와 일치합니다.
+
+=== 7.5. Searching Text: Collections
+
+이 섹션에 정의된 보고서 중 일부는 클라이언트가 제공한 문자열의 텍스트 일치를 수행하며 저장된 캘린더 데이터와 비교됩니다. iCalendar 데이터는 기본적으로 UTF-8 문자셋으로 인코딩되며 일부 속성 및 매개변수 값에 US-ASCII 문자셋 범위를 벗어난 문자가 포함될 수 있으므로 텍스트 일치가 잘 정의된 규칙을 따르도록 해야 할 필요가 있습니다.
+
+이 문제를 해결하기 위해 이 사양에서는 [RFC4790]에 정의된 IANA Collation Registry를 사용하여 잘 정의된 규칙으로 텍스트 비교 작업을 수행하는 데 사용할 수 있는 콜레이션을 지정합니다.
+
+CalDAV에서 사용되는 비교는 [RFC4790], 섹션 4.2에 따라 모두 "substring" 일치입니다. 서버에서 지원하는 콜레이션은 반드시 "substring" 일치 연산을 지원해야 합니다.
+
+CalDAV 서버는 [RFC4790]에 설명된 대로 "i;ascii-casemap" 및 "i;octet" 콜레이션을 지원해야 하며, 다른 콜레이션도 지원할 수 있습니다.
+
+서버는 콜레이션을 사용하는 보고서를 지원하는 리소스에 정의된 CALDAV:supported-collation-set 속성을 통해 지원하는 콜레이션 집합을 알릴 수 있어야 합니다.
+
+클라이언트는 서버가 광고한 목록의 데이터 정렬만 사용해야 합니다.
+
+클라이언트가 명시적으로 지정한 콜레이션이 없거나 클라이언트가 "default" 콜레이션 식별자([RFC4790] 3.1절에 정의됨)를 지정한 경우, 서버는 기본적으로 "i;ascii-casemap"을 콜레이션으로 사용해야 합니다.
+
+와일드카드([RFC4790], 섹션 3.2에 정의됨)는 콜레이션 식별자에 사용해서는 안 됩니다.
+
+클라이언트가 서버에서 지원하지 않는 콜레이션을 선택하면 서버는 반드시 CALDAV:supported-collation 전제 조건 오류 응답으로 응답해야 합니다.
+
+==== 7.5.1. CALDAV:supported-collation-set Property
+
+Name:: supported-collation-set
+
+Namespace:: urn:ietf:params:xml:ns:caldav
+
+Purpose:: 텍스트 일치 작업을 위해 서버에서 지원하는 데이터 정렬 집합을 식별합니다.
+
+Conformance:: 이 속성은 텍스트 일치를 수행하는 보고서를 지원하는 모든 리소스에 정의되어야 합니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518]의 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.
+
+Description:: CALDAV:supported-collation-set 속성은 서버에서 지원하는 콜레이션의 컬렉션 식별자를 지정하는 0개 이상의 CALDAV:support-collation-set 요소를 포함합니다.
+
+Definition::
++
+[source]
+----
+<!ELEMENT supported-collation-set (supported-collation*)>
+
+<!ELEMENT supported-collation (#PCDATA)>
+----
+
+Example::
++
+[source]
+----
+<C:supported-collation-set
+    xmlns:C="urn:ietf:params:xml:ns:caldav">
+  <C:supported-collation>i;ascii-casemap</C:supported-collation>
+  <C:supported-collation>i;octet</C:supported-collation>
+</C:supported-collation-set>
+----
+
+=== 7.6. Partial Retrieval
+
+이 문서에 정의된 일부 캘린더 보고서는 캘린더 객체 리소스의 부분 검색을 허용합니다. CalDAV 클라이언트는 캘린더 REPORT 요청 본문에서 반환할 정보를 지정할 수 있습니다.
+
+CalDAV 클라이언트는 특정 WebDAV 속성 값, 모든 WebDAV 속성 값 또는 리소스의 WebDAV 속성 이름 목록을 요청할 수 있습니다. 또한 캘린더 데이터를 반환하도록 요청하고 모든 캘린더 구성 요소 및 속성을 반환할지 아니면 특정 속성만 반환할지 지정할 수 있습니다. 9.6절의 CALDAV:calendar-data를 참조하세요.
+
+기본적으로 반환되는 캘린더 데이터에는 "master component"라고 하는 반복 집합을 정의하는 구성 요소와 "overridden components"라고 하는 반복 집합에 대한 예외를 정의하는 구성 요소가 포함됩니다.
+
+지정된 시간 범위와 겹치는 반복 인스턴스에만 관심이 있는 CalDAV 클라이언트는 지정된 시간 범위에 영향을 미치는 "overridden components"와 함께 "master component"만 수신하도록 요청하여 서버에서 반환되는 데이터를 제한할 수 있습니다(섹션 9.6.6의 CALDAV:limit-recurrence-set 참조). 재정의된 구성 요소는 현재 시작 및 종료 시간이 시간 범위와 겹치거나 인스턴스가 재정의되지 않았을 경우 사용되었을 원래 시작 및 종료 시간이 시간 범위와 겹치거나 시간 범위와 겹치는 다른 인스턴스에 영향을 미치는 경우 시간 범위에 영향을 미칩니다.
+
+리커런시 속성(예: EXDATE, EXRULE, RDATE 및 RRULE)과 VTIMEZONE 구성 요소를 지원하지 않거나 제한된 처리 능력으로 인해 리커런시 확장을 수행하지 않으려는 클라이언트는 지정된 시간 범위와 겹치는 리커런시 인스턴스만 각각 정확히 하나의 리커런시 인스턴스를 정의하는 별도의 캘린더 구성 요소로 수신하도록 요청할 수 있습니다(9.6.5장의 CALDAV:expand 참조).
+
+마지막으로, VFREEBUSY 구성 요소의 경우, CalDAV 클라이언트는 지정된 시간 범위와 겹치는 FREEBUSY 속성 값만 수신하도록 요청할 수 있습니다(9.6.7절의 CALDAV:limit-freebusy-set 참조).
+
+=== 7.7. Non-Standard Components, Properties, and Parameters
+
+=== 7.8. CALDAV:calendar-query REPORT
+
+==== 7.8.1. Example: Partial Retrieval of Events by Time Range
+
+==== 7.8.2. Example: Partial Retrieval of Recurring Events
+
+==== 7.8.3. Example: Expanded Retrieval of Recurring Events
+
+==== 7.8.4. Example: Partial Retrieval of Stored Free Busy Components
+
+==== 7.8.5. Example: Retrieval of To-Dos by Alarm Time Range
+
+==== 7.8.6. Example: Retrieval of Event by UID
+
+==== 7.8.7. Example: Retrieval of Events by PARTSTAT
+
+==== 7.8.8. Example: Retrieval of Events Only
+
+==== 7.8.9. Example: Retrieval of All Pending To-Dos
+
+==== 7.8.10. Example: Attempt to Query Unsupported Property
+
+=== 7.9. CALDAV:calendar-multiget REPORT
+
+==== 7.9.1. Example: Successful CALDAV:calendar-multiget REPORT
+
+=== 7.10. CALDAV:free-busy-query REPORT
+
+==== 7.10.1. Example: Successful CALDAV:free-busy-query REPORT
 
 == 8. Guidelines
 
