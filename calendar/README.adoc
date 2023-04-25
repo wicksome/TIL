@@ -1,0 +1,25 @@
+= Calendar
+
+== Server
+
+* https://github.com/Bedework/bw-caldav[Bedework CalDAV] - Java
+* https://github.com/1and1/cosmo[Cosmo] - Java
+* https://github.com/ksokol/carldav[carldav] - Java
+* https://github.com/sabre-io/dav[sabre-io/dav] - PHP
+* https://github.com/Kozea/Radicale[Radicale] - Python
+* https://github.com/jelmer/xandikos[xandikos] - Python
+* https://milton.io/
+* https://github.com/thomas-trendsoft/davserver
+* https://github.com/swordlordcodingcrew/fennel
+* https://github.com/tomsquest/docker-radicale[Docker-Radicale] - Docker
+* https://github.com/kristapsdz/kcaldav - C
+
+== Client
+
+* https://github.com/caldav4j/caldav4j[CalDAV4j]
+* https://github.com/tchapi/davis
+
+== ETC
+
+* https://github.com/miltonio/milton2
+* https://www.webdavsystem.com/server/creating_caldav_carddav/creating_caldav_server/
