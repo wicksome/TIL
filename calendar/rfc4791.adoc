@@ -1,10 +1,13 @@
+= RFC 4791
+:toc: left
+
 원문: [RFC 4791 - Calendaring Extensions to WebDAV (CalDAV)](https://datatracker.ietf.org/doc/html/rfc4791)
 
-# 1. 소개
+== 1. 소개
 
 캘린더 액세스 프로토콜의 기반으로 HTTP\[RFC2616\] 및 WebDAV\[RFC2518\]를 사용하는 개념은 결코 새로운 개념이 아닙니다. 이미 1997년 또는 1998년 IETF CALSCH 작업 그룹에서 논의되었습니다. 여러 회사에서 HTTP를 사용하여 iCalendar\[RFC2445\] 객체를 업로드 및 다운로드하고 WebDAV을 사용하여 리소스를 가져오는 캘린더 액세스 프로토콜을 구현했습니다. 그러나 일정 관리 데이터를 WebDAV 리소스를 모델링하는 방법과 WebDAV에 포함되지 않은 필수 기능을 구현하는 방법에 대해 크고 작은 결정이 많기 때문에 이러한 구현은 상호 운용되지 않습니다. 이 문서는 상호 운용 가능한 캘린더 엑세스 프로토콜을 만들기 위한 추가 기능과 함께 WebDAV에서 캘린더 데이터를 모델링하는 방법을 제안합니다.
 
-## 1.1. 표기법 컨벤션
+=== 1.1. 표기법 컨벤션
 
 이 문서에서 키워드 "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMANDED", "MAY", "OPTIONAL"은 \[RFC2119\]에 설명된 것과 같이 해석됩니다.
 
@@ -12,7 +15,7 @@
 
 네임스페이스 "DAV:" 및 "urn:ieft:params:xml:ns:caldav"의 XML 엘리먼트 타입이 XML fragment의 컨텍스트 외부에서 참조되는 경우, 문자열 "DAV:", "CALDAV:"이 각각 엘리먼트 타입 앞에 붙습니다.
 
-## 1.2. XML 네임스페이스 및 처리
+=== 1.2. XML 네임스페이스 및 처리
 
 이 문서의 XML 요소 정의는 \[W3C.RFC-xml-20060816\]의 섹션 3.2에 설명된 XML 요소 유형 선언을 사용합니다.
 
@@ -24,34 +27,37 @@
 
 CalDAV 클라이언트 및 서버에 의한 XML 처리는 RFC2518에 설명된 규칙을 따라야 합니다. 특히 해당 사양의 섹션 14 및 부록 3을 참조하십시오.
 
-## 1.3. 메서드 전제 조건 및 사후 조건
+=== 1.3. 메서드 전제 조건 및 사후 조건
 
 메소드의 "전제 조건"은 해당 메소드가 수행되기 위해 참이어야 하는 서버 상태를 말합니다. 메서드의 "사후 조건"은 해당 메서드가 완료된 후 참이어야 하는 서버 상태를 말합니다. 요청에 대한 메서드 전제 조건 또는 사후 조건이 충족되지 않은 경우 요청의 응답 상태는 항상 실패하므로 요청이 반복되지 않아야 하는 경우 403(Forbidden)이거나 예상되는 경우 409(Conflict)여야 합니다. 사용자가 충돌을 해결하고 요청을 다시 제출할 수 있는지 확인합니다.
 
 클라이언트가 403 및 409 응답을 더 잘 처리할 수 있도록 고유한 XML 요소 유형이 요청의 각 메서드 전제 조건 및 사후 조건과 연결됩니다. 특정 전제 조건이 충족되지 않거나 특정 사후 조건이 달성될 수 없는 경우 요청에서 달리 협상하지 않는 한 적절한 XML 요소가 응답 본문의 최상위 DAV:error 요소의 자식으로 반환되어야 합니다.
 
-# 2. 요구 사항 개요
+== 2. 요구 사항 개요
 
 이 섹션에는 CalDAV 서버에 필요한 기능이 나열되어 있습니다. CalDAV 서버에 대한 지원을 공시하려면 다음과 같아야 합니다. (MUST)
-- 캘린더 객체 리소스 포맷의 미디어 타입으로 iCalendar (RFC2445) 를 지원해야 합니다.
-- WebDAV 클래스 1 (RFC2518)을 지원해야 합니다. (rfc2518bis는 상호 운용성을 지원하는 RFC2518에 대해 설명함)
-- 이 문서의 섹션 6.1에 정의된 추가 권한으로 WebDAV ACL RFC3744를 지원해야 합니다.
-- RFC2818에 정의된 대로 TLS(RFC2246)를 통한 전송을 지원해야 합니다.
-  (RFC2246은 RFC4346에 의해 폐기되었습니다.)
-- 이 문서의 섹션 5.3.4에 지정된 추가 요구 사항과 함께 ETag(RFC2616)를 지원해야 합니다.
-- 이 문서의 섹션 7에 정의된 모든 캘린더링 리포트를 지원해야 합니다(MUST). 그리고
-- RFC3253에 정의된 대로 DAV:supported report-set 속성의 캘린더링 리포트에 대한 모든 일정 컬렉션 및 일정 개체 리소스에 대한 지원을 공시해야 합니다.
+
+* 캘린더 객체 리소스 포맷의 미디어 타입으로 iCalendar (RFC2445) 를 지원해야 합니다.
+* WebDAV 클래스 1 (RFC2518)을 지원해야 합니다. (rfc2518bis는 상호 운용성을 지원하는 RFC2518에 대해 설명함)
+* 이 문서의 섹션 6.1에 정의된 추가 권한으로 WebDAV ACL RFC3744를 지원해야 합니다.
+* RFC2818에 정의된 대로 TLS(RFC2246)를 통한 전송을 지원해야 합니다.
++
+(RFC2246은 RFC4346에 의해 폐기되었습니다.)
+* 이 문서의 섹션 5.3.4에 지정된 추가 요구 사항과 함께 ETag(RFC2616)를 지원해야 합니다.
+* 이 문서의 섹션 7에 정의된 모든 캘린더링 리포트를 지원해야 합니다(MUST). 그리고
+* RFC3253에 정의된 대로 DAV:supported report-set 속성의 캘린더링 리포트에 대한 모든 일정 컬렉션 및 일정 개체 리소스에 대한 지원을 공시해야 합니다.
 
 또한 서버는 다음을 수행해야 합니다:
-- 이 문서의 섹션 5.3.1에 정의된 MKCALENDAR 메서드를 지원해야 합니다(SHOULD).
 
-# 3. 캘린더링 데이터 모델
+* 이 문서의 섹션 5.3.1에 정의된 MKCALENDAR 메서드를 지원해야 합니다(SHOULD).
+
+== 3. 캘린더링 데이터 모델
 
 WebDAV를 성공적인 프로토콜로 만든 기능 중 하나는 확고한 데이터 모델입니다. 이는 일정 관리와 같은 다른 응용 프로그램에 유용한 프레임워크가 됩니다. 이 사양은 잘 설명된 데이터 모델을 기반으로 모든 기능을 개발하여 동일한 패턴을 따릅니다.
 
 간략한 개요로서 CalDAV 캘린더는 정의된 구조를 가진 WebDAV 컬렉션으로 모델링됩니다. 각 달력 모음에는 달력 개체를 직접 자식 리소스로 나타내는 여러 리소스가 포함되어 있습니다. 캘린더 개체(이벤트, 할 일, 저널 항목 또는 기타 캘린더 구성 요소)를 나타내는 각 리소스를 "calendar object resource"라고 합니다. 각 달력 개체 리소스 및 각 달력 모음은 개별적으로 잠글 수 있으며 개별 WebDAV 속성을 가질 수 있습니다. 이 모델에서 파생된 요구 사항은 섹션 4.1 및 섹션 4.2에 제공됩니다.
 
-## 3.1. 캘린더 서버
+=== 3.1. 캘린더 서버
 
 CalDAV 서버는 WebDAV 리포지토리와 결합된 calendaring-aware engine입니다. WebDAV 리포지토리는 unified URL 네임스페이스 내에 다른 WebDAV 리소스를 포함하는 WebDAV 컬렉션 집합입니다. 예를 들어, 저장소 "http://www.example.com/webdav/" 에는 "http://www.example.com/webdav/" 로 시작하는 URL이 있는 WebDAV 컬렉션 및 리소스가 포함될 수 있습니다. root URL "http://www.example.com/" 자체는 WebDAV 저장소가 아닐 수 있습니다(예: WebDAV 지원이 서블릿 또는 기타 웹 서버 확장을 통해 구현되는 경우).
 
@@ -61,15 +67,15 @@ WebDAV 리포지토리는 리포지토리 루트 내의 모든 지점에서 이 
 
 CalDAV 서버 또는 리포지토리는 일정 데이터 및 상태 정보의 표준 위치입니다. 클라이언트는 데이터 변경 또는 데이터 다운로드 요청을 제출할 수 있습니다. 클라이언트는 일정 개체를 오프라인으로 저장하고 나중에 동기화를 시도할 수 있습니다. 그러나 여러 클라이언트를 통해 일정 모음을 공유하고 액세스할 수 있으므로 클라이언트는 마지막 동기화 시간과 업데이트를 시도할 때 서버의 일정 데이터가 변경될 수 있도록 준비해야 합니다. 엔터티 태그 및 기타 기능이 이를 가능하게 합니다.
 
-## 3.2. Recurrence and the Data Model
+=== 3.2. Recurrence and the Data Model
 
 반복(Recurrence)은 얼마나 많은 리소스가 존재할 것으로 예상되는지를 제어하기 때문에 데이터 모델의 중요한 부분입니다. 이 사양은 반복 일정 구성 요소 및 반복 예외를 단일 리소스로 모델링합니다. 이 모델에서 반복 규칙, 반복 날짜, 예외 규칙 및 예외 날짜는 모두 단일 달력 개체 리소스에 있는 데이터의 일부입니다. 이 모델은 리포지토리에 저장할 반복 인스턴스 수, 반복 일정 구성 요소와 반복 인스턴스를 동기화하는 방법 및 반복 일정 구성 요소와 반복 예외를 연결하는 방법을 제한하는 문제를 방지합니다. 또한 클라이언트와 서버 간에 동기화할 데이터가 줄어들고 모든 반복 인스턴스 또는 반복 규칙을 더 쉽게 변경할 수 있습니다. 되풀이 일정 구성 요소를 만들고 모든 되풀이 인스턴스를 삭제하는 것이 더 쉬워집니다.
 
 클라이언트는 반복 컴포넌트의 모든 반복 인스턴스에 대한 정보를 검색하도록 강제되지 않습니다. 이 문서에 정의된 CALDAV:calendar-query 및 CALDAV:calendar-multiget 보고서를 사용하면 클라이언트가 주어진 시간 범위와 겹치는 반복 인스턴스만 검색할 수 있습니다.
 
-# 4. Calendar Resources
+== 4. Calendar Resources
 
-## 4.1. Calendar Object Resources
+=== 4.1. Calendar Object Resources
 
 캘린더 컬렉션에 포함된 캘린더 개체 리소스(calendar object resources)는 iCalendar 개체에 지정된 각 고유한 TZID 매개 변수 값인 VTIMEZONE 구성 요소를 제외하고 둘 이상의 캘린더 구성 요소 유형(예: VEVENT, VTODO, VJOURNAL, VFREEBUSY 등)을 포함해서는 안 됩니다. 예를 들어, 달력 개체 리소스는 하나의 VEVENT 구성 요소와 하나의 VTIMEZONE 구성 요소를 포함할 수 있지만 하나의 VEVENT 구성 요소와 하나의 VTODO 구성 요소를 포함할 수는 없습니다. 대신 VEVENT 및 VTODO 구성 요소는 동일한 컬렉션의 별도 달력 개체 리소스에 저장되어야 합니다.
 
@@ -115,7 +121,7 @@ END:VCALENDAR
 
 UID 값이 "1@example.com"인 VEVENT 컴포넌트는 자체 달력 개체 리소스에 저장됩니다. 하나의 반복 인스턴스가 재정의된 반복 이벤트를 나타내는 UID 값이 "2@example.com"인 두 개의 VEVENT 구성 요소는 동일한 일정 개체 리소스에 저장됩니다.
 
-## 4.2. Calendar Collection
+=== 4.2. Calendar Collection
 
 캘린더 컬렉션에는 달력 내의 캘린더 컴포넌트를 나타내는 캘린더 객체 리소스가 포함되어 있습니다. 캘린더 컬렉션은 URL로 식별되는 WebDAV 리소스 컬렉션으로 클라이언트에 나타납니다. 캘린더 컬렉션은 `DAV:resourcetype` 프로퍼티 값에서 `DAV:collection` 및 `CALDAV:calendar` XML 요소를 보고해야 합니다. CALDAV: calendar에 대한 요소 유형 선언은 다음과 같습니다. `CALDAV:calendar` 에 대한 요소 타입 선언은 다음과 같습니다.
 
@@ -132,19 +138,19 @@ UID 값이 "1@example.com"인 VEVENT 컴포넌트는 자체 달력 개체 리소
 
 여러 캘린더 컬렉션은 동일한 컬렉션의 하위 항목일 수 있습니다.
 
-# 5. Calendar Access Feature
+== 5. Calendar Access Feature
 
-## 5.1. Calendar Access Support
+=== 5.1. Calendar Access Support
+이 문서에 설명된 기능을 지원하는 서버는 캘린더 속성, 보고서, 메서드 또는 권한을 지원하는 리소스에 대한 OPTIONS 요청의 DAV 응답 헤더에 "calendar-access"를 필드로 포함해야 합니다.  DAV 응답 헤더의 "calendar- access" 값은 서버가 이 문서에 명시된 모든 MUST 수준 요구 사항을 지원함을 나타내야 합니다.
 
-이 문서에 설명된 기능을 지원하는 서버는 캘린더 속성, 보고서, 방법 또는 권한을 지원하는 모든 리소스에 대한 OPTIONS 요청의 DAV 응답 헤더 필드로 "calendar-access"를 포함해야 합니다. DAV 응답 헤더의 "calendar-access" 값은 서버가 이 문서에 지정된 모든 MUST 수준 요구 사항을 지원함을 나타내야 합니다.
+==== 5.1.1.  Example: Using OPTIONS for the Discovery of Calendar Access
 
-### 5.1.1. Example: Using OPTIONS for the Discovery of Calendar Access Support
-
-```
+[source]
+----
 >> Request <<
 
 OPTIONS /home/bernard/calendars/ HTTP/1.1
-Host: [cal.example.com](http://cal.example.com/)
+Host: cal.example.com
 
 >> Response <<
 
@@ -154,72 +160,299 @@ Allow: PROPFIND, PROPPATCH, LOCK, UNLOCK, REPORT, ACL
 DAV: 1, 2, access-control, calendar-access
 Date: Sat, 11 Nov 2006 09:32:12 GMT
 Content-Length: 0
-```
+----
 
- In this example, the OPTIONS method returns the value "calendar-access" in the DAV response header to indicate that the collection "/home/bernard/calendars/" supports the properties, reports, method, or privilege defined in this specification.
+이 예에서 OPTIONS 메서드는 DAV 응답 헤더에 "calendar- access" 값을 반환하여 "/home/bernard/calendars/" 컬렉션이 이 사양에 정의된 속성, 보고서, 메서드 또는 권한을 지원한다는 것을 나타냅니다.
 
-## 5.2. Calendar Collection Properties
+=== 5.2. Calendar Collection Properties
 
-이 섹션은 캘린더 컬렉션의 프로퍼티를 정의합니다.
+이 섹션에서는 캘린더 컬렉션의 속성을 정의합니다.
 
-### 5.2.1. CALDAV:calendar-description Property
+==== 5.2.1. CALDAV:calendar-description Property
 
-이름: calendar-description
+Name: calendar-description
 
-네임스페이스: urn:ietf:params:xml:ns:caldav
+Namespace: urn:ietf:params:xml:ns:caldav
 
-목적: 캘린더 컬렉션에 대한 사람이 읽을 수 있는 설명을 제공합니다.
+목적: 캘린더 컬렉션에 대해 사람이 읽을 수 있는 설명을 제공합니다.
 
-Conformance: 이 속성은 모든 캘린더 컬렉션에서 정의될 수 있습니다(MAY). 정의된 경우, 보호될 수 있으며 (RFC2518의 섹션 12.14.1에 정의된) PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다(SHOULD NOT). 설명의 인간 언어를 나타내는 xml:lang 특성은 클라이언트 또는 서버 프로비저닝을 통해 이 속성에 대해 설정해야 합니다. 속성에 대해 설정된 경우 서버는 xml:lang 속성을 반환해야 합니다.
+적합성:  이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다.  정의된 경우, 이 속성은 보호될 수 있으며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).  설명의 인간 언어를 나타내는 xml:lang 속성은 클라이언트 또는 서버 프로비저닝을 통해 이 속성에 대해 설정되어야 합니다.  서버는 속성에 대해 설정된 경우 xml:lang 속성을 반환해야 합니다.
 
-설명: 존재할 경우 프로퍼티에는 사용자에게 표시하기에 적합한 캘린더 컬렉션에 대한 설명이 포함됩니다. 존재하지 않는 경우 클라이언트는 캘린더 컬렉션에 대한 설명이 없다고 가정해야 합니다.
+설명:  있는 경우 이 속성에는 사용자에게 표시하기에 적합한 캘린더 컬렉션에 대한 설명이 포함됩니다. 없는 경우 클라이언트는 캘린더 컬렉션에 대한 설명이 없다고 가정해야 합니다.
 
 정의:
 
-```
-<!ELEMENT calendar-description (#PCDATA)>
-PCDATA value: string
-```
+[source]
+----
+ <!ELEMENT calendar-description (#PCDATA)>
+ PCDATA value: string
+----
 
-예제:
+예시:
 
-```
+[source]
+----
 <C:calendar-description xml:lang="fr-CA"
    xmlns:C="urn:ietf:params:xml:ns:caldav"
 >Calendrier de Mathilde Desruisseaux</C:calendar-description>
-```
+----
 
-### 5.2.2. CALDAV:calendar-timezone Property
+==== 5.2.2.  CALDAV:calendar-timezone Property
 
-### 5.2.3. CALDAV:supported-calendar-component-set Property
+Name: calendar-timezone
 
-### 5.2.4. CALDAV:supported-calendar-data Property
+Namespace: urn:ietf:params:xml:ns:caldav
 
-### 5.2.5. CANDAV:max-resource-size Property
+Purpose: 캘린더 컬렉션의 표준 시간대를 지정합니다.
 
-### 5.2.6. CALDAV:min-date-time Property
+Conformance:
 
-### 5.2.7. CALDAV:max-date-time Property
+이 속성은 모든 캘린더 컬렉션에 정의되어야 합니다.  정의된 경우 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되지 않아야 합니다.
 
-### 5.2.8. CALDAV:max-instances Property
+Description:
 
-### 5.2.9 CALDAV:max-attendees-per-instance Property
+CALDAV:calendar-timezone 속성은 서버가 '날짜' 값과 '현지 시간 포함 날짜' 값(즉, 부동 시간)을 'UTC 시간 포함 날짜' 값으로 변환할 때 사용해야 하는 시간대를 지정하는 데 사용됩니다.  서버는 "날짜" 값 또는 "현지 시간 포함 날짜" 값으로 예약된 캘린더 구성 요소가 CALDAV:캘린더 쿼리 REPORT에 지정된 CALDAV: 시간 범위와 겹치는지 확인하기 위해 이 정보를 필요로 합니다.  또한 서버는 "날짜" 값 또는 "현지 시간 포함 날짜" 값으로 예약된 캘린더 구성 요소를 고려하는 CALDAV:free-busy-query REPORT 요청에 대한 응답으로 반환되는 VFREEBUSY 구성 요소에서 "UTC 시간 포함 날짜"로 적절한 FREEBUSY 기간을 계산하기 위해 이 정보를 필요로 합니다.  이 속성이 없는 경우 서버는 선택한 표준 시간대를 사용할 수 있습니다.
 
-### 5.2.10. Additional Precondition for PROPPATCH
+Note: 
 
-## 5.3. Creating Resources
+CALDAV:calendar- 시간대 XML 요소에 포함된 iCalendar 데이터는 <![CDATA[ ... ]]> 엔티티 인코딩 사용 또는 <![CDATA[ ... ]]> 구문 사용 등 표준 XML 문자 데이터 인코딩 규칙을 따라야 합니다.  후자의 경우 iCalendar 데이터에는 CDATA 섹션의 끝 구분 기호인 문자 시퀀스 "]]>"를 포함할 수 없습니다.
 
-Calendar collections and calendar object resources may be created by either a CalDAV client or by the CalDAV server. This specification defines restrictions and a data model that both clients and servers MUST adhere to when manipulating such calendar data.
+Definition:
 
-### 5.3.1. MKCALENDAR Method
+[source]
+----
+<!ELEMENT calendar-timezone (#PCDATA)>
+PCDATA value: an iCalendar object with exactly one VTIMEZONE
+       component.
+----
 
-#### 5.3.1.1. Status Codes
+Example:
 
-#### 5.3.1.2. Examples: Successful MKCALENDAR Request
+[source]
+----
+<C:calendar-timezone
+   xmlns:C="urn:ietf:params:xml:ns:caldav">BEGIN:VCALENDAR
+PRODID:-//Example Corp.//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:US-Eastern
+LAST-MODIFIED:19870101T000000Z
+BEGIN:STANDARD
+DTSTART:19671029T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:Eastern Standard Time (US &amp; Canada)
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19870405T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:Eastern Daylight Time (US &amp; Canada)
+END:DAYLIGHT
+END:VTIMEZONE
+END:VCALENDAR
+</C:calendar-timezone>
+----
 
-This example creates a calendar collection called /home/lisa/calendars/events/ on the server [cal.example.com](http://cal.example.com/) with specific values for the properties DAV:displayname, CALDAV:calendar-description, CALDAV:supported-calendar-component-set, and CALDAV:calendar-timezone.
+==== 5.2.3. CALDAV:supported-calendar-component-set Property
 
-```
+Name: supported-calendar-component-set
+
+Namespace: urn:ietf:params:xml:ns:caldav
+
+Purpose:
+
+캘린더 객체 리소스가 캘린더 컬렉션에 포함할 수 있는 캘린더 구성요소 유형(예: VEVENT, VTODO 등)을 지정합니다.
+적합성:  이 속성은 모든 캘린더 컬렉션에 정의할 수 있습니다.  정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).
+
+Description:
+
+CALDAV:supported-calendar-component-set 속성은 캘린더 개체 리소스가 캘린더 컬렉션에 포함할 수 있는 캘린더 구성 요소 유형에 대한 제한을 지정하는 데 사용됩니다. 클라이언트가 이 속성에 나열되지 않은 구성 요소 유형이 있는 캘린더 객체 리소스를 저장하려고 시도하면 반드시 오류가 발생하며, CALDAV:supported-calendar-component 전제 조건(섹션 5.3.2.1)을 위반한 것이 됩니다.  이 속성은 보호되어 있으므로 클라이언트가 PROPPATCH 요청을 사용하여 변경할 수 없습니다.  그러나 클라이언트는 MKCALENDAR를 사용하여 새 캘린더 컬렉션을 만들 때 이 속성의 값을 초기화할 수 있습니다.  빈 요소 태그 <C:comp name="VTIMEZONE"/>는 VTIMEZONE 구성 요소만 포함된 캘린더 객체 리소스에 대한 지원이 제공되거나 원하는 경우에만 지정해야 합니다.  VEVENT 또는 VTODO 구성 요소가 포함된 캘린더 객체 리소스에서 VTIMEZONE 구성 요소에 대한 지원은 항상 가정됩니다.  이 속성이 없는 경우 서버는 모든 구성 요소 유형을 수락해야 하며 클라이언트는 모든 구성 요소 유형이 수락된다고 가정할 수 있습니다.
+
+Definition:
+
+<!ELEMENT supported-calendar-component-set (comp+)>
+Example:
+
+<C:supported-calendar-component-set
+   xmlns:C="urn:ietf:params:xml:ns:caldav">
+  <C:comp name="VEVENT"/>
+  <C:comp name="VTODO"/>
+</C:supported-calendar-component-set>
+
+==== 5.2.4. CALDAV:supported-calendar-data Property
+
+Name: supported-calendar-data
+
+Namespace: urn:ietf:params:xml:ns:caldav
+
+Purpose: 캘린더 컬렉션의 캘린더 객체 리소스에 허용되는 미디어 유형을 지정합니다.
+
+Conformance: 이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다.  정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.
+
+Description: CALDAV:supported-calendar-data 속성은 지정된 캘린더 컬렉션에 포함된 캘린더 객체 리소스에 대해 지원되는 미디어 유형을 지정하는 데 사용됩니다(예: iCalendar 버전 2.0).  클라이언트가 이 속성에 나열되지 않은 미디어 유형으로 캘린더 객체 리소스를 저장하려고 시도하면 반드시 오류가 발생하며, CALDAV:supported-calendar-data 전제 조건(섹션 5.3.2.1)을 위반한 것입니다.  이 속성이 없는 경우 서버는 미디어 유형이 "text/calendar" 및 iCalendar 버전 2.0인 데이터만 허용해야 하며, 클라이언트는 서버가 이 데이터만 허용한다고 가정할 수 있습니다.
+
+Definition:
+
+[source]
+----
+<!ELEMENT supported-calendar-data (calendar-data+)>
+----
+
+Example:
+
+[source]
+----
+<C:supported-calendar-data
+    xmlns:C="urn:ietf:params:xml:ns:caldav">
+   <C:calendar-data content-type="text/calendar" version="2.0"/>
+</C:supported-calendar-data>
+----
+
+==== 5.2.5.  CALDAV:max-resource-size Property
+
+Name: max-resource-size
+
+Namespace: urn:ietf:params:xml:ns:caldav
+
+Conformance:
+
+이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다.  정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.
+
+Description:
+
+CALDAV:max-resource-size는 캘린더 객체 리소스가 캘린더 컬렉션에 저장될 때 서버가 허용할 수 있는 최대 크기를 옥텟 단위로 나타내는 숫자 값을 지정하는 데 사용됩니다.  이 크기를 초과하는 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV:max-resource-size 전제 조건(섹션 5.3.2.1)을 위반한 것입니다.  이 속성이 없는 경우 클라이언트는 서버가 합리적인 크기의 리소스 저장을 허용한다고 가정할 수 있습니다.
+
+Definition:
+
+[source]
+----
+<!ELEMENT max-resource-size (#PCDATA)>
+PCDATA value: a numeric value (positive integer)
+----
+
+Example:
+
+[source]
+----
+<C:max-resource-size xmlns:C="urn:ietf:params:xml:ns:caldav"
+>102400</C:max-resource-size>
+----
+
+==== 5.2.6. CALDAV:min-date-time Property
+
+==== 5.2.7. CALDAV:max-date-time Property
+
+==== 5.2.8. CALDAV:max-instances Property
+
+==== 5.2.9. CALDAV:max-attendees-per-instance Property
+
+Name: max-attendees-per-instance
+
+Namespace: urn:ietf:params:xml:ns:caldav
+
+Purpose: 캘린더 컬렉션에 저장된 캘린더 객체 리소스의 모든 인스턴스에서 최대 참석자 속성 수를 나타내는 숫자 값을 제공합니다.
+
+Conformance: 이 프로퍼티는 모든 캘린더 컬렉션에 정의될 수 있습니다.  정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).
+
+Description:
+
+CALDAV:max-attendees-per-instance는 캘린더 컬렉션에 저장된 캘린더 객체 리소스의 한 인스턴스에 있는 iCalendar 참석자 속성의 최대 개수를 나타내는 숫자 값을 지정하는 데 사용됩니다.  이 값보다 인스턴스당 참석자 속성이 많은 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV: max-attendees-per-instance 전제조건(섹션 5.3.2.1)을 위반한 것입니다.  이 속성이 없는 경우 클라이언트는 서버가 캘린더 구성 요소의 참석자 속성을 원하는 수만큼 처리할 수 있다고 가정할 수 있습니다.
+
+Definition:
+
+[source]
+----
+<!ELEMENT max-attendees-per-instance (#PCDATA)>
+PCDATA value: a numeric value (integer greater than zero)
+----
+
+Example:
+
+[source]
+----
+<C:max-attendees-per-instance
+  xmlns:C="urn:ietf:params:xml:ns:caldav"
+>25</C:max-attendees-per-instance>
+----
+
+==== 5.2.10. Additional Precondition for PROPPATCH
+
+이 사양에는 PROPPATCH 메서드에 대한 추가 전제 조건이 필요합니다.  전제 조건은 다음과 같습니다:
+
+(CALDAV:valid-calendar-data): CALDAV:calendar-timezone 속성에 지정된 표준 시간대는 유효한 단일 VTIMEZONE 구성 요소를 포함하는 유효한 iCalendar 객체여야 합니다.
+
+=== 5.2. Creating Resources
+
+캘린더 컬렉션과 캘린더 객체 리소스는 CalDAV 클라이언트 또는 CalDAV 서버에 의해 생성될 수 있습니다.  이 사양은 클라이언트와 서버가 이러한 캘린더 데이터를 조작할 때 반드시 준수해야 하는 제한 사항과 데이터 모델을 정의합니다.
+
+==== 5.3.1. MKCALENDAR Method
+
+MKCALENDAR 메서드를 사용하는 HTTP 요청은 새 캘린더 컬렉션 리소스를 생성합니다.  서버는 캘린더 컬렉션 생성을 특정 컬렉션으로 제한할 수 있습니다.
+
+일부 캘린더 저장소는 사용자(또는 본인) 당 하나의 캘린더만 지원하며 일반적으로 각 계정에 대해 미리 생성되기 때문에 서버에서 MKCALENDAR를 지원하는 것은 권장 사항일 뿐 필수는 아닙니다.  그러나 서버와 클라이언트는 사용자가 여러 개의 캘린더 컬렉션을 만들어 데이터를 더 잘 정리할 수 있도록 가능하면 MKCALENDAR를 지원할 것을 적극 권장합니다.
+
+클라이언트는 사람이 읽을 수 있는 캘린더 이름에 DAV:displayname 속성을 사용해야 합니다.  클라이언트는 MKCALENDAR 요청의 요청 본문에서 DAV:displayname 속성의 값을 지정하거나, 또는 MKCALENDAR 요청을 발행한 후 즉시 PROPPATCH 요청을 발행하여 DAV:displayname 속성을 적절한 값으로 변경할 수 있습니다.  클라이언트는 동일한 URI "level"에 있는 다른 캘린더 컬렉션과 동일하게 DAV: displayname 속성을 설정해서는 안 됩니다.  캘린더 컬렉션을 사용자에게 표시할 때 클라이언트는 DAV:displayname 속성을 확인하고 해당 값을 캘린더의 이름으로 사용해야 합니다.  DAV: displayname 속성이 비어 있는 경우 클라이언트는 캘린더 컬렉션 URI의 마지막 부분을 이름으로 사용할 수 있지만, 해당 경로 세그먼트는 "opaque"하여 사람이 읽을 수 있는 의미 있는 텍스트를 나타내지 않을 수 있습니다.
+
+MKCALENDAR 요청이 실패하면 요청 이전의 서버 상태가 반드시 복원되어야 합니다.
+
+Marshalling:
+
+요청 본문이 포함된 경우, 반드시 CALDAV:mkcalendar XML 요소여야 합니다.  명령 처리는 명령이 수신된 순서대로(즉, 위에서 아래로) 수행되어야 합니다. 인스트럭션은 모두 실행되거나 실행되지 않아야 합니다.  따라서 처리 중에 오류가 발생하면 실행된 모든 인스트럭션을 취소하고 적절한 오류 결과를 반환해야 합니다.  명령어 처리에 대한 자세한 내용은 [RFC2518] 섹션 12.13.2의 DAV:set 명령어 정의에서 확인할 수 있습니다.
+
+[source]
+----
+<!ELEMENT mkcalendar (DAV:set)>
+----
+
+성공적인 요청에 대한 응답 본문이 포함된 경우, 반드시 CALDAV:mkcalendar-response XML 요소여야 합니다.
+
+[source]
+----
+<!ELEMENT mkcalendar-response ANY>
+----
+
+응답에는 Cache-Control:no-cache 헤더가 포함되어야 합니다.
+
+Postconditions:
+
+(CALDAV:initialize-calendar-collection): 새 캘린더 컬렉션이 Reqeust-URI에 존재합니다.  캘린더 컬렉션의 DAV:resourcetype 에는 DAV:collection CALDAV:calendar XML 요소가 모두 포함되어야 합니다.
+
+
+===== 5.3.1.1. Status Codes
+
+다음은 MKCALENDAR 요청에 대한 응답으로 받을 수 있는 응답 코드의 예시입니다.  이 목록은 결코 완전한 목록이 아닙니다.
+
+201(Created) - 캘린더 컬렉션 리소스가 완전히 생성되었습니다;
+
+207(Multi-Status) - 요청 본문에 지정된 하나 이상의 DAV:set 명령어를 성공적으로 처리할 수 없기 때문에 캘린더 컬렉션 리소스를 만들지 못했습니다.  다음은 이 상황에서 207(다중 상태) 응답에 사용될 것으로 예상되는 응답 코드의 예입니다:
+
+        403(Forbidden) - 서버가 지정하지 않은 이유로 클라이언트가 속성 중 하나를 변경할 수 없습니다;
+
+       409(Conflict) - 클라이언트가 해당 프로퍼티에 적합하지 않은 의미를 가진 값을 제공했습니다.  여기에는 읽기 전용 속성을 설정하려는 시도가 포함됩니다;
+
+        424(Failed Dependency) - 요청 본문에 지정된 다른 DAV:set 명령의 실패가 아니었다면 지정된 리소스에 대한 DAV:set 명령이 성공했을 것입니다;
+
+        423(Locked) - 지정한 리소스가 잠겨 있고 클라이언트가 잠금 소유자가 아니거나 잠금 유형에 잠금 토큰을 제출해야 하는데 클라이언트가 제출하지 않았습니다.
+
+        507 (Insufficient Storage) - 서버에 속성을 기록할 공간이 충분하지 않습니다;
+
+403(Forbidden) - 다음 두 가지 조건 중 하나 이상을 나타냅니다: 1) 서버가 네임스페이스의 지정된 위치에 캘린더 컬렉션을 만드는 것을 허용하지 않거나 2) Request-URI의 상위 컬렉션이 존재하지만 구성원을 받아들일 수 없습니다;
+
+409(Conflict) - 하나 이상의 중간 컬렉션이 만들어질 때까지 Request-URI에서 컬렉션을 만들 수 없습니다;
+
+415(Unsupported Media Type) - 서버가 본문의 요청 유형을 지원하지 않습니다.
+
+507(Insufficient Storage) - 이 메서드 실행 후 리소스의 상태를 기록할 공간이 충분하지 않습니다.
+
+===== 5.3.1.2. Example: Successful MKCALENDAT Request
+
+이 예에서는 서버 cal.example.com에 /home/lisa/calendars/events/라는 캘린더 컬렉션을 생성하고, DAV:displayname, CALDAV:calendar-description, CALDAV:supported-calendar-component-set 및 CALDAV:calendar-timezone 속성에 대한 특정 값을 지정합니다.
+
+[source]
+----
 >> Request <<
 
 MKCALENDAR /home/lisa/calendars/events/ HTTP/1.1
@@ -229,7 +462,7 @@ Content-Length: xxxx
 
 <?xml version="1.0" encoding="utf-8" ?>
 <C:mkcalendar xmlns:D="DAV:"
-             xmlns:C="urn:ietf:params:xml:ns:caldav">
+              xmlns:C="urn:ietf:params:xml:ns:caldav">
  <D:set>
    <D:prop>
      <D:displayname>Lisa's Events</D:displayname>
@@ -271,31 +504,121 @@ HTTP/1.1 201 Created
 Cache-Control: no-cache
 Date: Sat, 11 Nov 2006 09:32:12 GMT
 Content-Length: 0
-```
+----
 
+==== 5.3.2. Creating Calendar Object Resources
 
-# 6. Calendaring Access Control
+클라이언트는 캘린더 개체 리소스로 캘린더 컬렉션을 채웁니다. 각 캘린더 객체 리소스의 URL은 전적으로 임의적이며 캘린더 객체 리소스의 iCalendar 속성 또는 기타 메타데이터와 특정 관계를 가질 필요가 없습니다.  새 캘린더 객체 리소스는 매핑되지 않은 URI를 대상으로 하는 PUT 요청으로 만들어야 합니다.  매핑된 URI를 대상으로 하는 PUT 요청은 기존 캘린더 객체 리소스를 업데이트합니다.
 
-## 6.1. Calendaring Privillege
+서버가 새 리소스를 만들 때 서버가 매핑되지 않은 URI를 선택하는 것은 어렵지 않습니다.  클라이언트는 컬렉션의 모든 리소스를 검사하고 싶지 않을 수도 있고 새 리소스가 이름 충돌로 생성되지 않도록 전체 컬렉션을 잠그고 싶지 않을 수도 있기 때문에 약간 더 까다롭습니다.  하지만 이를 완화하는 HTTP 기능이 있습니다.  클라이언트가 새 이벤트와 같이 컬렉션이 아닌 리소스를 새로 만들려는 경우, 클라이언트는 PUT 요청에 HTTP 요청 헤더 "If-None-Match: *"를 PUT 요청에 사용해야 합니다.  PUT 요청의 Request-URI는 리소스가 생성될 대상 컬렉션과 마지막 경로 세그먼트에 있는 리소스 이름을 포함해야 합니다.  "If-None-Match: *" 요청 헤더는 마지막 경로 세그먼트가 이미 사용된 것으로 판명된 경우 클라이언트가 실수로 기존 리소스를 덮어쓰지 않도록 보장합니다.
 
-## 6.2. Additional Principal
+[source]
+----
+>> Request <<
 
-# 7. Calendaring Reports
+PUT /home/lisa/calendars/events/qwue23489.ics HTTP/1.1
+If-None-Match: *
+Host: cal.example.com
+Content-Type: text/calendar
+Content-Length: xxxx
 
-# 8. 가이드라인
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+UID:20010712T182145Z-123401@example.com
+DTSTAMP:20060712T182145Z
+DTSTART:20060714T170000Z
+DTEND:20060715T040000Z
+SUMMARY:Bastille Day Party
+END:VEVENT
+END:VCALENDAR
 
-# 9. XML Element Definitions
+>> Response <<
 
-# 10. 국제화 고려 사항
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+ETag: "123456789-000-111"
+----
+
+기존 이벤트를 변경하는 요청은 동일하지만 "If-None- Match" 헤더가 아닌 "If-Match" 헤더에 특정 ETag를 사용합니다.
+
+RFC2445] 섹션 3.10에 명시된 대로 캘린더 및 스케줄링 정보를 포함하는 (임의의) 캘린더 객체 리소스의 URL에는 ".ics"가 붙을 수 있으며, 여유 시간 또는 바쁜 시간 정보를 포함하는 캘린더 객체 리소스의 URL에는 ".ifb"가 붙을 수 있습니다.
+
+===== 5.3.2.1. Additional Preconditions for PUT, COPY, and MOVE
+
+이 사양은 PUT, COPY 및 MOVE 메서드에 대한 추가 전제 조건을 생성합니다.  이러한 전제 조건은 캘린더 객체 리소스를 캘린더 컬렉션으로 PUT 작업할 때, 캘린더 객체 리소스를 캘린더 컬렉션으로 COPY 또는 MOVE 작업할 때 또는 캘린더 컬렉션에서 COPY 또는 MOVE 작업이 발생할 때 적용됩니다.
+
+새로운 전제 조건은 다음과 같습니다:
+
+(CALDAV:supported-calendar-data): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 캘린더 객체 리소스에 대해 지원되는 미디어 유형(즉, iCalendar)이어야 합니다;
+
+(CALDAV:valid-calendar-data): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 지정된 미디어 유형에 유효한 데이터여야 합니다(즉, 유효한 iCalendar 데이터를 포함해야 합니다);
+
+(CALDAV:valid-calendar-object-resource): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 섹션 4.1에 명시된 모든 제한 사항을 준수해야 합니다(예: 캘린더 객체 리소스는 두 가지 이상의 캘린더 구성 요소 유형을 포함해서는 안 되며, 캘린더 객체 리소스는 iCalendar METHOD 속성을 지정해서는 안 됨 등);
+
+(CALDAV:supported-calendar-component): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스에는 대상 캘린더 컬렉션에서 지원되는 캘린더 컴포넌트 유형이 포함되어야 합니다;
+
+(CALDAV:no-uid-conflict): PUT 요청에 제출되거나 COPY 또는 MOVE 요청에 의해 대상이 되는 리소스는 대상 캘린더 컬렉션에서 이미 사용 중인 iCalendar UID 속성 값을 지정하거나 기존 캘린더 개체 리소스를 다른 UID 속성 값을 가진 것으로 덮어쓰지 않아야 합니다. 서버는 DAV:href 요소에 이미 동일한 UID 속성 값을 사용하고 있는 리소스의 URL을 보고해야 합니다;
+
+[source]
+----
+<!ELEMENT no-uid-conflict (DAV:href)>
+----
+
+(CALDAV:calendar-collection-location-ok): 복사 또는 이동 요청에서 Request-URI가 캘린더 컬렉션인 경우, Descrination-URI는 캘린더 컬렉션을 만들 수 있는 위치를 식별해야 합니다;
+
+(CALDAV:max-resource-size): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 CALDAV:max-resource- size 속성 값(섹션 5.2.5)의 값보다 작거나 같은 옥텟 크기를 가져야 합니다;
+
+(CALDAV:min-date-time): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 모든 iCalendar DATE 또는 DATE-TIME 속성 값(각 반복 인스턴스에 대해)이 CALDAV:min-date-time 속성 값(섹션 5.2.6)보다 크거나 같아야 합니다;
+
+(CALDAV:max-date-time): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 모든 iCalendar DATE 또는 DATE-TIME 속성 값(각 반복 인스턴스에 대해)이 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작아야 합니다;
+
+(CALDAV:max-instances): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션에서 CALDAV: max-instances 속성 값(섹션 5.2.8)의 값보다 작거나 같은 수의 반복 인스턴스를 생성해야 합니다;
+
+(CALDAV:max-attendees-per-instance): PUT 요청에 제출된 리소스 또는 복사 또는 이동 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 CALDAV:max-attendees-per-instance 속성 값(섹션 5.2.9) 값보다 작거나 같은 수의 참석자 속성을 하나의 인스턴스에서 가져야 합니다;
+
+==== 5.3.3. Non-Standard Components, Properties, and Parameters
+
+iCalendar는 "standdatd mechanism for doing non-standard things"을 제공합니다.  이 확장 지원을 통해 구현자는 이름 앞에 "X-"라는 텍스트가 붙은 비표준 컴포넌트, 속성 및 매개변수를 사용할 수 있습니다.
+
+서버는 PUT 메서드를 통해 저장된 캘린더 객체 리소스에서 비표준 컴포넌트, 속성 및 파라미터의 사용을 지원해야 합니다.
+
+서버는 자체 "private" 컴포넌트, 속성 또는 매개변수에 대한 규칙을 적용해야 할 수 있으므로 서버는 클라이언트가 해당 컴포넌트를 변경하거나 서버가 가진 제한을 벗어난 값을 사용하려는 시도를 거부할 수 있습니다.  서버는 사용하는 모든 "private" 컴포넌트, 속성 또는 매개변수가 [RFC2445] 섹션 4.2에 설명된 대로 "X-" 이름에 공급업체 ID를 포함하는 규칙을 따르도록 해야 합니다(예: "X-ABC-PRIVATE").
+
+==== 5.3.4. Calendar Object Resource Entity Tag
+
+모든 캘린더 객체 리소스에서 DAV:getetag 속성을 정의하고 강력한 엔티티 태그로 설정해야 합니다.
+
+캘린더 객체 리소스를 대상으로 하는 GET 요청에 대한 응답에는 캘린더 객체 리소스의 강력한 엔티티 태그의 현재 값을 나타내는 ETag 응답 헤더 필드가 포함되어야 합니다.
+
+서버는 저장된 캘린더 객체 리소스가 PUT 요청 본문에 제출된 캘린더 객체 리소스와 옥텟 단위로 동등한 경우 PUT 응답에 강력한 엔티티 태그(ETag 헤더)를 반환해야 합니다.  이를 통해 클라이언트는 반환된 강력한 엔티티 태그를 데이터 동기화 목적으로 안정적으로 사용할 수 있습니다.  예를 들어, 클라이언트는 저장된 캘린더 객체 리소스에 대해 PROPFIND 요청을 수행하여 DAV:getetag 속성을 반환받고, 이 값을 PUT 응답에서 받은 강력한 엔티티 태그와 비교하여 두 값이 같으면 서버의 캘린더 객체 리소스가 변경되지 않았음을 알 수 있습니다.
+
+PUT 요청의 결과로 서버에 저장된 데이터가 제출된 캘린더 객체 리소스와 옥텟 단위로 동일하지 않은 경우, 강력한 엔티티 태그가 응답에 반환되지 않아야 한다는 점을 제외하고는 ETag 응답 헤더의 동작이 여기에 지정되어 있지 않습니다.  따라서 클라이언트는 PUT 요청과 함께 보낸 캘린더 객체 리소스를 사용하는 대신 추가 변경을 위해 수정된 캘린더 객체 리소스(및 ETag)를 검색해야 할 수 있습니다.
+
+== 6. Calendaring Access Control
+
+=== 6.1. Calendaring Privillege
+
+=== 6.2. Additional Principal
+
+== 7. Calendaring Reports
+
+== 8. 가이드라인
+
+== 9. XML Element Definitions
+
+== 10. 국제화 고려 사항
 
 CalDAV를 사용하면 캘린더 컬렉션 설명을 위해 국제화된 문자열을 저장하고 검색할 수 있습니다(섹션 5.2.1 참조).
 
 CALDAV:calendar-query REPORT(섹션 7.8)에는 CALDAV:text-match 요소에 의해 제어되는 텍스트 검색 옵션이 포함되어 있습니다. 문자 처리에 대한 자세한 내용은 해당 요소에 대한 설명에서 다룹니다(섹션 9.7.5 참조).
 
-# 11. 보안 고려 사항
+== 11. 보안 고려 사항
 
-# 12. IANA 고려 사항
+== 12. IANA 고려 사항
 
-# 13. 감사의 말
+== 13. 감사의 말
 
-# 14. 참고
+== 14. 참고
