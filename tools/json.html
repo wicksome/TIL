@@ -50,15 +50,59 @@
             padding: 60px 15px 0;
         }
 
+        .buttons {
+            margin-bottom: 10px;
+        }
+
+        .editor {
+            height: 100%;
+            /*width: 100%;*/
+        }
+
         .vertical-area {
             height: calc(100vh - 7rem);
             max-height: 100%;
             width: 100%;
         }
 
-        .buttons {
-            margin-bottom: 10px;
+        .editor-area > .editor:first-child {
+            padding-right: 0;
         }
+
+        .editor-area > .editor:last-child {
+            padding-left: 0;
+        }
+
+        .editor-area > .resizer {
+            max-width: 15px;
+            padding-right: 0;
+            padding-left: 0;
+            cursor: ew-resize;
+
+            /* vertical center text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* disable selection */
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none; /* Standard syntax */
+        }
+
+        .resizer:hover {
+            /*cursor: ew-resize;*/
+            background-color: lightgray;
+        }
+
+        .resizer:active {
+            /*cursor: ew-resize;*/
+            background-color: lightgray;
+        }
+
+        /*.resizer {*/
+        /*    width: 10px;*/
+        /*}*/
 
     </style>
     <title>JSON formatter</title>
@@ -79,18 +123,19 @@
                             <button type="button" class="btn btn-primary" id="formatting">formatting</button>
                             <button type="button" class="btn btn-primary" id="copy">copy result</button>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="auto_format">
-                                <label class="form-check-label" for="auto_format">Auto Formatting</label>
+                                <input class="form-check-input" type="checkbox" id="autoFormat">
+                                <label class="form-check-label" for="autoFormat">Auto Formatting</label>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
+            <div class="row editor-area">
+                <div class="col editor">
                     <div id="inputEditor" class="vertical-area"></div>
                 </div>
-                <div class="col">
+                <div class="col resizer" id="editorResizer">︙</div>
+                <div class="col editor">
                     <div id="resultEditor" class="vertical-area"></div>
                 </div>
             </div>
@@ -108,76 +153,97 @@
 
 <script>
     let temp = ""
-    const format = () => {
-        const content = inputEditor.getValue()
+    const format = (src, dest) => {
+        const content = src.getValue()
         if (temp === content) return
 
-        console.log(content)
         let result = content
-        result = JSON.parse(result)
-        result = JSON.stringify(result, undefined, 2)
+        try {
+            result = JSON.parse(result)
+            result = JSON.stringify(result, undefined, 2)
+            console.log(result)
+        } catch (e) {
+            console.warn(e)
+            return
+        }
 
-        console.log(result)
-        resultEditor.setValue("")
-
-        resultEditor.insert(result.trim())
+        dest.setValue("")
+        dest.insert(result.trim())
         temp = content
-
     }
 
-    const inputEditor = ace.edit("inputEditor");
-    inputEditor.setTheme("ace/theme/dawn");
-    inputEditor.setOptions({
-        fontFamily: "JetBrains Mono",
-        tabSize: 2,
-        useSoftTabs: false,
-        showInvisibles: false
-    })
-    inputEditor.session.setMode("ace/mode/json");
-    inputEditor.on("input", (e) => {
-        console.log($autoFormat.checked)
-        if (!$autoFormat.checked) return
+    document.addEventListener('DOMContentLoaded', () => {
+        // TODO: font size
+        // TODO: save local history
+        // TODO: add shortcut to expend editor width
+        // TODO: add resizer editor width
 
-        format()
-    })
+        // editor
+        const inputEditor = ace.edit("inputEditor");
+        inputEditor.setTheme("ace/theme/dawn");
+        inputEditor.setOptions({
+            fontFamily: "JetBrains Mono",
+            tabSize: 2,
+            useSoftTabs: false,
+            showInvisibles: false
+        })
+        inputEditor.session.setMode("ace/mode/json");
 
-    const resultEditor = ace.edit("resultEditor");
-    resultEditor.setTheme("ace/theme/dawn");
-    resultEditor.setOptions({
-        fontFamily: "JetBrains Mono",
-        tabSize: 2,
-        useSoftTabs: true,
-        showInvisibles: false
-    })
-    resultEditor.session.setMode("ace/mode/json");
-    resultEditor.session.setUseWorker(false)
-    resultEditor.setShowPrintMargin(false)
-    resultEditor.setReadOnly(true)
+        const resultEditor = ace.edit("resultEditor");
+        resultEditor.setTheme("ace/theme/dawn");
+        resultEditor.setOptions({
+            fontFamily: "JetBrains Mono",
+            tabSize: 2,
+            useSoftTabs: true,
+            showInvisibles: false
+        })
+        resultEditor.session.setMode("ace/mode/json");
+        resultEditor.session.setUseWorker(false)
+        resultEditor.setShowPrintMargin(false)
+        resultEditor.setReadOnly(true)
 
-    const $before = document.querySelector("#before")
-    const $button = document.querySelector("#formatting")
-    const $copy = document.querySelector("#copy")
-    const $autoFormat = document.querySelector("#auto_format")
+        // add editor events
+        inputEditor.on("input", (e) => {
+            if (!$autoFormat.checked) return
 
-    $copy.addEventListener("click", (e) => {
-        const sel = resultEditor.selection.toJSON()
-        resultEditor.selectAll()
-        resultEditor.focus()
-        document.execCommand("copy")
-        resultEditor.selection.fromJSON(sel)
-        // navigator.clipboard.writeText(content)
-    })
+            format(inputEditor, resultEditor)
+        })
 
-    $button.addEventListener("click", (e) => {
-        format()
-    })
+        // add dom events
+        const $before = document.querySelector("#before")
+        const $button = document.querySelector("#formatting")
+        const $copy = document.querySelector("#copy")
+        const $autoFormat = document.querySelector("#autoFormat")
+        const $resizer = document.querySelector("#editorResizer")
 
-    $before.addEventListener("input", (e) => {
-        console.log($autoFormat.checked)
-        if (!$autoFormat.checked) return
+        $copy.addEventListener("click", (e) => {
+            const sel = resultEditor.selection.toJSON()
+            resultEditor.selectAll()
+            resultEditor.focus()
+            document.execCommand("copy")
+            resultEditor.selection.fromJSON(sel)
+            // navigator.clipboard.writeText(content)
+        })
 
-        format()
-    })
+        $button.addEventListener("click", (e) => {
+            format(inputEditor, resultEditor)
+        })
+
+        $before.addEventListener("input", (e) => {
+            if (!$autoFormat.checked) return
+
+            format(inputEditor, resultEditor)
+        })
+
+        // $resizer.addEventListener("mousedown", (e) => {
+        $resizer.addEventListener("click", (e) => {
+            console.log(e.clientX, e.clientY)
+        })
+        $resizer.addEventListener("mousedown mousemove", (e) => {
+            // $resizer.
+            console.log(e.clientX, e.clientY)
+        })
+    }, false);
 </script>
 </body>
 </html>
