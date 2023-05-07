@@ -54,6 +54,10 @@
             margin-bottom: 10px;
         }
 
+        .buttons > .col > *:not(:last-child) {
+            margin-left: 3px;
+        }
+
         .editor {
             height: 100%;
             display: flex;
@@ -119,25 +123,41 @@
 <main>
     <div class="container-fluid">
         <div class="contents">
-            <div class="row">
-                <div class="buttons">
-                    <form class="form-inline">
-                        <div class="form-row">
-                            <button type="button" class="btn btn-light" id="formatting">formatting</button>
-                            <button type="button" class="btn btn-light" id="copy">copy result</button>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="autoFormat">
-                                <label class="form-check-label" for="autoFormat">Auto Formatting</label>
-                            </div>
-                        </div>
-                    </form>
+            <div class="row buttons">
+                <div class="col float-start">
+                    <button type="button" class="btn btn-light" id="formatting">formatting</button>
+                    <button type="button" class="btn btn-light" id="copy">copy result</button>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="autoFormat">
+                        <label class="form-check-label" for="autoFormat">Auto Formatting</label>
+                    </div>
                 </div>
+                <div class="col float-end">
+                    <button type="button" class="btn btn-dark btn-sm float-end" id="sizeDownJsonFont">-</button>
+                    <button type="button" class="btn btn-dark btn-sm float-end" id="sizeUpJsonFont">+</button>
+                </div>
+                <!--                <div class="buttons">-->
+                <!--                    <form class="form-inline">-->
+                <!--                        <div class="form-row">-->
+                <!--                            <button type="button" class="btn btn-light" id="formatting">formatting</button>-->
+                <!--                            <button type="button" class="btn btn-light" id="copy">copy result</button>-->
+                <!--                            <div class="form-check form-check-inline">-->
+                <!--                                <input class="form-check-input" type="checkbox" id="autoFormat">-->
+                <!--                                <label class="form-check-label" for="autoFormat">Auto Formatting</label>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </form>-->
+                <!--                </div>-->
             </div>
             <div class="row editor-container">
                 <div class="editor-view">
-                    <div class="editor"><div id="inputEditor" class="vertical-area"></div></div>
+                    <div class="editor">
+                        <div id="inputEditor" class="vertical-area"></div>
+                    </div>
                     <div class="resizer" id="editorResizer">︙</div>
-                    <div class="editor"><div id="resultEditor" class="vertical-area"></div></div>
+                    <div class="editor">
+                        <div id="resultEditor" class="vertical-area"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,6 +238,8 @@
         const $autoFormat = document.querySelector("#autoFormat")
         const $resizer = document.querySelector("#editorResizer")
         const $editor = document.querySelector(".editor-view > .editor:first-child")
+        const $fontSizeUp = document.querySelector("#sizeUpJsonFont")
+        const $fontSizeDown = document.querySelector("#sizeDownJsonFont")
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
@@ -259,6 +281,18 @@
         document.addEventListener("mouseup", (e) => {
             document.removeEventListener("mousemove", resize, false)
         }, false);
+
+        // font size events
+        $fontSizeUp.addEventListener("click", (e) => {
+            const size = inputEditor.getFontSize()
+            inputEditor.setFontSize(size + 1)
+            resultEditor.setFontSize(size + 1)
+        })
+        $fontSizeDown.addEventListener("click", (e) => {
+            const size = inputEditor.getFontSize()
+            inputEditor.setFontSize(size - 1)
+            resultEditor.setFontSize(size - 1)
+        })
     }, false);
 </script>
 </body>
