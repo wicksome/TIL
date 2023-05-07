@@ -120,8 +120,8 @@
                 <div class="buttons">
                     <form class="form-inline">
                         <div class="form-row">
-                            <button type="button" class="btn btn-primary" id="formatting">formatting</button>
-                            <button type="button" class="btn btn-primary" id="copy">copy result</button>
+                            <button type="button" class="btn btn-light" id="formatting">formatting</button>
+                            <button type="button" class="btn btn-light" id="copy">copy result</button>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="autoFormat">
                                 <label class="form-check-label" for="autoFormat">Auto Formatting</label>
@@ -218,14 +218,19 @@
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
+            if (content.trim() === "") return
+
             navigator.clipboard.writeText(content).then(() => {
                 const beforeLabel = $copy.textContent
-                $copy.classList.remove("btn-primary")
+                const beforeClass = [...$copy.classList].find((cls) => {
+                    return !!cls.match(/btn-\w+/)
+                })
+                $copy.classList.remove(beforeClass)
                 $copy.classList.add("btn-success")
                 $copy.textContent = "copied!"
                 setTimeout(() => {
                     $copy.classList.remove("btn-success")
-                    $copy.classList.add("btn-primary")
+                    $copy.classList.add(beforeClass)
                     $copy.textContent = beforeLabel
                 }, 500)
             })
