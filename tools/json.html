@@ -56,7 +56,13 @@
 
         .editor {
             height: 100%;
-            /*width: 100%;*/
+            display: flex;
+            width: 100%;
+        }
+
+        .editor-view {
+            display: flex;
+            width: 100%
         }
 
         .vertical-area {
@@ -65,18 +71,22 @@
             width: 100%;
         }
 
-        .editor-area > .editor:first-child {
-            padding-right: 0;
+        .editor-view > .editor:first-child {
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: 50%;
         }
 
-        .editor-area > .editor:last-child {
-            padding-left: 0;
+        .editor-view > .editor:last-child {
+            flex-grow: 0;
+            flex-shrink: 1;
+            overflow-x: auto;
         }
 
-        .editor-area > .resizer {
+        .editor-view > .resizer {
+            flex-grow: 0;
+            flex-shrink: 0;
             max-width: 15px;
-            padding-right: 0;
-            padding-left: 0;
             cursor: ew-resize;
 
             /* vertical center text */
@@ -91,19 +101,12 @@
         }
 
         .resizer:hover {
-            /*cursor: ew-resize;*/
             background-color: lightgray;
         }
 
         .resizer:active {
-            /*cursor: ew-resize;*/
             background-color: lightgray;
         }
-
-        /*.resizer {*/
-        /*    width: 10px;*/
-        /*}*/
-
     </style>
     <title>JSON formatter</title>
 </head>
@@ -130,13 +133,11 @@
                     </form>
                 </div>
             </div>
-            <div class="row editor-area">
-                <div class="col editor">
-                    <div id="inputEditor" class="vertical-area"></div>
-                </div>
-                <div class="col resizer" id="editorResizer">︙</div>
-                <div class="col editor">
-                    <div id="resultEditor" class="vertical-area"></div>
+            <div class="row editor-container">
+                <div class="editor-view">
+                    <span class="editor"><div id="inputEditor" class="vertical-area"></div></span>
+                    <span class="resizer" id="editorResizer">︙</span>
+                    <span class="editor"><div id="resultEditor" class="vertical-area"></div></span>
                 </div>
             </div>
         </div>
@@ -155,6 +156,7 @@
     let temp = ""
     const format = (src, dest) => {
         const content = src.getValue()
+        if (content.trim() === "") return
         if (temp === content) return
 
         let result = content
@@ -215,6 +217,7 @@
         const $copy = document.querySelector("#copy")
         const $autoFormat = document.querySelector("#autoFormat")
         const $resizer = document.querySelector("#editorResizer")
+        const $editor = document.querySelector(".editor-view > .editor:first-child")
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
@@ -234,26 +237,28 @@
                     $copy.textContent = beforeLabel
                 }, 500)
             })
+            $resizer.addEventListener("click", (e) => {
+                console.log(e.clientX, e.clientY)
+            })
         })
 
         $button.addEventListener("click", (e) => {
             format(inputEditor, resultEditor)
         })
 
-        $before.addEventListener("input", (e) => {
-            if (!$autoFormat.checked) return
-
-            format(inputEditor, resultEditor)
-        })
-
-        // $resizer.addEventListener("mousedown", (e) => {
-        document.querySelector("#editorResizer").addEventListener("click", (e) => {
-            console.log(e.clientX, e.clientY)
-        })
-        $resizer.addEventListener("mousedown mousemove", (e) => {
-            // $resizer.
-            console.log(e.clientX, e.clientY)
-        })
+        // resizing editor width size
+        const resize = (e) => {
+            const resizeDivWidth = 15 // px
+            $editor.style.flexBasis = (e.clientX - (resizeDivWidth + (resizeDivWidth / 2))) + "px"
+        }
+        $resizer.addEventListener("mousedown", (e) => {
+            if (e.offsetX < 15) {
+                document.addEventListener("mousemove", resize, false)
+            }
+        }, false);
+        document.addEventListener("mouseup", (e) => {
+            document.removeEventListener("mousemove", resize, false)
+        }, false);
     }, false);
 </script>
 </body>
