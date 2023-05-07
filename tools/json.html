@@ -135,9 +135,9 @@
             </div>
             <div class="row editor-container">
                 <div class="editor-view">
-                    <span class="editor"><div id="inputEditor" class="vertical-area"></div></span>
-                    <span class="resizer" id="editorResizer">︙</span>
-                    <span class="editor"><div id="resultEditor" class="vertical-area"></div></span>
+                    <div class="editor"><div id="inputEditor" class="vertical-area"></div></div>
+                    <div class="resizer" id="editorResizer">︙</div>
+                    <div class="editor"><div id="resultEditor" class="vertical-area"></div></div>
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@
         // TODO: font size
         // TODO: save local history
         // TODO: add shortcut to expend editor width
-        // TODO: add resizer editor width
+        // TODO: add settings into local history
 
         // editor
         const inputEditor = ace.edit("inputEditor");
