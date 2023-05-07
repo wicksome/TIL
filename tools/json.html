@@ -217,12 +217,18 @@
         const $resizer = document.querySelector("#editorResizer")
 
         $copy.addEventListener("click", (e) => {
-            const sel = resultEditor.selection.toJSON()
-            resultEditor.selectAll()
-            resultEditor.focus()
-            document.execCommand("copy")
-            resultEditor.selection.fromJSON(sel)
-            // navigator.clipboard.writeText(content)
+            const content = resultEditor.getValue()
+            navigator.clipboard.writeText(content).then(() => {
+                const beforeLabel = $copy.textContent
+                $copy.classList.remove("btn-primary")
+                $copy.classList.add("btn-success")
+                $copy.textContent = "copied!"
+                setTimeout(() => {
+                    $copy.classList.remove("btn-success")
+                    $copy.classList.add("btn-primary")
+                    $copy.textContent = beforeLabel
+                }, 500)
+            })
         })
 
         $button.addEventListener("click", (e) => {
@@ -236,7 +242,7 @@
         })
 
         // $resizer.addEventListener("mousedown", (e) => {
-        $resizer.addEventListener("click", (e) => {
+        document.querySelector("#editorResizer").addEventListener("click", (e) => {
             console.log(e.clientX, e.clientY)
         })
         $resizer.addEventListener("mousedown mousemove", (e) => {
