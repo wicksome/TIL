@@ -815,19 +815,694 @@ CalDAV 클라이언트는 특정 WebDAV 속성 값, 모든 WebDAV 속성 값 또
 
 === 7.7. Non-Standard Components, Properties, and Parameters
 
+서버는 클라이언트가 응답에 제공된 캘린더 데이터에 비표준 구성 요소, 속성 및 매개 변수를 반환하도록 요청할 수 있도록 캘린더 REPORT 요청에서 CALDAV:calendar-data XML 요소에 비표준 구성 요소, 속성 또는 매개 변수 이름을 사용할 수 있도록 지원해야 합니다.
+
+서버는 캘린더 REPORT 요청의 CALDAV:filter XML 요소에 지정된 CALDAV:comp-filter, CALDAV:prop-filter 및 CALDAV:param-filter XML 요소에서 비표준 구성 요소, 속성 또는 매개 변수 이름을 사용하는 것을 지원할 수 있습니다.
+
+서버가 쿼리를 지원하지 않는 비표준 구성 요소, 속성 또는 매개변수 이름을 참조하는 CALDAV:comp-filter, CALDAV:prop- filter 또는 CALDAV:param-filter XML 요소를 캘린더 REPORT 요청에 사용하는 경우 서버는 CALDAV:supported-filter 전제 조건에 따라 실패해야 합니다.
+
 === 7.8. CALDAV:calendar-query REPORT
+
+CALDAV:calendar-query REPORT는 지정된 필터와 일치하는 모든 캘린더 객체 리소스를 검색합니다.  이 보고서의 응답에는 요청에 지정된 모든 WebDAV 속성 및 캘린더 개체 리소스 데이터가 포함됩니다.  CALDAV: calendar-data XML 요소의 경우 필터와 일치하는 캘린더 객체 리소스 데이터에서 반환되어야 하는 캘린더 구성 요소 및 속성을 명시적으로 지정할 수 있습니다.
+
+이 보고서의 형식은 PROPFIND 메서드를 모델로 합니다.  CALDAV:calendar-query REPORT의 요청 및 응답 본문은 PROPFIND에서도 사용되는 XML 요소를 사용합니다.  특히 요청에는 반환할 WebDAV 속성을 요청하는 XML 요소가 포함될 수 있습니다.  이 경우 응답은 특정 속성 결과를 반환하는 데 사용되는 DAV:multistatus 응답 요소와 관련하여 PROPFIND와 동일한 동작을 따라야 합니다.  예를 들어, 존재하지 않는 속성 값을 검색하라는 요청은 오류이므로 404(찾을 수 없음) 상태 값을 포함하는 응답 XML 요소에 유의해야 합니다.
+
+CALDAV:calendar-query REPORT에 대한 지원이 필요합니다.
+
+**Marshalling:**
+
+요청 본문은 섹션 9.5에 정의된 대로 CALDAV:calendar-query XML 요소여야 합니다.
+
+요청에 Depth 헤더가 포함될 수 있습니다.  Depth 헤더가 포함되지 않으면 Depth:0으로 가정합니다.
+
+성공적인 요청에 대한 응답 본문은 반드시 DAV: 다중 상태 XML 요소여야 합니다(즉, 응답은 PROPFIND에 대한 응답과 동일한 형식을 사용함).  응답 요소가 없는 경우 반환된 DAV:multistatus XML 요소는 비어 있습니다.
+
+성공적인 CALDAV:캘린더 쿼리 REPORT 요청에 대한 응답 본문에는 검색 필터와 일치하는 각 iCalendar 개체에 대한 DAV:응답 요소가 포함되어야 합니다.  캘린더 데이터는 DAV: propstat XML 요소 내부의 CALDAV:calendar-data XML 요소에 반환됩니다.
+
+**Preconditions:**
+
+(CALDAV:supported-calendar-data): CALDAV:calendar-data XML 요소(9.6절 참조)의 "content-type" 및 "version" 속성은 캘린더 객체 리소스에 대해 서버에서 지원하는 미디어 유형을 지정합니다.
+
+(CALDAV:valid-filter): REPORT 요청에 지정된 CALDAV:filter XML 요소(9.7절 참조)가 유효해야 합니다.  예를 들어, `<C:comp name="VEVENT">` 요소는 `<C:comp name="VTODO">` 요소에 중첩될 수 없으며, `<C:time-range start="..." end="...">` 요소는 `<C:prop name="SUMMARY">` 요소에 중첩될 수 없습니다.
+
+(CALDAV:param-filter): REPORT 요청의 CALDAV:filter XML 요소(9.7절 참조)에 사용되는 CALDAV:comp-filter(9.7.1절 참조), CALDAV:prop-filter(9.7.2절 참조), CALDAV:param-filter(9.7.3절 참조) XML 요소는 서버에서 쿼리가 지원되는 구성 요소, 속성 및 매개변수만 참조한다, CALDAV: 필터 요소가 지원되지 않는 컴포넌트, 속성 또는 파라미터를 참조하려고 시도하면 이 전제 조건이 위반됩니다.  서버는 지원하지 않는 CALDAV:comp-filter, CALDAV:prop-filter 또는 CALDAV:param-filter를 보고해야 합니다.
+
+[source]
+----
+<!ELEMENT supported-filter (comp-filter*,
+                            prop-filter*,
+                            param-filter*)> >
+----
+
+(CALDAV:valid-calendar-data): REPORT 요청에 지정된 표준 시간대는 단일 유효한 VTIMEZONE 구성 요소를 포함하는 유효한 iCalendar 객체여야 합니다.
+
+(CALDAV:min-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 종료 DATE 또는 DATE-TIME 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:min-date-time 속성 값(섹션 5.2.6)보다 크거나 같아야 합니다;
+
+(CALDAV:max-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작거나 같아야 합니다;
+
+(CALDAV:supported-collation): 콜레이션을 지정하는 모든 XML 속성은 7.5절에 설명된 대로 서버에서 지원하는 콜레이션을 지정해야 합니다.
+
+**Postconditions:**
+
+(DAV:number-of-matches-within-limits): 일치하는 캘린더 객체 리소스의 수가 서버별로 미리 정의된 한도 내에 있어야 합니다.  예를 들어 검색 사양으로 인해 매우 많은 수의 응답이 반환되는 경우 이 조건이 트리거될 수 있습니다.
 
 ==== 7.8.1. Example: Partial Retrieval of Events by Time Range
 
+이 예제에서 클라이언트는 서버에 2006년 1월 4일 오전 00:00:00 UTC부터 2006년 1월 5일 오전 00:00:00 UTC까지의 시간 범위와 겹치는 특정 구성 요소와 VEVENT 구성 요소의 속성을 반환하도록 요청합니다.  또한 DAV:getetag 속성도 요청되어 응답의 일부로 반환됩니다.  반환되는 첫 번째 캘린더 객체는 첫 번째 인스턴스가 요청된 시간 범위를 벗어나지만 세 번째 인스턴스가 시간 범위와 겹치는 반복 이벤트입니다.  CALDAV: 캘린더 데이터 요소 제한으로 인해 VEVENT 구성 요소의 DTSTAMP 속성은 반환되지 않으며, VCALENDAR 객체에서 반환되는 유일한 속성은 VERSION입니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하십시오.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop>
+   <D:getetag/>
+   <C:calendar-data>
+     <C:comp name="VCALENDAR">
+       <C:prop name="VERSION"/>
+       <C:comp name="VEVENT">
+         <C:prop name="SUMMARY"/>
+         <C:prop name="UID"/>
+         <C:prop name="DTSTART"/>
+         <C:prop name="DTEND"/>
+         <C:prop name="DURATION"/>
+         <C:prop name="RRULE"/>
+         <C:prop name="RDATE"/>
+         <C:prop name="EXRULE"/>
+         <C:prop name="EXDATE"/>
+         <C:prop name="RECURRENCE-ID"/>
+       </C:comp>
+       <C:comp name="VTIMEZONE"/>
+     </C:comp>
+   </C:calendar-data>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VEVENT">
+       <C:time-range start="20060104T000000Z"
+                     end="20060105T000000Z"/>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd2.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd2"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060106T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060106T120000
+SUMMARY:Event #2 bis bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd3.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd3"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
+
 ==== 7.8.2. Example: Partial Retrieval of Recurring Events
+
+이 예에서 클라이언트는 서버에 2006년 1월 3일 오전 00:00:00 UTC부터 2006년 1월 5일 오전 00:00:00 UTC까지의 시간 범위와 겹치는 VEVENT 구성 요소를 반환하도록 요청합니다.  CALDAV:limit-recurrence-set 요소를 사용하면 서버는 해당 요소에 지정된 시간 범위와 겹치거나 시간 범위와 겹치는 다른 인스턴스에 영향을 주는 재정의된 반복 구성 요소만 반환합니다(예: THISANDFUTURE 동작의 경우).  이 예에서는 일치하는 리소스에서 첫 번째로 재정의된 구성 요소가 반환되지만 두 번째 구성 요소는 반환되지 않습니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop>
+   <C:calendar-data>
+     <C:limit-recurrence-set start="20060103T000000Z"
+                             end="20060105T000000Z"/>
+   </C:calendar-data>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VEVENT">
+       <C:time-range start="20060103T000000Z"
+                     end="20060105T000000Z"/>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd2.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd2"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd3.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd3"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
 
 ==== 7.8.3. Example: Expanded Retrieval of Recurring Events
 
+이 예에서 클라이언트는 서버에 2006년 1월 2일 오전 00:00:00 UTC부터 2006년 1월 5일 오전 00:00:00 UTC까지의 시간 범위와 겹치는 VEVENT 구성 요소를 반환하고 개별 반복 인스턴스 캘린더 구성 요소로 확장된 반복 캘린더 구성 요소를 반환하도록 요청합니다.  CALDAV:expand 요소를 사용하면 서버는 해당 요소에 지정된 시간 범위와 겹치는 재정의된 반복 인스턴스만 반환합니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop>
+   <C:calendar-data>
+     <C:expand start="20060103T000000Z"
+               end="20060105T000000Z"/>
+   </C:calendar-data>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VEVENT">
+       <C:time-range start="20060103T000000Z"
+                     end="20060105T000000Z"/>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd2.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd2"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART:20060103T170000
+DURATION:PT1H
+RECURRENCE-ID:20060103T170000
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART:20060104T190000
+DURATION:PT1H
+RECURRENCE-ID:20060104T170000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd3.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd3"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART:20060104T150000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
+
 ==== 7.8.4. Example: Partial Retrieval of Stored Free Busy Components
+
+이 예에서 클라이언트는 서버에 2006년 1월 2일 오전 00:00:00 UTC(포함)부터 2006년 1월 3일 오전 00:00:00 UTC(제외)까지의 시간 범위와 겹치는 사용 중 정보(free busy)가 있는 VFREEBUSY 구성 요소를 반환하도록 요청합니다.  CALDAV:limit-freebusy-set 요소를 사용하면 서버가 해당 요소에 지정된 시간 범위와 겹치는 FREEBUSY 속성 값만 반환합니다.  이 예는 캘린더 소유자가 바쁜 시간을 검색하는 예가 아닙니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop>
+   <C:calendar-data>
+     <C:limit-freebusy-set start="20060102T000000Z"
+                             end="20060103T000000Z"/>
+   </C:calendar-data>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VFREEBUSY">
+       <C:time-range start="20060102T000000Z"
+                       end="20060103T000000Z"/>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd8.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd8"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VFREEBUSY
+ORGANIZER;CN="Bernard Desruisseaux":mailto:bernard@example.com
+UID:76ef34-54a3d2@example.com
+DTSTAMP:20050530T123421Z
+DTSTART:20060101T100000Z
+DTEND:20060108T100000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060102T100000Z/20060102T120000Z
+END:VFREEBUSY
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
 
 ==== 7.8.5. Example: Retrieval of To-Dos by Alarm Time Range
 
+이 예제에서 클라이언트는 지정된 시간 범위에서 알람 트리거가 예약된 VTODO 구성 요소를 반환하도록 서버에 요청합니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop xmlns:D="DAV:">
+   <D:getetag/>
+   <C:calendar-data/>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VTODO">
+       <C:comp-filter name="VALARM">
+         <C:time-range start="20060106T100000Z"
+                         end="20060107T100000Z"/>
+       </C:comp-filter>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd4.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd4"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235300Z
+DUE;TZID=US/Eastern:20060106T120000
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:NEEDS-ACTION
+SUMMARY:Task #2
+UID:E10BA47467C5C69BB74E8720@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
+
 ==== 7.8.6. Example: Retrieval of Event by UID
+
+이 예제에서 클라이언트는 서버에 UID 속성이 "DC6C50A017428C5216A2F1CD@example.com"로 설정된 VEVENT 컴포넌트를 반환하도록 요청합니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop xmlns:D="DAV:">
+   <D:getetag/>
+   <C:calendar-data/>
+ </D:prop>
+ <C:filter>
+   <C:comp-filter name="VCALENDAR">
+     <C:comp-filter name="VEVENT">
+       <C:prop-filter name="UID">
+         <C:text-match collation="i;octet"
+         >DC6C50A017428C5216A2F1CD@example.com</C:text-match>
+       </C:prop-filter>
+     </C:comp-filter>
+   </C:comp-filter>
+ </C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd3.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd3"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+</D:multistatus>
+----
 
 ==== 7.8.7. Example: Retrieval of Events by PARTSTAT
 
@@ -839,11 +1514,212 @@ CalDAV 클라이언트는 특정 WebDAV 속성 값, 모든 WebDAV 속성 값 또
 
 === 7.9. CALDAV:calendar-multiget REPORT
 
+CALDAV:calendar-multiget REPORT는 요청-URI가 컬렉션인 경우 컬렉션 내에서 특정 캘린더 객체 리소스를 검색하거나 요청-URI가 캘린더 객체 리소스인 경우 특정 캘린더 객체 리소스를 검색하는 데 사용됩니다.  이 보고서는 반환할 캘린더 객체 리소스를 결정하기 위해 CALDAV:필터 요소 대신 DAV:href 요소의 목록을 사용한다는 점을 제외하면 CALDAV:calendar-query REPORT(7.8절 참조)와 유사합니다.
+
+CALDAV:calendar-multiget REPORT에 대한 지원은 필수입니다.
+
+*Marshalling:*
+
+요청 본문은 반드시 CALDAV:calendar-multiget XML 요소여야 합니다(섹션 9.10 참조).  요청-URI가 컬렉션 리소스인 경우 DAV:href 요소는 해당 컬렉션 내의 캘린더 객체 리소스를 참조해야 하며, 컬렉션 내의 모든 깊이에 있는 캘린더 객체 리소스를 참조할 수 있습니다.  따라서 서버는 "Depth" 헤더를 무시해야 하며 클라이언트에서 전송해서는 안 됩니다.  요청-URI가 컬렉션이 아닌 리소스를 참조하는 경우 요청-URI와 동일한 단일 DAV:href 요소가 있어야 합니다.
+
+성공적인 요청에 대한 응답 본문은 반드시 DAV: 다중 상태 XML 요소여야 합니다.
+
+성공적인 CALDAV:calendar-multiget REPORT 요청에 대한 응답 본문에는 제공된 DAV:href 요소 집합에서 참조하는 각 캘린더 개체 리소스에 대한 DAV:응답 요소가 포함되어야 합니다.  캘린더 데이터는 DAV:prop 요소 내부의 CALDAV:calendar- 데이터 요소에서 반환됩니다.
+
+제공된 DAV:href 리소스에 액세스하는 데 오류가 발생하는 경우 서버는 해당 DAV:응답 요소의 DAV:status 요소에 적절한 오류 상태 코드를 반환해야 합니다.
+
+*Preconditions:*
+
+(CALDAV:supported-calendar-data): CALDAV:calendar-data XML 요소(9.6절 참조)의 "content-type" 및 "version" 속성은 캘린더 객체 리소스에 대해 서버에서 지원하는 미디어 유형을 지정합니다.
+
+(CALDAV:min-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:min-date-time 속성 값(5.2.6절)보다 크거나 같아야 합니다;
+
+(CALDAV:max-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작거나 같아야 합니다;
+
+*Postconditions:*
+
+None.
+
 ==== 7.9.1. Example: Successful CALDAV:calendar-multiget REPORT
+
+이 예제에서 클라이언트는 서버에 특정 URI가 참조하는 VEVENT 컴포넌트의 특정 속성을 반환하도록 요청합니다.  또한 DAV:getetag 속성도 요청되어 응답의 일부로 반환됩니다.  이 예에서는 http://cal.example.com/bernard/work/mtg1.ics 리소스가 존재하지 않으므로 오류 상태 응답이 반환됩니다.
+
+이 예제에서 타겟팅하는 캘린더 데이터는 부록 B를 참조하세요.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-multiget xmlns:D="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:prop>
+   <D:getetag/>
+   <C:calendar-data/>
+ </D:prop>
+ <D:href>/bernard/work/abcd1.ics</D:href>
+ <D:href>/bernard/work/mtg1.ics</D:href>
+</C:calendar-multiget>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd1.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd1"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001102Z
+DTSTART;TZID=US/Eastern:20060102T100000
+DURATION:PT1H
+SUMMARY:Event #1
+Description:Go Steelers!
+UID:74855313FA803DA593CD579A@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/mtg1.ics</D:href>
+   <D:status>HTTP/1.1 404 Not Found</D:status>
+ </D:response>
+</D:multistatus>
+----
 
 === 7.10. CALDAV:free-busy-query REPORT
 
+CALDAV:free-busy-query REPORT는 요청의 대상이 되고 현재 사용자에게 CALDAV:read-free- busy 또는 DAV:read 권한이 부여된 모든 캘린더 객체 리소스에 대한 사용 가능 시간 정보를 포함하는 VFREEBUSY 구성 요소를 생성합니다.
+
+TRANSP 속성이 없거나 TRANSP 속성이 OPAQUE로 설정된 VEVENT 구성 요소와 VFREEBUSY 구성 요소만 여유 사용 시간 정보를 생성할 때 고려해야 합니다.
+
+VEVENT 컴포넌트의 경우, 아래 표에 설명된 바와 같이 반환된 VFREEBUSY 컴포넌트의 FREEBUSY 프로퍼티의 사용 가능 또는 사용 중 시간 유형(FBTYPE)은 TRANSP 및 STATUS 프로퍼티의 값에서 파생되어야 합니다:
+
+[source]
+----
++---------------------------++------------------+
+|          VEVENT           ||    VFREEBUSY     |
++-------------+-------------++------------------+
+| TRANSP      | STATUS      || FBTYPE           |
++=============+=============++==================+
+|             | CONFIRMED   || BUSY             |
+|             | (default)   ||                  |
+| OPAQUE      +-------------++------------------+
+| (default)   | CANCELLED   || FREE             |
+|             +-------------++------------------+
+|             | TENTATIVE   || BUSY-TENTATIVE   |
+|             +-------------++------------------+
+|             | x-name      || BUSY or          |
+|             |             || x-name           |
++-------------+-------------++------------------+
+|             | CONFIRMED   ||                  |
+| TRANSPARENT | CANCELLED   || FREE             |
+|             | TENTATIVE   ||                  |
+|             | x-name      ||                  |
++-------------+-------------++------------------+
+----
+
+반환된 VFREEBUSY 구성 요소에 동일한 FBTYPE 파라미터 값을 가진 중복된 사용 시간대를 지정해서는 안 됩니다.  서버는 동일한 유형의 연속되거나 겹치는 사용량이 많은 기간을 합쳐야 합니다.  FBTYPE 매개변수 값이 다른 바쁜 기간이 겹칠 수 있습니다.
+
+CALDAV:free-busy-query REPORT에 대한 지원이 필요합니다.
+
+*Marshalling:*
+
+요청 본문은 9.9절에 정의된 대로 정확히 하나의 CALDAV:free-busy-query XML 요소(9.11절 참조)여야 하며, 이 요소에는 9.9절에 정의된 대로 정확히 하나의 CALDAV:time-range XML 요소가 포함되어야 합니다.
+
+요청에 Depth 헤더가 포함될 수 있습니다.  Depth 헤더가 포함되지 않으면 Depth:0으로 간주합니다.
+
+성공적인 요청에 대한 응답 본문은 VEVENT를 포함하는 캘린더 객체 리소스의 사용 중 시간 간격을 설명하는 정확히 하나의 VFREEBUSY 구성 요소 또는 Depth 값을 만족하고 현재 사용자에게 최소한 CALDAV:read-free-busy 권한이 부여된 VFREEBUSY 구성 요소를 포함하는 iCalendar 객체여야 합니다.  이러한 조건을 충족하는 캘린더 객체 리소스가 없는 경우 FREEBUSY 속성이 없는 VFREEBUSY 구성 요소를 반환해야 합니다.  이 보고서는 바쁜 시간 정보만 반환합니다.  반환된 사용 시간 정보에서 여유 시간 정보를 유추할 수 있습니다.
+
+현재 사용자에게 Request-URI에 대한 CALDAV:read-free-busy 또는 DAV:read 권한이 부여되지 않은 경우, CALDAV:free-busy-query REPORT 요청은 실패하고 404(찾을 수 없음) 상태 값을 반환해야 합니다.  이 제한으로 인해 사용자는 CALDAV:read-free- busy 권한만 부여된 리소스의 URL을 검색할 수 없습니다.
+
+CALDAV:free-busy-query REPORT 요청은 컬렉션(일반 컬렉션 또는 캘린더 컬렉션)에 대해서만 실행할 수 있습니다.  캘린더 객체 리소스에 대해 보고서를 실행하려는 시도는 반드시 실패하고 403(금지됨) 상태 값을 반환해야 합니다.
+
+*Preconditions:*
+
+None
+
+*Postconditions:*
+
+(DAV:number-of-matches-within-limits): 일치하는 캘린더 객체 리소스의 수가 서버별로 미리 정의된 한도 내에 있어야 합니다.  예를 들어, 이 사후 조건은 지정된 CALDAV:시간 범위로 인해 응답을 계산할 때 매우 많은 수의 캘린더 개체 리소스가 고려되는 경우 실패할 수 있습니다.
+
 ==== 7.10.1. Example: Successful CALDAV:free-busy-query REPORT
+
+이 예에서 클라이언트는 서버에 2006년 1월 4일 오전 9시부터 오후 5시(동부 표준시 오후 2시부터 오후 10시) 사이에 /bernard/work/ 캘린더 컬렉션에 대한 무료 사용 중 정보를 반환하도록 요청합니다.  서버가 응답하여 1시간 간격으로 두 개의 바쁜 시간 간격을 표시하며, 그 중 하나는 잠정적인 시간입니다.
+
+이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하십시오.
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:free-busy-query xmlns:C="urn:ietf:params:xml:ns:caldav">
+ <C:time-range start="20060104T140000Z"
+                 end="20060105T220000Z"/>
+</C:free-busy-query>
+
+>> Response <<
+
+HTTP/1.1 200 OK
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: text/calendar
+Content-Length: xxxx
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Server//EN
+BEGIN:VFREEBUSY
+DTSTAMP:20050125T090000Z
+DTSTART:20060104T140000Z
+DTEND:20060105T220000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060104T150000Z/PT1H
+FREEBUSY:20060104T190000Z/PT1H
+END:VFREEBUSY
+END:VCALENDAR
+----
 
 == 8. Guidelines
 
@@ -983,17 +1859,97 @@ CalDAV를 사용하려면 서버가 주 네임스페이스를 포함하여 WebDA
 
 === 8.5. Storing and Using Attachments
 
+CalDAV 클라이언트는 캘린더 구성 요소에서 첨부파일을 인라인 또는 외부로 만들 수 있습니다.  이 섹션에는 첨부파일을 만들고 관리하기 위한 몇 가지 지침이 포함되어 있습니다.
+
 ==== 8.5.1. Inline Attachments
 
 ==== 8.5.2. External Attachments
 
 === 8.6. Storing and Using Alarms
 
+사용자가 공개 캘린더 또는 그룹 캘린더로 취급할 수 있는 캘린더 컬렉션을 포함한 모든 CalDAV 캘린더 컬렉션에는 이벤트 및 할 일에 대한 알람 정보가 포함될 수 있습니다.  사용자는 여러 장치 간에 캘린더를 동기화하고 알람을 만든 장치와 다른 장치에서 알람이 실행되도록 설정할 수 있습니다.  모든 알람 작업 유형이 완전히 상호 운용되는 것은 아닙니다(예: 재생할 사운드 파일에 이름을 지정하는 작업).
+
+* 동작이 AUDIO이고 클라이언트가 알람을 실행하도록 구성된 경우 클라이언트는 제안된 사운드를 사용할 수 있는 경우 재생하거나 다른 사운드를 재생해야 하지만, 제안된 사운드를 로컬에서 사용할 수 있는 사운드로 바꾸기 위해 알람을 다시 작성해서는 안 됩니다.
+
+* 동작이 디스플레이이고 클라이언트가 알람을 실행하도록 구성된 경우 클라이언트는 제안된 설명에 따라 디스플레이 알람을 실행하거나 합리적인 대체물을 표시해야 하지만, 자체 편의를 위해 알람을 다시 작성해서는 안 됩니다.
+
+* 동작이 이메일이고 클라이언트가 이메일을 보낼 수 없는 경우, 클라이언트는 알람을 무시해야 하지만 알람 자체는 계속 동기화해야 합니다.
+
+* 이 사양에서는 PROCEDURE 유형의 알람 실행에 대한 권장 사항은 없지만, 클라이언트가 이러한 알람을 실행하여 보안 허점을 만들지 않도록 주의해야 한다는 점을 참고하시기 바랍니다.
+
+모든 장치에서 기본 알람을 사용할 수 있도록 하기 위해 상호 운용이 불가능한 알람 정보(예: 디스플레이 알람에 사용할 색상을 정의하는 경우)는 VALARM 컴포넌트 내부의 비표준 프로퍼티에 넣어야 합니다.
+
+캘린더 객체 리소스의 변경을 허용하는 클라이언트는 리소스에 이미 존재하는 알람 데이터를 동기화해야 합니다.
+
+클라이언트는 사용자 기본 설정에 따라 이러한 방식으로 다운로드한 알람을 실행할 수 있습니다.  클라이언트가 캘린더에서 읽기 작업만 수행하고 알람 정보를 잃을 위험이 없는 경우 클라이언트는 알람 정보를 삭제할 수 있습니다.
+
+이 사양은 그룹 캘린더에서 다중 사용자 알람을 제공하거나 알람이 누구를 위한 것인지 알아내려는 시도를 하지 않습니다. 이러한 문제를 해결하려면 사용자별로 알람을 저장하거나 알람이 어떤 사용자를 대상으로 하는지 표시하는 등 iCalendar를 확장해야 할 수 있습니다.  그 동안 클라이언트는 일반적으로 공개, 그룹 또는 리소스 캘린더에 알람 정보를 업로드하지 않음으로써 상호 운용성을 극대화할 수 있습니다.
+
 == 9. XML Element Definitions
 
 === 9.1. CALDAV:calendar XML Element
 
+Name:  calendar
+
+Namespace:  urn:ietf:params:xml:ns:caldav
+
+Purpose:  Specifies the resource type of a calendar collection.
+
+Description:  See Section 4.2.
+
+Definition:
+
+     <!ELEMENT calendar EMPTY>
+
 === 9.2. CALDAV:mkcalendar XML Element
+
+Name:  mkcalendar
+
+Namespace:  urn:ietf:params:xml:ns:caldav
+
+Purpose:  Specifies a request that includes the WebDAV property
+  values to be set for a calendar collection resource when it is
+  created.
+
+Description:  See Section 5.3.1.
+
+Definition:
+
+     <!ELEMENT mkcalendar (DAV:set)>
+
+=== 9.3. CALDAV:mkcalendar-response XML Element
+
+=== 9.4. CALDAV:supported-collation XML Element
+
+=== 9.5. CALDAV:calendar-query XML Element
+
+=== 9.6. CALDAV:calendar-data XML Element
+
+==== 9.6.1. CALDAV:comp XML Element
+
+==== 9.6.2. CALDAV:allcomp XML Element
+
+==== 9.6.3. CALDAV:allprop XML Element
+
+==== 9.6.4. CALDAV:prop XML Element
+
+==== 9.6.5. CALDAV:expand XML Element
+
+==== 9.6.6. CALDAV:limit-recurrence-set XML Element
+
+==== 9.6.7. CALDAV:limit-freebusy-set XML Element
+
+=== 9.7. CALDAV:filter XML Element
+
+==== 9.7.1.
+==== 9.7.2.
+==== 9.7.3.
+==== 9.7.4.
+==== 9.7.5.
+=== 9.8.
+=== 9.9.
+=== 9.10.
+=== 9.11.
 
 == 10. Internationalization Considerations
 
@@ -1003,10 +1959,42 @@ CALDAV:calendar-query REPORT(섹션 7.8)에는 CALDAV:text-match 요소에 의�
 
 == 11. Security Considerations
 
+스누핑으로부터의 보호가 협상되지 않는 한 HTTP 프로토콜 트랜잭션은 네트워크를 통해 투명하게 전송됩니다.  이는 [RFC2818]에 정의된 대로 TLS를 사용하여 수행할 수 있습니다.  특히, TLS가 적용되지 않는 한 HTTP 기본 인증은 사용해서는 안 됩니다.
+
+서버는 악의적인 클라이언트가 신중하게 작성된 보고서를 통해 과도한 서버 리소스(CPU, 메모리, 디스크 등)를 소비하지 못하도록 적절한 예방 조치를 취해야 합니다.  예를 들어, 클라이언트가 향후 100년 동안 매초마다 발생하는 반복 이벤트를 지정하는 반복 규칙이 포함된 이벤트를 업로드하면 약 3 x 10^9개의 인스턴스가 발생할 수 있습니다!  이 범위 이상으로 반복을 확장하도록 요청하는 보고서는 서버에 대한 서비스 거부 공격으로 간주될 수 있습니다.
+
+새 리소스(캘린더 컬렉션 포함)를 생성할 때 클라이언트는 새 리소스에 할당된 리소스 이름(리소스 URI의 마지막 경로 세그먼트)이 iCalendar 리소스 자체의 데이터나 캘린더 컬렉션의 특성에 대한 정보를 노출하지 않는지 확인해야 합니다.  이는 리소스 이름에 따라 특정 iCalendar 구성 요소의 존재 여부나 컬렉션의 구성 요소 특성을 유추할 수 없도록 하기 위해 필요합니다.
+
+사용 중인 정보를 롤업할 때 사용 중인 기간이 겹치거나 인접한 경우 사용자의 이벤트에 대한 더 많은 정보가 노출됩니다(이는 사용 중인 정보를 요청하는 클라이언트에게 캘린더 소유자가 사용 중인 기간에 하나 이상의 이벤트가 있다는 사실만 알려주는 것이 아니라 캘린더 소유자가 적어도 두 개의 이벤트를 가지고 있다는 것을 알려줍니다). 따라서 캘린더 데이터 프라이버시에 대한 보수적인 접근 방식은 서버가 같은 유형의 바쁜 기간에 대해 항상 통합하도록 하는 것입니다.
+
+프로시저 알람은 클라이언트나 서버가 처리해야 하는 알려진 보안 위험이며, 특히 다른 상담원이 알람을 생성한 경우에는 더욱 그렇습니다.  클라이언트와 서버는 이러한 프로시저 알람을 실행할 필요가 없습니다.
+
+iCalendar [RFC2445] 및 iTIP [RFC2446]에 설명된 보안 고려 사항은 CalDAV에도 적용됩니다.
+
+이 외에도 CalDAV는 HTTP [RFC2616] 및 WebDAV [RFC2518], [RFC3253], [RFC3744]에 존재하지 않는 보안 고려 사항을 제기하지 않습니다.
+
 == 12. IANA Considerations
+
+이 문서는 하나의 새로운 URN을 사용하여 새로운 XML 네임스페이스를 식별합니다.  URN은 [RFC3688]에 설명된 레지스트리 메커니즘을 준수합니다.
 
 === 12.1. Namespace Registration
 
+Registration request for the CalDAV namespace:
+
+URI: urn:ietf:params:xml:ns:caldav
+
+Registrant Contact: See the "Authors' Addresses" section of this
+document.
+
+XML: None.  Namespace URIs do not represent an XML specification.
+
 == 13. Acknowledgements
 
+The authors would like to thank the following individuals for contributing their ideas and support for writing this specification: Michael Arick, Mario Bonin, Chris Bryant, Scott Carr, Andre Courtemanche, Mike Douglass, Ted Hardie, Marten den Haring, Jeffrey Harris, Sam Hartman, Helge Hess, Jeff McCullough, Alexey Melnikov, Dan Mosedale, Brian Moseley, Francois Perrault, Kervin L. Pierre, Julian F. Reschke, Wilfredo Sanchez Vega, Mike Shaver, Jari Urpalainen, Simon Vaillancourt, and Jim Whitehead.
+
+The authors would also like to thank the Calendaring and Scheduling Consortium for advice with this specification, and for organizing interoperability testing events to help refine it.
+
 == 14. References
+
+== Appendix A.
+== Appendix B.
