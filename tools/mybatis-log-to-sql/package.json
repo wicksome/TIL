@@ -1,0 +1,14 @@
+{
+  "name": "mybatis-sql-log-to-sql",
+  "version": "1.0.1",
+  "description": "convert mybatis log with parameters to SQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yeongjun.kim <opid911@gmail.com> (https://wickso.me)",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
+}
