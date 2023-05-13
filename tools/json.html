@@ -148,7 +148,10 @@
             </div>
             <div class="collapse" id="setting">
                 <div class="card card-body">
-                    <div>wrap: <input type="checkbox" id="editorLineWrap"></div>
+                    <div>
+                        <label for="editorLineWrap">wrap: </label>
+                        <input type="checkbox" id="editorLineWrap">
+                    </div>
                     <div>fontSize:
                         <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
                         <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
@@ -172,10 +175,10 @@
         </div>
     </div>
 </main>
-<div class="position-absolute bottom-0 end-0 bg-warning border-0 log-toast">
-    <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="parseLog">
+<div class="position-absolute bottom-0 end-0 border-0 log-toast">
+    <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="toastBody">
         <div class="d-flex">
-            <div class="toast-body" id="logBody"></div>
+            <div class="toast-body" id="toastContent"></div>
             <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
@@ -189,101 +192,119 @@
 <script src="https://cdn.jsdelivr.net/npm/lossless-json@2.0.9/lib/umd/lossless-json.min.js"></script>
 
 <script>
+    // editor
+    let inputEditor = undefined
+    let resultEditor = undefined
+
+    // initialize editors
+    const initEditorInstances = () => {
+        inputEditor = ace.edit("inputEditor");
+        inputEditor.setTheme("ace/theme/dawn");
+        inputEditor.session.setMode("ace/mode/json");
+
+        resultEditor = ace.edit("resultEditor");
+        resultEditor.setTheme("ace/theme/dawn");
+        resultEditor.session.setMode("ace/mode/json");
+        resultEditor.session.setUseWorker(false)
+        resultEditor.setShowPrintMargin(false)
+        resultEditor.setReadOnly(true)
+
+        console.log("init editor instances", [inputEditor, resultEditor])
+    }
+
+    const getCurrentEditorOptions = () => {
+        const defaultOptions = {
+            fontFamily: "JetBrains Mono",
+            fontSize: 12,
+            wrap: null,
+            tabSize: 2,
+            useSoftTabs: false,
+            showInvisibles: false,
+        }
+        const savedEditorOptionsStr = localStorage.getItem("editorOptions")
+
+        let savedEditorOptions = {}
+        if (!!savedEditorOptionsStr) {
+            savedEditorOptions = JSON.parse(savedEditorOptionsStr)
+        }
+        const currentOptions = JSON.parse(JSON.stringify(defaultOptions))
+
+        return Object.assign(currentOptions, savedEditorOptions)
+    }
+
+    const initEditorOptions = () => {
+        if (!inputEditor || !resultEditor) {
+            console.error("not yet init editor")
+            return
+        }
+
+        const defaultOptions = getCurrentEditorOptions()
+        updateEditorOptions(defaultOptions)
+
+        // apply setting
+        document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
+    }
+
+    const updateEditorOptions = (options) => {
+        if (!inputEditor || !resultEditor) {
+            console.error("not yet init editor")
+            return
+        }
+
+        // validate
+        if (!!options.fontSize && (options.fontSize < 10 || options.fontSize > 100)) {
+            console.warn("fontSize min: 10, max: 100")
+            return
+        }
+
+        const currentOptions = getCurrentEditorOptions()
+        const updateOptions = JSON.parse(JSON.stringify(currentOptions))
+        if (!!options) {
+            Object.assign(updateOptions, options)
+        }
+        inputEditor.setOptions(updateOptions)
+        resultEditor.setOptions(updateOptions)
+        localStorage.setItem("editorOptions", JSON.stringify(updateOptions))
+
+        console.log("updated editor options", updateOptions)
+    }
+
     // json formatter
     let temp = ""
     const format = (src, dest) => {
         const content = src.getValue()
-        if (content.trim() === "") return
         if (temp === content) return
 
         let result = content
         try {
             result = LosslessJSON.parse(result)
             result = LosslessJSON.stringify(result, undefined, 2)
-            document.querySelector("#parseLog").classList.remove("show")
             console.log(result)
         } catch (e) {
             console.warn(e)
-            const $log = document.querySelector("#logBody")
-            $log.innerHTML = e.message
-
-            document.querySelector("#parseLog").classList.add("show")
-
-            const toastTrigger = document.getElementById('liveToastBtn')
-            const toastLiveExample = document.getElementById('liveToast')
-
-            if (toastTrigger) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-                toastTrigger.addEventListener('click', () => {
-                    toastBootstrap.show()
-                })
-            }
-
-            setTimeout(() => {
-                document.querySelector("#parseLog").classList.remove("show")
-            }, 1000)
+            document.querySelector("#toastContent").innerHTML = `⚠️ ${e.message}`
+            const toastBody = bootstrap.Toast.getOrCreateInstance(document.getElementById('toastBody'))
+            toastBody.show()
             return
         }
 
+        console.log("result", result)
         dest.setValue("")
         dest.insert(result.trim())
         temp = content
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const DEFAULT_FONT_SIZE = 12
-        const DEFAULT_LINE_WRAP = false
         // TODO: save local history
         // TODO: add shortcut to expend editor width
-        // TODO: add settings into local history
-        const fontSizeItem = localStorage.getItem("fontSize")
-        let fontSize = DEFAULT_FONT_SIZE
-        if (!!fontSizeItem) {
-            fontSize = parseInt(fontSizeItem)
-        }
-        console.log("fontSize", fontSize)
-
-        const lineWrapItem = localStorage.getItem("lineWrap")
-        let lineWrap = DEFAULT_LINE_WRAP
-        if (!!lineWrapItem) {
-            lineWrap = Boolean(lineWrapItem)
-        }
-        console.log("lineWrap", lineWrap)
 
         // editor
-        const inputEditor = ace.edit("inputEditor");
-        inputEditor.setTheme("ace/theme/dawn");
-        inputEditor.setOptions({
-            fontSize: fontSize,
-            fontFamily: "JetBrains Mono",
-            tabSize: 2,
-            useSoftTabs: false,
-            showInvisibles: false,
-            wrap: lineWrap,
-        })
-        inputEditor.session.setMode("ace/mode/json");
-        console.log("lineWrap", inputEditor.getOption("indentedSoftWrap"))
-        console.log("lineWrap", inputEditor.getOption("wrap"))
-
-        const resultEditor = ace.edit("resultEditor");
-        resultEditor.setTheme("ace/theme/dawn");
-        resultEditor.setOptions({
-            fontSize: fontSize,
-            fontFamily: "JetBrains Mono",
-            tabSize: 2,
-            useSoftTabs: true,
-            showInvisibles: false,
-            wrap: lineWrap,
-        })
-        resultEditor.session.setMode("ace/mode/json");
-        resultEditor.session.setUseWorker(false)
-        resultEditor.setShowPrintMargin(false)
-        resultEditor.setReadOnly(true)
+        initEditorInstances()
+        initEditorOptions()
 
         // add editor events
         inputEditor.on("input", (e) => {
             if (!$autoFormat.checked) return
-
             format(inputEditor, resultEditor)
         })
 
@@ -297,9 +318,6 @@
         const $fontSizeDown = document.querySelector("#sizeDownJsonFont")
         const $fontSizeReset = document.querySelector("#resetJsonFont")
         const $editorLineWrap = document.querySelector("#editorLineWrap")
-
-        // init settings
-        $editorLineWrap.checked = lineWrap
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
@@ -348,44 +366,22 @@
 
         // font size events
         $fontSizeUp.addEventListener("click", (e) => {
-            const size = inputEditor.getFontSize() + 1
-            if (size > 100) {
-                console.warn("maximum fontSize is 100")
-                return
-            }
-            inputEditor.setFontSize(size)
-            resultEditor.setFontSize(size)
-            console.log(`update fontSize to ${size}`)
-            localStorage.setItem("fontSize", size)
+            const size = parseInt(inputEditor.getFontSize()) + 1
+            updateEditorOptions({fontSize: size})
         })
         $fontSizeDown.addEventListener("click", (e) => {
-            const size = inputEditor.getFontSize() - 1
-            if (size < 10) {
-                console.warn("minimum fontSize is 10")
-                return
-            }
-            inputEditor.setFontSize(size)
-            resultEditor.setFontSize(size)
-            console.log(`update fontSize to ${size}`)
-            localStorage.setItem("fontSize", size)
+            const size = parseInt(inputEditor.getFontSize()) - 1
+            updateEditorOptions({fontSize: size})
         })
         $fontSizeReset.addEventListener("click", (e) => {
-            console.log(`reset fontSize`)
-            inputEditor.setFontSize(DEFAULT_FONT_SIZE)
-            resultEditor.setFontSize(DEFAULT_FONT_SIZE)
-            localStorage.removeItem("fontSize")
+            updateEditorOptions({fontSize: null})
         })
 
-        // settings
+        // etc options
         $editorLineWrap.addEventListener("change", (e) => {
-            const enable = e.target.checked
-            inputEditor.setOption("wrap", enable)
-            resultEditor.setOption("wrap", enable)
-            if (enable) {
-                localStorage.setItem("lineWrap", enable)
-            } else {
-                localStorage.removeItem("lineWrap")
-            }
+            let enable = null
+            if (e.target.checked) enable = true
+            updateEditorOptions({wrap: enable})
         })
     }, false);
 </script>
