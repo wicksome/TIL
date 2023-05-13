@@ -210,9 +210,11 @@
         resultEditor.setReadOnly(true)
 
         const latestJsonContent = localStorage.getItem("latestJsonContent")
-        inputEditor.setValue("")
-        inputEditor.insert(latestJsonContent)
-        format(inputEditor, resultEditor)
+        if (!!latestJsonContent) {
+            inputEditor.setValue("")
+            inputEditor.insert(latestJsonContent)
+            format(inputEditor, resultEditor)
+        }
 
         console.log("init editor instances", [inputEditor, resultEditor])
     }
