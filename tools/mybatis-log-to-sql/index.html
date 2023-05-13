@@ -1,0 +1,191 @@
+<!DOCTYPE>
+<html>
+
+<head>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-font-smoothing: antialiased;
+      -o-font-smoothing: antialiased;
+      font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      font-family: "Roboto", Helvetica, Arial, sans-serif;
+      font-weight: 100;
+      font-size: 12px;
+      line-height: 30px;
+      color: #777;
+      /* background: hsl(0, 0%, 24%); */
+      background: url('https://images.techhive.com/images/article/2016/11/code-1839406-100696509-orig.jpg') no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    #contact input[type="text"],
+    #contact input[type="email"],
+    #contact input[type="tel"],
+    #contact input[type="url"],
+    #contact textarea,
+    #contact button[type="submit"] {
+      font: 400 12px/16px "Roboto", Helvetica, Arial, sans-serif;
+    }
+
+    #contact {
+      background: #F9F9F9;
+      padding: 25px;
+      margin: 150px 0;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+
+    #contact h3 {
+      display: block;
+      font-size: 30px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    #contact h4 {
+      margin: 5px 0 15px;
+      display: block;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    fieldset {
+      border: medium none !important;
+      margin: 0 0 10px;
+      min-width: 100%;
+      padding: 0;
+      width: 100%;
+    }
+
+    #contact input[type="text"],
+    #contact input[type="email"],
+    #contact input[type="tel"],
+    #contact input[type="url"],
+    #contact textarea {
+      width: 100%;
+      border: 1px solid #ccc;
+      background: #FFF;
+      margin: 0 0 5px;
+      padding: 10px;
+    }
+
+    #contact input[type="text"]:hover,
+    #contact input[type="email"]:hover,
+    #contact input[type="tel"]:hover,
+    #contact input[type="url"]:hover,
+    #contact textarea:hover {
+      -webkit-transition: border-color 0.3s ease-in-out;
+      -moz-transition: border-color 0.3s ease-in-out;
+      transition: border-color 0.3s ease-in-out;
+      border: 1px solid #aaa;
+    }
+
+    #contact textarea {
+      height: 130px;
+      max-width: 100%;
+      resize: none;
+    }
+
+    #contact #parser {
+      cursor: pointer;
+      width: 100%;
+      border: none;
+      background: #CE0003;
+      color: #FFF;
+      margin: 0 0 5px;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    #contact #parser:hover {
+      background: #92230C;
+      -webkit-transition: background 0.3s ease-in-out;
+      -moz-transition: background 0.3s ease-in-out;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    #contact #parser:active {
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .copyright {
+      text-align: center;
+    }
+
+    #contact input:focus,
+    #contact textarea:focus {
+      outline: 0;
+      border: 1px solid #aaa;
+    }
+
+     ::-webkit-input-placeholder {
+      color: #888;
+    }
+
+     :-moz-placeholder {
+      color: #888;
+    }
+
+     ::-moz-placeholder {
+      color: #888;
+    }
+
+     :-ms-input-placeholder {
+      color: #888;
+    }
+  </style>
+</head>
+<div class="container">
+
+  <body>
+    <a href="https://github.com/wicksome/mybatis-log-to-sql"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+    <div id="contact">
+      <h3><b>Mybatis Log Parser</b></h3>
+      <h4>Parsing mybatis's log and convert to SQL</h4>
+      <!-- <input type="radio" id="contactChoice1" name="contact" value="email" checked> -->
+      <!-- <label for="contactChoice1">Email</label> -->
+      <!-- <input type="radio" id="contactChoice2" name="contact" value="phone"> -->
+      <!-- <label for="contactChoice2">Phone</label> -->
+      <textarea id="originalLog" placeholder="Please write original log." tabindex="5"></textarea>
+      <textarea id="parsedSql" placeholder="Parsed SQL." tabindex="5" onfocus="this.select();" onmouseup="return false;"></textarea>
+      <button name="pasing" type="button" id="parser" data-submit="...Sending">Parse</button>
+      <p class="copyright">Written by <a href="https://wickso.me" target="_blank" title="wicksome">wicksome</a>, Designed by <a href="https://colorlib.com"
+          target="_blank" title="Colorlib">Colorlib</a></p>
+    </div>
+</div>
+
+</body>
+<script src="mybatis-log-to-sql.js"></script>
+<script>
+  // const converter = require('./mybatis-log-to-sql.js');
+  document.getElementById('parser').addEventListener('click', () => {
+    const data = document.getElementById('originalLog').value.split('\n');
+    if(!data || data.length === 0 || data[0].length === 0) {
+        alert('Empty original log');
+        document.getElementById('originalLog').focus();
+        return;
+    }
+    document.getElementById('parsedSql').value = myBatisLogParser(data[0], data[1]);
+  });
+</script>
+
+</html>
