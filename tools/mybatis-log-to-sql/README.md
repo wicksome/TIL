@@ -6,7 +6,7 @@
 
 ![demo](https://user-images.githubusercontent.com/5036939/31315987-d1997990-ac5e-11e7-9012-b8f76352eb48.png)
 
-https://wickso.me/mybatis-log-to-sql/
+https://wickso.me/tools/mybatis-log-to-sql/
 
 **AS-IS**
 
