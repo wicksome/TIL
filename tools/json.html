@@ -139,6 +139,7 @@
                     </div>
                 </div>
                 <div class="col float-end">
+                    <button type="button" class="btn btn-dark btn-sm float-end" id="resetJsonFont">reset</button>
                     <button type="button" class="btn btn-dark btn-sm float-end" id="sizeDownJsonFont">-</button>
                     <button type="button" class="btn btn-dark btn-sm float-end" id="sizeUpJsonFont">+</button>
                 </div>
@@ -183,6 +184,7 @@
         crossorigin="anonymous"></script>
 
 <script>
+    // json formatter
     let temp = ""
     const format = (src, dest) => {
         const content = src.getValue()
@@ -213,15 +215,23 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const DEFAULT_FONT_SIZE = 12
         // TODO: font size
         // TODO: save local history
         // TODO: add shortcut to expend editor width
         // TODO: add settings into local history
+        const fontSizeItem = localStorage.getItem("fontSize")
+        let fontSize = DEFAULT_FONT_SIZE
+        if (!!fontSizeItem) {
+            fontSize = parseInt(fontSizeItem)
+        }
+        console.log("fontSize", fontSize)
 
         // editor
         const inputEditor = ace.edit("inputEditor");
         inputEditor.setTheme("ace/theme/dawn");
         inputEditor.setOptions({
+            fontSize: fontSize,
             fontFamily: "JetBrains Mono",
             tabSize: 2,
             useSoftTabs: false,
@@ -232,6 +242,7 @@
         const resultEditor = ace.edit("resultEditor");
         resultEditor.setTheme("ace/theme/dawn");
         resultEditor.setOptions({
+            fontSize: fontSize,
             fontFamily: "JetBrains Mono",
             tabSize: 2,
             useSoftTabs: true,
@@ -258,6 +269,7 @@
         const $editor = document.querySelector(".editor-view > .editor:first-child")
         const $fontSizeUp = document.querySelector("#sizeUpJsonFont")
         const $fontSizeDown = document.querySelector("#sizeDownJsonFont")
+        const $fontSizeReset = document.querySelector("#resetJsonFont")
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
@@ -302,17 +314,26 @@
 
         // font size events
         $fontSizeUp.addEventListener("click", (e) => {
-            const size = inputEditor.getFontSize()
-            inputEditor.setFontSize(size + 1)
-            resultEditor.setFontSize(size + 1)
+            const size = inputEditor.getFontSize() + 1
+            inputEditor.setFontSize(size)
+            resultEditor.setFontSize(size)
+            console.log(`update fontSize to ${size}`)
+            localStorage.setItem("fontSize", size)
         })
         $fontSizeDown.addEventListener("click", (e) => {
-            const size = inputEditor.getFontSize()
-            inputEditor.setFontSize(size - 1)
-            resultEditor.setFontSize(size - 1)
+            const size = inputEditor.getFontSize() - 1
+            inputEditor.setFontSize(size)
+            resultEditor.setFontSize(size)
+            console.log(`update fontSize to ${size}`)
+            localStorage.setItem("fontSize", size)
+        })
+        $fontSizeReset.addEventListener("click", (e) => {
+            console.log(`reset fontSize`)
+            inputEditor.setFontSize(DEFAULT_FONT_SIZE)
+            resultEditor.setFontSize(DEFAULT_FONT_SIZE)
+            localStorage.removeItem("fontSize")
         })
     }, false);
 </script>
 </body>
 </html>
-
