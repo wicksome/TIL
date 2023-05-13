@@ -144,18 +144,15 @@
                             aria-expanded="false" aria-controls="setting">
                         settings
                     </button>
-
-                    <button type="button" class="btn btn-dark float-end" id="sizeDownJsonFont">-</button>
-                    <button type="button" class="btn btn-dark float-end" id="sizeUpJsonFont">+</button>
                 </div>
             </div>
             <div class="collapse" id="setting">
                 <div class="card card-body">
                     <div>wrap: <input type="checkbox" id="editorLineWrap"></div>
                     <div>fontSize:
-                        <button type="button" class="btn btn-warning"
-                                id="resetJsonFont">reset
-                        </button>
+                        <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
+                        <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
+                        <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>
                     </div>
                 </div>
                 <br/>
@@ -176,7 +173,7 @@
     </div>
 </main>
 <div class="position-absolute bottom-0 end-0 bg-warning border-0 log-toast">
-    <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="log">
+    <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="parseLog">
         <div class="d-flex">
             <div class="toast-body" id="logBody"></div>
             <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -203,16 +200,27 @@
         try {
             result = LosslessJSON.parse(result)
             result = LosslessJSON.stringify(result, undefined, 2)
-            document.querySelector("#log").classList.remove("show")
+            document.querySelector("#parseLog").classList.remove("show")
             console.log(result)
         } catch (e) {
             console.warn(e)
             const $log = document.querySelector("#logBody")
             $log.innerHTML = e.message
 
-            document.querySelector("#log").classList.add("show")
+            document.querySelector("#parseLog").classList.add("show")
+
+            const toastTrigger = document.getElementById('liveToastBtn')
+            const toastLiveExample = document.getElementById('liveToast')
+
+            if (toastTrigger) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                toastTrigger.addEventListener('click', () => {
+                    toastBootstrap.show()
+                })
+            }
+
             setTimeout(() => {
-                document.querySelector("#log").classList.remove("show")
+                document.querySelector("#parseLog").classList.remove("show")
             }, 1000)
             return
         }
@@ -341,6 +349,10 @@
         // font size events
         $fontSizeUp.addEventListener("click", (e) => {
             const size = inputEditor.getFontSize() + 1
+            if (size > 100) {
+                console.warn("maximum fontSize is 100")
+                return
+            }
             inputEditor.setFontSize(size)
             resultEditor.setFontSize(size)
             console.log(`update fontSize to ${size}`)
@@ -348,6 +360,10 @@
         })
         $fontSizeDown.addEventListener("click", (e) => {
             const size = inputEditor.getFontSize() - 1
+            if (size < 10) {
+                console.warn("minimum fontSize is 10")
+                return
+            }
             inputEditor.setFontSize(size)
             resultEditor.setFontSize(size)
             console.log(`update fontSize to ${size}`)
