@@ -209,6 +209,11 @@
         resultEditor.setShowPrintMargin(false)
         resultEditor.setReadOnly(true)
 
+        const latestJsonContent = localStorage.getItem("latestJsonContent")
+        inputEditor.setValue("")
+        inputEditor.insert(latestJsonContent)
+        format(inputEditor, resultEditor)
+
         console.log("init editor instances", [inputEditor, resultEditor])
     }
 
@@ -295,10 +300,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // TODO: save local history
-        // TODO: add shortcut to expend editor width
-
-        // editor
         initEditorInstances()
         initEditorOptions()
 
@@ -306,6 +307,7 @@
         inputEditor.on("input", (e) => {
             if (!$autoFormat.checked) return
             format(inputEditor, resultEditor)
+            localStorage.setItem("latestJsonContent", inputEditor.getValue())
         })
 
         // add dom events
