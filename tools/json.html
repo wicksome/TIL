@@ -139,9 +139,9 @@
                     </div>
                 </div>
                 <div class="col float-end">
-                    <button type="button" class="btn btn-dark btn-sm float-end" id="resetJsonFont">reset</button>
-                    <button type="button" class="btn btn-dark btn-sm float-end" id="sizeDownJsonFont">-</button>
-                    <button type="button" class="btn btn-dark btn-sm float-end" id="sizeUpJsonFont">+</button>
+                    <button type="button" class="btn btn-dark float-end" id="resetJsonFont">reset</button>
+                    <button type="button" class="btn btn-dark float-end" id="sizeDownJsonFont">-</button>
+                    <button type="button" class="btn btn-dark float-end" id="sizeUpJsonFont">+</button>
                 </div>
             </div>
             <div class="row editor-container">
@@ -158,11 +158,6 @@
         </div>
     </div>
 </main>
-<!--<div class="position-absolute bottom-0 end-0 alert alert-warning alert-dismissible fade show _log"-->
-<!--     role="alert"-->
-<!--     id="log">-->
-<!--    You should check in on some of those fields below.-->
-<!--</div>-->
 <div class="position-absolute bottom-0 end-0 bg-warning border-0 log-toast">
     <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="log">
         <div class="d-flex">
@@ -216,7 +211,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const DEFAULT_FONT_SIZE = 12
-        // TODO: font size
         // TODO: save local history
         // TODO: add shortcut to expend editor width
         // TODO: add settings into local history
@@ -311,6 +305,10 @@
         document.addEventListener("mouseup", (e) => {
             document.removeEventListener("mousemove", resize, false)
         }, false);
+        $resizer.addEventListener("dblclick", (e) => {
+            $editor.style.removeProperty("flex-basis")
+            console.log("reset editor width")
+        });
 
         // font size events
         $fontSizeUp.addEventListener("click", (e) => {
