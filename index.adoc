@@ -1,6 +1,7 @@
 = TIL
 :docinfo: shared
 :source-highlighter: highlight.js
+:toc: left
 
 https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 파일로 변환되어 https://github.com/wicksome/TIL/actions/workflows/pages.yml[github pages]를 통해 배포된다.
 
@@ -15,3 +16,4 @@ https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 
 - https://github.com/wicksome/TIL/blob/master/index.adoc
 + https://wickso.me/index.html
 ----
+
