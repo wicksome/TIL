@@ -3,10 +3,9 @@
 :source-highlighter: highlight.js
 :toc: left
 
-[quote]
-____
+====
 Today I Learned
-____
+====
 
 == Introduction
 
