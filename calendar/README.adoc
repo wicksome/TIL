@@ -1,6 +1,20 @@
 = Calendar
 
-== Server
+== Documents
+
+=== WebDAV
+
+* xref:rfc4918.adoc[RFC 4918 - WebDAV]
+* xref:rfc3744.adoc[RFC 3744 - WebDAV, Access Control Protocol]
+
+=== CalDAV
+
+* xref:rfc4791.adoc[RFC 4791 - CalDAV]
+* xref:rfc5545.adoc[RFC 5545 - iCalenadr]
+
+== References
+
+=== Server
 
 * https://github.com/Bedework/bw-caldav[Bedework CalDAV] - Java
 * https://github.com/1and1/cosmo[Cosmo] - Java
@@ -14,12 +28,12 @@
 * https://github.com/tomsquest/docker-radicale[Docker-Radicale] - Docker
 * https://github.com/kristapsdz/kcaldav - C
 
-== Client
+=== Client
 
 * https://github.com/caldav4j/caldav4j[CalDAV4j]
 * https://github.com/tchapi/davis
 
-== ETC
+=== ETC
 
 * https://github.com/miltonio/milton2
 * https://www.webdavsystem.com/server/creating_caldav_carddav/creating_caldav_server/
