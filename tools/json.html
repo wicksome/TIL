@@ -30,7 +30,7 @@
     </script>
 
     <!-- naver -->
-    <meta name="naver-site-verification" content="19e1704de71915e3321e6c7b25780884d9f96975" />
+    <meta name="naver-site-verification" content="19e1704de71915e3321e6c7b25780884d9f96975"/>
 
     <!-- https://ace.c9.io/ -->
     <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/css/ace.min.css" rel="stylesheet">
@@ -360,13 +360,26 @@
         // resizing editor width size
         const RESIZING_DIV_WIDTH = 15 // px
         const resize = (e) => {
-            console.log(3, e.clientX)
             let clientX = e.clientX
             if (!clientX) {
                 // support touch event
+                if (!e.touches || e.touches.length === 0) {
+                    console.warn("not found event.touches")
+                    return
+                }
                 clientX = e.touches[0].clientX
             }
-            $editor.style.flexBasis = (clientX - (RESIZING_DIV_WIDTH + (RESIZING_DIV_WIDTH / 2))) + "px"
+            const width = (clientX - (RESIZING_DIV_WIDTH + (RESIZING_DIV_WIDTH / 2)))
+
+            const $el = document.querySelector(".editor-view")
+            const style = $el.currentStyle || window.getComputedStyle($el)
+            const maxWidth = $el.clientWidth - RESIZING_DIV_WIDTH - parseInt(style.paddingLeft) - parseInt(style.paddingRight)
+            if (width < 0 || width >= maxWidth) {
+                console.warn(`can not less then 0 or grete then ${maxWidth}`)
+                return
+            }
+
+            $editor.style.flexBasis = `${width}px`
         }
         $resizer.addEventListener("mousedown", (e) => {
             if (e.offsetX < RESIZING_DIV_WIDTH) {
