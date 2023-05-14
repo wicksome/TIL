@@ -125,6 +125,70 @@
             margin-bottom: 10px;
             margin-right: 10px;
         }
+
+        .ts-history-layer {
+            /*width: 100%;*/
+            z-index: 9;
+        }
+
+        .ts-history-fold {
+            width: 100%;
+            padding-left: 10px;
+        }
+
+        .ts-history-wrapper {
+            max-height: 150px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-top: 1px solid #000;
+            overflow-anchor: none;
+        }
+
+        .ts-history {
+            background: #e9e9e9;
+            display: table;
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .ts-history-row {
+            display: table-row;
+            font-size: 13px;
+        }
+
+        .ts-history-row:after {
+            display: table-cell;
+            padding: 3px 6px;
+            color: rgba(0, 0, 0, .35);
+            border: 1px solid #ccc;
+            content: attr(data-date);
+            vertical-align: top;
+        }
+
+        .ts-history-row + .ts-history-row > * {
+            border: 1px solid #ccc;
+        }
+
+        .ts-history-row:last-child, .ts-history-row:last-child:after {
+            animation: flash 1s;
+        }
+
+        .ts-history-row > div {
+            padding: 3px 5px;
+            white-space: pre-wrap;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        @keyframes flash {
+            0% {
+                background: rgba(255, 240, 0, .25);
+            }
+            100% {
+                background: none;
+            }
+        }
     </style>
 </head>
 <body class="d-flex flex-column h-100">
@@ -164,6 +228,10 @@
                         <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
                         <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>
                     </div>
+                    <div>
+                        <label for="showTimestampConvertLayer">show timestamp converter: </label>
+                        <input type="checkbox" id="showTimestampConvertLayer" checked>
+                    </div>
                 </div>
                 <br/>
             </div>
@@ -182,6 +250,19 @@
         </div>
     </div>
 </main>
+<div class="position-absolute bottom-0 ts-history-layer">
+    <span class="ts-history-fold" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
+          aria-controls="navbarToggleExternalContent" aria-expanded="false">Epoch timestamp converter</span>
+    <div class="collapse ts-history-wrapper" id="navbarToggleExternalContent">
+        <div class="ts-history">
+            <div class="ts-history-row" data-date="created_at">
+                <div>Input</div>
+                <div>UTC</div>
+                <div id="currentTimeZone"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="position-absolute bottom-0 end-0 border-0 log-toast">
     <div class="toast align-items-center" role="alert" aria-live="polite" aria-atomic="true" id="toastBody">
         <div class="d-flex">
@@ -311,6 +392,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         initEditorInstances()
         initEditorOptions()
+        // set current timezone
+        document.querySelector("#currentTimeZone").innerHTML = Intl.DateTimeFormat().resolvedOptions().timeZone
 
         // add editor events
         inputEditor.on("input", (e) => {
@@ -318,6 +401,43 @@
             format(inputEditor, resultEditor)
             localStorage.setItem("latestJsonContent", inputEditor.getValue())
         })
+
+        const appendTimeStamp = (editor) => {
+            const now = (new Date()).toTimeString().split(' ')[0]
+            setTimeout(() => {
+                let value = editor.getSelectedText()
+                if (!value || !/^\d+$/.test(value)) return
+                value = parseInt(value)
+
+                // convert epoch millisecond or second to date
+                let date = new Date(value)
+                if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
+                    // epoch millisecond
+                    date = new Date(value)
+                } else {
+                    // epoch second
+                    date = new Date(value * 1000)
+                }
+
+                // TODO: https://dkje.github.io/2020/08/18/createDomElement/#3-document-fragment
+                const row = `<div class="ts-history-row" data-date="${now}">
+                    <div>${value}</div>
+                    <div>${date.toISOString()}</div>
+                    <div>${date.toLocaleString()}</div>
+                </div>`.trim()
+
+                // set scroll to bottom
+                document.querySelector(".ts-history").innerHTML += row
+                const element = document.querySelector(".ts-history-wrapper")
+                element.scroll({ top: element.scrollHeight, behavior: 'smooth' });
+            }, 10);
+        }
+        inputEditor.on("dblclick", () => {
+            appendTimeStamp(inputEditor)
+        });
+        resultEditor.on("dblclick", () => {
+            appendTimeStamp(resultEditor)
+        });
 
         // add dom events
         const $button = document.querySelector("#formatting")
@@ -418,6 +538,16 @@
             let enable = null
             if (e.target.checked) enable = true
             updateEditorOptions({wrap: enable})
+        })
+
+        document.querySelector("#showTimestampConvertLayer").addEventListener("change", (e) => {
+            let display
+            if (e.target.checked) {
+                display = "block"
+            } else {
+                display = "none"
+            }
+            document.querySelector(".ts-history-layer").style.display = display
         })
     }, false);
 </script>
