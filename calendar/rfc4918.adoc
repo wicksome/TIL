@@ -1,0 +1,6 @@
+= HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)
+:toc: left
+
+====
+Origin: https://www.rfc-editor.org/rfc/rfc4918.html[RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)]
+====
