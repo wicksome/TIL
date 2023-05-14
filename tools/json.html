@@ -353,7 +353,13 @@
         // resizing editor width size
         const RESIZING_DIV_WIDTH = 15 // px
         const resize = (e) => {
-            $editor.style.flexBasis = (e.clientX - (RESIZING_DIV_WIDTH + (RESIZING_DIV_WIDTH / 2))) + "px"
+            console.log(3, e.clientX)
+            let clientX = e.clientX
+            if (!clientX) {
+                // support touch event
+                clientX = e.touches[0].clientX
+            }
+            $editor.style.flexBasis = (clientX - (RESIZING_DIV_WIDTH + (RESIZING_DIV_WIDTH / 2))) + "px"
         }
         $resizer.addEventListener("mousedown", (e) => {
             if (e.offsetX < RESIZING_DIV_WIDTH) {
@@ -368,9 +374,7 @@
             console.log("reset editor width")
         });
         $resizer.addEventListener("touchstart", (e) => {
-            if (e.offsetX < RESIZING_DIV_WIDTH) {
-                document.addEventListener("touchmove", resize, false)
-            }
+            document.addEventListener("touchmove", resize, false)
         }, false);
         document.addEventListener("touchend", (e) => {
             document.removeEventListener("touchmove", resize, false)
