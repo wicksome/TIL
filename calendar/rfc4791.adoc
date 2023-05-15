@@ -2497,5 +2497,325 @@ The authors would also like to thank the Calendaring and Scheduling Consortium f
 
 == 14. References
 
-== Appendix A.
-== Appendix B.
+== Appendix A. CalDAV Method Privilege Table (Normative)
+
+The following table extends the WebDAV Method Privilege Table specified in Appendix B of [RFC3744].
+
+[source]
+----
++------------+------------------------------------------------------+
+| METHOD     | PRIVILEGES                                           |
++------------+------------------------------------------------------+
+| MKCALENDAR | DAV:bind                                             |
+| REPORT     | DAV:read or CALDAV:read-free-busy (on all referenced |
+|            | resources)                                           |
++------------+------------------------------------------------------+
+----
+
+== Appendix B. Calendar Collections Used in the Examples
+
+This appendix shows the calendar object resources contained in the calendar collection queried in the examples throughout this document.
+
+The content of the calendar collection is being shown as if it were returned by a CALDAV:calendar-query REPORT request designed to return all the calendar data in the collection:
+
+[source]
+----
+>> Request <<
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav">
+<D:prop>
+  <D:getetag/>
+  <C:calendar-data/>
+</D:prop>
+<C:filter>
+  <C:comp-filter name="VCALENDAR"/>
+</C:filter>
+</C:calendar-query>
+
+>> Response <<
+
+HTTP/1.1 207 Multi-Status
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav">
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd1.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd1"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001102Z
+DTSTART;TZID=US/Eastern:20060102T100000
+DURATION:PT1H
+SUMMARY:Event #1
+Description:Go Steelers!
+UID:74855313FA803DA593CD579A@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd2.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd2"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd3.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd3"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+END:VEVENT
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd4.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd4"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235335Z
+DUE;VALUE=DATE:20060104
+STATUS:NEEDS-ACTION
+SUMMARY:Task #1
+UID:DDDEEB7915FA61233B861457@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd5.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd5"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235300Z
+DUE;VALUE=DATE:20060106
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:NEEDS-ACTION
+SUMMARY:Task #2
+UID:E10BA47467C5C69BB74E8720@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd6.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd6"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+COMPLETED:20051223T122322Z
+DTSTAMP:20060205T235400Z
+DUE;VALUE=DATE:20051225
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:COMPLETED
+SUMMARY:Task #3
+UID:E10BA47467C5C69BB74E8722@example.com
+END:VTODO
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd7.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd7"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235600Z
+DUE;VALUE=DATE:20060101
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:CANCELLED
+SUMMARY:Task #4
+UID:E10BA47467C5C69BB74E8725@example.com
+END:VTODO
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+ <D:response>
+   <D:href>http://cal.example.com/bernard/work/abcd8.ics</D:href>
+   <D:propstat>
+     <D:prop>
+       <D:getetag>"fffff-abcd8"</D:getetag>
+       <C:calendar-data>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VFREEBUSY
+ORGANIZER;CN="Bernard Desruisseaux":mailto:bernard@example.com
+UID:76ef34-54a3d2@example.com
+DTSTAMP:20050530T123421Z
+DTSTART:20060101T000000Z
+DTEND:20060108T000000Z
+FREEBUSY:20050531T230000Z/20050601T010000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060102T100000Z/20060102T120000Z
+FREEBUSY:20060103T100000Z/20060103T120000Z
+FREEBUSY:20060104T100000Z/20060104T120000Z
+FREEBUSY;FBTYPE=BUSY-UNAVAILABLE:20060105T100000Z/20060105T120000Z
+FREEBUSY:20060106T100000Z/20060106T120000Z
+END:VFREEBUSY
+END:VCALENDAR
+</C:calendar-data>
+     </D:prop>
+     <D:status>HTTP/1.1 200 OK</D:status>
+   </D:propstat>
+ </D:response>
+
+</D:multistatus>
+----
