@@ -129,11 +129,14 @@
         .ts-history-layer {
             /*width: 100%;*/
             z-index: 9;
+            height: min-content;
         }
 
         .ts-history-fold {
             width: 100%;
-            padding-left: 10px;
+            padding: 0 10px 0 10px;
+            border: 1px solid darkgray;
+            background-color: lightgray;
         }
 
         .ts-history-wrapper {
@@ -251,9 +254,10 @@
     </div>
 </main>
 <div class="position-absolute bottom-0 ts-history-layer">
-    <span class="ts-history-fold" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
-          aria-controls="navbarToggleExternalContent" aria-expanded="false">Epoch timestamp converter</span>
-    <div class="collapse ts-history-wrapper" id="navbarToggleExternalContent">
+    <div class="ts-history-fold" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
+          aria-controls="navbarToggleExternalContent" aria-expanded="false"><b>Epoch timestamp converter</b></div>
+    <div></div>
+    <div class="collapse show ts-history-wrapper" id="navbarToggleExternalContent-disable">
         <div class="ts-history">
             <div class="ts-history-row" data-date="created_at">
                 <div>Input</div>
@@ -278,6 +282,7 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/lossless-json@2.0.9/lib/umd/lossless-json.min.js"></script>
+<script src="dragmove.js"></script>
 
 <script>
     // editor
@@ -392,6 +397,11 @@
     document.addEventListener('DOMContentLoaded', () => {
         initEditorInstances()
         initEditorOptions()
+
+        // https://github.com/daybrush/moveable
+        // https://github.com/knadh/dragmove.js
+        dragmove(document.querySelector(".ts-history-layer"), document.querySelector(".ts-history-fold"));
+
         // set current timezone
         document.querySelector("#currentTimeZone").innerHTML = Intl.DateTimeFormat().resolvedOptions().timeZone
 
@@ -429,7 +439,7 @@
                 // set scroll to bottom
                 document.querySelector(".ts-history").innerHTML += row
                 const element = document.querySelector(".ts-history-wrapper")
-                element.scroll({ top: element.scrollHeight, behavior: 'smooth' });
+                element.scroll({top: element.scrollHeight, behavior: 'smooth'});
             }, 10);
         }
         inputEditor.on("dblclick", () => {
