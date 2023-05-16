@@ -580,6 +580,7 @@
         }, false);
         $resizer.addEventListener("dblclick", (e) => {
             $editor.style.removeProperty("flex-basis")
+            localStorage.removeItem("latestInputEditorWidth")
             console.log("reset editor width")
         });
         $resizer.addEventListener("touchstart", (e) => {
