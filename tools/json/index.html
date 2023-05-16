@@ -137,6 +137,17 @@
             padding: 0 10px 0 10px;
             border: 1px solid darkgray;
             background-color: lightgray;
+            cursor: move;
+        }
+
+        .ts-history-fold-title {
+            font-weight: bold;
+            padding-right: 20px;
+        }
+
+        .ts-history-fold-close:after {
+            display: inline-block;
+            content: "\00d7"; /* This will render the 'X' */
         }
 
         .ts-history-wrapper {
@@ -255,8 +266,10 @@
 </main>
 <div class="position-absolute bottom-0 ts-history-layer">
     <div class="ts-history-fold" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
-          aria-controls="navbarToggleExternalContent" aria-expanded="false"><b>Epoch timestamp converter</b></div>
-    <div></div>
+         aria-controls="navbarToggleExternalContent" aria-expanded="false">
+        <span class="ts-history-fold-title">Epoch timestamp converter</span>
+        <span class="float-end ts-history-fold-close" role="button"></span>
+    </div>
     <div class="collapse show ts-history-wrapper" id="navbarToggleExternalContent-disable">
         <div class="ts-history">
             <div class="ts-history-row" data-date="created_at">
@@ -558,6 +571,10 @@
                 display = "none"
             }
             document.querySelector(".ts-history-layer").style.display = display
+        })
+
+        document.querySelector(".ts-history-fold-close").addEventListener("click", (e) => {
+            document.querySelector("#showTimestampConvertLayer").click()
         })
     }, false);
 </script>
