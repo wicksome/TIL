@@ -461,6 +461,21 @@
         resultEditor.on("dblclick", () => {
             appendTimeStamp(resultEditor)
         });
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/selectionchange_event
+        // document.addEventListener("selectionchange", (e) => {
+        //     console.log(e)
+        //
+        //     const value = document.getSelection()
+        //     if (value.type !== "Range") return
+        //     const node = value.focusNode
+        //     if (!(node instanceof HTMLDivElement)) return
+        //
+        //     if (node.id === "inputEditor") {
+        //         appendTimeStamp(inputEditor)
+        //     } else if (node.id === "resultEditor") {
+        //         appendTimeStamp(resultEditor)
+        //     }
+        // })
 
         // add dom events
         const $button = document.querySelector("#formatting")
