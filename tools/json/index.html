@@ -209,7 +209,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">JSON Formatter</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -221,7 +222,8 @@
                     <a class="nav-link" href="#">Diff</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         Others
                     </a>
                     <ul class="dropdown-menu">
@@ -379,6 +381,11 @@
 
         // apply setting
         document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
+
+        const editorWidth = localStorage.getItem("latestInputEditorWidth")
+        if (!!editorWidth) {
+            document.querySelector(".editor-view > .editor:first-child").style.flexBasis = editorWidth
+        }
     }
 
     const updateEditorOptions = (options) => {
@@ -561,6 +568,7 @@
             }
 
             $editor.style.flexBasis = `${width}px`
+            localStorage.setItem("latestInputEditorWidth", `${width}px`)
         }
         $resizer.addEventListener("mousedown", (e) => {
             if (e.offsetX < RESIZING_DIV_WIDTH) {
