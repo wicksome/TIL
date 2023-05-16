@@ -116,7 +116,7 @@
         <div class="contents">
             <div class="row clearfix buttons">
                 <div class="col float-start">
-<!--                    <button type="button" class="btn btn-light" id="formatting">format</button>-->
+                    <!--                    <button type="button" class="btn btn-light" id="formatting">format</button>-->
                 </div>
                 <div class="col float-end">
                     <button type="button" class="btn btn-light float-end" data-bs-toggle="collapse"
@@ -128,19 +128,19 @@
             </div>
             <div class="collapse" id="setting">
                 <div class="card card-body">
-<!--                    <div>-->
-<!--                        <label for="editorLineWrap">wrap: </label>-->
-<!--                        <input type="checkbox" id="editorLineWrap">-->
-<!--                    </div>-->
-<!--                    <div>fontSize:-->
-<!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>-->
-<!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>-->
-<!--                        <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                        <label for="showTimestampConvertLayer">show timestamp converter: </label>-->
-<!--                        <input type="checkbox" id="showTimestampConvertLayer" checked>-->
-<!--                    </div>-->
+                    <!--                    <div>-->
+                    <!--                        <label for="editorLineWrap">wrap: </label>-->
+                    <!--                        <input type="checkbox" id="editorLineWrap">-->
+                    <!--                    </div>-->
+                    <!--                    <div>fontSize:-->
+                    <!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>-->
+                    <!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>-->
+                    <!--                        <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>-->
+                    <!--                    </div>-->
+                    <!--                    <div>-->
+                    <!--                        <label for="showTimestampConvertLayer">show timestamp converter: </label>-->
+                    <!--                        <input type="checkbox" id="showTimestampConvertLayer" checked>-->
+                    <!--                    </div>-->
                 </div>
                 <br/>
             </div>
@@ -163,20 +163,41 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // initEditorInstances()
-        // initEditorOptions()
+        let latestLeftContent = localStorage.getItem("latestLeftContent")
+        if (!latestLeftContent) {
+            latestLeftContent = ""
+        }
+        let latestRightContent = localStorage.getItem("latestRightContent")
+        if (!latestRightContent) {
+            latestRightContent = ""
+        }
 
         const differ = new AceDiff({
             element: '.acediff',
             theme: "ace/theme/dawn",
             mode: "ace/mode/json",
             left: {
-                content: "",
+                content: latestLeftContent,
             },
             right: {
-                content: "",
+                content: latestRightContent,
             },
         });
+
+        const leftEditor = differ.getEditors().left
+        const rightEditor = differ.getEditors().right
+
+        leftEditor.setOption("fontFamily", "JetBrains Mono")
+        leftEditor.setOption("fontSize", 13)
+        rightEditor.setOption("fontFamily", "JetBrains Mono")
+        rightEditor.setOption("fontSize", 13)
+
+        leftEditor.on("input", () => {
+            localStorage.setItem("latestLeftContent", leftEditor.getValue())
+        })
+        rightEditor.on("input", () => {
+            localStorage.setItem("latestRightContent", rightEditor.getValue())
+        })
     }, false);
 </script>
 </body>
