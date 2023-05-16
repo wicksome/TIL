@@ -192,6 +192,10 @@
         rightEditor.setOption("fontFamily", "JetBrains Mono")
         rightEditor.setOption("fontSize", 13)
 
+        // TODO: set options
+        // https://github.com/ace-diff/ace-diff#api
+        // differ.setOption("fontFamily", "JetBrains Mono")
+
         leftEditor.on("input", () => {
             localStorage.setItem("latestLeftContent", leftEditor.getValue())
         })
