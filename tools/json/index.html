@@ -437,9 +437,79 @@
         temp = content
     }
 
+    let rows = []
+    const appendRow = (input, date) => {
+        const now = (new Date()).toTimeString().split(' ')[0]
+
+        // TODO: https://dkje.github.io/2020/08/18/createDomElement/#3-document-fragment
+        let row
+        try {
+            row = `<div class="ts-history-row" data-date="${now}">
+                    <div>${input}</div>
+                    <div>${date.toISOString()}</div>
+                    <div>${date.toLocaleString()}</div>
+                </div>`.trim()
+        } catch (e) {
+            console.warn(`input: [${input}], date: [${date}] throw: ${e}`)
+            return
+        }
+
+        const lastRow = rows[rows.length - 1]
+        if (input === lastRow) {
+            console.log("duplicate last value")
+            return
+        }
+        rows.push(input)
+
+        // set scroll to bottom
+        document.querySelector(".ts-history").innerHTML += row
+        const element = document.querySelector(".ts-history-wrapper")
+        element.scroll({top: element.scrollHeight, behavior: 'smooth'});
+    }
+    const appendTimeStamp = (editor) => {
+        setTimeout(() => {
+            const value = toNumber(editor.getSelectedText())
+            if (!value) return
+
+            // convert epoch millisecond or second to date
+            let date = new Date(value)
+            if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
+                // epoch millisecond
+                date = new Date(value)
+            } else {
+                // epoch second
+                date = new Date(value * 1000)
+            }
+
+            appendRow(value, date)
+        }, 10);
+    }
+
+    const debounce = (callback, limit = 100) => {
+        let timeout
+        return function (...args) {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                callback.apply(this, args)
+            }, limit)
+        }
+    }
+
+    const toNumber = (value) => {
+        if (!value || !/^\d+$/.test(value)) return null
+        return parseInt(value)
+    }
+
+    const isIsoDate = (str) => {
+        try {
+            new Date(Date.parse(str));
+            return true
+        } catch (e) {
+            return false
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        // TODO: convert datetime value when changed cursor
-        // TODO: convert ISO8601 datetime
         // TODO: delete row converted datetime
         // TODO: add relative time column
         initEditorInstances()
@@ -452,64 +522,50 @@
         // set current timezone
         document.querySelector("#currentTimeZone").innerHTML = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-        // add editor events
+        // add default value in editor
         inputEditor.on("input", (e) => {
             if (!$autoFormat.checked) return
             format(inputEditor, resultEditor)
             localStorage.setItem("latestJsonContent", inputEditor.getValue())
         })
+        inputEditor.session.selection.on("changeSelection", debounce((e) => {
+            const selection = inputEditor.getSelectedText()
+            if (!selection) return
 
-        const appendTimeStamp = (editor) => {
-            const now = (new Date()).toTimeString().split(' ')[0]
-            setTimeout(() => {
-                let value = editor.getSelectedText()
-                if (!value || !/^\d+$/.test(value)) return
-                value = parseInt(value)
+            const timestamp = toNumber(selection)
+            if (!!timestamp) {
+                appendTimeStamp(inputEditor)
+                return
+            }
 
-                // convert epoch millisecond or second to date
-                let date = new Date(value)
-                if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
-                    // epoch millisecond
-                    date = new Date(value)
-                } else {
-                    // epoch second
-                    date = new Date(value * 1000)
-                }
+            const str = selection.replaceAll('"', '')
+            if (isIsoDate(str)) {
+                appendRow(str, new Date(Date.parse(str)))
+                return
+            }
+        }, 500))
+        resultEditor.session.selection.on("changeSelection", debounce((e) => {
+            const selection = resultEditor.getSelectedText()
+            if (!selection) return
 
-                // TODO: https://dkje.github.io/2020/08/18/createDomElement/#3-document-fragment
-                const row = `<div class="ts-history-row" data-date="${now}">
-                    <div>${value}</div>
-                    <div>${date.toISOString()}</div>
-                    <div>${date.toLocaleString()}</div>
-                </div>`.trim()
+            const timestamp = toNumber(selection)
+            if (!!timestamp) {
+                appendTimeStamp(resultEditor)
+                return
+            }
 
-                // set scroll to bottom
-                document.querySelector(".ts-history").innerHTML += row
-                const element = document.querySelector(".ts-history-wrapper")
-                element.scroll({top: element.scrollHeight, behavior: 'smooth'});
-            }, 10);
-        }
+            const str = selection.replaceAll('"', '')
+            if (isIsoDate(str)) {
+                appendRow(str, new Date(Date.parse(str)))
+                return
+            }
+        }, 500))
         inputEditor.on("dblclick", () => {
             appendTimeStamp(inputEditor)
         });
         resultEditor.on("dblclick", () => {
             appendTimeStamp(resultEditor)
         });
-        // https://developer.mozilla.org/en-US/docs/Web/API/Document/selectionchange_event
-        // document.addEventListener("selectionchange", (e) => {
-        //     console.log(e)
-        //
-        //     const value = document.getSelection()
-        //     if (value.type !== "Range") return
-        //     const node = value.focusNode
-        //     if (!(node instanceof HTMLDivElement)) return
-        //
-        //     if (node.id === "inputEditor") {
-        //         appendTimeStamp(inputEditor)
-        //     } else if (node.id === "resultEditor") {
-        //         appendTimeStamp(resultEditor)
-        //     }
-        // })
 
         // add dom events
         const $button = document.querySelector("#formatting")
