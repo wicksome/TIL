@@ -2,9 +2,12 @@
 :toc: left
 :source-highlighter: highlight.js
 
-====
-Origin: https://datatracker.ietf.org/doc/html/rfc4791[RFC 4791 - Calendaring Extensions to WebDAV (CalDAV)]
-====
+:rfc4791: https://www.rfc-editor.org/rfc/rfc4791
+
+[.text-center]
+****
+{rfc4791}[**Calendaring Extensions to WebDAV (CalDAV)**] +
+****
 
 :rfc2616: https://www.rfc-editor.org/rfc/rfc2616
 :rfc2518: https://www.rfc-editor.org/rfc/rfc2518
