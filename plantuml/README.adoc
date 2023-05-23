@@ -13,6 +13,17 @@ but, "Note: draw.io for Confluence Server and data center do not support PlantUM
 
 github action: https://github.com/grassedge/generate-plantuml-action
 
+== 설정
+
+* 파일 저장시 짤릴 경우
++
+https://github.com/qjebbs/vscode-plantuml/issues/136
++
+[source]
+----
+-DPLANTUML_LIMIT_SIZE=8192
+----
+
 <<<
 
 == Class diagram
