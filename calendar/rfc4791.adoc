@@ -1,4 +1,4 @@
-= CalDAV: Calendaring Extensions to WebDAV
+= RFC 4791 - CalDAV
 :toc: left
 :source-highlighter: highlight.js
 
