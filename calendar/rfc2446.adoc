@@ -1,11 +1,14 @@
-= iCalendar Transport-Independent Interoperability Protocol (iTIP)
+= RFC 2446 - iTIP
 :toc: left
+:source-highlighter: highlight.js
+
+:rfc2446: https://www.rfc-editor.org/rfc/rfc2446
 
 [.text-center]
 ****
-**iCalendar Transport-Independent Interoperability Protocol** +
-**(iTIP)** +
-**Scheduling Events, BusyTime, To-dos and Journal Entries**
+{rfc2446}[**iCalendar Transport-Independent Interoperability Protocol**] +
+{rfc2446}[**(iTIP)**] +
+{rfc2446}[**Scheduling Events, BusyTime, To-dos and Journal Entries**]
 ****
 
 == 개요
