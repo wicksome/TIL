@@ -1,16 +1,15 @@
 = Calendar
 
-== Documents
-
-=== WebDAV
+== WebDAV
 
 * xref:rfc4918.adoc[RFC 4918 - WebDAV]
 * xref:rfc3744.adoc[RFC 3744 - WebDAV, Access Control Protocol]
 
-=== CalDAV
+== CalDAV
 
 * xref:rfc4791.adoc[RFC 4791 - CalDAV]
 * xref:rfc5545.adoc[RFC 5545 - iCalenadr]
+* xref:rfc2446.adoc[RFC 2446 - iTIP]
 
 == References
 
