@@ -1,7 +1,13 @@
-= Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+= RFC 5445 - iCalendar
 :toc: left
 :sectnums:
 :source-highlighter: highlight.js
+
+[.text-center]
+****
+**Internet Calendaring and Scheduling Core Object Specification** +
+**(iCalendar)**
+****
 
 ====
 Origin: https://datatracker.ietf.org/doc/html/rfc5545[RFC 5545 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)]
@@ -98,11 +104,141 @@ iCalendar 객체의 형식은 텍스트/디렉토리 미디어 유형[RFC2425]�
 
 === Content Lines
 
+iCalendar 개체는 내용 줄이라고 하는 개별 텍스트 줄로 구성됩니다.  콘텐츠 줄은 줄 바꿈으로 구분되며, 줄 바꿈은 CRLF 시퀀스(CR 문자 다음에 LF 문자)입니다.
+
+텍스트 줄은 줄 바꿈을 제외하고 75옥텟을 넘지 않아야 합니다.  긴 콘텐츠 줄은 줄 '접기' 기법을 사용하여 여러 줄로 나눠서 표시해야 합니다.  즉, 긴 줄 바로 뒤에 단일 선형 공백 문자(예: SPACE 또는 HTAB)를 삽입하여 긴 줄을 두 문자로 분할할 수 있습니다.  콘텐츠 유형을 처리할 때 단일 선형 공백 문자가 바로 뒤에 오는 모든 CRLF 시퀀스는 무시됩니다(즉, 제거됩니다).
+
+예를 들어, 줄입니다:
+
+[source]
+----
+DESCRIPTION:This is a long description that exists on a long line.
+----
+
+다음과 같이 표현할 수 있습니다:
+
+[source]
+----
+DESCRIPTION:This is a lo
+ ng description
+  that exists on a long line.
+----
+
+이 접힌 여러 줄 표현에서 한 줄 표현으로 이동하는 과정을 "펼치기"라고 합니다.  펼치기는 CRLF와 바로 뒤에 오는 선형 공백 문자를 제거하여 수행됩니다.
+
+콘텐츠 줄을 구문 분석할 때 접힌 줄은 반드시 위에 설명된 펼치기 절차에 따라 먼저 펼쳐야 합니다.
+
+[NOTE]
+====
+매우 간단한 구현에서는 UTF-8 다중 옥텟 시퀀스 중간에 부적절하게 접힌 줄이 생성될 수 있습니다.  따라서 구현에서는 원래 시퀀스를 올바르게 복원할 수 있는 방식으로 줄을 펼쳐야 합니다.
+====
+
+iCalendar 객체와 관련된 콘텐츠 정보는 [RFC2425]에 정의된 것과 유사한 구문을 사용하여 형식이 지정됩니다.  즉, 콘텐츠 정보는 CRLF로 구분된 콘텐츠 줄로 구성됩니다.
+
+다음 표기법은 iCalendar 개체의 콘텐츠 줄을 정의합니다:
+
+[source]
+----
+contentline   = name *(";" param ) ":" value CRLF
+; This ABNF is just a general definition for an initial parsing
+; of the content line into its property name, parameter list,
+; and value string
+
+; When parsing a content line, folded lines MUST first
+; be unfolded according to the unfolding procedure
+; described above.  When generating a content line, lines
+; longer than 75 octets SHOULD be folded according to
+; the folding procedure described above.
+
+name          = iana-token / x-name
+
+iana-token    = 1*(ALPHA / DIGIT / "-")
+; iCalendar identifier registered with IANA
+
+x-name        = "X-" [vendorid "-"] 1*(ALPHA / DIGIT / "-")
+; Reserved for experimental use.
+
+vendorid      = 3*(ALPHA / DIGIT)
+; Vendor identification
+
+param         = param-name "=" param-value *("," param-value)
+; Each property defines the specific ABNF for the parameters
+; allowed on the property.  Refer to specific properties for
+; precise parameter ABNF.
+
+param-name    = iana-token / x-name
+
+param-value   = paramtext / quoted-string
+
+paramtext     = *SAFE-CHAR
+
+value         = *VALUE-CHAR
+
+quoted-string = DQUOTE *QSAFE-CHAR DQUOTE
+
+QSAFE-CHAR    = WSP / %x21 / %x23-7E / NON-US-ASCII
+; Any character except CONTROL and DQUOTE
+
+SAFE-CHAR     = WSP / %x21 / %x23-2B / %x2D-39 / %x3C-7E
+           / NON-US-ASCII
+; Any character except CONTROL, DQUOTE, ";", ":", ","
+
+VALUE-CHAR    = WSP / %x21-7E / NON-US-ASCII
+; Any textual character
+
+NON-US-ASCII  = UTF8-2 / UTF8-3 / UTF8-4
+; UTF8-2, UTF8-3, and UTF8-4 are defined in [RFC3629]
+
+CONTROL       = %x00-08 / %x0A-1F / %x7F
+; All the controls except HTAB
+----
+
+콘텐츠 줄의 속성 값 구성 요소에는 속성별로 고유한 형식이 있습니다.  이 형식에 대한 정의는 각 속성을 설명하는 섹션을 참조하세요.
+
+모든 속성 이름, 속성 매개변수, 열거된 속성 값 및 속성 매개변수 값은 대소문자를 구분하지 않습니다.  그러나 다른 모든 속성 값은 달리 명시되지 않는 한 대소문자를 구분합니다.
+
 ==== List and Field Separators
+
+일부 속성 및 매개변수는 값 목록을 허용합니다.  값 목록의 값은 반드시 쉼표로 구분해야 합니다.  목록의 값 순서에는 의미가 없습니다.  따옴표로 묶은 문자열로 지정된 매개변수 값(예: URI 값을 지정하는 값)의 경우 개별 따옴표로 묶은 문자열은 COMMA 문자로 구분됩니다.
+
+일부 속성 값은 여러 부분으로 정의됩니다.  이러한 구조화된 속성 값은 반드시 세미콜론 문자로 값 부분을 구분해야 합니다.
+
+일부 속성은 매개변수 목록을 허용합니다.  속성 매개변수 목록의 각 속성 매개변수는 세미콜론 문자로 구분해야 합니다.
+
+콜론 문자, 세미콜론 문자 또는 콤마 문자가 포함된 값이 있는 속성 매개 변수는 반드시 따옴표로 묶은 텍스트 안에 넣어야 합니다.
+
+예를 들어 다음 속성에서 세미콜론은 속성 매개 변수를 서로 구분하는 데 사용되며 COMMA 문자는 값 목록에서 속성 값을 구분하는 데 사용됩니다.
+
+[source]
+----
+ATTENDEE;RSVP=TRUE;ROLE=REQ-PARTICIPANT:mailto:
+jsmith@example.com
+
+RDATE;VALUE=DATE:19970304,19970504,19970704,19970904
+----
 
 ==== Multiple Values
 
+iCalendar 객체에 정의된 일부 속성은 여러 값을 가질 수 있습니다.  다중 값 항목을 인코딩하는 일반적인 규칙은 속성 이름을 포함하여 각 값에 대해 새 콘텐츠 줄을 만드는 것입니다.  그러나 일부 속성은 값을 쉼표 문자로 구분하여 단일 속성에서 여러 값을 인코딩하는 것을 지원합니다.  특정 속성이 여러 값을 허용하는지 여부와 이 두 가지 형식 중 어떤 형식을 허용하는지 확인하려면 개별 속성 정의를 참조해야 합니다.  다중 값 속성을 사용하여 동일한 값의 여러 언어 변형을 지정해서는 안 됩니다.  캘린더 애플리케이션은 모든 값을 표시해야 합니다.
+
 ==== Binary Content
+
+iCalendar 객체의 바이너리 콘텐츠 정보는 속성 값 내의 URI를 사용하여 참조해야 합니다.  즉, 바이너리 콘텐츠 정보는 iCalendar 객체 내에서 URI로 참조할 수 있는 외부 MIME 엔티티에 배치되어야 합니다.  이것이 가능하지 않은 애플리케이션에서는 바이너리 콘텐츠 정보를 [RFC4648]에 정의된 "BASE64" 인코딩 방법을 사용하여 먼저 텍스트로 인코딩한 후에만 iCalendar 객체 내에 포함할 수 있습니다.  인라인 바이너리 콘텐츠는 특별한 상황에서 iCalendar 개체를 단일 엔티티로 표현해야 하는 애플리케이션에서만 사용해야 합니다.  인라인 바이너리 콘텐츠 정보를 포함하는 속성에는 반드시 "ENCODING" 속성 매개변수를 지정해야 합니다. iCalendar 객체 외부에 배치된 바이너리 콘텐츠 정보는 유니폼 리소스 식별자(URI)로 참조되어야 합니다.
+
+다음 예는 URI 참조를 사용하여 iCalendar 객체 외부의 첨부 파일을 참조하는 "ATTACH" 속성을 지정합니다:
+
+[source]
+----
+ATTACH:http://example.com/public/quarterly-report.doc
+----
+
+다음 예제에서는 인라인 바이너리 인코딩된 콘텐츠 정보가 포함된 "ATTACH" 속성을 지정합니다:
+
+[source]
+----
+ATTACH;FMTTYPE=text/plain;ENCODING=BASE64;VALUE=BINARY:VGhlIH
+ F1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4
+----
 
 ==== Character Set
 
@@ -112,198 +248,365 @@ iCalendar 객체의 형식은 텍스트/디렉토리 미디어 유형[RFC2425]�
 
 === Property Parameters
 
+속성에는 속성과 연관된 속성이 있을 수 있습니다.  이러한 "속성 매개변수"에는 속성 또는 속성 값에 대한 메타 정보가 포함됩니다.  속성 매개변수는 속성 값의 대체 텍스트 표현 위치, 텍스트 속성 값의 언어, 속성 값의 값 유형 및 기타 속성과 같은 정보를 지정하기 위해 제공됩니다.
+
+콜론, 세미콜론 또는 콤마 문자 구분 기호가 포함된 속성 매개변수 값은 반드시 따옴표로 묶인 문자열 텍스트 값으로 지정해야 합니다. 속성 매개 변수 값에는 DQUOTE 문자가 포함되어서는 안 됩니다.  DQUOTE 문자는 제한된 문자 또는 URI 텍스트가 포함된 매개변수 값의 구분 기호로 사용됩니다.  예를 들어
+
+[source]
+----
+DESCRIPTION;ALTREP="cid:part1.0001@example.org":The Fall'98 Wild
+  Wizards Conference - - Las Vegas\, NV\, USA
+----
+
+따옴표로 묶이지 않은 속성 매개변수 값은 대소문자를 구분하지 않습니다.
+
+이 메모에서 정의하는 일반적인 속성 매개변수는 다음과 같은 표기법으로 정의됩니다:
+
+[source]
+----
+icalparameter = altrepparam       ; Alternate text representation
+              / cnparam           ; Common name
+              / cutypeparam       ; Calendar user type
+              / delfromparam      ; Delegator
+              / deltoparam        ; Delegatee
+              / dirparam          ; Directory entry
+              / encodingparam     ; Inline encoding
+              / fmttypeparam      ; Format type
+              / fbtypeparam       ; Free/busy time type
+              / languageparam     ; Language for text
+              / memberparam       ; Group or list membership
+              / partstatparam     ; Participation status
+              / rangeparam        ; Recurrence identifier range
+              / trigrelparam      ; Alarm trigger relationship
+              / reltypeparam      ; Relationship type
+              / roleparam         ; Participation role
+              / rsvpparam         ; RSVP expectation
+              / sentbyparam       ; Sent by
+              / tzidparam         ; Reference to time zone object
+              / valuetypeparam    ; Property value data type
+              / other-param
+
+other-param   = (iana-param / x-param)
+
+iana-param  = iana-token "=" param-value *("," param-value)
+; Some other IANA-registered iCalendar parameter.
+
+x-param     = x-name "=" param-value *("," param-value)
+; A non-standard, experimental parameter.
+----
+
+애플리케이션은 인식하지 못하는 x-param 및 iana-param 값을 무시해야 합니다.
+
 ==== Alternate Text Representation
+
+Parameter Name:: ALTREP
+
+Purpose:: 속성 값에 대한 대체 텍스트 표현을 지정합니다.
+
+Format Definition:: 이 속성 매개변수는 다음 표기법으로 정의됩니다:
++
+[source]
+----
+altrepparam = "ALTREP" "=" DQUOTE uri DQUOTE
+----
+
+Description:: 이 매개변수는 텍스트 속성 값의 대체 표현을 가리키는 URI를 지정합니다.  이 매개변수를 지정하는 속성에는 텍스트 값의 기본 표현을 반영하는 값도 포함되어야 합니다.  URI 매개변수 값은 반드시 따옴표로 묶인 문자열로 지정해야 합니다.
++
+[NOTE]
+====
+이 매개변수에 허용되는 URI 스키마에 대한 제한은 없지만, 현재 구현에서 가장 일반적으로 사용되는 URI 스키마는 CID(콘텐츠 식별자) [RFC2392], HTTP [RFC2616] 및 HTTPS [RFC2818]입니다.
+====
+
+Example::
++
+[source]
+----
+DESCRIPTION;ALTREP="CID:part3.msg.970415T083000@example.com":
+ Project XYZ Review Meeting will include the following agenda
+  items: (a) Market Overview\, (b) Finances\, (c) Project Man
+ agement
+----
++
+"ALTREP" 속성 매개변수 값은 "text/html" 콘텐츠 부분을 가리킬 수 있습니다.
++
+[source]
+----
+Content-Type:text/html
+Content-Id:<part3.msg.970415T083000@example.com>
+
+<html>
+ <head>
+  <title></title>
+ </head>
+ <body>
+   <p>
+     <b>Project XYZ Review Meeting</b> will include
+     the following agenda items:
+     <ol>
+       <li>Market Overview</li>
+       <li>Finances</li>
+       <li>Project Management</li>
+     </ol>
+   </p>
+ </body>
+</html>
+----
 
 ==== Common Name
 
+Parameter Name:: CN
+
+Purpose:: To specify the common name to be associated with the calendar user specified by the property.
+
+Format Definition:: This property parameter is defined by the following notation:
++
+[source]
+----
+cnparam    = "CN" "=" param-value
+----
+
+Description:: 이 매개 변수는 CAL-ADDRESS 값 유형이 있는 속성에서 지정할 수 있습니다.  이 매개 변수는 속성에서 지정한 캘린더 사용자와 연결할 일반 이름을 지정합니다. 매개변수 값은 텍스트입니다.  이 매개변수 값은 속성에서 지정한 캘린더 주소와 연결할 표시 텍스트에 사용할 수 있습니다.
+
+Example::
++
+[source]
+----
+ORGANIZER;CN="John Smith":mailto:jsmith@example.com
+----
+
 ==== Calendar User Type
 
-https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.3
+Parameter Name:: CUTYPE
 
 ==== Delegators
 
+Parameter Name:: DELEGATED-FROM
+
 ==== Delegatees
+
+Parameter Name:: DELEGATED-TO
 
 ==== Directory Entry Reference
 
+Parameter Name:: DIR
+
 ==== Inline Encoding
+
+Parameter Name:: ENCODING
 
 ==== Format Type
 
+Parameter Name:: FMTTYPE
+
 ==== Free/Busy Time Type
+
+Parameter Name:: FBTYPE
 
 ==== Language
 
+Parameter Name:: LANGUAGE
+
 ==== Group or List Membership
+
+Parameter Name:: MEMBER
 
 ==== Participation Status
 
+Parameter Name:: PARTSTAT
+
 ==== Recurrence Identifier Range
+
+Parameter Name:: RANGE
 
 ==== Alarm Trigger Relationship
 
+Parameter Name:: RELATED
+
 ==== Relationship Type
+
+Parameter Name:: RELTYPE
 
 ==== Participation Role
 
+Parameter Name:: ROLE
+
 ==== RSVP Expectation
+
+Parameter Name:: RSVP
 
 ==== Sent By
 
+Parameter Name:: SENT-BY
+
 ==== Time Zone Identifier
+
+Parameter Name:: TZID
 
 ==== Value Data Types
 
+Parameter Name:: VALUE
+
 === Property Value Data Types
+
+iCalendar 개체의 속성은 강력하게 유형화되어 있습니다.  각 속성의 정의는 값이 이 섹션에 정의된 값 데이터 유형 또는 단순히 값 유형 중 하나로 제한됩니다. 속성의 값 유형은 기본 값 유형으로 암시적으로 지정되거나 "VALUE" 매개변수를 사용하여 명시적으로 지정됩니다.  속성의 값 유형이 대체 유효한 유형 중 하나인 경우 "VALUE" 매개 변수를 사용하여 명시적으로 지정해야 합니다.
 
 ==== Binary
 
+Value Name:: BINARY
+
 ==== Boolean
+
+Value Name:: BOOLEAN
 
 ==== Calendar User Address
 
+Value Name:: CAL-ADDRESS
+
 ==== Date
+
+Value Name:: CAL-ADDRESS
 
 ==== Date-Time
 
+Value Name:: DATE-TIME
+
 ==== Duration
+
+Value Name:: DURATION
 
 ==== Float
 
+Value Name:: FLOAT
+
 ==== Integer
+
+Value Name:: INTEGER
 
 ==== Period of Time
 
+Value Name:: PERIOD
+
 ==== Recurrence Rule
 
-|===
-| **Value Name** | `RECUR`
-|===
+Value Name:: RECUR
 
-===== 목적
+Purpose:: 이 value type은 반복 규칙 사양이 포함된 속성을 식별하는데 사용한다.
 
-이 value type은 반복 규칙 사양이 포함된 속성을 식별하는데 사용한다.
-
-===== 형식 정의
-
+Format Definition::
++
 [source]
 ----
-       recur           = recur-rule-part *( ";" recur-rule-part )
-                       ;
-                       ; The rule parts are not ordered in any
-                       ; particular sequence.
-                       ;
-                       ; The FREQ rule part is REQUIRED,
-                       ; but MUST NOT occur more than once.
-                       ;
-                       ; The UNTIL or COUNT rule parts are OPTIONAL,
-                       ; but they MUST NOT occur in the same 'recur'.
-                       ;
-                       ; The other rule parts are OPTIONAL,
-                       ; but MUST NOT occur more than once.
+recur           = recur-rule-part *( ";" recur-rule-part )
+               ;
+               ; The rule parts are not ordered in any
+               ; particular sequence.
+               ;
+               ; The FREQ rule part is REQUIRED,
+               ; but MUST NOT occur more than once.
+               ;
+               ; The UNTIL or COUNT rule parts are OPTIONAL,
+               ; but they MUST NOT occur in the same 'recur'.
+               ;
+               ; The other rule parts are OPTIONAL,
+               ; but MUST NOT occur more than once.
 
-       recur-rule-part = ( "FREQ" "=" freq )
-                       / ( "UNTIL" "=" enddate )
-                       / ( "COUNT" "=" 1*DIGIT )
-                       / ( "INTERVAL" "=" 1*DIGIT )
-                       / ( "BYSECOND" "=" byseclist )
-                       / ( "BYMINUTE" "=" byminlist )
-                       / ( "BYHOUR" "=" byhrlist )
-                       / ( "BYDAY" "=" bywdaylist )
-                       / ( "BYMONTHDAY" "=" bymodaylist )
-                       / ( "BYYEARDAY" "=" byyrdaylist )
-                       / ( "BYWEEKNO" "=" bywknolist )
-                       / ( "BYMONTH" "=" bymolist )
-                       / ( "BYSETPOS" "=" bysplist )
-                       / ( "WKST" "=" weekday )
+recur-rule-part = ( "FREQ" "=" freq )
+               / ( "UNTIL" "=" enddate )
+               / ( "COUNT" "=" 1*DIGIT )
+               / ( "INTERVAL" "=" 1*DIGIT )
+               / ( "BYSECOND" "=" byseclist )
+               / ( "BYMINUTE" "=" byminlist )
+               / ( "BYHOUR" "=" byhrlist )
+               / ( "BYDAY" "=" bywdaylist )
+               / ( "BYMONTHDAY" "=" bymodaylist )
+               / ( "BYYEARDAY" "=" byyrdaylist )
+               / ( "BYWEEKNO" "=" bywknolist )
+               / ( "BYMONTH" "=" bymolist )
+               / ( "BYSETPOS" "=" bysplist )
+               / ( "WKST" "=" weekday )
 
-       freq        = "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"
-                   / "WEEKLY" / "MONTHLY" / "YEARLY"
+freq        = "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"
+           / "WEEKLY" / "MONTHLY" / "YEARLY"
 
-       enddate     = date / date-time
+enddate     = date / date-time
 
-       byseclist   = ( seconds *("," seconds) )
+byseclist   = ( seconds *("," seconds) )
 
-       seconds     = 1*2DIGIT       ;0 to 60
+seconds     = 1*2DIGIT       ;0 to 60
 
-       byminlist   = ( minutes *("," minutes) )
+byminlist   = ( minutes *("," minutes) )
 
-       minutes     = 1*2DIGIT       ;0 to 59
+minutes     = 1*2DIGIT       ;0 to 59
 
-       byhrlist    = ( hour *("," hour) )
+byhrlist    = ( hour *("," hour) )
 
-       hour        = 1*2DIGIT       ;0 to 23
+hour        = 1*2DIGIT       ;0 to 23
 
-       bywdaylist  = ( weekdaynum *("," weekdaynum) )
+bywdaylist  = ( weekdaynum *("," weekdaynum) )
 
-       weekdaynum  = [[plus / minus] ordwk] weekday
+weekdaynum  = [[plus / minus] ordwk] weekday
 
-       plus        = "+"
+plus        = "+"
 
-       minus       = "-"
+minus       = "-"
 
-       ordwk       = 1*2DIGIT       ;1 to 53
+ordwk       = 1*2DIGIT       ;1 to 53
 
-       weekday     = "SU" / "MO" / "TU" / "WE" / "TH" / "FR" / "SA"
-       ;Corresponding to SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY,
-       ;FRIDAY, and SATURDAY days of the week.
+weekday     = "SU" / "MO" / "TU" / "WE" / "TH" / "FR" / "SA"
+;Corresponding to SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY,
+;FRIDAY, and SATURDAY days of the week.
 
-       bymodaylist = ( monthdaynum *("," monthdaynum) )
+bymodaylist = ( monthdaynum *("," monthdaynum) )
 
-       monthdaynum = [plus / minus] ordmoday
+monthdaynum = [plus / minus] ordmoday
 
-       ordmoday    = 1*2DIGIT       ;1 to 31
+ordmoday    = 1*2DIGIT       ;1 to 31
 
-       byyrdaylist = ( yeardaynum *("," yeardaynum) )
+byyrdaylist = ( yeardaynum *("," yeardaynum) )
 
-       yeardaynum  = [plus / minus] ordyrday
+yeardaynum  = [plus / minus] ordyrday
 
-       ordyrday    = 1*3DIGIT      ;1 to 366
+ordyrday    = 1*3DIGIT      ;1 to 366
 
-       bywknolist  = ( weeknum *("," weeknum) )
+bywknolist  = ( weeknum *("," weeknum) )
 
-       weeknum     = [plus / minus] ordwk
+weeknum     = [plus / minus] ordwk
 
-       bymolist    = ( monthnum *("," monthnum) )
+bymolist    = ( monthnum *("," monthnum) )
 
-       monthnum    = 1*2DIGIT       ;1 to 12
+monthnum    = 1*2DIGIT       ;1 to 12
 
-       bysplist    = ( setposday *("," setposday) )
+bysplist    = ( setposday *("," setposday) )
 
-       setposday   = yeardaynum
+setposday   = yeardaynum
 ----
 
-===== 설명
-
-이 value type은 하나 혹은 여러개의 recurrence grammar part 목록으로 구성된 구조화된 값이다.
-각 규칙 부분(rule part)는 `NAME=VALUE` 쌍으로 정의되며, 세미콜론으로 구분하고, 특정 순서로 정렬되지 않는다.
-개별 규칙 부분은 한 번만 지정해야 한다(**MUST**).
-호환 응용프로그램은 규칙 부분의 순서와 상관없이 받아들여야 하지만, iCalendar의 리비전의 이전 버전의 응용프로그램과의 하위 호환성을 보장하기 위해 `FREQ` 규칙 부분은 `RECUR` 값에 첫번째 규칙 부분이어야 한다(**MUST**).
+Description:: 이 value type은 하나 혹은 여러개의 recurrence grammar part 목록으로 구성된 구조화된 값이다. 각 규칙 부분(rule part)는 `NAME=VALUE` 쌍으로 정의되며, 세미콜론으로 구분하고, 특정 순서로 정렬되지 않는다. 개별 규칙 부분은 한 번만 지정해야 한다(**MUST**). 호환 응용프로그램은 규칙 부분의 순서와 상관없이 받아들여야 하지만, iCalendar의 리비전의 이전 버전의 응용프로그램과의 하위 호환성을 보장하기 위해 `FREQ` 규칙 부분은 `RECUR` 값에 첫번째 규칙 부분이어야 한다(**MUST**).
 
 `FREQ` 규칙 파트는 ...
 
-===== 예시
-
+Example:: 격일로 10회를 나타내는 규칙
++
 [source]
-.격일로 10회를 나타내는 규칙
 ----
 FREQ=DAILY;COUNT=10;INTERVAL=2
 ----
 
-https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.3[다른 예시 이동 (Section 3.8.5.3)]
-
 ==== Text
+
+Value Name:: TEXT
 
 ==== Time
 
+Value Name:: TIME
+
 ==== URI
+
+Value Name:: URI
 
 ==== UTC offset
 
-|===
-| **Value Name** | `UTC-OFFSET`
-|===
-
+Value Name:: UTC-OFFSET
 
 * 목적: UTC에서 local-time까지의 offset이 포함된 프로퍼티.
 * 형식 정의:
