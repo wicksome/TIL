@@ -1,23 +1,18 @@
 = RFC 5445 - iCalendar
 :toc: left
 :sectnums:
+:sectnumlevels: 5
 :source-highlighter: highlight.js
-
-[.text-center]
-****
-**Internet Calendaring and Scheduling Core Object Specification** +
-**(iCalendar)**
-****
-
-====
-Origin: https://datatracker.ietf.org/doc/html/rfc5545[RFC 5545 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)]
-====
 
 :rfc5545: https://datatracker.ietf.org/doc/html/rfc5545
 
+[.text-center]
 ****
+{rfc5545}[**Internet Calendaring and Scheduling Core Object Specification**] +
+{rfc5545}[**(iCalendar)**]
+****
+
 {rfc5545}[RFC 5545]는 캘린더 서비스나 프로토콜에 관계 없이 events, to-dos, journal entries, free/busy information와 같은 캘린더 및 일정 정보를 표현하고 교환하기 위한 iCalendar 데이터 포맷을 정의한다.
-****
 
 == Introduction
 
@@ -356,9 +351,9 @@ Content-Id:<part3.msg.970415T083000@example.com>
 
 Parameter Name:: CN
 
-Purpose:: To specify the common name to be associated with the calendar user specified by the property.
+Purpose:: 속성에서 지정한 캘린더 사용자와 연결할 일반 이름을 지정합니다.
 
-Format Definition:: This property parameter is defined by the following notation:
+Format Definition:: 이 속성 매개변수는 다음 표기법으로 정의됩니다:
 +
 [source]
 ----
@@ -377,6 +372,33 @@ ORGANIZER;CN="John Smith":mailto:jsmith@example.com
 ==== Calendar User Type
 
 Parameter Name:: CUTYPE
+
+Purpose:: 속성에서 지정한 캘린더 사용자 유형을 식별합니다.
+
+Format Definition:: 이 속성 매개변수는 다음 표기법으로 정의됩니다:
++
+[source]
+----
+cutypeparam        = "CUTYPE" "="
+                  ("INDIVIDUAL"   ; An individual
+                 / "GROUP"        ; A group of individuals
+                 / "RESOURCE"     ; A physical resource
+                 / "ROOM"         ; A room resource
+                 / "UNKNOWN"      ; Otherwise not known
+                 / x-name         ; Experimental type
+                 / iana-token)    ; Other IANA-registered
+                                  ; type
+; Default is INDIVIDUAL
+----
+
+Description:: 이 매개 변수는 CAL-ADDRESS 값 유형이 있는 속성에서 지정할 수 있습니다.  이 매개 변수는 속성에서 지정한 캘린더 사용자 유형을 식별합니다.  이 매개 변수를 허용하는 속성에 지정되지 않은 경우 기본값은 INDIVIDUAL입니다. 애플리케이션은 인식하지 못하는 x-name 및 iana-token 값을 UNKNOWN 값과 동일한 방식으로 처리해야 합니다.
+
+Example::
++
+[source]
+----
+ATTENDEE;CUTYPE=GROUP:mailto:ietf-calsch@example.org
+----
 
 ==== Delegators
 
@@ -442,13 +464,50 @@ Parameter Name:: SENT-BY
 
 Parameter Name:: TZID
 
+Purpose:: 속성 값에서 시간 구성 요소의 시간대 정의에 대한 식별자를 지정합니다.
+
+Format Definition:: 이 속성 매개변수는 다음 표기법으로 정의됩니다:
++
+[source]
+----
+tzidparam  = "TZID" "=" [tzidprefix] paramtext
+
+tzidprefix = "/"
+----
+
+Description::  이 매개변수는 DATE-TIME 또는 TIME 값 유형이 지정되고 값이 UTC 또는 "floating" 시간이 아닌 경우 "DTSTART", "DTEND", "DUE", "EXDATE" 및 "RDATE" 속성에서 지정해야 합니다.  UTC 및 "floating time" 형식에 대한 설명은 DATE-TIME 또는 TIME 값 유형 정의를 참조하십시오. 이 속성 매개변수는 속성의 시간 부분을 평가할 때 사용할 "VTIMEZONE" 캘린더 구성 요소를 고유하게 식별하는 텍스트 값을 지정합니다.  "TZID" 속성 매개변수의 값은 일치하는 시간대 정의에 대한 "TZID" 속성 값과 동일합니다.  iCalendar 객체에 지정된 각 고유한 "TZID" 매개변수 값에 대해 개별 "VTIMEZONE" 캘린더 구성 요소를 지정해야 합니다.
++
+DATE-TIME이 UTC 또는 "floating" 시간이 아닌 경우 이 매개변수는 DATE-TIME 값이 있는 속성에 지정되어야 합니다. iCalendar 객체에 VTIMEZONE 정의를 포함하지 않고 따르지 않으면 특정 위치의 현지 시간을 일관성 있게 이해하지 못할 수 있습니다.
++
+접두사로 SOLIDUS 문자가 있으면 이 "TZID"가 전역으로 정의된 표준 시간대 레지스트리(해당 레지스트리가 정의된 경우)에서 고유 ID를 나타냅니다.
++
+[NOTE]
+====
+이 문서는 표준 시간대 식별자에 대한 명명 규칙을 정의하지 않습니다. 구현자는 public-domain TZ database[TZDB]와 같은 기존 시간대 사양에 정의된 명명 규칙을 사용할 수 있습니다. 전 세계적으로 고유한 시간대 식별자의 사양은 이 문서에서 다루지 않으며 향후 연구를 위해 남겨져 있습니다.
+====
++
+다음은 이 속성 매개변수의 예시입니다:
++
+[source]
+----
+DTSTART;TZID=America/New_York:19980119T020000
+
+DTEND;TZID=America/New_York:19980119T030000
+----
++
+"TZID" 속성 매개 변수는 시간 값이 UTC로 지정된 DATE 속성 및 DATE-TIME 또는 TIME 속성에 적용해서는 안 됩니다.
++
+"TZID" 속성 매개변수 없이 DATE-TIME 또는 TIME 값에 현지 시간을 사용하면 iCalendar 객체에 "VTIMEZONE" 캘린더 구성 요소가 있는지 여부에 관계없이 부동 시간으로 해석됩니다.
++
+자세한 내용은 DATE-TIME 및 TIME 값 유형에 대한 섹션을 참조하십시오.
+
 ==== Value Data Types
 
 Parameter Name:: VALUE
 
 === Property Value Data Types
 
-iCalendar 개체의 속성은 강력하게 유형화되어 있습니다.  각 속성의 정의는 값이 이 섹션에 정의된 값 데이터 유형 또는 단순히 값 유형 중 하나로 제한됩니다. 속성의 값 유형은 기본 값 유형으로 암시적으로 지정되거나 "VALUE" 매개변수를 사용하여 명시적으로 지정됩니다.  속성의 값 유형이 대체 유효한 유형 중 하나인 경우 "VALUE" 매개 변수를 사용하여 명시적으로 지정해야 합니다.
+iCalendar 개체의 속성은 강력하게 유형화되어 있습니다. 각 속성의 정의는 값이 이 섹션에 정의된 값 데이터 유형 또는 단순히 값 유형 중 하나로 제한됩니다. 속성의 값 유형은 기본 값 유형으로 암시적으로 지정되거나 "VALUE" 매개변수를 사용하여 명시적으로 지정됩니다.  속성의 값 유형이 대체 유효한 유형 중 하나인 경우 "VALUE" 매개 변수를 사용하여 명시적으로 지정해야 합니다.
 
 ==== Binary
 
@@ -466,9 +525,115 @@ Value Name:: CAL-ADDRESS
 
 Value Name:: CAL-ADDRESS
 
+Purpose:: This value type is used to identify values that contain a calendar date.
+
+Format Definition:: This value type is defined by the following notation:
++
+[source]
+----
+date               = date-value
+
+date-value         = date-fullyear date-month date-mday
+date-fullyear      = 4DIGIT
+date-month         = 2DIGIT        ;01-12
+date-mday          = 2DIGIT        ;01-28, 01-29, 01-30, 01-31
+                                   ;based on month/year
+----
+
+Description:: 속성이 허용하는 경우 여러 "date" 값이 COMMA-separated 목록으로 지정됩니다. 값 유형의 형식은 달력 날짜의 기본 형식인 [ISO.8601.2004] 완전 표현을 기반으로 합니다. 텍스트 형식은 four-digit year, two-digit month 및 two-digit day을 지정합니다. year, month, day 구성 요소 텍스트 사이에는 구분 문자가 없습니다.
+
+이 값 유형에는 추가 콘텐츠 값 인코딩(예: BACKSLASH 문자 인코딩, 섹션 3.3.11 참조)이 정의되어 있지 않습니다.
+
+Example:: 다음은 1997년 7월 14일을 나타냅니다:
++
+[source]
+----
+19970714
+----
+
 ==== Date-Time
 
 Value Name:: DATE-TIME
+
+Purpose:: 이 값 유형은 정확한 달력 날짜와 시간을 지정하는 값을 식별하는 데 사용됩니다.
+
+Format Definition:: 이 값 유형은 다음 표기법으로 정의됩니다:
++
+[source]
+----
+date-time  = date "T" time ;As specified in the DATE and TIME
+                           ;value definitions
+----
+
+Description::  속성이 허용하는 경우 여러 개의 "DATE-TIME" 값이 쉼표로 구분된 값 목록으로 지정됩니다. 이 값 유형에 대한 추가 콘텐츠 값 인코딩(예: BACKSLASH 문자 인코딩, 3.3.11절 참조)은 정의되지 않습니다.
++
+"DATE-TIME" 값 유형은 정확한 달력 날짜 및 시간을 포함하는 값을 식별하는 데 사용됩니다. 이 형식은 달력 날짜 및 시간에 대한 기본 형식인 [ISO.8601.2004] 완전한 표현을 기반으로 합니다.  텍스트 형식은 "date"와 그 뒤에 시간 지정자인 LATIN CAPITAL LETTER T 문자, "time" 형식을 연결한 것입니다.
++
+"DATE-TIME" 값 유형은 세 가지 형식으로 시간 값을 표현합니다:
++
+UTC 오프셋이 있는 날짜 및 시간 형식은 사용하지 않아야 합니다. 예를 들어 다음은 DATE-TIME 값에 유효하지 않습니다:
++
+[source]
+----
+19980119T230000-0800       ;Invalid time format
+----
++
+FORM #1: 현지 시간 포함 날짜
++
+현지 시간 포함 날짜 형식은 UTC 지정자를 포함하지 않거나 표준 시간대를 참조하지 않는 단순한 DATE-TIME 값입니다.  예를 들어 다음은 1998년 1월 18일 오후 11시를 나타냅니다:
++
+[source]
+----
+19980118T230000
+----
++
+이 유형의 DATE-TIME 값은 "floating"이라고 하며 특정 시간대에 구속되지 않습니다. 현재 관찰 중인 시간대에 관계없이 동일한 시, 분, 초 값을 나타내는 데 사용됩니다. 예를 들어, 어떤 시간대에 있든 상관없이 매일 오전 11시부터 오후 1시까지 개인이 바쁘다는 것을 나타내는 이벤트를 정의할 수 있습니다. 이러한 경우 현지 시간을 지정할 수 있습니다. 상대적인 표준 시간대 정보 없이 현지 시간으로 구성된 속성 값을 가진 iCalendar 개체의 수신자는 해당 값을 "ATTENDEE"가 특정 순간에 있는 표준 시간대로 고정된 것으로 해석해야 합니다. 즉, 서로 다른 시간대에 있는 두 명의 "Attendees"가 floating time으로 동일한 이벤트 정의를 수신하더라도 실제 시간은 서로 다를 수 있습니다. Floating time은 합리적인 동작인 경우에만 사용해야 합니다.
++
+대부분의 경우 고정 시간이 필요합니다. 속성 값에 고정 시간을 올바르게 전달하려면 UTC 시간 또는 표준 시간대 참조가 있는 현지 시간을 지정해야 합니다.
++
+"TZID" 속성 매개변수 없이 DATE-TIME 값에 현지 시간을 사용하는 것은 iCalendar 객체에 "VTIMEZONE" 캘린더 구성 요소가 있는지 여부와 관계없이 floating time으로 해석됩니다.
++
+FORM #2: UTC 시간이 있는 날짜
++
+UTC 시간 또는 절대 시간이 포함된 날짜는 시간 값에 추가된 UTC 지정자인 LATIN CAPITAL LETTER Z 접미사 문자로 식별됩니다. 예를 들어 다음은 1998년 1월 19일 07:00 UTC를 나타냅니다:
++
+[source]
+----
+19980119T070000Z
+----
++
+시간 값이 UTC로 지정된 DATE-TIME 속성에는 "TZID" 속성 매개 변수를 적용해서는 안 됩니다.
++
+FORM #3: 현지 시간 및 표준 시간대 참조가 있는 날짜
++
+표준 시간대 정보를 참조하는 날짜 및 현지 시간은 적절한 표준 시간대 정의를 참조하기 위해 "TZID" 속성 매개 변수를 사용하여 식별합니다. "TZID"는 섹션 3.2.19에서 자세히 설명합니다. 예를 들어 다음은 1998년 1월 19일 뉴욕의 오전 2시를 나타냅니다:
++
+[source]
+----
+TZID=America/New_York:19980119T020000
+----
++
+참조된 표준 시간대의 정의에 따라 설명된 현지 시간이 두 번 이상 발생하는 경우(일광 절약 시간제에서 표준 시간제로 변경할 때) DATE-TIME 값은 참조된 시간의 첫 번째 발생을 나타냅니다. 따라서 `TZID=America/Now_York:20071104T013000` 은 2007년 11월 4일 오전 1시 30분 EDT(UTC-04:00)을 나타냅니다. 설명된 현지 시간이 발생하지 않는 경우(표준시에서 서머타임으로 변경하는 경우), 현지 시간 차이 이전의 UTC offset을 사용하여 DATE-TIME 값이 해석됩니다. 따라서 `TZID=America/New_York:20070311T023000` 은 2007년 3월 11일 오전 3시 30분 EDT(UTC-04:00)을 나타내며, 이는 EST(UTC-05:00) 오전 1시 30분에서 한 시간 후입니다.
++
+시간 값은 양수 윤초를 지정할 때 초 60만 지정해야 합니다. 예:
++
+[source]
+----
+19970630T235960Z
+----
++
+윤초를 지원하지 않는 구현은 초 60을 초 59와 동등한 것으로 해석해야 합니다.
+
+Example:: 다음은 "DTSTART" 속성을 사용하여 세 가지 시간 형식 각각에서 1997년 7월 14일 오후 1시 30분에 뉴욕시를 나타냅니다.
++
+[source]
+----
+DTSTART:19970714T133000                   ; Local time
+DTSTART:19970714T173000Z                  ; UTC time
+DTSTART;TZID=America/New_York:19970714T133000
+                                          ; Local time and time
+                                          ; zone reference
+----
 
 ==== Duration
 
@@ -492,7 +657,7 @@ Value Name:: RECUR
 
 Purpose:: 이 value type은 반복 규칙 사양이 포함된 속성을 식별하는데 사용한다.
 
-Format Definition::
+Format Definition:: 이 값 유형은 다음 표기법으로 정의됩니다:
 +
 [source]
 ----
@@ -581,16 +746,122 @@ bysplist    = ( setposday *("," setposday) )
 setposday   = yeardaynum
 ----
 
-Description:: 이 value type은 하나 혹은 여러개의 recurrence grammar part 목록으로 구성된 구조화된 값이다. 각 규칙 부분(rule part)는 `NAME=VALUE` 쌍으로 정의되며, 세미콜론으로 구분하고, 특정 순서로 정렬되지 않는다. 개별 규칙 부분은 한 번만 지정해야 한다(**MUST**). 호환 응용프로그램은 규칙 부분의 순서와 상관없이 받아들여야 하지만, iCalendar의 리비전의 이전 버전의 응용프로그램과의 하위 호환성을 보장하기 위해 `FREQ` 규칙 부분은 `RECUR` 값에 첫번째 규칙 부분이어야 한다(**MUST**).
+Description:: 이 값 유형은 하나 이상의 반복 문법 부분의 목록으로 구성된 구조화된 값입니다.  각 규칙 부분은 이름=값 쌍으로 정의됩니다.  규칙 부분은 세미콜론 문자로 서로 구분됩니다.  규칙 부분은 특정 순서로 정렬되지 않습니다.  개별 규칙 부분은 반드시 한 번만 지정해야 합니다.  호환 애플리케이션은 어떤 순서로 정렬된 규칙 부분을 허용해야 하지만, 이 iCalendar 개정 이전 애플리케이션과의 역호환성을 보장하기 위해 FREQ 규칙 부분은 RECUR 값에 지정된 첫 번째 규칙 부분이어야 합니다.
++
+FREQ 규칙 부분은 반복 규칙의 유형을 식별합니다.  이 규칙 부분은 반드시 반복 규칙에 지정되어야 합니다.  유효한 값으로는 초 이상 간격을 기준으로 반복 이벤트를 지정하려면 SECONDLY, 1분 이상 간격을 기준으로 반복 이벤트를 지정하려면 MINUTELY, 1시간 이상 간격을 기준으로 반복 이벤트를 지정하려면 HOURLY가 있습니다; 매일: 하루 이상의 간격을 기준으로 반복 이벤트를 지정하고, 매주: 일주일 이상의 간격을 기준으로 반복 이벤트를 지정하고, 매월: 한 달 이상의 간격을 기준으로 반복 이벤트를 지정하고, 매년: 일 년 이상의 간격을 기준으로 반복 이벤트를 지정합니다.
++
+INTERVAL 규칙 부분에는 반복 규칙이 반복되는 간격을 나타내는 양수 정수가 포함됩니다.  기본값은 "1"이며, SECONDLY 규칙의 경우 매초, MINUTELY 규칙의 경우 매분, HOURLY 규칙의 경우 매시간, DAILY 규칙의 경우 매일, WEEKLY 규칙의 경우 매주, MONTHLY 규칙의 경우 매월, YEARLY 규칙의 경우 매년을 의미합니다.  예를 들어, DAILY 규칙에서 값 "8"은 8일마다를 의미합니다.
++
+UNTIL 규칙 부분은 포괄적인 방식으로 반복 규칙의 범위를 지정하는 DATE 또는 DATE-TIME 값을 정의합니다.  UNTIL로 지정된 값이 지정된 반복과 동기화되면 이 DATE 또는 DATE-TIME이 반복의 마지막 인스턴스가 됩니다.  UNTIL 규칙 부분의 값은 "DTSTART" 속성과 동일한 값 유형이어야 합니다.  또한 "DTSTART" 속성이 현지 시간이 포함된 날짜로 지정되어 있는 경우 UNTIL 규칙 부분도 현지 시간이 포함된 날짜로 지정되어야 합니다.  "DTSTART" 속성이 UTC 시간이 포함된 날짜 또는 현지 시간 및 표준 시간대 참조가 포함된 날짜로 지정된 경우 UNTIL 규칙 부분은 반드시 UTC 시간이 포함된 날짜로 지정해야 합니다.  "STANDARD" 및 "DAYLIGHT" 하위 구성 요소의 경우 UNTIL 규칙 부분은 항상 UTC 시간이 포함된 날짜로 지정해야 합니다.  DATE-TIME 값으로 지정하는 경우 반드시 UTC 시간 형식으로 지정해야 합니다.  없는 경우, 그리고 COUNT 규칙 부분도 없는 경우, "RRULE"은 영원히 반복되는 것으로 간주됩니다.
++
+COUNT 규칙 부분은 반복을 범위 제한할 발생 횟수를 정의합니다.  "DTSTART" 속성 값은 항상 첫 번째 발생으로 계산됩니다.
++
+BYSECOND 규칙 부분은 쉼표로 구분된 1분 이내의 초 목록을 지정합니다.  유효한 값은 0~60입니다.  BYMINUTE 규칙 부분은 1시간 이내의 콤마로 구분된 분 목록을 지정합니다. 유효한 값은 0~59입니다.  BYHOUR 규칙 부분은 하루 중 쉼표로 구분된 시간 목록을 지정합니다.  유효한 값은 0~23입니다. 연결된 "DTSTART" 속성의 값 유형이 DATE인 경우 BYSECOND, BYMINUTE 및 BYHOUR 규칙 부분을 지정해서는 안 됩니다. 이러한 규칙 부분은 위의 요구 사항을 위반하는 RECUR 값에서 무시되어야 합니다(예: 이 iCalendar 개정 이전 버전에서 생성된 애플리케이션에서 생성된 값).
++
+BYDAY 규칙 부분은 쉼표로 구분된 요일 목록을 지정합니다. SU는 일요일, MO는 월요일, TU는 화요일, WE는 수요일, TH는 목요일, FR은 금요일, SA는 토요일을 나타냅니다.
++
+각 BYDAY 값 앞에는 양수(+n) 또는 음수(-n)의 정수가 올 수도 있습니다.  이 값이 있는 경우 월별 또는 연간 "RRULE" 내에서 특정 날짜의 n번째 발생을 나타냅니다.
++
+예를 들어, 월별 규칙 내에서 +1MO(또는 간단히 1MO)는 해당 월의 첫 번째 월요일을 나타내고, -1MO는 해당 월의 마지막 월요일을 나타냅니다.  FREQ 규칙 부분이 YEARLY로 설정된 BYDAY 규칙 부분의 숫자 값은 BYMONTH 규칙 부분이 있는 경우 해당 월 내의 오프셋에 해당하며, BYWEEKNO 또는 BYMONTH 규칙 부분이 있는 경우 해당 연도 내의 오프셋에 해당합니다.  정수 수정자가 없는 경우 지정된 빈도 내에서 이 유형의 모든 날짜를 의미합니다.  예를 들어 MONTHLY 규칙 내에서 MO는 해당 월 내의 모든 월요일을 나타냅니다.  FREQ 규칙 부분이 MONTHLY 또는 YEARLY로 설정되지 않은 경우 BYDAY 규칙 부분을 숫자 값으로 지정해서는 안 됩니다.  또한 BYWEEKNO 규칙 부분을 지정할 때 FREQ 규칙 부분이 YEARLY로 설정된 상태에서 BYDAY 규칙 부분을 숫자 값과 함께 지정해서는 안 됩니다.
++
+BYMONTHDAY 규칙 부분은 쉼표로 구분된 월별 요일 목록을 지정합니다.  유효한 값은 1 ~ 31 또는 -31 ~ -1입니다.  예를 들어 -10은 해당 월의 열 번째부터 마지막 날을 나타냅니다. FREQ 규칙 부분이 매주로 설정된 경우 BYMONTHDAY 규칙 부분을 지정해서는 안 됩니다.
++
+BYYEARDAY 규칙 부분은 쉼표로 구분된 연도별 요일 목록을 지정합니다.  유효한 값은 1 ~ 366 또는 -366 ~ -1입니다.  예를 들어 -1은 연도의 마지막 날(12월 31일)을 나타내고 -306은 연도의 306번째부터 마지막 날(3월 1일)을 나타냅니다.  FREQ 규칙 부분이 매일, 매주 또는 매월로 설정된 경우 BYYEARDAY 규칙 부분을 지정해서는 안 됩니다.
++
+BYWEEKNO 규칙 부분은 연도의 주를 지정하는 쉼표로 구분된 서수 목록을 지정합니다.  유효한 값은 1에서 53 또는 -53에서 -1입니다.  이는 [ISO.8601.2004]에 정의된 주 번호에 따른 주에 해당합니다.  한 주는 주 시작일로 정의된 요일부터 시작하여 7일의 기간으로 정의됩니다(WKST 참조).  역년의 첫 번째 주는 해당 역년에서 최소 4일이 포함된 첫 번째 주입니다.  이 규칙 부분은 FREQ 규칙 부분이 매년이 아닌 다른 값으로 설정된 경우에는 사용하지 않아야 합니다.  예를 들어 3은 해당 연도의 셋째 주를 나타냅니다.
++
+[NOTE]
+====
+주 시작이 월요일이라고 가정할 때 53주는 목요일이 1월 1일이거나 윤년이고 수요일이 1월 1일인 경우에만 발생할 수 있습니다.
+====
++
+BYMONTH 규칙 부분은 쉼표로 구분된 연도 월 목록을 지정합니다.  유효한 값은 1~12입니다.
++
+WKST 규칙 부분은 근무일이 시작되는 날짜를 지정합니다. 유효한 값은 MO, TU, WE, TH, FR, SA 및 SU입니다.  이 값은 WEEKLY "RRULE"의 간격이 1보다 크고 BYDAY 규칙 부분을 지정할 때 중요합니다.  이 값은 연도별 "RRULE"에 BYWEEKNO 규칙 부분이 지정된 경우에도 중요합니다.  기본값은 MO입니다.
++
+BYSETPOS 규칙 부분은 규칙에 지정된 반복 인스턴스 집합 내에서 n번째 발생에 해당하는 값의 쉼표로 구분된 목록을 지정합니다.  BYSETPOS는 반복 규칙의 한 간격에 있는 반복 인스턴스 집합에서 작동합니다.  예를 들어, WEEKLY 규칙에서 간격은 1주일입니다. 반복 인스턴스 세트는 FREQ 규칙 부분에 정의된 간격의 시작부터 시작됩니다.  유효한 값은 1 ~ 366 또는 -366 ~ -1입니다.  반드시 다른 BYxxx 규칙 부분과 함께 사용해야 합니다.  예를 들어 "해당 월의 마지막 근무일"은 다음과 같이 표현할 수 있습니다:
++
+[source]
+----
+FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1
+----
++
+각 BYSETPOS 값은 양수(+n) 또는 음수(-n)의 정수를 포함할 수 있습니다.  이 값이 있는 경우 규칙에 지정된 발생 집합 내에서 특정 발생의 n번째 발생을 나타냅니다.
++
+반복 규칙은 잘못된 날짜(예: 2월 30일) 또는 존재하지 않는 현지 시간(예: 현지 시간이 1시간 앞당겨진 날의 오전 1시 30분, 오전 1시)을 가진 반복 인스턴스를 생성할 수 있습니다.  이러한 반복 인스턴스는 무시해야 하며 반복 집합의 일부로 계산해서는 안 됩니다.
++
+규칙에 포함되지 않은 다양한 반복 인스턴스 시작 시간 및 날짜를 결정하는 데 필요한 정보는 시작 시간("DTSTART") 구성 요소 속성에서 파생됩니다.  예를 들어, "FREQ=YEARLY;BYMONTH=1"은 월 내 특정 날짜나 시간을 지정하지 않습니다.  이 정보는 "DTSTART"에 지정된 것과 동일합니다.
++
+BYxxx 규칙 부분은 어떤 방식으로든 반복을 수정합니다.  빈도와 같거나 더 큰 기간의 BYxxx 규칙 부분은 일반적으로 생성된 반복의 발생 횟수를 줄이거나 제한합니다.  예를 들어, "FREQ=DAILY;BYMONTH=1"은 반복 인스턴스 수를 모든 일(BYMONTH 규칙 부분이 없는 경우)에서 1월의 모든 일로 줄입니다.  빈도보다 짧은 기간에 대한 BYxxx 규칙 부분은 일반적으로 반복 발생 횟수를 늘리거나 확장합니다. 예를 들어, "FREQ=YEARLY;BYMONTH=1,2"는 연간 반복 설정 내의 일 수를 1(BYMONTH 규칙 부분이 없는 경우)에서 2로 증가시킵니다.
++
+여러 개의 BYxxx 규칙 부분이 지정된 경우 지정된 FREQ 및 INTERVAL 규칙 부분을 평가한 후 다음 순서로 현재 평가된 발생 집합에 BYxxx 규칙 부분을 적용합니다: BYMONTH, BYWEEKNO, BYYEARDAY, BYMONTHDAY, BYDAY, BYHOUR, BYMINUTE, BYSECOND 및 BYSETPOS를 평가한 다음 COUNT 및 UNTIL을 평가합니다.
++
+아래 표에는 FREQ 규칙 부분 값에 대한 BYxxx 규칙 부분 확장 또는 제한 동작의 종속성이 요약되어 있습니다.
++
+"N/A"라는 용어는 해당 BYxxx 규칙 부분을 해당 FREQ 값과 함께 사용하지 않아야 함을 의미합니다.
++
+BYDAY는 FREQ 값에 따라 몇 가지 특별한 동작이 있으며, 이는 표 아래의 별도 메모에 설명되어 있습니다.
++
+[source]
+----
++----------+--------+--------+-------+-------+------+-------+------+
+|          |SECONDLY|MINUTELY|HOURLY |DAILY  |WEEKLY|MONTHLY|YEARLY|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYMONTH   |Limit   |Limit   |Limit  |Limit  |Limit |Limit  |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYWEEKNO  |N/A     |N/A     |N/A    |N/A    |N/A   |N/A    |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYYEARDAY |Limit   |Limit   |Limit  |N/A    |N/A   |N/A    |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYMONTHDAY|Limit   |Limit   |Limit  |Limit  |N/A   |Expand |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYDAY     |Limit   |Limit   |Limit  |Limit  |Expand|Note 1 |Note 2|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYHOUR    |Limit   |Limit   |Limit  |Expand |Expand|Expand |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYMINUTE  |Limit   |Limit   |Expand |Expand |Expand|Expand |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYSECOND  |Limit   |Expand  |Expand |Expand |Expand|Expand |Expand|
++----------+--------+--------+-------+-------+------+-------+------+
+|BYSETPOS  |Limit   |Limit   |Limit  |Limit  |Limit |Limit  |Limit |
++----------+--------+--------+-------+-------+------+-------+------+
+----
++
+[NOTE]
+.Note 1
+====
+BYMONTHDAY가 있는 경우 제한, 그렇지 않은 경우 월별 특별 확장.
+====
++
+[NOTE]
+.Note 2
+====
+BYYEARDAY 또는 BYMONTHDAY가 있는 경우 한도, BYWEEKNO가 있는 경우 매주 특별 확장, BYMONTH가 있는 경우 매월 특별 확장, 그 외에는 매년 특별 확장입니다.
+====
++
+다음은 여러 BYxxx 규칙 부분을 평가하는 예제입니다.
++
+[source]
+----
+DTSTART;TZID=America/New_York:19970105T083000
+RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU;BYHOUR=8,9;
+ BYMINUTE=30
+----
++
+먼저 "INTERVAL=2"를 "FREQ=YEARLY"에 적용하여 "격년"에 도달합니다.  그런 다음 "BYMONTH=1"을 적용하여 "격년 1월마다"에 도달합니다.  그런 다음 "BYDAY=SU"를 적용하여 "격년 1월 매주 일요일"에 도달합니다.  그런 다음 "BYHOUR=8,9"를 적용하여 "격년 1월의 매주 일요일 오전 8시와 오전 9시에 도착"합니다. 그런 다음 "BYMINUTE=30"을 적용하여 "격년 1월 매주 일요일 오전 8시 30분과 오전 9시 30분에 도착"하도록 합니다.  그런 다음 "RRULE"의 정보가 없기 때문에 두 번째는 "DTSTART"에서 파생되어 "격년 1월의 매주 일요일 오전 8:30:00 및 오전 9:30:00"로 끝납니다.  마찬가지로 BYMINUTE, BYHOUR, BYDAY, BYMONTHDAY 또는 BYMONTH 규칙 부분이 누락된 경우 "DTSTART" 속성에서 적절한 분, 시간, 일 또는 월을 검색할 수 있습니다.
++
+지정된 시간대에 대해 반복 인스턴스의 계산된 로컬 시작 시간이 존재하지 않거나 두 번 이상 발생하는 경우, 반복 인스턴스의 시간은 섹션 3.3.5에 지정된 대로 해당 날짜와 시간을 설명하는 명시적 DATE-TIME 값과 동일한 방식으로 해석됩니다.
++
+이 값 유형에 대한 추가 콘텐츠 값 인코딩(즉, BACKSLASH 문자 인코딩, 3.3.11절 참조)은 정의되어 있지 않습니다.
 
-`FREQ` 규칙 파트는 ...
-
-Example:: 격일로 10회를 나타내는 규칙
+Example:: 다음은 격일로 발생하는 10개의 발생을 지정하는 규칙입니다:
 +
 [source]
 ----
 FREQ=DAILY;COUNT=10;INTERVAL=2
 ----
++
+섹션 3.8.5.3에 명시된 다른 예가 있습니다.
 
 ==== Text
 
@@ -608,18 +879,22 @@ Value Name:: URI
 
 Value Name:: UTC-OFFSET
 
-* 목적: UTC에서 local-time까지의 offset이 포함된 프로퍼티.
-* 형식 정의:
+Purpose:: 이 값 유형은 UTC에서 현지 시간으로의 오프셋이 포함된 속성을 식별하는 데 사용됩니다.
+
+Format Definition:: 이 값 유형은 다음 표기법으로 정의됩니다:
 +
 [source]
 ----
 utc-offset = time-numzone
+
 time-numzone = ("+" / "-") time-hour time-minute [time-second]
 ----
-* 설명: `+` 는 **반드시** UTC 앞의 값을 표시. `-` 는 **반드시** UTC 뒷 값을 표시. `-0000`, `-000000` 과 같은 값은 허용하지 않음.
-시간초가 있을 경우 이 값은 60이어서는 안되며, 기본값은 0입니다.
-이 값에는 추가 컨텐츠 값은 정의되지 않음.
-* 예제
+
+Description:: positive UTC offsets(즉, UTC보다 앞당김)의 경우 반드시 PLUS SIGN 문자를 지정해야 합니다. negative UTC offsets(즉, UTC보다 뒤처짐)의 경우 HYPHEN-MINUS 문자를 지정해야 합니다.  "-0000" 및 "-000000" 값은 허용되지 않습니다. time-second가 있는 경우 60이 아니어야 하며, 없는 경우 기본값은 0입니다.
++
+이 값 유형에 대한 추가 콘텐츠 값 인코딩(예: BACKSLASH 문자 인코딩, 섹션 3.3.11 참조)은 정의되어 있지 않습니다.
+
+Example:: 뉴욕(UTC보다 5시간 늦음)과 제네바(UTC보다 1시간 빠름)의 표준 시간에 대해 다음과 같은 UTC 오프셋이 제공됩니다:
 +
 [source]
 ----
@@ -629,9 +904,56 @@ time-numzone = ("+" / "-") time-hour time-minute [time-second]
 
 === iCalendar Object
 
+캘린더 및 스케줄링 코어 객체는 캘린더 및 스케줄링 정보의 모음입니다.  일반적으로 이 정보는 단일 iCalendar 개체가 있는 iCalendar 스트림으로 구성됩니다. 그러나 여러 개의 iCalendar 개체를 순차적으로 함께 그룹화하여 iCalendar 스트림에 포함시킬 수 있습니다.  iCalendar 개체의 첫 번째 줄과 마지막 줄에는 반드시 한 쌍의 iCalendar 개체 구분자 문자열이 포함되어야 합니다.  iCalendar 스트림의 구문은 다음과 같습니다:
+
+[source]
+----
+icalstream = 1*icalobject
+
+icalobject = "BEGIN" ":" "VCALENDAR" CRLF
+             icalbody
+             "END" ":" "VCALENDAR" CRLF
+----
+
+다음은 iCalendar 객체의 간단한 예입니다:
+
+[source]
+----
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:19970610T172345Z-AF23B2@example.com
+DTSTAMP:19970610T172345Z
+DTSTART:19970714T170000Z
+DTEND:19970715T040000Z
+SUMMARY:Bastille Day Party
+END:VEVENT
+END:VCALENDAR
+----
+
 === Property
 
+속성은 캘린더 객체 또는 캘린더 구성요소를 설명하는 개별 속성의 정의입니다.  속성은 3.1절에 정의된 "내용선" 표기법에 의해 정의된 형식을 취합니다.
+
+다음은 속성의 예입니다:
+
+[source]
+----
+DTSTART:19960415T133000Z
+----
+
+이 메모에서는 iCalendar 개체 내에서 속성의 순서를 지정하지 않습니다.
+
+속성 이름, 매개변수 이름 및 열거된 매개변수 값은 대소문자를 구분하지 않습니다.  예를 들어, 속성 이름 "DUE"는 "due" 및 "Due"와 동일하며, `DTSTART;TZID=America/New_York:19980714T120000` 은 `DtStart;TzID=America/New_York:19980714T120000` 과 동일합니다.
+
 === Calendar Components
+
+==== Event Component
+
+==== To-Do Component
+
+==== Journal Component
 
 ==== Free/Busy Component
 
@@ -726,10 +1048,91 @@ URL:http://www.example.com/calendar/busytime/jsmith.ifb
 END:VFREEBUSY
 ----
 
+==== Time Zone Component
+
+==== Alarm Component
 
 === Calendar Properties
 
+==== Calendar Scale
+
+==== Method
+
+==== Product Identifier
+
+==== Version
+
 === Component Properties
+
+==== Descriptive Component Properties
+
+===== Attachment
+
+===== Categories
+
+===== Classification
+
+===== Comment
+
+===== Description
+
+===== Geographic Position
+
+===== Location
+
+===== Percent Complete
+
+===== Priority
+
+===== Resources
+
+===== Status
+
+===== Summary
+
+==== Date and Time Component Properties
+
+===== Date-Time Completed
+
+===== Date-Time End
+
+===== Date-Time Due
+
+===== Date-Time Start
+
+===== Duration
+
+===== Free/Busy Time
+
+===== Time Transparency
+
+==== Time Zone Component Properties
+
+===== Time Zone Identifier
+
+===== Time Zone Name
+
+===== Time Zone Offset From
+
+===== Time Zone Offset To
+
+===== Time Zone URL
+
+==== Relationship Component Properties
+
+===== Attendee
+
+===== Contact
+
+===== Organizer
+
+===== Recurrence ID
+
+===== Related To
+
+===== Uniform Resource Locator
+
+===== Unique Identifier
 
 ==== Recurrence Component Properties
 
