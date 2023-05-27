@@ -30,7 +30,7 @@ NamedParameterJdbcTemplate --> JdbcOperation
 * TransactionManager
 * TransactionTemplate
 * DataAccessStrategy
-* ResultMap
+* ResultSet
 
 == findById
 
@@ -46,4 +46,7 @@ NamedParameterJdbcTemplate --> JdbcOperation
 ..... `converter: JdbcConverter` 필드의 `query` 메서드 호출
 ..... `execute` 메서드 호출
 ..... `DateSourceUtils.getConnection(DataSource)` 메서드 통해서 `Connection` 생성
+..... `doInPreparedStatement` 실행
+...... `PreparedStatement#executeQuery` 메서드 통해서 `ResultSet` 생성 
+..... **쿼리 결과인 `result` 생성**
 ... `triggerAfterConvert` 메서드 실행
