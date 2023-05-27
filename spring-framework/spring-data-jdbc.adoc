@@ -39,7 +39,7 @@ NamedParameterJdbcTemplate --> JdbcOperation
 .. `JdbcAggregateOperations` 구현체인 `JdbcAggregateTemplate`
 ... `DataAccessStrategy` 필드의 `findById` 메서드 호출
 .... `DataAccessStrategy` 구현체인 `DefaultDataAccessStrategy`
-.... `SqlGeneratorSource` 필드의 `getSqlGenerator` 메서드 통해서 쿼리 생성
+.... **`SqlGeneratorSource` 필드의 `getSqlGenerator` 메서드 통해서 쿼리 생성**
 .... `SqlParamgersFactory` 필드의 `forQueryById` 메서드 통해서 쿼리 파라미터 생성
 .... `getEntityRowMapper` 메서드 통해 `RowMapper` 생성
 .... `operations: NamedParameterJdbcOperations` 필드의 `queryForObject` 메서드 통해서 쿼리 실행 (w/ rowMapper)
@@ -48,5 +48,8 @@ NamedParameterJdbcTemplate --> JdbcOperation
 ..... `DateSourceUtils.getConnection(DataSource)` 메서드 통해서 `Connection` 생성
 ..... `doInPreparedStatement` 실행
 ...... `PreparedStatement#executeQuery` 메서드 통해서 `ResultSet` 생성 
+....... `update`
+....... `AbstractQueryProtocol#executeQuery`
+....... `ComQuery.sendSubCmd`
 ..... **쿼리 결과인 `result` 생성**
 ... `triggerAfterConvert` 메서드 실행
