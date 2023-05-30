@@ -436,7 +436,7 @@
     const getSetting = (key) => {
         if (key === "liveFormat") {
             const liveFormat = localStorage.getItem("liveFormat")
-            return (liveFormat === null) ? false : /^true$/i.test(liveFormat)
+            return (liveFormat === null) ? true : /^true$/i.test(liveFormat)
         }
 
         if (key === "sortJson") {
@@ -460,7 +460,6 @@
     }
 
     const setSetting = (key, value) => {
-        console.log("setSetting", key, value)
         localStorage.setItem(key, value)
     }
 
@@ -470,9 +469,12 @@
 
     // json formatter
     let temp = ""
-    const format = (src, dest, options = {}) => {
+    const format = (src, dest, options = {
+        force: false,
+        sort: false,
+    }) => {
         const content = src.getValue()
-        if (temp === content) return
+        if (!options.force && temp === content) return
 
         let result = content
         try {
@@ -502,9 +504,11 @@
         temp = content
     }
 
-    const runFormat = () => {
+    const runFormat = (options) => {
+        const force = options == null ? false : (!!options.force ? options.force : false)
         format(inputEditor, resultEditor, {
-            sort: getSetting("sortJson")
+            sort: getSetting("sortJson"),
+            force: force,
         })
         setSetting("latestJsonContent", inputEditor.getValue())
     }
@@ -603,6 +607,7 @@
 
         // add default value in editor
         inputEditor.on("input", () => {
+            console.log(getSetting("liveFormat"))
             if (!getSetting("liveFormat")) return
             runFormat()
         })
@@ -648,7 +653,7 @@
         // add dom events
         const $format = document.querySelector("#formatting")
         const $copy = document.querySelector("#copy")
-        const $autoFormat = document.querySelector("#autoFormat")
+        const $liveFormat = document.querySelector("#autoFormat")
         const $sortJson = document.querySelector("#sortJson")
         const $resizer = document.querySelector("#editorResizer")
         const $editor = document.querySelector(".editor-view > .editor:first-child")
@@ -683,15 +688,15 @@
         $format.addEventListener("click", (e) => {
             runFormat()
         })
-        $autoFormat.addEventListener("change", (e) => {
-            setSetting("autoFormat", e.target.checked)
+        $liveFormat.addEventListener("change", (e) => {
+            setSetting("liveFormat", e.target.checked)
             runFormat()
         })
         $sortJson.addEventListener("change", (e) => {
             setSetting("sortJson", e.target.checked)
 
-            if (!getSetting("liveFormat")) return
-            runFormat()
+            // if (!getSetting("liveFormat")) return
+            runFormat({force: true})
         })
 
         // resizing editor width size
