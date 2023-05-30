@@ -379,7 +379,7 @@
             inputEditor.setValue("")
             inputEditor.insert(latestJsonContent)
             format(inputEditor, resultEditor, {
-                sort: true
+                sort: getSetting("sortJson"),
             })
         }
 
@@ -498,6 +498,7 @@
         let result = content
         try {
             result = LosslessJSON.parse(result)
+            console.log(options, options.sort)
             if (options.sort) {
                 result = deepSort(result)
             }
@@ -525,6 +526,7 @@
 
     const runFormat = (options) => {
         const force = options == null ? false : (!!options.force ? options.force : false)
+        console.log("sort", getSetting("sortJson"))
         format(inputEditor, resultEditor, {
             sort: getSetting("sortJson"),
             force: force,
@@ -657,7 +659,6 @@
 
         // add default value in editor
         inputEditor.on("input", () => {
-            console.log(getSetting("liveFormat"))
             if (!getSetting("liveFormat")) return
             runFormat()
         })
