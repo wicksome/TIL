@@ -195,6 +195,10 @@
             vertical-align: middle;
         }
 
+        .ts-history-row > .ts-col.hidden {
+            display: none;
+        }
+
         @keyframes flash {
             0% {
                 background: rgba(255, 240, 0, .25);
@@ -283,6 +287,18 @@
                         <label for="showTimestampConvertLayer">show timestamp converter: </label>
                         <input type="checkbox" id="showTimestampConvertLayer" checked>
                     </div>
+                    <div>
+                        <label for="showRelativeTimeColumn">show relative time column: </label>
+                        <input type="checkbox" id="showRelativeTimeColumn">
+                    </div>
+                    <div>
+                        <label for="showEpochSecondColumn">show epoch second column: </label>
+                        <input type="checkbox" id="showEpochSecondColumn">
+                    </div>
+                    <div>
+                        <label for="showEpochMilliSecondColumn">show epoch millisecond column: </label>
+                        <input type="checkbox" id="showEpochMilliSecondColumn">
+                    </div>
                 </div>
                 <br/>
             </div>
@@ -313,6 +329,9 @@
                 <div>Input</div>
                 <div>UTC</div>
                 <div id="currentTimeZone"></div>
+                <div class="ts-col-1" style="display: none">Relative</div>
+                <div class="ts-col-2" style="display: none">Epoch(s)</div>
+                <div class="ts-col-3" style="display: none">Epoch(ms)</div>
             </div>
         </div>
     </div>
@@ -513,6 +532,32 @@
         setSetting("latestJsonContent", inputEditor.getValue())
     }
 
+    function formatTimeAgo(date) {
+        const formatter = new Intl.RelativeTimeFormat('ko-kr', {
+            numeric: 'auto'
+        })
+
+        const DIVISIONS = [
+            {amount: 60, name: 'seconds'},
+            {amount: 60, name: 'minutes'},
+            {amount: 24, name: 'hours'},
+            {amount: 7, name: 'days'},
+            {amount: 4.34524, name: 'weeks'},
+            {amount: 12, name: 'months'},
+            {amount: Number.POSITIVE_INFINITY, name: 'years'}
+        ]
+
+        let duration = (date - new Date()) / 1000
+
+        for (let i = 0; i < DIVISIONS.length; i++) {
+            const division = DIVISIONS[i]
+            if (Math.abs(duration) < division.amount) {
+                return formatter.format(Math.round(duration), division.name)
+            }
+            duration /= division.amount
+        }
+    }
+
     let rows = []
     const appendRow = (input, date) => {
         const now = (new Date()).toTimeString().split(' ')[0]
@@ -520,10 +565,17 @@
         // TODO: https://dkje.github.io/2020/08/18/createDomElement/#3-document-fragment
         let row
         try {
+            const showColumn1 = document.querySelector("#showRelativeTimeColumn").checked ? "table-cell" : "none"
+            const showColumn2 = document.querySelector("#showEpochSecondColumn").checked ? "table-cell" : "none"
+            const showColumn3 = document.querySelector("#showEpochMilliSecondColumn").checked ? "table-cell" : "none"
+
             row = `<div class="ts-history-row" data-date="${now}">
                     <div>${input}</div>
                     <div>${date.toISOString()}</div>
                     <div>${date.toLocaleString()}</div>
+                    <div class="ts-col-1" style="display: ${showColumn1}">${formatTimeAgo(date)}</div>
+                    <div class="ts-col-2" style="display: ${showColumn2}">${date.getTime() / 1000}</div>
+                    <div class="ts-col-3" style="display: ${showColumn3}">${date.getTime()}</div>
                 </div>`.trim()
         } catch (e) {
             console.warn(`input: [${input}], date: [${date}] throw: ${e}`)
@@ -591,9 +643,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         // TODO: clear datetime rows
         // TODO: delete row converted datetime
-        // TODO: add relative time column
         // TODO: fix header in datetime table to top
-        // TODO: add epoch timestamp column
 
         initEditorInstances()
         initEditorOptions()
@@ -661,6 +711,10 @@
         const $fontSizeDown = document.querySelector("#sizeDownJsonFont")
         const $fontSizeReset = document.querySelector("#resetJsonFont")
         const $editorLineWrap = document.querySelector("#editorLineWrap")
+
+        const $converterColumn1 = document.querySelector("#showRelativeTimeColumn")
+        const $converterColumn2 = document.querySelector("#showEpochSecondColumn")
+        const $converterColumn3 = document.querySelector("#showEpochMilliSecondColumn")
 
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
@@ -764,13 +818,23 @@
             updateEditorOptions({wrap: enable})
         })
 
+        $converterColumn1.addEventListener("change", (e) => {
+            const display = e.target.checked ? "table-cell" : "none"
+            document.querySelectorAll(".ts-col-1").forEach(e => e.style.display = display)
+        })
+
+        $converterColumn2.addEventListener("change", (e) => {
+            const display = e.target.checked ? "table-cell" : "none"
+            document.querySelectorAll(".ts-col-2").forEach(e => e.style.display = display)
+        })
+
+        $converterColumn3.addEventListener("change", (e) => {
+            const display = e.target.checked ? "table-cell" : "none"
+            document.querySelectorAll(".ts-col-3").forEach(e => e.style.display = display)
+        })
+
         document.querySelector("#showTimestampConvertLayer").addEventListener("change", (e) => {
-            let display
-            if (e.target.checked) {
-                display = "block"
-            } else {
-                display = "none"
-            }
+            const display = e.target.checked ? "block" : "none"
             document.querySelector(".ts-history-layer").style.display = display
         })
 
