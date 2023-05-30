@@ -92,13 +92,16 @@
 </nav>
 <main>
     <div class="container-fluid">
-        <div class="contents">
-            <div class="row converter-container">
-                <div class="converter-view">
-                    <input id="input" type="text" placeholder="unicode or emoji"/>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+                <div class="mb-3" id="form_box">
+                    <input class="form-control" id="input" type="text" placeholder="unicode or emoji" required
+                           style="max-width: 500px; margin-top: 0px;">
                 </div>
-            </div>
-            <div class="row output-container" id="output">
+
+                <div class="mb-3">
+                    <div id="output"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -161,7 +164,7 @@
                 return
             }
 
-            if(isEmoji(input)) {
+            if (isEmoji(input)) {
                 const unicodeArray = [...input].map(e => e.codePointAt(0).toString(16))
                 output.push(unicodeJsStyle(unicodeArray))
 
