@@ -769,7 +769,7 @@
             }
 
             $editor.style.flexBasis = `${width}px`
-            getSetting("latestInputEditorWidth", `${width}px`)
+            setSetting("latestInputEditorWidth", `${width}px`)
         }
         $resizer.addEventListener("mousedown", (e) => {
             if (e.offsetX < RESIZING_DIV_WIDTH) {
