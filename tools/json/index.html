@@ -195,25 +195,12 @@
             vertical-align: middle;
         }
 
-        .ts-history-row > .ts-col.hidden {
-            display: none;
-        }
-
         @keyframes flash {
             0% {
                 background: rgba(255, 240, 0, .25);
             }
             100% {
                 background: none;
-            }
-        }
-
-        @keyframes updateJsonResult {
-            0% {
-                outline: rgb(85, 255, 0) solid 1px;
-            }
-            100% {
-                outline: unset;
             }
         }
     </style>
@@ -488,6 +475,7 @@
 
     // json formatter
     let temp = ""
+    let timer
     const format = (src, dest, options = {
         force: false,
         sort: false,
@@ -497,13 +485,15 @@
 
         let result = content
         try {
+            console.log("input", result)
+            console.log("options", options)
             result = LosslessJSON.parse(result)
-            console.log(options, options.sort)
+            console.log("input(json)", result)
             if (options.sort) {
                 result = deepSort(result)
             }
             result = LosslessJSON.stringify(result, undefined, 2)
-            console.log(result)
+            console.log("result", result)
         } catch (e) {
             console.warn(e)
             document.querySelector("#toastContent").innerHTML = `⚠️ ${e.message}`
@@ -512,15 +502,17 @@
             return
         }
 
-        console.log("result", result)
         dest.setValue("")
         dest.insert(result.trim())
 
+        // update effect
+        clearTimeout(timer)
         const area = document.querySelector(".refresh-effect-area")
-        area.style.animation = "updateJsonResult 100ms linear"
-        setTimeout(() => {
-            area.style.animation = ""
-        }, 200)
+        area.style.outline = "solid rgb(85, 255, 0) 2px"
+        timer = setTimeout(() => {
+            area.style.outline = "unset"
+        }, 220)
+
         temp = content
     }
 
