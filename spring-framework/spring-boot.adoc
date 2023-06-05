@@ -1,5 +1,9 @@
 = Spring Boot
 
+== external config
+
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.external-config
+
 == Converter, Formatter
 
 * Converter는 특정 타입을 특정 타입으로 변환하는 것
