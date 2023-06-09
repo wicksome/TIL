@@ -597,7 +597,7 @@
     }
     const appendTimeStamp = (editor) => {
         setTimeout(() => {
-            const value = toNumber(editor.getSelectedText())
+            const value = toNumber(editor.getSelectedText().trim())
             if (!value) return
 
             // convert epoch millisecond or second to date
@@ -631,8 +631,15 @@
 
     const isIsoDate = (str) => {
         try {
-            new Date(Date.parse(str));
-            return true
+            // https://stackoverflow.com/a/37563868/3793078
+            const ISO_8601 = /^\d{4}(-\d\d(-\d\d(T\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?$/i
+            
+            if (ISO_8601.test(str)) {
+                new Date(Date.parse(str));
+                return true
+            } else {
+                return false
+            }
         } catch (e) {
             return false
         }
@@ -672,7 +679,10 @@
                 return
             }
 
-            const str = selection.replaceAll('"', '')
+            const str = selection
+                .replaceAll('"', '')
+                .trim()
+                
             if (isIsoDate(str)) {
                 appendRow(str, new Date(Date.parse(str)))
                 return
