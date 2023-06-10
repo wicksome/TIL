@@ -258,6 +258,9 @@
                             aria-expanded="false" aria-controls="setting">
                         settings
                     </button>
+                    <div class="float-end">
+                        <input id="jq" type="text" class="form-control" placeholder="expression" oninput="this.size = this.value.length">
+                    </div>
                 </div>
             </div>
             <div class="collapse" id="setting">
@@ -347,6 +350,7 @@
 <script src="https://cdn.jsdelivr.net/npm/lossless-json@2.0.9/lib/umd/lossless-json.min.js"></script>
 <script src="dragmove.js"></script>
 <script src="json-sort.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsonata/jsonata.min.js"></script>
 
 <script>
     const deepSort = sort
@@ -372,11 +376,19 @@
         if (!!latestJsonContent) {
             inputEditor.setValue("")
             inputEditor.insert(latestJsonContent)
-            format(inputEditor, resultEditor, {
-                sort: getSetting("sortJson"),
-            })
-        }
 
+            // format(inputEditor, resultEditor, {
+            //     sort: getSetting("sortJson"),
+            // }).then((result) => {
+            //     // set result
+            //     resultEditor.setValue("")
+            //     resultEditor.insert(result)
+            //
+            //     // update effect
+            //     effectRefersh()
+            //
+            // })
+        }
         console.log("init editor instances", [inputEditor, resultEditor])
     }
 
@@ -483,7 +495,7 @@
     // json formatter
     let temp = ""
     let timer
-    const format = (src, dest, options = {
+    const format = async (src, dest, options = {
         force: false,
         sort: false,
     }) => {
@@ -491,27 +503,70 @@
         if (!options.force && temp === content) return
 
         let result = content
+        console.log("--------------------------------------------------------")
+        console.log("input", result)
+        console.log("options", options)
+        console.log("........................................................")
+
+        // 1. json formatting
         try {
-            console.log("input", result)
-            console.log("options", options)
             result = LosslessJSON.parse(result)
             console.log("input(json)", result)
             if (options.sort) {
                 result = deepSort(result)
             }
             result = LosslessJSON.stringify(result, undefined, 2)
-            console.log("result", result)
         } catch (e) {
             console.warn(e)
-            document.querySelector("#toastContent").innerHTML = `⚠️ ${e.message}`
-            const toastBody = bootstrap.Toast.getOrCreateInstance(document.getElementById('toastBody'))
-            toastBody.show()
+            showAlert(`⚠️ ${e.message}`)
             return
         }
+        console.log("result(format)", result)
+        // result = Promise.resolve(result)
 
-        dest.setValue("")
-        dest.insert(result.trim())
+        // 2. json filtering
+        const jqFilter = document.querySelector("#jq").value
+        if(!!jqFilter) {
+            // https://docs.jsonata.org/string-functions
+            const expression = jsonata(jqFilter)
+            result = await expression.evaluate(JSON.parse(result))
+            result = JSON.stringify(result, undefined, 2)
+            console.log("result(filter)", result)
 
+            // result = LosslessJSON.stringify(result, (key, value) => {
+            //     // support LosslessNumber structure
+            //     console.log(value)
+            //     if(value instanceof Object && !!value.isLosslessNumber) {
+            //         return new LosslessJSON.LosslessNumber(value.value)
+            //     }
+            //     return value
+            // }, 2)
+
+            // [references]
+            // https://try.jsonata.org/
+            // https://maxleiko.github.io/json-query-tester/
+            // https://mwh.github.io/jqjs/demo.html
+        }
+
+        // set result
+        // dest.setValue("")
+        // dest.insert(result)
+
+        // update effect
+        // effectRefersh()
+
+        temp = content
+
+        return result
+    }
+
+    const showAlert = (message) => {
+        document.querySelector("#toastContent").innerHTML = message
+        const toastBody = bootstrap.Toast.getOrCreateInstance(document.getElementById('toastBody'))
+        toastBody.show()
+    }
+
+    const effectRefersh = () => {
         // update effect
         clearTimeout(timer)
         const area = document.querySelector(".refresh-effect-area")
@@ -519,18 +574,23 @@
         timer = setTimeout(() => {
             area.style.outline = "unset"
         }, 220)
-
-        temp = content
     }
-
     const runFormat = (options) => {
         const force = options == null ? false : (!!options.force ? options.force : false)
-        console.log("sort", getSetting("sortJson"))
         format(inputEditor, resultEditor, {
             sort: getSetting("sortJson"),
             force: force,
+        }).then((result) => {
+            // set result
+            console.log(result)
+            resultEditor.setValue("")
+            resultEditor.insert(result)
+
+            // update effect
+            effectRefersh()
+
+            setSetting("latestJsonContent", inputEditor.getValue())
         })
-        setSetting("latestJsonContent", inputEditor.getValue())
     }
 
     function formatTimeAgo(date) {
@@ -652,7 +712,7 @@
         // TODO: clear datetime rows
         // TODO: delete row converted datetime
         // TODO: fix header in datetime table to top
-        // TODO: add jq plugin? (https://github.com/mwh/jqjs)
+        // TODO: support big number when filtering json
 
         initEditorInstances()
         initEditorOptions()
@@ -761,6 +821,9 @@
             setSetting("sortJson", e.target.checked)
 
             // if (!getSetting("liveFormat")) return
+            runFormat({force: true})
+        })
+        document.querySelector("#jq").addEventListener("input", (e) => {
             runFormat({force: true})
         })
 
