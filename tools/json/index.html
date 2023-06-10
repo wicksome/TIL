@@ -72,6 +72,8 @@
         #jsonQuery {
             /*font-family: 'JetBrains Mono', monospace;*/
             /*font-size: .9rem;*/
+            width: 400px;
+            white-space: pre;
         }
 
         .editor {
@@ -261,8 +263,7 @@
                         settings
                     </button>
                     <div class="float-end">
-                        <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression"
-                               size="30">
+                        <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
                     </div>
                 </div>
             </div>
@@ -309,6 +310,13 @@
                             <div>
                                 <span>JSONata expression guide: <a
                                         href="https://docs.jsonata.org/simple">link</a></span>
+                                <div class="card card-body" style="padding: 10px 15px; color: inherit; text-decoration: none;">
+                                    <span>func: <code>$distinct(Property)</code>, <code>$sum(Property)</code></span>
+                                    <span>array func: <code>$sort(Array)</code>, <code>$count(Array)</code></span>
+                                    <span>filter: <code>Property[SubProperty='Value']</code></span>
+                                    <span>wildcard: <code>Property.*</code> (<a href="https://docs.jsonata.org/predicate#wildcards">#</a>)</span>
+                                    <span>concat: <code>Property.(SubProperty & '=' & SubProperty)</code> (<a href="https://docs.jsonata.org/expressions#string-expressions">#</a>)</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -543,7 +551,7 @@
         temp = content
 
         // TODO: return null when no change
-        if(!!expression) {
+        if (!!expression) {
             return filtered
         }
 
