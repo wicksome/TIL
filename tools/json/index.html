@@ -272,37 +272,50 @@
                 </div>
             </div>
             <div class="collapse" id="setting">
-                <div class="card card-body">
-                    <div>
-                        <label for="editorLineWrap">wrap: </label>
-                        <input type="checkbox" id="editorLineWrap">
+                <div class="card-group">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <label for="editorLineWrap">wrap: </label>
+                                <input type="checkbox" id="editorLineWrap">
+                            </div>
+                            <div>fontSize:
+                                <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
+                                <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
+                                <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset
+                                </button>
+                            </div>
+                            <div>
+                                <label for="showTimestampConvertLayer">show timestamp converter: </label>
+                                <input type="checkbox" id="showTimestampConvertLayer" checked>
+                            </div>
+                            <div>
+                                <label for="showRelativeTimeColumn">show relative time column: </label>
+                                <input type="checkbox" id="showRelativeTimeColumn">
+                            </div>
+                            <div>
+                                <label for="showEpochSecondColumn">show epoch second column: </label>
+                                <input type="checkbox" id="showEpochSecondColumn">
+                            </div>
+                            <div>
+                                <label for="showEpochMilliSecondColumn">show epoch millisecond column: </label>
+                                <input type="checkbox" id="showEpochMilliSecondColumn">
+                            </div>
+                        </div>
                     </div>
-                    <div>fontSize:
-                        <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
-                        <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
-                        <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>
-                    </div>
-                    <div>
-                        <label for="showTimestampConvertLayer">show timestamp converter: </label>
-                        <input type="checkbox" id="showTimestampConvertLayer" checked>
-                    </div>
-                    <div>
-                        <label for="showRelativeTimeColumn">show relative time column: </label>
-                        <input type="checkbox" id="showRelativeTimeColumn">
-                    </div>
-                    <div>
-                        <label for="showEpochSecondColumn">show epoch second column: </label>
-                        <input type="checkbox" id="showEpochSecondColumn">
-                    </div>
-                    <div>
-                        <label for="showEpochMilliSecondColumn">show epoch millisecond column: </label>
-                        <input type="checkbox" id="showEpochMilliSecondColumn">
-                    </div>
-                    <div>
-                        <span>more editor settings: click the editor, <code>cmd</code> + <code>,</code></span>
-                    </div>
-                    <div>
-                        <span>more editor actions: click the editor, <code>f1</code></span>
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <span>more editor settings: click the editor, <code>cmd</code> + <code>,</code></span>
+                            </div>
+                            <div>
+                                <span>more editor actions: click the editor, <code>f1</code></span>
+                            </div>
+                            <div>
+                                <span>JSONata expression guide: <a
+                                        href="https://docs.jsonata.org/simple">link</a></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <br/>
