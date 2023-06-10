@@ -396,19 +396,7 @@
         const latestJsonContent = getSetting("latestJsonContent")
         if (!!latestJsonContent) {
             inputEditor.setValue("")
-            inputEditor.insert(latestJsonContent)
-
-            // format(inputEditor, resultEditor, {
-            //     sort: getSetting("sortJson"),
-            // }).then((result) => {
-            //     // set result
-            //     resultEditor.setValue("")
-            //     resultEditor.insert(result)
-            //
-            //     // update effect
-            //     effectRefersh()
-            //
-            // })
+            inputEditor.insert(latestJsonContent) // call input event
         }
         console.log("init editor instances", [inputEditor, resultEditor])
     }
@@ -524,6 +512,7 @@
 
         console.log("--------------------------------------------------------")
         console.log("input", content)
+        console.log("expression", expression)
         console.log("options", options)
         console.log("........................................................")
 
@@ -541,14 +530,14 @@
         } catch (e) {
             console.warn(e)
             showAlert(`⚠️ ${e.message}`)
-            return
+            return undefined
         }
         console.log("result(format)", result)
         // result = Promise.resolve(result)
 
         // 2. json filtering
         let filtered
-        if (!!expression) {
+        if (!!expression && expression.trim().length > 0) {
             // https://docs.jsonata.org/string-functions
             const jsonataExp = jsonata(expression)
             const jsonataResult = await jsonataExp.evaluate(JSON.parse(result))
@@ -556,38 +545,20 @@
             filtered = JSON.stringify(jsonataResult, undefined, 2)
             console.log("result(filter)", filtered)
 
-            // result = LosslessJSON.stringify(result, (key, value) => {
-            //     // support LosslessNumber structure
-            //     console.log(value)
-            //     if(value instanceof Object && !!value.isLosslessNumber) {
-            //         return new LosslessJSON.LosslessNumber(value.value)
-            //     }
-            //     return value
-            // }, 2)
-
             // [references]
             // https://try.jsonata.org/
             // https://maxleiko.github.io/json-query-tester/
             // https://mwh.github.io/jqjs/demo.html
         }
 
-        // set result
-        // dest.setValue("")
-        // dest.insert(result)
-
-        // update effect
-        // effectRefersh()
-
         temp = content
 
         // TODO: return null when no change
-        if (!!filtered) {
+        if(!!expression) {
             return filtered
-        } else if (!!result) {
-            return result
-        } else {
-            return content
         }
+
+        return result
     }
     const showAlert = (message) => {
         document.querySelector("#toastContent").innerHTML = message
