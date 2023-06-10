@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta lang="en" name="description" content="Online simple JSON formatter">
-    <meta lang="en" name="keywords" content="JSON Formatter &amp; Validator,JSON Validator,JSON Formatter,JSON Format,Debug JSON,Pretty Print JSON,Validate JSON,JSON Pretty Printer,JSON Beautifier,Beautify JSON">
+    <meta lang="en" name="keywords"
+          content="JSON Formatter &amp; Validator,JSON Validator,JSON Formatter,JSON Format,Debug JSON,Pretty Print JSON,Validate JSON,JSON Pretty Printer,JSON Beautifier,Beautify JSON">
     <meta property="og:title" content="JSON Formatter">
     <meta property="og:description" content="simple json formatter">
 
@@ -259,7 +260,7 @@
                         settings
                     </button>
                     <div class="float-end">
-                        <input id="jq" type="text" class="form-control" placeholder="expression" oninput="this.size = this.value.length">
+                        <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
                     </div>
                 </div>
             </div>
@@ -495,11 +496,10 @@
     // json formatter
     let temp = ""
     let timer
-    const format = async (src, dest, options = {
+    const format = async (content, expression, options = {
         force: false,
         sort: false,
     }) => {
-        const content = src.getValue()
         if (!options.force && temp === content) return
 
         let result = content
@@ -525,11 +525,10 @@
         // result = Promise.resolve(result)
 
         // 2. json filtering
-        const jqFilter = document.querySelector("#jq").value
-        if(!!jqFilter) {
+        if (!!expression) {
             // https://docs.jsonata.org/string-functions
-            const expression = jsonata(jqFilter)
-            result = await expression.evaluate(JSON.parse(result))
+            const jsonataExp = jsonata(expression)
+            result = await jsonataExp.evaluate(JSON.parse(result))
             result = JSON.stringify(result, undefined, 2)
             console.log("result(filter)", result)
 
@@ -577,18 +576,24 @@
     }
     const runFormat = (options) => {
         const force = options == null ? false : (!!options.force ? options.force : false)
-        format(inputEditor, resultEditor, {
-            sort: getSetting("sortJson"),
-            force: force,
-        }).then((result) => {
+        format(
+            inputEditor.getValue(),
+            document.querySelector("#jsonQuery").value,
+            {
+                sort: getSetting("sortJson"),
+                force: force,
+            }
+        ).then((result) => {
             // set result
             console.log(result)
-            resultEditor.setValue("")
-            resultEditor.insert(result)
+            if (!!result) {
+                resultEditor.setValue("")
+                resultEditor.insert(result)
 
-            // update effect
-            effectRefersh()
-
+                // update effect
+                effectRefersh()
+            }
+            
             setSetting("latestJsonContent", inputEditor.getValue())
         })
     }
@@ -693,7 +698,7 @@
         try {
             // https://stackoverflow.com/a/37563868/3793078
             const ISO_8601 = /^\d{4}(-\d\d(-\d\d(T\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?$/i
-            
+
             if (ISO_8601.test(str)) {
                 new Date(Date.parse(str));
                 return true
@@ -742,7 +747,7 @@
             const str = selection
                 .replaceAll('"', '')
                 .trim()
-                
+
             if (isIsoDate(str)) {
                 appendRow(str, new Date(Date.parse(str)))
                 return
@@ -823,7 +828,7 @@
             // if (!getSetting("liveFormat")) return
             runFormat({force: true})
         })
-        document.querySelector("#jq").addEventListener("input", (e) => {
+        document.querySelector("#jsonQuery").addEventListener("input", (e) => {
             runFormat({force: true})
         })
 
