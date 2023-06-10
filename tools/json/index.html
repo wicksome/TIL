@@ -61,11 +61,17 @@
         }
 
         .buttons {
+            margin-top: 6px;
             margin-bottom: 10px;
         }
 
         .buttons > .col > *:not(:last-child) {
             margin-left: 3px;
+        }
+
+        #jsonQuery {
+            /*font-family: 'JetBrains Mono', monospace;*/
+            /*font-size: .9rem;*/
         }
 
         .editor {
@@ -260,7 +266,8 @@
                         settings
                     </button>
                     <div class="float-end">
-                        <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
+                        <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression"
+                               size="30">
                     </div>
                 </div>
             </div>
@@ -502,20 +509,20 @@
     }) => {
         if (!options.force && temp === content) return
 
-        let result = content
         console.log("--------------------------------------------------------")
-        console.log("input", result)
+        console.log("input", content)
         console.log("options", options)
         console.log("........................................................")
 
         // 1. json formatting
+        let result
         try {
-            result = LosslessJSON.parse(result)
-            console.log("input(json)", result)
+            const jsonResult = LosslessJSON.parse(content)
+            console.log("input(json)", jsonResult)
             if (options.sort) {
-                result = deepSort(result)
+                result = deepSort(jsonResult)
             }
-            result = LosslessJSON.stringify(result, undefined, 2)
+            result = LosslessJSON.stringify(jsonResult, undefined, 2)
         } catch (e) {
             console.warn(e)
             showAlert(`⚠️ ${e.message}`)
@@ -525,12 +532,14 @@
         // result = Promise.resolve(result)
 
         // 2. json filtering
+        let filtered
         if (!!expression) {
             // https://docs.jsonata.org/string-functions
             const jsonataExp = jsonata(expression)
-            result = await jsonataExp.evaluate(JSON.parse(result))
-            result = JSON.stringify(result, undefined, 2)
-            console.log("result(filter)", result)
+            const jsonataResult = await jsonataExp.evaluate(JSON.parse(result))
+
+            filtered = JSON.stringify(jsonataResult, undefined, 2)
+            console.log("result(filter)", filtered)
 
             // result = LosslessJSON.stringify(result, (key, value) => {
             //     // support LosslessNumber structure
@@ -556,7 +565,14 @@
 
         temp = content
 
-        return result
+        // TODO: return null when no change
+        if (!!filtered) {
+            return filtered
+        } else if (!!result) {
+            return result
+        } else {
+            return content
+        }
     }
 
     const showAlert = (message) => {
@@ -593,7 +609,7 @@
                 // update effect
                 effectRefersh()
             }
-            
+
             setSetting("latestJsonContent", inputEditor.getValue())
         })
     }
