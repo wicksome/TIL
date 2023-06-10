@@ -517,11 +517,13 @@
         // 1. json formatting
         let result
         try {
-            const jsonResult = LosslessJSON.parse(content)
+            let jsonResult = LosslessJSON.parse(content)
             console.log("input(json)", jsonResult)
             if (options.sort) {
-                result = deepSort(jsonResult)
+                console.log("sort!")
+                jsonResult = deepSort(jsonResult)
             }
+
             result = LosslessJSON.stringify(jsonResult, undefined, 2)
         } catch (e) {
             console.warn(e)
@@ -574,19 +576,19 @@
             return content
         }
     }
-
     const showAlert = (message) => {
         document.querySelector("#toastContent").innerHTML = message
         const toastBody = bootstrap.Toast.getOrCreateInstance(document.getElementById('toastBody'))
         toastBody.show()
     }
 
+    let refreshTimer
     const effectRefersh = () => {
         // update effect
-        clearTimeout(timer)
+        clearTimeout(refreshTimer)
         const area = document.querySelector(".refresh-effect-area")
         area.style.outline = "solid rgb(85, 255, 0) 2px"
-        timer = setTimeout(() => {
+        refreshTimer = setTimeout(() => {
             area.style.outline = "unset"
         }, 220)
     }
