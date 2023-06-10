@@ -248,15 +248,10 @@
         <div class="contents">
             <div class="row clearfix buttons">
                 <div class="col float-start">
-                    <button type="button" class="btn btn-light" id="formatting">format</button>
                     <button type="button" class="btn btn-light" id="copy">copy result</button>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="autoFormat">
-                        <label class="form-check-label" for="autoFormat">Live format</label>
-                    </div>
-                    <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sortJson">
-                        <label class="form-check-label" for="sortJson">Sort JSON</label>
+                        <label class="form-check-label" for="sortJson">sort</label>
                     </div>
                 </div>
                 <div class="col float-end">
@@ -432,7 +427,6 @@
 
         // apply editor setting
         document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
-        document.querySelector("#autoFormat").checked = getSetting("liveFormat")
         document.querySelector("#sortJson").checked = getSetting("sortJson")
 
         const editorWidth = getSetting("latestInputEditorWidth")
@@ -468,11 +462,6 @@
 
     // etc options
     const getSetting = (key) => {
-        if (key === "liveFormat") {
-            const liveFormat = localStorage.getItem("liveFormat")
-            return (liveFormat === null) ? true : /^true$/i.test(liveFormat)
-        }
-
         if (key === "sortJson") {
             const sortJson = localStorage.getItem("sortJson")
             return (sortJson === null) ? false : /^true$/i.test(sortJson)
@@ -733,7 +722,6 @@
 
         // add default value in editor
         inputEditor.on("input", () => {
-            if (!getSetting("liveFormat")) return
             runFormat()
         })
         inputEditor.session.selection.on("changeSelection", debounce((e) => {
@@ -779,9 +767,7 @@
         });
 
         // add dom events
-        const $format = document.querySelector("#formatting")
         const $copy = document.querySelector("#copy")
-        const $liveFormat = document.querySelector("#autoFormat")
         const $sortJson = document.querySelector("#sortJson")
         const $resizer = document.querySelector("#editorResizer")
         const $editor = document.querySelector(".editor-view > .editor:first-child")
@@ -817,17 +803,9 @@
             })
         })
 
-        $format.addEventListener("click", (e) => {
-            runFormat()
-        })
-        $liveFormat.addEventListener("change", (e) => {
-            setSetting("liveFormat", e.target.checked)
-            runFormat()
-        })
         $sortJson.addEventListener("change", (e) => {
             setSetting("sortJson", e.target.checked)
 
-            // if (!getSetting("liveFormat")) return
             runFormat({force: true})
         })
         document.querySelector("#jsonQuery").addEventListener("input", (e) => {
