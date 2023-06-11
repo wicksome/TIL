@@ -256,7 +256,7 @@
                     <button type="button" class="btn btn-light" id="copy">copy result</button>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sortJson">
-                        <label class="form-check-label" for="sortJson">sort</label>
+                        <label class="form-check-label" for="sortJson">Sort</label>
                     </div>
                 </div>
                 <div class="col float-end">
@@ -274,36 +274,41 @@
                 <div class="card-group">
                     <div class="card">
                         <div class="card-body">
-                            <div>
-                                <label for="editorLineWrap">wrap: </label>
-                                <input type="checkbox" id="editorLineWrap">
-                            </div>
-                            <div>fontSize:
+                            <h5>🔧 Editor</h5>
+                            <div>font size:
                                 <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
                                 <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
                                 <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset
                                 </button>
+<!--                                <input type="number" min="10" max="100" id="fontSize">-->
                             </div>
                             <div>
-                                <label for="showTimestampConvertLayer">show timestamp converter: </label>
+                                <label for="editorLineWrap">wrap: </label>
+                                <input type="checkbox" id="editorLineWrap">
+                            </div>
+                            <hr/>
+                            <h5>🔧 TimeStamp Converter</h5>
+                            <div>
+                                <label for="showTimestampConvertLayer">Show timestamp converter: </label>
                                 <input type="checkbox" id="showTimestampConvertLayer" checked>
                             </div>
                             <div>
-                                <label for="showRelativeTimeColumn">show relative time column: </label>
+                                <label for="showRelativeTimeColumn">Add a column(relative time): </label>
                                 <input type="checkbox" id="showRelativeTimeColumn">
                             </div>
                             <div>
-                                <label for="showEpochSecondColumn">show epoch second column: </label>
+                                <label for="showEpochSecondColumn">Add a column(epoch second): </label>
                                 <input type="checkbox" id="showEpochSecondColumn">
                             </div>
                             <div>
-                                <label for="showEpochMilliSecondColumn">show epoch millisecond column: </label>
+                                <label for="showEpochMilliSecondColumn">Add a column(epoch millisecond): </label>
                                 <input type="checkbox" id="showEpochMilliSecondColumn">
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
+                            <h5>🧑‍🔧 More</h5>
                             <div>
                                 <span>more editor settings: click the editor, <code>cmd</code> + <code>,</code></span>
                             </div>
@@ -315,7 +320,7 @@
                                         href="https://docs.jsonata.org/simple">link</a></span>
                                 <div class="card card-body"
                                      style="padding: 10px 15px; color: inherit; text-decoration: none;">
-                                    <span>func: <code>$distinct(Property)</code>, <code>$sum(Property)</code></span>
+                                    <span>func: <code>$distinct(Property)</code>, <code>$sum(Property)</code>, <code>$substring(Property, 0, 4)</code></span>
                                     <span>array func: <code>$sort(Array)</code>, <code>$count(Array)</code></span>
                                     <span>filter: <code>Property[SubProperty='Value']</code></span>
                                     <span>wildcard: <code>Property.*</code> (<a
