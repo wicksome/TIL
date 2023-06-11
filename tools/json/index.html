@@ -556,6 +556,7 @@
         sort: false,
     }) => {
         if (!options.force && temp === content) return
+        if (content.trim() === '') return ''
 
         console.log("--------------------------------------------------------")
         console.log("input", content)
@@ -633,7 +634,7 @@
         ).then((result) => {
             // set result
             console.log(result)
-            if (!!result) {
+            if (!!result || result === "") {
                 resultEditor.setValue("")
                 resultEditor.insert(result)
 
