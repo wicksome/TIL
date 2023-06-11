@@ -69,10 +69,13 @@
             margin-left: 3px;
         }
 
-        #jsonQuery {
-            /*font-family: 'JetBrains Mono', monospace;*/
-            /*font-size: .9rem;*/
-            width: 400px;
+        .json-query-wrapper {
+            --variable: 100px;
+            width: calc(100% - var(--variable));
+        }
+
+        .json-query-wrapper > input[type='text'] {
+            /*width: 400px;*/
             white-space: pre;
         }
 
@@ -262,7 +265,7 @@
                             aria-expanded="false" aria-controls="setting">
                         settings
                     </button>
-                    <div class="float-end">
+                    <div class="float-end json-query-wrapper">
                         <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
                     </div>
                 </div>
@@ -310,12 +313,15 @@
                             <div>
                                 <span>JSONata expression guide: <a
                                         href="https://docs.jsonata.org/simple">link</a></span>
-                                <div class="card card-body" style="padding: 10px 15px; color: inherit; text-decoration: none;">
+                                <div class="card card-body"
+                                     style="padding: 10px 15px; color: inherit; text-decoration: none;">
                                     <span>func: <code>$distinct(Property)</code>, <code>$sum(Property)</code></span>
                                     <span>array func: <code>$sort(Array)</code>, <code>$count(Array)</code></span>
                                     <span>filter: <code>Property[SubProperty='Value']</code></span>
-                                    <span>wildcard: <code>Property.*</code> (<a href="https://docs.jsonata.org/predicate#wildcards">#</a>)</span>
-                                    <span>concat: <code>Property.(SubProperty & '=' & SubProperty)</code> (<a href="https://docs.jsonata.org/expressions#string-expressions">#</a>)</span>
+                                    <span>wildcard: <code>Property.*</code> (<a
+                                            href="https://docs.jsonata.org/predicate#wildcards">#</a>)</span>
+                                    <span>concat: <code>Property.(SubProperty & '=' & SubProperty)</code> (<a
+                                            href="https://docs.jsonata.org/expressions#string-expressions">#</a>)</span>
                                 </div>
                             </div>
                         </div>
@@ -717,7 +723,7 @@
         // TODO: delete row converted datetime
         // TODO: fix header in datetime table to top
         // TODO: support big number when filtering json
-        // TODO: set auto width sizing of json query input 
+        // TODO: set auto width sizing of json query input
 
         initEditorInstances()
         initEditorOptions()
