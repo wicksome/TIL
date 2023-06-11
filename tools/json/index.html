@@ -139,6 +139,12 @@
             margin-right: 10px;
         }
 
+        .toast-body {
+            /*white-space: nowrap;*/
+            overflow: hidden;
+            /*text-overflow: ellipsis;*/
+        }
+
         .ts-history-layer {
             /*width: 100%;*/
             z-index: 9;
@@ -609,13 +615,41 @@
                 effectRefersh()
             }
         }).catch((e) => {
-            console.warn(e)
-            showAlert(`⚠️ ${e.message}`)
+            showAlert(`⚠️ ${(truncate(
+                e.message,
+                500,
+                `<br/><i style="color: grey;">${escape("If you want a detailed reason, open the console.")}</i>`
+            ))}`)
+            console.error(e)
             return undefined
         }).finally(() => {
             setSetting("latestJsonContent", inputEditor.getValue())
         })
     }
+
+    const escape = function(text) {
+        const tagsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;'
+        };
+        return text.replace(/[&<>]/g, function(tag) {
+            return tagsToReplace[tag] || tag;
+        });
+    };
+
+    const truncate = (input, length, endMessage) => {
+        console.log(endMessage)
+        if (input.length > length) {
+            if (!!endMessage) {
+                return `${input.substring(0, length)}... ${endMessage}`
+            } else {
+                return `${input.substring(0, length)}...`
+            }
+        } else {
+            return input
+        }
+    };
 
     function formatTimeAgo(date) {
         const formatter = new Intl.RelativeTimeFormat('ko-kr', {
@@ -939,6 +973,17 @@
             document.querySelector("#showTimestampConvertLayer").click()
         })
     }, false);
+
+    String.prototype.truncate = String.prototype.truncate ||
+        function (n, useWordBoundary) {
+            if (this.length <= n) {
+                return this;
+            }
+            const subString = this.slice(0, n - 1); // the original check
+            return (useWordBoundary
+                ? subString.slice(0, subString.lastIndexOf(" "))
+                : subString) + "&hellip;";
+        };
 </script>
 </body>
 </html>
