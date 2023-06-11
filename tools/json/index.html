@@ -230,6 +230,23 @@
                 background: none;
             }
         }
+
+        /*.jsonata-example {*/
+        /*    z-index: 12;*/
+        /*    width: 100vw;*/
+        /*    height: 100vh;*/
+        /*    background-color: rgba(255, 255, 255, 0.8);*/
+        /*}*/
+
+        /*.jsonata-example-img {*/
+        /*    padding-top: 40%;*/
+        /*    padding-left: 10px;*/
+        /*    padding-right: 10px;*/
+        /*}*/
+
+        /*.jsonata-example-img > img {*/
+        /*    width: 100%;*/
+        /*}*/
     </style>
 </head>
 <body class="d-flex flex-column h-100">
@@ -341,6 +358,10 @@
                                             href="https://docs.jsonata.org/predicate#wildcards">#</a>)</span>
                                     <span>concat: <code>Property.(SubProperty & '=' & SubProperty)</code> (<a
                                             href="https://docs.jsonata.org/expressions#string-expressions">#</a>)</span>
+                                    <span class="jsonata-example-trigger" data-file-name="jsonata_example_1.png">
+                                        more: <code>$sort(Property.array[].{"date": date, "order": order}, function($l, $r) {$l.order < $r.order})</code> (<a
+                                            href="assets/jsonata_example_1.png" target="jsonata_preview">#</a>)
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -390,6 +411,11 @@
         </div>
     </div>
 </div>
+<!--<div class="position-absolute jsonata-example" style="display: none;">-->
+<!--    <div class="jsonata-example-img">-->
+<!--        <img src="" alt="jsonata example image"/>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/src-min-noconflict/ace.min.js"></script>
@@ -627,13 +653,13 @@
         })
     }
 
-    const escape = function(text) {
+    const escape = function (text) {
         const tagsToReplace = {
             '&': '&amp;',
             '<': '&lt;',
             '>': '&gt;'
         };
-        return text.replace(/[&<>]/g, function(tag) {
+        return text.replace(/[&<>]/g, function (tag) {
             return tagsToReplace[tag] || tag;
         });
     };
@@ -972,18 +998,19 @@
         document.querySelector(".ts-history-fold-close").addEventListener("click", (e) => {
             document.querySelector("#showTimestampConvertLayer").click()
         })
-    }, false);
 
-    String.prototype.truncate = String.prototype.truncate ||
-        function (n, useWordBoundary) {
-            if (this.length <= n) {
-                return this;
-            }
-            const subString = this.slice(0, n - 1); // the original check
-            return (useWordBoundary
-                ? subString.slice(0, subString.lastIndexOf(" "))
-                : subString) + "&hellip;";
-        };
+        // document.querySelectorAll(".jsonata-example-trigger").forEach((el) => {
+        //     el.addEventListener("click", (e) => {
+        //         const filename = e.target.closest(".jsonata-example-trigger").dataset.fileName
+        //
+        //         document.querySelector(".jsonata-example-img > img").src = `assets/${filename}`
+        //         document.querySelector(".jsonata-example").style.display = "unset";
+        //     })
+        // })
+        // document.querySelector(".jsonata-example").addEventListener("click", (e) => {
+        //     document.querySelector(".jsonata-example").style.display = "none";
+        // })
+    }, false);
 </script>
 </body>
 </html>
