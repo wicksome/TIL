@@ -193,7 +193,7 @@
             vertical-align: top;
         }
 
-        .ts-history-row + .ts-history-row > * {
+        .ts-history-row > div {
             border: 1px solid #ccc;
         }
 
@@ -280,7 +280,7 @@
                                 <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
                                 <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset
                                 </button>
-<!--                                <input type="number" min="10" max="100" id="fontSize">-->
+                                <!--                                <input type="number" min="10" max="100" id="fontSize">-->
                             </div>
                             <div>
                                 <label for="editorLineWrap">wrap: </label>
@@ -357,7 +357,7 @@
     </div>
     <div class="collapse show ts-history-wrapper" id="navbarToggleExternalContent-disable">
         <div class="ts-history">
-            <div class="ts-history-row" data-date="created_at">
+            <div class="ts-history-row" data-date="Added time">
                 <div>Input</div>
                 <div>UTC</div>
                 <div id="currentTimeZone"></div>
@@ -739,7 +739,8 @@
         dragmove(document.querySelector(".ts-history-layer"), document.querySelector(".ts-history-fold"));
 
         // set current timezone
-        document.querySelector("#currentTimeZone").innerHTML = Intl.DateTimeFormat().resolvedOptions().timeZone
+        const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        document.querySelector("#currentTimeZone").innerHTML = `${currentTimeZone} (<i>current</i>)`
 
         // add default value in editor
         inputEditor.on("input", () => {
