@@ -182,6 +182,7 @@
         .ts-history-row {
             display: table-row;
             font-size: 13px;
+            pointer-events: none;
         }
 
         .ts-history-row:after {
@@ -191,10 +192,17 @@
             border: 1px solid #ccc;
             content: attr(data-date);
             vertical-align: top;
+            pointer-events: all;
         }
 
         .ts-history-row > div {
             border: 1px solid #ccc;
+        }
+
+        .ts-history-row:not(:first-child):hover:after {
+            content: "\00d7"; /* This will render the 'X' */
+            color: red;
+            font-weight: bold;
         }
 
         .ts-history-row:last-child, .ts-history-row:last-child:after {
@@ -637,7 +645,9 @@
 
     let rows = []
     const appendRow = (input, date) => {
-        const now = (new Date()).toTimeString().split(' ')[0]
+        const now = new Date()
+        const time = now.toTimeString().split(' ')[0]
+        const rowId = now.getTime()
 
         // TODO: https://dkje.github.io/2020/08/18/createDomElement/#3-document-fragment
         let row
@@ -646,7 +656,7 @@
             const showColumn2 = document.querySelector("#showEpochSecondColumn").checked ? "table-cell" : "none"
             const showColumn3 = document.querySelector("#showEpochMilliSecondColumn").checked ? "table-cell" : "none"
 
-            row = `<div class="ts-history-row" data-date="${now}">
+            row = `<div class="ts-history-row" data-date="${time}" data-id="${rowId}" onclick="removeTimeStampRow(${rowId})">
                     <div>${input}</div>
                     <div>${date.toISOString()}</div>
                     <div>${date.toLocaleString()}</div>
@@ -671,6 +681,15 @@
         const element = document.querySelector(".ts-history-wrapper")
         element.scroll({top: element.scrollHeight, behavior: 'smooth'});
     }
+
+    const removeTimeStampRow = (rowId) => {
+        [...document.querySelectorAll(".ts-history-row")]
+            .filter((el) => !!el.dataset.id && Number(el.dataset.id) === rowId)
+            .forEach((el) => {
+                document.querySelector(".ts-history").removeChild(el)
+            })
+    }
+
     const appendTimeStamp = (editor) => {
         setTimeout(() => {
             const value = toNumber(editor.getSelectedText().trim())
@@ -725,11 +744,8 @@
     // event listeners
     // ===================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // TODO: clear datetime rows
-        // TODO: delete row converted datetime
         // TODO: fix header in datetime table to top
         // TODO: support big number when filtering json
-        // TODO: set auto width sizing of json query input
 
         initEditorInstances()
         initEditorOptions()
@@ -921,6 +937,13 @@
 
         document.querySelector(".ts-history-fold-close").addEventListener("click", (e) => {
             document.querySelector("#showTimestampConvertLayer").click()
+        })
+
+        // timestamp converter events
+        document.querySelectorAll(".ts-history-row").forEach(($el) => {
+            $el.addEventListener("click", (e) => {
+                console.log(e)
+            })
         })
     }, false);
 </script>
