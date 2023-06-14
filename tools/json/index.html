@@ -284,7 +284,7 @@
         <div class="contents">
             <div class="row clearfix buttons">
                 <div class="col float-start">
-                    <button type="button" class="btn btn-light" id="minify">copy minified json</button>
+                    <button type="button" class="btn btn-light" id="minify">copy minify</button>
                     <button type="button" class="btn btn-light" id="copy">copy result</button>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sortJson">
@@ -906,20 +906,8 @@
             if (content.trim() === "") return
             
             const minified = LosslessJSON.stringify(LosslessJSON.parse(content))
-            navigator.clipboard.writeText(minified).then(() => {
-                const beforeLabel = $minify.textContent
-                const beforeClass = [...$minify.classList].find((cls) => {
-                    return !!cls.match(/btn-\w+/)
-                })
-                $minify.classList.remove(beforeClass)
-                $minify.classList.add("btn-success")
-                $minify.textContent = "copied!"
-                setTimeout(() => {
-                    $minify.classList.remove("btn-success")
-                    $minify.classList.add(beforeClass)
-                    $minify.textContent = beforeLabel
-                }, 500)
-            })
+            inputEditor.setValue("")
+            inputEditor.insert(minified)
         })
 
         $sortJson.addEventListener("change", (e) => {
