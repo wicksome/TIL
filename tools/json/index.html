@@ -69,6 +69,17 @@
             margin-left: 3px;
         }
 
+        .json-size {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .json-size-value {
+            font-size: small;
+        }
+
         .json-query-wrapper {
             --variable: 100px;
             width: calc(100% - var(--variable));
@@ -91,7 +102,7 @@
         }
 
         .vertical-area {
-            height: calc(100vh - 7rem);
+            height: calc(100vh - 7.5rem);
             max-height: 100%;
             width: 100%;
         }
@@ -289,6 +300,9 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sortJson">
                         <label class="form-check-label" for="sortJson">Sort</label>
+                    </div>
+                    <div class="float-end json-size">
+                        <span class="json-size-value" id="jsonSizeValue"></span>
                     </div>
                 </div>
                 <div class="col float-end">
@@ -653,6 +667,8 @@
         }).finally(() => {
             setSetting("latestJsonContent", inputEditor.getValue())
         })
+
+        updateJsonSize()
     }
 
     const escape = function (text) {
@@ -678,6 +694,12 @@
             return input
         }
     };
+
+    const updateJsonSize = () => {
+        const content = inputEditor.getValue()
+        const size = new Blob([content]).size
+        document.querySelector("#jsonSizeValue").innerHTML = `${size} Bytes`
+    }
 
     function formatTimeAgo(date) {
         const formatter = new Intl.RelativeTimeFormat('ko-kr', {
@@ -899,12 +921,12 @@
                 }, 500)
             })
         })
-        
+
         const $minify = document.querySelector("#minify")
         document.querySelector("#minify").addEventListener("click", (e) => {
             const content = inputEditor.getValue()
             if (content.trim() === "") return
-            
+
             const minified = LosslessJSON.stringify(LosslessJSON.parse(content))
             inputEditor.setValue("")
             inputEditor.insert(minified)
