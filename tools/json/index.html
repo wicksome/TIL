@@ -284,6 +284,7 @@
         <div class="contents">
             <div class="row clearfix buttons">
                 <div class="col float-start">
+                    <button type="button" class="btn btn-light" id="minify">copy minified json</button>
                     <button type="button" class="btn btn-light" id="copy">copy result</button>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sortJson">
@@ -866,7 +867,6 @@
         });
 
         // add dom events
-        const $copy = document.querySelector("#copy")
         const $sortJson = document.querySelector("#sortJson")
         const $resizer = document.querySelector("#editorResizer")
         const $editor = document.querySelector(".editor-view > .editor:first-child")
@@ -879,6 +879,7 @@
         const $converterColumn2 = document.querySelector("#showEpochSecondColumn")
         const $converterColumn3 = document.querySelector("#showEpochMilliSecondColumn")
 
+        const $copy = document.querySelector("#copy")
         $copy.addEventListener("click", (e) => {
             const content = resultEditor.getValue()
             if (content.trim() === "") return
@@ -897,8 +898,27 @@
                     $copy.textContent = beforeLabel
                 }, 500)
             })
-            $resizer.addEventListener("click", (e) => {
-                console.log(e.clientX, e.clientY)
+        })
+        
+        const $minify = document.querySelector("#minify")
+        document.querySelector("#minify").addEventListener("click", (e) => {
+            const content = inputEditor.getValue()
+            if (content.trim() === "") return
+            
+            const minified = LosslessJSON.stringify(LosslessJSON.parse(content))
+            navigator.clipboard.writeText(minified).then(() => {
+                const beforeLabel = $minify.textContent
+                const beforeClass = [...$minify.classList].find((cls) => {
+                    return !!cls.match(/btn-\w+/)
+                })
+                $minify.classList.remove(beforeClass)
+                $minify.classList.add("btn-success")
+                $minify.textContent = "copied!"
+                setTimeout(() => {
+                    $minify.classList.remove("btn-success")
+                    $minify.classList.add(beforeClass)
+                    $minify.textContent = beforeLabel
+                }, 500)
             })
         })
 
