@@ -339,6 +339,10 @@
                                 <input type="checkbox" id="showTimestampConvertLayer" checked>
                             </div>
                             <div>
+                                <label for="ignoreDuplicateLastRow">Ignore duplicated last row: </label>
+                                <input type="checkbox" id="ignoreDuplicateLastRow">
+                            </div>
+                            <div>
                                 <label for="showRelativeTimeColumn">Add a column(relative time): </label>
                                 <input type="checkbox" id="showRelativeTimeColumn">
                             </div>
@@ -462,7 +466,7 @@
         resultEditor.setShowPrintMargin(false)
         resultEditor.setReadOnly(true)
 
-        const latestJsonContent = getSetting("latestJsonContent")
+        const latestJsonContent = getSetting(SETTINGS.latestJsonContent)
         if (!!latestJsonContent) {
             inputEditor.setValue("")
             inputEditor.insert(latestJsonContent) // call input event
@@ -479,7 +483,7 @@
             useSoftTabs: false,
             showInvisibles: false,
         }
-        const savedEditorOptionsStr = getSetting("editorOptions")
+        const savedEditorOptionsStr = getSetting(SETTINGS.editorOptions)
 
         let savedEditorOptions = {}
         if (!!savedEditorOptionsStr) {
@@ -501,12 +505,17 @@
 
         // apply editor setting
         document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
-        document.querySelector("#sortJson").checked = getSetting("sortJson")
+        document.querySelector("#sortJson").checked = getSetting(SETTINGS.sortJson)
 
-        const editorWidth = getSetting("latestInputEditorWidth")
+        const editorWidth = getSetting(SETTINGS.latestInputEditorWidth)
         if (!!editorWidth) {
             document.querySelector(".editor-view > .editor:first-child").style.flexBasis = editorWidth
         }
+    }
+
+    const initTimeStampConverterOptions = () => {
+        console.log("init timestamp converter settings", getSetting(SETTINGS.ignoreDuplicateLastRow))
+        document.querySelector("#ignoreDuplicateLastRow").checked = getSetting(SETTINGS.ignoreDuplicateLastRow)
     }
 
     const updateEditorOptions = (options) => {
@@ -529,31 +538,48 @@
 
         inputEditor.setOptions(updateOptions)
         resultEditor.setOptions(updateOptions)
-        setSetting("editorOptions", JSON.stringify(updateOptions))
+        setSetting(SETTINGS.editorOptions, JSON.stringify(updateOptions))
 
         console.log("updated editor options", updateOptions)
     }
 
+    // setting key names
+    const SETTINGS = {
+        sortJson: "sortJson",
+        latestJsonContent: "latestJsonContent",
+        editorOptions: "editorOptions",
+        latestInputEditorWidth: "latestInputEditorWidth",
+        ignoreDuplicateLastRow: "ignoreDuplicateLastRow",
+    }
     // etc options
     const getSetting = (key) => {
-        if (key === "sortJson") {
-            const sortJson = localStorage.getItem("sortJson")
-            return (sortJson === null) ? false : /^true$/i.test(sortJson)
+        // FIXME: convert checking setting keys using SETTINGS
+        if (key === SETTINGS.sortJson) {
+            const sortJson = localStorage.getItem(SETTINGS.sortJson)
+            return toBoolean(sortJson, false)
         }
 
-        if (key === "latestJsonContent") {
-            return localStorage.getItem("latestJsonContent")
+        if (key === SETTINGS.latestJsonContent) {
+            return localStorage.getItem(SETTINGS.latestJsonContent)
         }
 
-        if (key === "editorOptions") {
-            return localStorage.getItem("editorOptions")
+        if (key === SETTINGS.editorOptions) {
+            return localStorage.getItem(SETTINGS.editorOptions)
         }
 
-        if (key === "latestInputEditorWidth") {
-            return localStorage.getItem("latestInputEditorWidth")
+        if (key === SETTINGS.latestInputEditorWidth) {
+            return localStorage.getItem(SETTINGS.latestInputEditorWidth)
+        }
+
+        if (key === SETTINGS.ignoreDuplicateLastRow) {
+            return toBoolean(localStorage.getItem(SETTINGS.ignoreDuplicateLastRow), false)
         }
 
         throw Error(`not supported option: ${key}`)
+    }
+
+    const toBoolean = (value, returnIfNull = false) => {
+        return (value === null) ? returnIfNull : /^true$/i.test(value)
     }
 
     const setSetting = (key, value) => {
@@ -643,7 +669,7 @@
             inputEditor.getValue(),
             document.querySelector("#jsonQuery").value,
             {
-                sort: getSetting("sortJson"),
+                sort: getSetting(SETTINGS.sortJson),
                 force: force,
             }
         ).then((result) => {
@@ -665,7 +691,7 @@
             console.error(e)
             return undefined
         }).finally(() => {
-            setSetting("latestJsonContent", inputEditor.getValue())
+            setSetting(SETTINGS.latestJsonContent, inputEditor.getValue())
         })
 
         updateJsonSize()
@@ -753,8 +779,10 @@
             return
         }
 
+        // TODO: check settings #ignoreDuplicateLastRow
+        const ignoreDuplicateLastRow = getSetting(SETTINGS.ignoreDuplicateLastRow)
         const lastRow = rows[rows.length - 1]
-        if (input === lastRow) {
+        if (ignoreDuplicateLastRow && input === lastRow) {
             console.log("duplicate last value")
             return
         }
@@ -774,8 +802,9 @@
             })
     }
 
-    const appendTimeStamp = (editor) => {
+    const appendTimeStamp = (editor, func) => {
         setTimeout(() => {
+            console.log("append timestamp")
             const value = toNumber(editor.getSelectedText().trim())
             if (!value) return
 
@@ -790,6 +819,9 @@
             }
 
             appendRow(value, date)
+            if (!!func) {
+                func()
+            }
         }, 10);
     }
 
@@ -833,6 +865,7 @@
 
         initEditorInstances()
         initEditorOptions()
+        initTimeStampConverterOptions()
 
         // https://github.com/daybrush/moveable
         // https://github.com/knadh/dragmove.js
@@ -846,12 +879,32 @@
         inputEditor.on("input", () => {
             runFormat()
         })
+
+        // add events for timestamp converter
+        let eventLock = false
+        inputEditor.on("dblclick", () => {
+            console.log("double click in input editor")
+            eventLock = true
+            appendTimeStamp(inputEditor)
+        });
+        resultEditor.on("dblclick", () => {
+            console.log("double click in result editor")
+            eventLock = true
+            appendTimeStamp(resultEditor)
+        });
         inputEditor.session.selection.on("changeSelection", debounce((e) => {
+            if (eventLock) {
+                // prevent duplicate events after dbclick event call
+                eventLock = false
+                return
+            }
+            console.log("change selection in input editor")
             const selection = inputEditor.getSelectedText()
             if (!selection) return
 
             const timestamp = toNumber(selection)
             if (!!timestamp) {
+                console.log("is timestamp value")
                 appendTimeStamp(inputEditor)
                 return
             }
@@ -861,11 +914,18 @@
                 .trim()
 
             if (isIsoDate(str)) {
+                console.log("is iso date format")
                 appendRow(str, new Date(Date.parse(str)))
                 return
             }
         }, 500))
         resultEditor.session.selection.on("changeSelection", debounce((e) => {
+            if (eventLock) {
+                // prevent duplicate events after dbclick event call
+                eventLock = false
+                return
+            }
+            console.log("change selection in result editor")
             const selection = resultEditor.getSelectedText()
             if (!selection) return
 
@@ -877,16 +937,11 @@
 
             const str = selection.replaceAll('"', '')
             if (isIsoDate(str)) {
+                console.log("iso date format")
                 appendRow(str, new Date(Date.parse(str)))
                 return
             }
         }, 500))
-        inputEditor.on("dblclick", () => {
-            appendTimeStamp(inputEditor)
-        });
-        resultEditor.on("dblclick", () => {
-            appendTimeStamp(resultEditor)
-        });
 
         // add dom events
         const $sortJson = document.querySelector("#sortJson")
@@ -922,7 +977,6 @@
             })
         })
 
-        const $minify = document.querySelector("#minify")
         document.querySelector("#minify").addEventListener("click", (e) => {
             const content = inputEditor.getValue()
             if (content.trim() === "") return
@@ -1022,8 +1076,11 @@
         })
 
         document.querySelector("#showTimestampConvertLayer").addEventListener("change", (e) => {
-            const display = e.target.checked ? "block" : "none"
-            document.querySelector(".ts-history-layer").style.display = display
+            document.querySelector(".ts-history-layer").style.display = e.target.checked ? "block" : "none"
+        })
+
+        document.querySelector("#ignoreDuplicateLastRow").addEventListener("change", (e) => {
+            setSetting(SETTINGS.ignoreDuplicateLastRow, e.target.checked)
         })
 
         document.querySelector(".ts-history-fold-close").addEventListener("click", (e) => {
