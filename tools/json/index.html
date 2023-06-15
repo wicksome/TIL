@@ -698,7 +698,7 @@
     const updateJsonSize = () => {
         const content = inputEditor.getValue()
         const size = new Blob([content]).size
-        document.querySelector("#jsonSizeValue").innerHTML = `${content.length.toLocaleString()} characters / ${size.toLocaleString()} bytes`
+        document.querySelector("#jsonSizeValue").innerHTML = `<b>${content.length.toLocaleString()}</b> characters, <b>${size.toLocaleString()}</b> bytes`
     }
 
     function formatTimeAgo(date) {
