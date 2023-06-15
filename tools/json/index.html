@@ -38,8 +38,9 @@
     <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/css/ace.min.css" rel="stylesheet">
 
     <!-- Bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,15 +48,6 @@
           rel="stylesheet">
 
     <style>
-        html {
-            /*font-family: 'JetBrains Mono', monospace;*/
-            /*font-size: 1rem;*/
-        }
-
-        html, body {
-            height: 100%;
-        }
-
         main > .container-fluid {
             padding: 60px 15px 0;
         }
@@ -81,7 +73,7 @@
         }
 
         .json-query-wrapper {
-            --variable: 100px;
+            --variable: 50px;
             width: calc(100% - var(--variable));
         }
 
@@ -102,7 +94,8 @@
         }
 
         .vertical-area {
-            height: calc(100vh - 7.5rem);
+            --offset-height: 7.5rem;
+            height: calc(100vh - var(--offset-height));
             max-height: 100%;
             width: 100%;
         }
@@ -309,7 +302,7 @@
                     <button type="button" class="btn btn-light float-end" data-bs-toggle="collapse"
                             data-bs-target="#setting"
                             aria-expanded="false" aria-controls="setting">
-                        settings
+                        <i class="bi bi-tools"></i>
                     </button>
                     <div class="float-end json-query-wrapper">
                         <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
@@ -320,7 +313,14 @@
                 <div class="card-group">
                     <div class="card">
                         <div class="card-body">
-                            <h5>🔧 Editor</h5>
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-window-split" viewBox="0 0 16 16">
+                                    <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Zm1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/>
+                                    <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2Zm12 1a1 1 0 0 1 1 1v2H1V3a1 1 0 0 1 1-1h12ZM1 13V6h6.5v8H2a1 1 0 0 1-1-1Zm7.5 1V6H15v7a1 1 0 0 1-1 1H8.5Z"/>
+                                </svg>
+                                Editor
+                            </h5>
                             <div>font size:
                                 <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>
                                 <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>
@@ -333,7 +333,14 @@
                                 <input type="checkbox" id="editorLineWrap">
                             </div>
                             <hr/>
-                            <h5>🔧 TimeStamp Converter</h5>
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-window-stack" viewBox="0 0 16 16">
+                                    <path d="M4.5 6a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1ZM6 6a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"/>
+                                    <path d="M12 1a2 2 0 0 1 2 2 2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2 2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h10ZM2 12V5a2 2 0 0 1 2-2h9a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1Zm1-4v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8H3Zm12-1V5a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2h12Z"/>
+                                </svg>
+                                TimeStamp Converter
+                            </h5>
                             <div>
                                 <label for="showTimestampConvertLayer">Show timestamp converter: </label>
                                 <input type="checkbox" id="showTimestampConvertLayer" checked>
@@ -358,7 +365,13 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h5>🧑‍🔧 More</h5>
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-right-text" viewBox="0 0 16 16">
+                                    <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+                                    <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                                More
+                            </h5>
                             <div>
                                 <span>more editor settings: click the editor, <code>cmd</code> + <code>,</code></span>
                             </div>
@@ -436,11 +449,10 @@
 <!--    </div>-->
 <!--</div>-->
 
-
-<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min-noconflict/ace.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min-noconflict/ace.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lossless-json@2.0.9/lib/umd/lossless-json.min.js"></script>
 <script src="dragmove.js"></script>
 <script src="json-sort.js"></script>
