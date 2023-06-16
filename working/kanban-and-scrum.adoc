@@ -119,3 +119,4 @@ image:https://wac-cdn.atlassian.com/dam/jcr:a679339b-0098-4c88-acdb-7009b0de6efb
 
 * https://www.atlassian.com/ko/agile/manifesto
 * 백로그를 선정하는 방법 중 하나: PON(Problem/Oppertunity) Needs
+* https://medium.com/@slow_scale/shape-up-%ED%95%9C%EA%B5%AD%EC%96%B4-%EC%9A%94%EC%95%BD-e6436f6eba8a
