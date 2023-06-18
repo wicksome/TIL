@@ -466,7 +466,7 @@
                                     </h5>
                                 </div>
                                 <div class="col float-end">
-                                    <button type="button" class="btn btn-light float-end" id="AddJsonHistory">
+                                    <button type="button" class="btn btn-light btn-sm float-end" id="AddJsonHistory">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" class="bi bi-bookmark-plus" viewBox="0 0 16 16">
                                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
@@ -579,6 +579,7 @@
         previewEditor.session.setMode("ace/mode/json");
         previewEditor.session.setUseWorker(false)
         previewEditor.setShowPrintMargin(false)
+        previewEditor.setShowInvisibles(true)
         previewEditor.setReadOnly(true)
         previewEditor.renderer.$cursorLayer.element.style.display = "none"
 
@@ -654,6 +655,7 @@
 
         inputEditor.setOptions(updateOptions)
         resultEditor.setOptions(updateOptions)
+        previewEditor.setOptions(updateOptions)
         setSetting(SETTINGS.editorOptions, JSON.stringify(updateOptions))
 
         console.log("updated editor options", updateOptions)
