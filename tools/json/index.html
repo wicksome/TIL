@@ -87,11 +87,23 @@
             white-space: pre;
         }
 
-        .editor {
+        .json-history-wrapper {
+            height: 300px;
+        }
+
+        .json-history-wrapper > div,
+        .json-history-wrapper > div > div {
             height: 100%;
-            display: flex;
-            width: 100%;
-            padding-bottom: 5px;
+        }
+
+        .json-history-list {
+            height: calc(100% - 25px);
+            overflow: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .json-history-editor {
+            height: calc(100% - 25px);
         }
 
         .contents {
@@ -109,9 +121,15 @@
             width: 100%
         }
 
+        .editor {
+            height: 100%;
+            display: flex;
+            width: 100%;
+            padding-bottom: 5px;
+        }
+
         .vertical-area {
             height: 100%;
-            /*max-height: 100%;*/
             width: 100%;
         }
 
@@ -304,13 +322,17 @@
             <div class="row clearfix buttons">
                 <div class="col float-start">
                     <button type="button" class="btn btn-light" id="toggleJsonHistoryArea" data-bs-toggle="collapse"
-                            data-bs-target="#jsonHistory"
-                            aria-expanded="false" aria-controls="jsonHistory">
+                            data-bs-target="#jsonHistoryArea"
+                            aria-expanded="false" aria-controls="jsonHistoryArea">
+                        <!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+                        <!--                             class="bi bi-clock-history" viewBox="0 0 16 16">-->
+                        <!--                            <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>-->
+                        <!--                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>-->
+                        <!--                            <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>-->
+                        <!--                        </svg>-->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-clock-history" viewBox="0 0 16 16">
-                            <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
-                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
-                            <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+                             class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
                         </svg>
                     </button>
                     <button type="button" class="btn btn-light" id="minify">minify</button>
@@ -354,6 +376,11 @@
                                 <!--                                <input type="number" min="10" max="100" id="fontSize">-->
                             </div>
                             <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-text-wrap" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M2 3.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5h9a2.5 2.5 0 0 1 0 5h-1.293l.647.646a.5.5 0 0 1-.708.708l-1.5-1.5a.5.5 0 0 1 0-.708l1.5-1.5a.5.5 0 0 1 .708.708l-.647.646H11.5a1.5 1.5 0 0 0 0-3h-9a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5H7a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5Z"/>
+                                </svg>
                                 <label for="editorLineWrap">wrap: </label>
                                 <input type="checkbox" id="editorLineWrap">
                             </div>
@@ -427,11 +454,49 @@
                 </div>
                 <br/>
             </div>
-            <div class="collapse" id="jsonHistory">
-                <div class="card-group">
+            <div class="collapse show" id="jsonHistoryArea">
+                <div class="card-group json-history-wrapper">
                     <div class="card">
                         <div class="card-body">
-                            json history view...
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-files" viewBox="0 0 16 16">
+                                    <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                                </svg>
+                                Bookmark
+                            </h5>
+                            <div class="list-group list-group-flush json-history-list">
+                                <!--                                    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">-->
+                                <!--                                        The current link item-->
+                                <!--                                    </a>-->
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-17 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-17 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-18 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-19 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-20 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-21 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-22 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-23 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-24 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-25 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-26 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-27 18:41:21</a>
+                                <a href="#" class="list-group-item list-group-item-action">2023-06-28 18:41:21</a>
+                                <!--                                    <a class="list-group-item list-group-item-action disabled">A disabled link item</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-file-text" viewBox="0 0 16 16">
+                                    <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                                </svg>
+                                Preview
+                            </h5>
+                            <div class="json-history-editor" id="jsonHistoryPreview"></div>
                         </div>
                     </div>
                 </div>
@@ -494,6 +559,7 @@
 <script src="dragmove.js"></script>
 <script src="json-sort.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsonata/jsonata.min.js"></script>
+<script src="common.js"></script>
 
 <script>
     const deepSort = sort
@@ -501,6 +567,7 @@
     // editor
     let inputEditor = undefined
     let resultEditor = undefined
+    let previewEditor = undefined
 
     // initialize editors
     const initEditorInstances = () => {
@@ -514,6 +581,15 @@
         resultEditor.session.setUseWorker(false)
         resultEditor.setShowPrintMargin(false)
         resultEditor.setReadOnly(true)
+
+        previewEditor = ace.edit("jsonHistoryPreview");
+        previewEditor.setTheme("ace/theme/dawn");
+        previewEditor.session.setMode("ace/mode/json");
+        previewEditor.session.setUseWorker(false)
+        previewEditor.setShowPrintMargin(false)
+        previewEditor.setReadOnly(true)
+        previewEditor.renderer.$cursorLayer.element.style.display = "none"
+
 
         const latestJsonContent = getSetting(SETTINGS.latestJsonContent)
         if (!!latestJsonContent) {
@@ -599,10 +675,10 @@
         editorOptions: "editorOptions",
         latestInputEditorWidth: "latestInputEditorWidth",
         ignoreDuplicateLastRow: "ignoreDuplicateLastRow",
+        jsonHistory: "jsonHistory",
     }
     // etc options
     const getSetting = (key) => {
-        // FIXME: convert checking setting keys using SETTINGS
         if (key === SETTINGS.sortJson) {
             const sortJson = localStorage.getItem(SETTINGS.sortJson)
             return toBoolean(sortJson, false)
@@ -624,15 +700,20 @@
             return toBoolean(localStorage.getItem(SETTINGS.ignoreDuplicateLastRow), false)
         }
 
+        if (key === SETTINGS.jsonHistory) {
+            const listStr = localStorage.getItem(SETTINGS.ignoreDuplicateLastRow)
+            return LosslessJSON.parse(listStr)
+        }
+
         throw Error(`not supported option: ${key}`)
     }
 
-    const toBoolean = (value, returnIfNull = false) => {
-        return (value === null) ? returnIfNull : /^true$/i.test(value)
-    }
-
     const setSetting = (key, value) => {
-        localStorage.setItem(key, value)
+        if (key === SETTINGS.jsonHistory) {
+            localStorage.setItem(key, LosslessJSON.stringify(value))
+        } else {
+            localStorage.setItem(key, value)
+        }
     }
 
     const removeSetting = (key) => {
@@ -746,60 +827,10 @@
         updateJsonSize()
     }
 
-    const escape = function (text) {
-        const tagsToReplace = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;'
-        };
-        return text.replace(/[&<>]/g, function (tag) {
-            return tagsToReplace[tag] || tag;
-        });
-    };
-
-    const truncate = (input, length, endMessage) => {
-        console.log(endMessage)
-        if (input.length > length) {
-            if (!!endMessage) {
-                return `${input.substring(0, length)}... ${endMessage}`
-            } else {
-                return `${input.substring(0, length)}...`
-            }
-        } else {
-            return input
-        }
-    };
-
     const updateJsonSize = () => {
         const content = inputEditor.getValue()
         const size = new Blob([content]).size
         document.querySelector("#jsonSizeValue").innerHTML = `<b>${content.length.toLocaleString()}</b> characters, <b>${size.toLocaleString()}</b> bytes`
-    }
-
-    function formatTimeAgo(date) {
-        const formatter = new Intl.RelativeTimeFormat('ko-kr', {
-            numeric: 'auto'
-        })
-
-        const DIVISIONS = [
-            {amount: 60, name: 'seconds'},
-            {amount: 60, name: 'minutes'},
-            {amount: 24, name: 'hours'},
-            {amount: 7, name: 'days'},
-            {amount: 4.34524, name: 'weeks'},
-            {amount: 12, name: 'months'},
-            {amount: Number.POSITIVE_INFINITY, name: 'years'}
-        ]
-
-        let duration = (date - new Date()) / 1000
-
-        for (let i = 0; i < DIVISIONS.length; i++) {
-            const division = DIVISIONS[i]
-            if (Math.abs(duration) < division.amount) {
-                return formatter.format(Math.round(duration), division.name)
-            }
-            duration /= division.amount
-        }
     }
 
     let rows = []
@@ -872,37 +903,6 @@
                 func()
             }
         }, 10);
-    }
-
-    const debounce = (callback, limit = 100) => {
-        let timeout
-        return function (...args) {
-            clearTimeout(timeout)
-            timeout = setTimeout(() => {
-                callback.apply(this, args)
-            }, limit)
-        }
-    }
-
-    const toNumber = (value) => {
-        if (!value || !/^\d+$/.test(value)) return null
-        return parseInt(value)
-    }
-
-    const isIsoDate = (str) => {
-        try {
-            // https://stackoverflow.com/a/37563868/3793078
-            const ISO_8601 = /^\d{4}(-\d\d(-\d\d(T\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?$/i
-
-            if (ISO_8601.test(str)) {
-                new Date(Date.parse(str));
-                return true
-            } else {
-                return false
-            }
-        } catch (e) {
-            return false
-        }
     }
 
     // ===================================================
