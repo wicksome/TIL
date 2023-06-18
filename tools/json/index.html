@@ -100,6 +100,17 @@
             height: calc(100% - 25px);
             overflow: scroll;
             -webkit-overflow-scrolling: touch;
+            /*padding-top: 10px;*/
+        }
+
+        .json-history-list-row {
+            cursor: pointer;
+        }
+
+        .json-history-row-buttons > button {
+            --bs-btn-padding-y: .3rem;
+            --bs-btn-padding-x: .4rem;
+            --bs-btn-font-size: .5rem;
         }
 
         .json-history-editor {
@@ -267,23 +278,6 @@
                 background: none;
             }
         }
-
-        /*.jsonata-example {*/
-        /*    z-index: 12;*/
-        /*    width: 100vw;*/
-        /*    height: 100vh;*/
-        /*    background-color: rgba(255, 255, 255, 0.8);*/
-        /*}*/
-
-        /*.jsonata-example-img {*/
-        /*    padding-top: 40%;*/
-        /*    padding-left: 10px;*/
-        /*    padding-right: 10px;*/
-        /*}*/
-
-        /*.jsonata-example-img > img {*/
-        /*    width: 100%;*/
-        /*}*/
     </style>
 </head>
 <body class="d-flex flex-column h-100">
@@ -321,7 +315,8 @@
         <div class="contents">
             <div class="row clearfix buttons">
                 <div class="col float-start">
-                    <button type="button" class="btn btn-light" id="toggleJsonHistoryArea" data-bs-toggle="collapse"
+                    <button type="button" class="btn btn-light" id="toggleJsonHistoryArea"
+                            data-bs-toggle="collapse"
                             data-bs-target="#jsonHistoryArea"
                             aria-expanded="false" aria-controls="jsonHistoryArea">
                         <!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
@@ -334,6 +329,8 @@
                              class="bi bi-star" viewBox="0 0 16 16">
                             <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
                         </svg>
+                        <span class="badge rounded-pill text-bg-danger" id="jsonHistoryCount">0</span>
+                        </span>
                     </button>
                     <button type="button" class="btn btn-light" id="minify">minify</button>
                     <button type="button" class="btn btn-light" id="copy">copy result</button>
@@ -346,10 +343,13 @@
                     </div>
                 </div>
                 <div class="col float-end">
-                    <button type="button" class="btn btn-light float-end" data-bs-toggle="collapse"
+                    <button type="button" class="btn btn-light position-relative float-end" data-bs-toggle="collapse"
                             data-bs-target="#setting"
                             aria-expanded="false" aria-controls="setting">
                         <i class="bi bi-tools"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New features</span>
+                        </span>
                     </button>
                     <div class="float-end json-query-wrapper">
                         <input id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression">
@@ -398,6 +398,7 @@
                                 <input type="checkbox" id="showTimestampConvertLayer" checked>
                             </div>
                             <div>
+                                <span style="color: #dc3545; font-size: .5rem">●</span>
                                 <label for="ignoreDuplicateLastRow">Ignore duplicated last row: </label>
                                 <input type="checkbox" id="ignoreDuplicateLastRow">
                             </div>
@@ -432,6 +433,7 @@
                                 <span>more editor actions: click the editor, <code>f1</code></span>
                             </div>
                             <div>
+                                <span style="color: #dc3545; font-size: .5rem">●</span>
                                 <span>JSONata expression guide: <a
                                         href="https://docs.jsonata.org/simple">link</a></span>
                                 <div class="card card-body"
@@ -454,35 +456,57 @@
                 </div>
                 <br/>
             </div>
-            <div class="collapse show" id="jsonHistoryArea">
+            <div class="collapse" id="jsonHistoryArea">
                 <div class="card-group json-history-wrapper">
                     <div class="card">
                         <div class="card-body">
-                            <h5>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                     class="bi bi-files" viewBox="0 0 16 16">
-                                    <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
-                                </svg>
-                                Bookmark
-                            </h5>
+                            <div class="row">
+                                <div class="col float-start">
+                                    <h5>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-files" viewBox="0 0 16 16">
+                                            <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/>
+                                        </svg>
+                                        Bookmark
+                                    </h5>
+                                </div>
+                                <div class="col float-end">
+                                    <button type="button" class="btn btn-light float-end" id="AddJsonHistory">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-bookmark-plus" viewBox="0 0 16 16">
+                                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                                            <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="list-group list-group-flush json-history-list">
                                 <!--                                    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">-->
                                 <!--                                        The current link item-->
                                 <!--                                    </a>-->
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-17 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-17 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-18 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-19 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-20 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-21 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-22 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-23 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-24 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-25 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-26 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-27 18:41:21</a>
-                                <a href="#" class="list-group-item list-group-item-action">2023-06-28 18:41:21</a>
-                                <!--                                    <a class="list-group-item list-group-item-action disabled">A disabled link item</a>-->
+                                <div class="list-group-item list-group-item-action json-history-list-row">
+                                    <div class="json-history-row-title float-start">2023-06-17 18:41:21</div>
+                                    <div class="json-history-row-buttons float-end">
+                                        <!--                                        <button type="button" class="btn btn-primary">-->
+                                        <!--                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"-->
+                                        <!--                                                 fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">-->
+                                        <!--                                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>-->
+                                        <!--                                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>-->
+                                        <!--                                            </svg>-->
+                                        <!--                                        </button>-->
+                                        <!--                                        <button type="button" class="btn btn-danger">-->
+                                        <!--                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">-->
+                                        <!--                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>-->
+                                        <!--                                            </svg>-->
+                                        <!--                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"-->
+                                        <!--                                                 fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">-->
+                                        <!--                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>-->
+                                        <!--                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>-->
+                                        <!--                                            </svg>-->
+                                        <!--                                        </button>-->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -589,7 +613,6 @@
         previewEditor.setShowPrintMargin(false)
         previewEditor.setReadOnly(true)
         previewEditor.renderer.$cursorLayer.element.style.display = "none"
-
 
         const latestJsonContent = getSetting(SETTINGS.latestJsonContent)
         if (!!latestJsonContent) {
@@ -701,8 +724,12 @@
         }
 
         if (key === SETTINGS.jsonHistory) {
-            const listStr = localStorage.getItem(SETTINGS.ignoreDuplicateLastRow)
-            return LosslessJSON.parse(listStr)
+            const listStr = localStorage.getItem(SETTINGS.jsonHistory)
+            if (!!listStr) {
+                return JSON.parse(listStr)
+            } else {
+                return []
+            }
         }
 
         throw Error(`not supported option: ${key}`)
@@ -710,7 +737,7 @@
 
     const setSetting = (key, value) => {
         if (key === SETTINGS.jsonHistory) {
-            localStorage.setItem(key, LosslessJSON.stringify(value))
+            localStorage.setItem(key, JSON.stringify(value))
         } else {
             localStorage.setItem(key, value)
         }
@@ -720,7 +747,82 @@
         localStorage.removeItem(key)
     }
 
+    // ======================================================================================================
+    // json bookmark
+    // ======================================================================================================
+    // TODO: use indexedDB instead of local storage
+
+    const refreshJsonHistory = () => {
+        const history = getSetting(SETTINGS.jsonHistory)
+        if (history.length === 0) {
+            document.querySelector("#jsonHistoryCount").style.display = 'none'
+        } else {
+            document.querySelector("#jsonHistoryCount").innerHTML = history.length
+            document.querySelector("#jsonHistoryCount").style.display = 'unset'
+        }
+
+        const historyTemplate = (id, title) => `
+            <div class="list-group-item list-group-item-action json-history-list-row" data-id="${id}" onclick="clickJsonHistory(${id})">
+                <div class="json-history-row-title float-start">${title}</div>
+                <div class="json-history-row-buttons float-end">
+                    <button type="button" class="btn btn-danger" onclick="deleteJsonHistory(${id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `.trim()
+        const $rows = history.map((row) => {
+            return historyTemplate(
+                row.key,
+                new Date(row.key).toLocaleString()
+            )
+        }).join("")
+        if ($rows === "") {
+            document.querySelector(".json-history-list").innerHTML = `
+                <div class="list-group-item list-group-item-action disabled">
+                    No data saved.
+                </div>
+            `
+        } else {
+            document.querySelector(".json-history-list").innerHTML = $rows
+        }
+    }
+
+    const clickJsonHistory = (id) => {
+        const result = [...getSetting(SETTINGS.jsonHistory)].find((data) => data.key === id)
+        if (!!result) {
+            previewEditor.setValue("")
+            previewEditor.insert(result.value)
+        }
+    }
+
+    const deleteJsonHistory = (id) => {
+        const history = getSetting(SETTINGS.jsonHistory)
+        const result = [...history].find((data) => data.key === id)
+        if (!!result) {
+            previewEditor.setValue("")
+            previewEditor.insert("")
+        }
+        setSetting(SETTINGS.jsonHistory, history.filter(item => item.key !== id))
+        refreshJsonHistory()
+    }
+
+    const saveJson = (jsonStr) => {
+        const before = getSetting(SETTINGS.jsonHistory)
+        const data = {
+            key: Date.now(),
+            value: jsonStr
+        }
+        setSetting(SETTINGS.jsonHistory, [data, ...before])
+    }
+
+    // ======================================================================================================
     // json formatter
+    // ======================================================================================================
     let temp = ""
     const format = async (content, expression, options = {
         force: false,
@@ -833,6 +935,10 @@
         document.querySelector("#jsonSizeValue").innerHTML = `<b>${content.length.toLocaleString()}</b> characters, <b>${size.toLocaleString()}</b> bytes`
     }
 
+    // ======================================================================================================
+    // timestamp parser
+    // ======================================================================================================
+
     let rows = []
     const appendRow = (input, date) => {
         const now = new Date()
@@ -905,9 +1011,9 @@
         }, 10);
     }
 
-    // ===================================================
+    // ======================================================================================================
     // event listeners
-    // ===================================================
+    // ======================================================================================================
     document.addEventListener('DOMContentLoaded', () => {
         // TODO: fix header in datetime table to top
         // TODO: support big number when filtering json
@@ -915,6 +1021,7 @@
         initEditorInstances()
         initEditorOptions()
         initTimeStampConverterOptions()
+        refreshJsonHistory()
 
         // https://github.com/daybrush/moveable
         // https://github.com/knadh/dragmove.js
@@ -1151,6 +1258,11 @@
         // document.querySelector(".jsonata-example").addEventListener("click", (e) => {
         //     document.querySelector(".jsonata-example").style.display = "none";
         // })
+
+        document.querySelector("#AddJsonHistory").addEventListener("click", () => {
+            saveJson(inputEditor.getValue())
+            refreshJsonHistory()
+        })
     }, false);
 </script>
 </body>
