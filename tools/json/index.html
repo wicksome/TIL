@@ -804,19 +804,19 @@
     // ======================================================================================================
     // json formatter
     // ======================================================================================================
-    let temp = ""
     const format = async (content, expression, options = {
         force: false,
         sort: false,
     }) => {
-        if (!options.force && temp === content) return
-        if (content.trim() === '') return ''
-
         console.log("--------------------------------------------------------")
         console.log("input", content)
         console.log("expression", expression)
         console.log("options", options)
+        console.log("temp", temp)
         console.log("........................................................")
+
+        if (!options.force && temp === content) return
+        if (content.trim() === '') return ''
 
         // 1. json formatting
         let result
@@ -851,7 +851,7 @@
             // https://mwh.github.io/jqjs/demo.html
         }
 
-        temp = content
+        // temp = content
 
         // TODO: return null when no change
         if (!!expression) {
@@ -876,10 +876,13 @@
             area.style.outline = "unset"
         }, 220)
     }
+
+    let temp = ""
     const runFormat = (options) => {
         const force = options == null ? false : (!!options.force ? options.force : false)
+        const jsonStr = inputEditor.getValue()
         format(
-            inputEditor.getValue(),
+            jsonStr,
             document.querySelector("#jsonQuery").value,
             {
                 sort: getSetting(SETTINGS.sortJson),
@@ -904,7 +907,8 @@
             console.error(e)
             return undefined
         }).finally(() => {
-            setSetting(SETTINGS.latestJsonContent, inputEditor.getValue())
+            setSetting(SETTINGS.latestJsonContent, jsonStr)
+            temp = jsonStr
         })
 
         updateJsonSize()
