@@ -785,11 +785,18 @@
 
     const saveJson = (jsonStr) => {
         const before = getSetting(SETTINGS.jsonHistory)
-        const data = {
+        if (before.length > 0) {
+            const lastData = before[0].value
+            if (lastData === jsonStr) {
+                showAlert("It's the same as the last saved JSON data, so that JSON is skipped.")
+                return
+            }
+        }
+        const newData = {
             key: Date.now(),
             value: jsonStr
         }
-        setSetting(SETTINGS.jsonHistory, [data, ...before])
+        setSetting(SETTINGS.jsonHistory, [newData, ...before])
     }
 
     // ======================================================================================================
@@ -988,7 +995,9 @@
     // ======================================================================================================
     document.addEventListener('DOMContentLoaded', () => {
         // TODO: fix header in datetime table to top
-        // TODO: support big number when filtering json
+        // TODO: support big number when filtering json (jsonata)
+        // FIXME: disable timestamp converter when find numbers using ace editor
+        // TODO: fix z-index of bookmark preview in mobile
 
         initEditorInstances()
         initEditorOptions()
@@ -1232,10 +1241,15 @@
         // })
 
         document.querySelector("#AddJsonHistory").addEventListener("click", () => {
-            saveJson(inputEditor.getValue())
-            refreshJsonHistory()
+            const jsonStr = inputEditor.getValue()
+            if (!!jsonStr && jsonStr.length > 0) {
+                saveJson(inputEditor.getValue())
+                refreshJsonHistory()
+            } else {
+                showAlert("empty data")
+            }
         })
-        
+
         document.querySelectorAll(".new-feature").forEach((el) => {
             el.closest("button").addEventListener("click", (_) => {
                 console.log("remove red-dot for new feature")
