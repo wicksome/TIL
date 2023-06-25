@@ -145,6 +145,21 @@ val stmt = con.createStatement(
 
 ==== ConnectionPool
 
+* 일정량의 Connection 인스턴스를 미리 만들어서 pool에 저장해두고 사용하기 위함
+* HikariCP
+** DBCP(Database Connection Pool) 라이브러리
++
+[source, kotlin]
+----
+val config = HikariConfig().apply {
+    jdbcUrl = url
+    username = user
+    this.password = password
+}
+val ds = HikariDataSource(config)
+val con: Connection = ds.connection
+----
+
 == spring-jdbc
 
 [subs="quotes"]
@@ -275,5 +290,6 @@ NamedParameterJdbcTemplate --> JdbcOperation
 
 ---
 
-- 실제 DB로부터 어떻게 값이 오는지?
-- reading converter가 동작할 수 있는지?
+* 실제 DB로부터 어떻게 값이 오는지?
+* reading converter가 동작할 수 있는지?
+* spring batch에서 cursor는 어떻게?
