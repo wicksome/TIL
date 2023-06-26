@@ -14,12 +14,6 @@
 * Java Database Connectivity(https://www.oracle.com/java/technologies/javase/javase-tech-database.html[JDBC])는 DBMS에 접근하기 위한 Java의 표준 API 스펙
 * JDBC 드라이버 로딩, DBMS 연결, SQL 전송 및 결과 반환 등의 처리
 
-=== References
-
-* https://godekdls.github.io/Spring%20Data%20Access/dataaccesswithjdbc/[Spring Data Access - Data Access with JDBC]
-* https://github.com/benelog/spring-jdbc-tips/blob/master/spring-jdbc-core.md[Spring JDBC의 핵심 사용법]
-
-
 [source, kotlin]
 .Example
 ----
@@ -163,6 +157,9 @@ val con: Connection = ds.connection
 === 참고 링크
 
 * https://blog.benelog.net/1898928.html
+* https://godekdls.github.io/Spring%20Data%20Access/dataaccesswithjdbc/[Spring Data Access - Data Access with JDBC]
+* https://github.com/benelog/spring-jdbc-tips/blob/master/spring-jdbc-core.md[Spring JDBC의 핵심 사용법]
+
 
 == spring-jdbc
 
@@ -176,12 +173,8 @@ val con: Connection = ds.connection
 
 * https://docs.spring.io/spring-framework/docs/current/reference/html/data-access.html#jdbc[spring-jdbc]
 * JDBC에서 처리하는 데이터베이스 관련 작업들을 스프링 프레임워크로 위임하고, 별도 API를 통해 데이터베이스 연결 및 쿼리 실행을 함.
-* `DataSource` 를 생성하고 `JdbcTemplate` 에 주입하여 사용.
-* `JdbcTemplate` 를 통해 JDBC를 편리하게 사용할 수 있음.
-* `JdbcTemplate`: 가장 저수준에서 동작하며, Spring 내부적으로 `JdbcTemplate` 을 사용함
-** thread-safe 하므로, DAO등에서 맴버 변수로 저장. `DataSource` 만 외부에서 유입받아 초기화해둘 수 있음.
-** `NamedParameterJdbcTemplate`: `JdbcTemplate` 을 래핑해서 `?` 가 아닌 이름이 붙은 파라미터 사용할 수 있게함.
 
+=== 구성요소
 
 [plantuml]
 ....
@@ -206,7 +199,16 @@ NamedParameterJdbcTemplate --> JdbcOperation
 @enduml
 ....
 
-=== 구성요소
+==== JdbcTemplate
+
+* `DataSource` 를 생성하고 `JdbcTemplate` 에 주입하여 사용.
+* `JdbcTemplate` 를 통해 JDBC를 편리하게 사용할 수 있음.
+* `JdbcTemplate`: 가장 저수준에서 동작하며, Spring 내부적으로 `JdbcTemplate` 을 사용함
+** thread-safe 하므로, DAO등에서 맴버 변수로 저장. `DataSource` 만 외부에서 유입받아 초기화해둘 수 있음.
+
+===== NamedParameterJdbcTemplate
+
+* `NamedParameterJdbcTemplate`: `JdbcTemplate` 을 래핑해서 `?` 가 아닌 이름이 붙은 파라미터 사용할 수 있게함.
 
 ==== RowMapper
 
@@ -217,6 +219,7 @@ NamedParameterJdbcTemplate --> JdbcOperation
 === 참고 링크
 
 * https://github.com/benelog/spring-jdbc-tips/blob/master/spring-jdbc-core.md
+
 
 == spring-boot-starter-jdbc
 
