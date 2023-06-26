@@ -179,8 +179,10 @@ val con: Connection = ds.connection
 [plantuml]
 ....
 @startuml
+hide empty field
+hide empty method
 
-interface JdbcOperation {
+interface JdbcOperations {
   query(psc, rowMapper): List<T>
 }
 class JdbcTemplate
@@ -190,11 +192,15 @@ class NamedParameterJdbcTemplate {
   -classicJdbcTemplate: JdbcOperations
 }
 
+abstract class JdbcAccessor {
+  -dataSource: DataSource
+}
 
-JdbcOperation <|-- JdbcTemplate
+JdbcOperations <|-- JdbcTemplate
+JdbcAccessor <|-- JdbcTemplate
 NamedParameterJdbcOperations <|-- NamedParameterJdbcTemplate
 
-NamedParameterJdbcTemplate --> JdbcOperation
+NamedParameterJdbcTemplate --> JdbcOperations
 
 @enduml
 ....
@@ -254,8 +260,82 @@ NamedParameterJdbcTemplate --> JdbcOperation
 ----
 
 * https://spring.io/projects/spring-data[Spring Data]의 미션은 데이터 액세스를 위해 친숙하고 일관된 Spring 기반의 프로그래밍 모델을 제공하는 동시에 기본 데이터 저장소의 특수한 특성을 유지하는 것.
+* spring data repository 추상화의 목표는 데이터 액세스 레이어를 구현하는 데 필요한 상용구 코드의 양을 줄이는 것
 * https://spring.io/projects/spring-data-jdbc[Spring Data JDBC]는 Spring Data의 여러 모듈중 하나로, 말 그대로 JDBC를 지원하는 모듈.
+** 뭔가 문서가 JPA인것 같은데...?
 * `CrudRepository` 를 활용하여 기본적인 CRUD 구현을 쉽게 함.
+* 중신에 `Repository` 인터페이스가 있고, `CrudRepository`, `ListCurdRepository` 인터페이스와 같이 엔티티 클래스에 대한 정교한 CURD기능을 제공
+** `CurdRepository` 인터페이스는 `Iterable` 반환
+** `ListCurdRepository` 인터페이스는 `List` 반환
+
+=== 구성요소
+
+[plantuml]
+....
+@startuml
+hide empty field
+hide empty method
+
+interface Repository
+
+interface CurdRepository {
+  save(eneity: S)
+  saveAll(entities: Iterable<S>)
+  findById(id: ID)
+  existsById(id: ID)
+  findAll()
+  findAllById(ids: Iterable<ID>)
+  count()
+  deleteById(id: ID)
+  delete(entity: T)
+  deleteAllById(ids: Iterable<? extends ID>)
+  deletaAll(entities: Iterable<? extends T>)
+  deleteAll()
+}
+
+interface PagingAndSortingRepository {
+  findAll(sort: Sort): Iterable<T>
+  findAll(pageable: Pageable): Page<T>
+}
+
+class SimpleJdbcRepository
+
+interface JdbcAggregateOperations
+class JdbcAggregateTemplate
+
+Repository <|-- CurdRepository
+CurdRepository <|-- SimpleJdbcRepository
+PagingAndSortingRepository <|-- SimpleJdbcRepository
+
+SimpleJdbcRepository ..> JdbcAggregateOperations
+
+interface DataAccessStrategy
+interface JdbcConverter
+
+JdbcAggregateOperations <|-- JdbcAggregateTemplate
+JdbcAggregateTemplate ..> DataAccessStrategy
+JdbcAggregateTemplate ..> JdbcConverter
+
+@enduml
+....
+
+==== Repository
+
+===== CurdRepository
+
+==== EntityRowMapper
+
+* spring-jdbc의 RowMapper의 구현체
+
+==== JdbcConverter
+
+==== JdbcValue
+
+
+=== 참고 링크
+
+* https://velog.io/@edenko/%EC%8A%A4%ED%94%84%EB%A7%81%EC%9D%98-%ED%95%B5%EC%8B%AC-3%EB%8C%80-%EC%9A%94%EC%86%8C-Spring-Triangle
+** PSA가 생각남
 
 == spring-boot-starter-data-jdbc
 
