@@ -276,7 +276,7 @@ NamedParameterJdbcTemplate --> JdbcOperations
 * https://spring.io/projects/spring-data[Spring Data]의 미션은 데이터 액세스를 위해 친숙하고 일관된 Spring 기반의 프로그래밍 모델을 제공하는 동시에 기본 데이터 저장소의 특수한 특성을 유지하는 것.
 * spring data repository 추상화의 목표는 데이터 액세스 레이어를 구현하는 데 필요한 상용구 코드의 양을 줄이는 것
 * https://spring.io/projects/spring-data-jdbc[Spring Data JDBC]는 Spring Data의 여러 모듈중 하나로, 말 그대로 JDBC를 지원하는 모듈.
-** 뭔가 문서가 JPA인것 같은데...?
+** 뭔가 문서가 JPA인것 같은데...? 엔티티매니저 가지고 더티체킹하는게 큰 차이?
 * `CrudRepository` 를 활용하여 기본적인 CRUD 구현을 쉽게 함.
 * 중신에 `Repository` 인터페이스가 있고, `CrudRepository`, `ListCurdRepository` 인터페이스와 같이 엔티티 클래스에 대한 정교한 CURD기능을 제공
 ** `CurdRepository` 인터페이스는 `Iterable` 반환
