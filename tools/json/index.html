@@ -1149,8 +1149,24 @@
 
             runFormat({force: true})
         })
+
         document.querySelector("#jsonQuery").addEventListener("input", (e) => {
             runFormat({force: true})
+        })
+        document.querySelector("#jsonQuery").addEventListener("keydown", (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const {target} = e
+                const start = target.selectionStart;
+                const end = target.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                target.value = target.value.substring(0, start) +
+                    "\t" + target.value.substring(end);
+
+                // put caret at right position again
+                target.selectionStart = target.selectionEnd = start + 1;
+            }
         })
 
         // resizing editor width size
