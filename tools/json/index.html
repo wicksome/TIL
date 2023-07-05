@@ -107,6 +107,12 @@
             cursor: pointer;
         }
 
+        .json-history-row-title {
+            /*white-space: nowrap;*/
+            /*overflow: hidden;*/
+            /*text-overflow: ellipsis;*/
+        }
+
         .json-history-row-buttons > button {
             --bs-btn-padding-y: .3rem;
             --bs-btn-padding-x: .4rem;
@@ -801,7 +807,9 @@
     }
 
     const editJsonHistory = (id) => {
-        const name = prompt("namespace").trim()
+        const data = [...getSetting(SETTINGS.jsonHistory)].filter((el) => el.key === id)[0]
+
+        const name = prompt("namespace", !!data.name ? data.name : undefined).trim()
         if (!name) {
             return
         }
