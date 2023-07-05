@@ -427,13 +427,14 @@
                                 More
                             </h5>
                             <div>
-                                <span>more editor settings: click the editor, <code>cmd</code> + <code>,</code></span>
+                                <span>more editor settings: click the editor, <code
+                                        class="metakey">cmd</code> + <code>,</code></span>
                             </div>
                             <div>
                                 <span>more editor actions: click the editor, <code>f1</code></span>
                             </div>
                             <div>
-                                <span>fold: <code>cmd</code> + <code>shift</code> + <code>alt</code> + l</span>
+                                <span>fold: <code class="metakey">cmd</code> + <code>shift</code> + <code>alt</code> + l</span>
                             </div>
                             <div>
                                 <span style="color: #dc3545; font-size: .5rem">●</span>
@@ -1299,10 +1300,6 @@
         //     document.querySelector(".jsonata-example").style.display = "none";
         // })
 
-        document.querySelector("#AddJsonHistory").addEventListener("click", () => {
-            appendJsonHistory()
-        })
-
         document.querySelectorAll(".new-feature").forEach((el) => {
             el.closest("button").addEventListener("click", (_) => {
                 console.log("remove red-dot for new feature")
@@ -1310,14 +1307,37 @@
             }, {once: true})
         })
 
-        document.addEventListener("keydown", function (e) {
+        document.querySelectorAll(".metakey").forEach(el => {
+            if (isMac()) {
+                el.innerHTML = "⌘"
+            } else {
+                el.innerHTML = "ctrl"
+            }
+        })
+
+
+        // bookmark
+        const bookmarkSaveTooltip = bootstrap.Tooltip.getInstance('#AddJsonHistory')
+        if (isMac()) {
+            bookmarkSaveTooltip.setContent({'.tooltip-inner': "⌘ + s"})
+        } else {
+            bookmarkSaveTooltip.setContent({'.tooltip-inner': "ctrl + s"})
+        }
+        document.querySelector("#AddJsonHistory").addEventListener("click", () => {
+            appendJsonHistory()
+        })
+        document.addEventListener("keydown", function (e) { // shortcut
             // https://michilehr.de/overwrite-cmds-and-ctrls-in-javascript
-            if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && (e.key === 's' || e.keyCode === 83)) {
+            if ((isMac() ? e.metaKey : e.ctrlKey) && (e.key === 's' || e.keyCode === 83)) {
                 e.preventDefault();
                 appendJsonHistory()
             }
         }, false);
     }, false);
+
+    function isMac() {
+        return window.navigator.platform.match("Mac")
+    }
 </script>
 </body>
 </html>
