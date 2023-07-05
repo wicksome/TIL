@@ -747,19 +747,19 @@
             document.querySelector("#jsonHistoryCount").style.display = 'unset'
         }
 
-        const historyTemplate = (id, title, addedAt) => `
-            <div class="list-group-item list-group-item-action json-history-list-row" data-id="${id}" onclick="clickJsonHistory(${id})">
+        const historyTemplate = (id, title, addedAt, active) => `
+            <div class="list-group-item list-group-item-action json-history-list-row ${active ? 'active' : ''}" data-id="${id}" onclick="clickJsonHistory('${id}')">
                 <div class="json-history-row-title float-start">
                     ${title}
                 </div>
                 <div class="json-history-row-buttons float-end">
                     ${!!addedAt ? `<small>${formatTimeAgo(new Date(addedAt))}</small>&nbsp;` : ''}
-                    <button type="button" class="btn btn-warning" onclick="editJsonHistory(${id})">
+                    <button type="button" class="btn btn-warning" onclick="editJsonHistory('${id}')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                         </svg>
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="deleteJsonHistory(${id})">
+                    <button type="button" class="btn btn-danger" onclick="deleteJsonHistory('${id}')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
@@ -769,11 +769,13 @@
                 </div>
             </div>
         `.trim()
+        const currentPreviewId = document.querySelector(".json-history-editor").dataset.id
         const $rows = history.map((row) => {
             return historyTemplate(
                 row.key,
-                !!row.name ? row.name : new Date(row.key).toLocaleString(),
-                row.addedAt
+                !!row.name ? row.name : new Date(row.addedAt).toLocaleString(),
+                row.addedAt,
+                (currentPreviewId === row.key),
             )
         }).join("")
         if ($rows === "") {
@@ -792,22 +794,30 @@
         if (!!result) {
             previewEditor.setValue("")
             previewEditor.insert(result.value)
+            document.querySelector(".json-history-editor").dataset.id = id
+            document.querySelectorAll(".json-history-list-row").forEach(el => {
+                if (el.dataset.id === String(id)) {
+                    el.classList.add("active")
+                } else {
+                    el.classList.remove("active")
+                }
+            })
         }
     }
 
     const deleteJsonHistory = (id) => {
         const history = getSetting(SETTINGS.jsonHistory)
-        const result = [...history].find((data) => data.key === id)
+        const result = [...history].find((data) => String(data.key) === id)
         if (!!result) {
             previewEditor.setValue("")
             previewEditor.insert("")
         }
-        setSetting(SETTINGS.jsonHistory, history.filter(item => item.key !== id))
+        setSetting(SETTINGS.jsonHistory, history.filter(item => String(item.key) !== id))
         refreshJsonHistory()
     }
 
     const editJsonHistory = (id) => {
-        const data = [...getSetting(SETTINGS.jsonHistory)].filter((el) => el.key === id)[0]
+        const data = [...getSetting(SETTINGS.jsonHistory)].filter((el) => String(el.key) === id)[0]
 
         const name = prompt("namespace", !!data.name ? data.name : undefined).trim()
         if (!name) {
@@ -815,7 +825,7 @@
         }
 
         const history = [...getSetting(SETTINGS.jsonHistory)].map(item => {
-            if (item.key === id) {
+            if (String(item.key) === id) {
                 item['name'] = name
             }
             return item
@@ -834,7 +844,7 @@
             }
         }
         const newData = {
-            key: Date.now(),
+            key: String(Date.now()),
             value: jsonStr,
             addedAt: Date.now(),
         }
