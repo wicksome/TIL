@@ -775,7 +775,7 @@
                 row.key,
                 !!row.name ? row.name : new Date(row.addedAt).toLocaleString(),
                 row.addedAt,
-                (currentPreviewId === row.key),
+                (currentPreviewId === String(row.key)),
             )
         }).join("")
         if ($rows === "") {
