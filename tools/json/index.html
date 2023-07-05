@@ -426,15 +426,19 @@
                                 </svg>
                                 More
                             </h5>
+                            <div class="shortcut-macos">
+                                <span>fold: <code
+                                        class="metakey">cmd</code> + <code>shift</code> + <code>alt</code> + <code>L</code></span>
+                            </div>
+                            <div class="shortcut-window">
+                                <span>fold: <code>alt</code> + <code>L</code></span>
+                            </div>
                             <div>
                                 <span>more editor settings: click the editor, <code
                                         class="metakey">cmd</code> + <code>,</code></span>
                             </div>
                             <div>
                                 <span>more editor actions: click the editor, <code>f1</code></span>
-                            </div>
-                            <div>
-                                <span>fold: <code class="metakey">cmd</code> + <code>shift</code> + <code>alt</code> + l</span>
                             </div>
                             <div>
                                 <span style="color: #dc3545; font-size: .5rem">●</span>
@@ -1307,14 +1311,22 @@
             }, {once: true})
         })
 
-        document.querySelectorAll(".metakey").forEach(el => {
-            if (isMac()) {
+        // shortcut
+        if (isMac()) {
+            document.querySelectorAll(".shortcut-window").forEach(el => {
+                el.style.display = 'none'
+            })
+            document.querySelectorAll(".metakey").forEach(el => {
                 el.innerHTML = "⌘"
-            } else {
+            })
+        } else {
+            document.querySelectorAll(".shortcut-macos").forEach(el => {
+                el.style.display = 'none'
+            })
+            document.querySelectorAll(".metakey").forEach(el => {
                 el.innerHTML = "ctrl"
-            }
-        })
-
+            })
+        }
 
         // bookmark
         const bookmarkSaveTooltip = bootstrap.Tooltip.getInstance('#AddJsonHistory')
