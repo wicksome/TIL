@@ -790,7 +790,7 @@
     }
 
     const clickJsonHistory = (id) => {
-        const result = [...getSetting(SETTINGS.jsonHistory)].find((data) => data.key === id)
+        const result = [...getSetting(SETTINGS.jsonHistory)].find((data) => String(data.key) === id)
         if (!!result) {
             previewEditor.setValue("")
             previewEditor.insert(result.value)
