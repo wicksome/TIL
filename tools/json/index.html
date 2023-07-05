@@ -796,12 +796,16 @@
     }
 
     const editJsonHistory = (id) => {
-        const name = prompt("namespace")
-        const history = getSetting(SETTINGS.jsonHistory)
-        history.forEach(item => {
+        const name = prompt("namespace").trim()
+        if (!name) {
+            return
+        }
+
+        const history = [...getSetting(SETTINGS.jsonHistory)].map(item => {
             if (item.key === id) {
                 item['name'] = name
             }
+            return item
         })
         setSetting(SETTINGS.jsonHistory, history)
         refreshJsonHistory()
