@@ -811,6 +811,7 @@
         if (!!result) {
             previewEditor.setValue("")
             previewEditor.insert("")
+            document.querySelector(".json-history-editor").dataset.id = undefined
         }
         setSetting(SETTINGS.jsonHistory, history.filter(item => String(item.key) !== id))
         refreshJsonHistory()
