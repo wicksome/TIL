@@ -7,6 +7,8 @@
 * https://www.macbartender.com/[Bartender] - 메뉴바 관리
 * https://gikken.co/mate-translate/[Mate Translate] - 번역기
 * https://github.com/Clipy/Clipy[Clipy] - 클립보드
+** https://www.raycast.com/
+** https://www.alfredapp.com/
 * https://www.hammerspoon.org/[Hammerspoon] - 유틸리티 `brew install --cask hammerspoon`
 * https://www.busymac.com/busycal/[BusyCal] - 달력 `brew install --cask busycal`
 ** https://cron.com/ ?
