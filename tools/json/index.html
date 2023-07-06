@@ -585,7 +585,8 @@
         inputEditor.session.setMode("ace/mode/json");
 
         resultEditor = ace.edit("resultEditor");
-        resultEditor.setTheme("ace/theme/dawn");
+        const theme = getSetting(SETTINGS.latestResultEditorTheme)
+        resultEditor.setTheme(!!theme ? theme : "ace/theme/dawn");
         resultEditor.session.setMode("ace/mode/json");
         resultEditor.session.setUseWorker(false)
         resultEditor.setShowPrintMargin(false)
@@ -645,6 +646,8 @@
             refreshEditorWidthSize(Number(editorWidth.substring(0, editorWidth.indexOf("px"))))
             // document.querySelector(".editor-view > .editor:first-child").style.flexBasis = editorWidth
         }
+
+        initializedEditors = true
     }
 
     const initTimeStampConverterOptions = () => {
@@ -686,6 +689,7 @@
         latestInputEditorWidth: "latestInputEditorWidth",
         ignoreDuplicateLastRow: "ignoreDuplicateLastRow",
         jsonHistory: "jsonHistory",
+        latestResultEditorTheme: "latestResultEditorTheme",
     }
     // etc options
     const getSetting = (key) => {
@@ -704,6 +708,10 @@
 
         if (key === SETTINGS.latestInputEditorWidth) {
             return localStorage.getItem(SETTINGS.latestInputEditorWidth)
+        }
+
+        if (key === SETTINGS.latestResultEditorTheme) {
+            return localStorage.getItem(SETTINGS.latestResultEditorTheme)
         }
 
         if (key === SETTINGS.ignoreDuplicateLastRow) {
@@ -1091,6 +1099,7 @@
     // ======================================================================================================
     // event listeners
     // ======================================================================================================
+    let initializedEditors = false
     document.addEventListener('DOMContentLoaded', () => {
         // TODO: fix header in datetime table to top
         // TODO: support big number when filtering json (jsonata)
@@ -1131,6 +1140,15 @@
             eventLock = true
             appendTimeStamp(resultEditor)
         });
+        // ref: https://github.com/ajaxorg/ace/blob/c910951d1ff7f5ab32ab424ec61604f61696780d/src/virtual_renderer.js#L1678C31-L1678C42
+        resultEditor.renderer.on('themeChange', (e) => {
+            if (!initializedEditors) {
+                console.log("not yet initialize editors", e)
+                return
+            }
+            console.log("change editor settings", e)
+            setSetting(SETTINGS.latestResultEditorTheme, e.theme)
+        })
         inputEditor.session.selection.on("changeSelection", debounce((e) => {
             if (eventLock) {
                 // prevent duplicate events after dbclick event call
