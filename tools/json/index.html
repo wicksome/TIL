@@ -642,7 +642,8 @@
 
         const editorWidth = getSetting(SETTINGS.latestInputEditorWidth)
         if (!!editorWidth) {
-            document.querySelector(".editor-view > .editor:first-child").style.flexBasis = editorWidth
+            refreshEditorWidthSize(Number(editorWidth.substring(0, editorWidth.indexOf("px"))))
+            // document.querySelector(".editor-view > .editor:first-child").style.flexBasis = editorWidth
         }
     }
 
@@ -731,6 +732,36 @@
 
     const removeSetting = (key) => {
         localStorage.removeItem(key)
+    }
+
+    // resizing editor width size
+    const RESIZING_DIV_WIDTH = 15 // px
+    const refreshEditorWidthSize = (width) => {
+        const $el = document.querySelector(".editor-view")
+        const style = $el.currentStyle || window.getComputedStyle($el)
+
+        const maxWidth = $el.clientWidth - RESIZING_DIV_WIDTH - parseInt(style.paddingLeft) - parseInt(style.paddingRight)
+
+        if (width < 0 || width >= maxWidth) {
+            console.warn(`can not less then 0 or grete then ${maxWidth}`)
+        }
+
+        const $editor = document.querySelector(".editor-view > .editor:first-child")
+
+        if (width === null) {
+            $editor.style.removeProperty("flex-basis")
+            return null
+        } else if (width <= 0) {
+            const minWidth = 0.5
+            $editor.style.flexBasis = `${minWidth}px`
+            return minWidth
+        } else if (width > maxWidth) {
+            $editor.style.flexBasis = `${maxWidth}px`
+            return maxWidth
+        } else {
+            $editor.style.flexBasis = `${width}px`
+            return width
+        }
     }
 
     // ======================================================================================================
@@ -1219,8 +1250,6 @@
             }
         })
 
-        // resizing editor width size
-        const RESIZING_DIV_WIDTH = 15 // px
         const resize = (e) => {
             let clientX = e.clientX
             if (!clientX) {
@@ -1233,16 +1262,8 @@
             }
             const width = (clientX - (RESIZING_DIV_WIDTH + (RESIZING_DIV_WIDTH / 2)))
 
-            const $el = document.querySelector(".editor-view")
-            const style = $el.currentStyle || window.getComputedStyle($el)
-            const maxWidth = $el.clientWidth - RESIZING_DIV_WIDTH - parseInt(style.paddingLeft) - parseInt(style.paddingRight)
-            if (width < 0 || width >= maxWidth) {
-                console.warn(`can not less then 0 or grete then ${maxWidth}`)
-                return
-            }
-
-            $editor.style.flexBasis = `${width}px`
-            setSetting("latestInputEditorWidth", `${width}px`)
+            const appliedWidth = refreshEditorWidthSize(width)
+            setSetting(SETTINGS.latestInputEditorWidth, `${appliedWidth}px`)
         }
         $resizer.addEventListener("mousedown", (e) => {
             if (e.offsetX < RESIZING_DIV_WIDTH) {
@@ -1253,9 +1274,19 @@
             document.removeEventListener("mousemove", resize, false)
         }, false);
         $resizer.addEventListener("dblclick", (e) => {
-            $editor.style.removeProperty("flex-basis")
-            removeSetting("latestInputEditorWidth")
-            console.log("reset editor width")
+            const widthStr = getSetting(SETTINGS.latestInputEditorWidth)
+            console.log(widthStr)
+
+            if (!!widthStr) {
+                const width = widthStr.substring(0, widthStr.indexOf("px"))
+                refreshEditorWidthSize(null)
+                removeSetting(SETTINGS.latestInputEditorWidth)
+                console.log("reset editor width")
+            } else {
+                const appliedWidth = refreshEditorWidthSize(0)
+                setSetting(SETTINGS.latestInputEditorWidth, `${appliedWidth}px`)
+                console.log("expend editor width")
+            }
         });
         $resizer.addEventListener("touchstart", (e) => {
             document.addEventListener("touchmove", resize, false)
