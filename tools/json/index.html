@@ -390,6 +390,11 @@
                                 <label for="editorLineWrap">wrap: </label>
                                 <input type="checkbox" id="editorLineWrap">
                             </div>
+                            <div>
+                                <span style="color: #dc3545; font-size: .5rem">●</span>
+                                <label for="includeTimeStampToJsonResult">Include timestamp to result: </label>
+                                <input type="checkbox" id="includeTimeStampToJsonResult">
+                            </div>
                             <hr/>
                             <h5>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -587,7 +592,7 @@
         resultEditor = ace.edit("resultEditor");
         const theme = getSetting(SETTINGS.latestResultEditorTheme)
         resultEditor.setTheme(!!theme ? theme : "ace/theme/dawn");
-        resultEditor.session.setMode("ace/mode/json");
+        resultEditor.session.setMode("ace/mode/json5");
         resultEditor.session.setUseWorker(false)
         resultEditor.setShowPrintMargin(false)
         resultEditor.setReadOnly(true)
@@ -640,6 +645,7 @@
         // apply editor setting
         document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
         document.querySelector("#sortJson").checked = getSetting(SETTINGS.sortJson)
+        document.querySelector("#includeTimeStampToJsonResult").checked = getSetting(SETTINGS.includeTimeStampToJsonResult)
 
         const editorWidth = getSetting(SETTINGS.latestInputEditorWidth)
         if (!!editorWidth) {
@@ -690,6 +696,7 @@
         ignoreDuplicateLastRow: "ignoreDuplicateLastRow",
         jsonHistory: "jsonHistory",
         latestResultEditorTheme: "latestResultEditorTheme",
+        includeTimeStampToJsonResult: "includeTimeStampToJsonResult",
     }
     // etc options
     const getSetting = (key) => {
@@ -716,6 +723,10 @@
 
         if (key === SETTINGS.ignoreDuplicateLastRow) {
             return toBoolean(localStorage.getItem(SETTINGS.ignoreDuplicateLastRow), false)
+        }
+
+        if (key === SETTINGS.includeTimeStampToJsonResult) {
+            return toBoolean(localStorage.getItem(SETTINGS.includeTimeStampToJsonResult), false)
         }
 
         if (key === SETTINGS.jsonHistory) {
@@ -982,8 +993,13 @@
             // set result
             console.log(result)
             if (!!result || result === "") {
+                let resultJson = result
+                if (getSetting(SETTINGS.includeTimeStampToJsonResult)) {
+                    const now = new Date()
+                    resultJson = `// ${now.toLocaleString()}\n` + result
+                }
                 resultEditor.setValue("")
-                resultEditor.insert(result)
+                resultEditor.insert(resultJson)
 
                 // update effect
                 effectRefersh()
@@ -1331,6 +1347,10 @@
             let enable = null
             if (e.target.checked) enable = true
             updateEditorOptions({wrap: enable})
+        })
+        document.querySelector("#includeTimeStampToJsonResult").addEventListener("change", (e) => {
+            setSetting(SETTINGS.includeTimeStampToJsonResult, e.target.checked)
+            runFormat({force: true})
         })
 
         $converterColumn1.addEventListener("change", (e) => {
