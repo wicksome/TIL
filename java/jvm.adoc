@@ -148,15 +148,12 @@ JVM 메모리 영역은 'runtime data area'라고도 불리며 여러 영역으�
 * 태생상 한계가 멈출 수 밖에 없다. STW
 ** 모든 GC는 다 멈출 수 밖에 없다.
 
-==== References
-
-* https://docs.oracle.com/javase/10/gctuning/garbage-first-garbage-collector.htm#JSGCT-GUID-ED3AB6D3-FD9B-4447-9EDF-983ED2F7A573
-
-==== Young Garbage Collections
-
 Young Garbage Collections::
 The G1 GC satisfies most allocation requests from regions added to the eden set of regions. During a young garbage collection, the G1 GC collects both the eden regions and the survivor regions from the previous garbage collection. The live objects from the eden and survivor regions are copied, or evacuated, to a new set of regions. The destination region for a particular object depends upon the object's age; an object that has aged sufficiently evacuates to an old generation region (that is, promoted); otherwise, the object evacuates to a survivor region and will be included in the CSet of the next young or mixed garbage collection.
 
+==== References
+
+* https://docs.oracle.com/javase/10/gctuning/garbage-first-garbage-collector.htm#JSGCT-GUID-ED3AB6D3-FD9B-4447-9EDF-983ED2F7A573
 
 == References
 
@@ -166,3 +163,4 @@ The G1 GC satisfies most allocation requests from regions added to the eden set 
 * https://mirinae312.github.io/develop/2018/06/04/jvm_gc.html
 * https://yaboong.github.io/java/2018/06/09/java-garbage-collection/
 * https://hongsii.github.io/2018/12/20/jvm-memory-structure/
+* https://thinkground.studio/2020/11/07/%EC%9D%BC%EB%B0%98%EC%A0%81%EC%9D%B8-gc-%EB%82%B4%EC%9A%A9%EA%B3%BC-g1gc-garbage-first-garbage-collector-%EB%82%B4%EC%9A%A9/
