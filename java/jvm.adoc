@@ -125,6 +125,7 @@ JVM 메모리 영역은 'runtime data area'라고도 불리며 여러 영역으�
 * eden 영역의 용량 한계에 다다르면 young gc 발생
 * 큰 힙메모리에서 짧은 GC 시간을 보장하는데 목적을 둠
 * Humongous : Region 크기의 50%를 초과하는 큰 객체를 저장하기 위한 공간이며, 이 Region 에서는 GC 동작이 최적으로 동작하지 않는다.
+** humongous면 바로 old region으로 간주하고, 다른거하지(넣지) 않음. 이어지게 하는 마크를 함
 * Available/Unused : 아직 사용되지 않은 Region을 의미한다.
 * young gc를 수행할때 stw 발생, stw 시간을 줄이기 위해 멀티스레드로 gc 수행
 * young gc는 region중 gc대상각체가 많은 region(eden, survivor 역할)에서 수행
@@ -136,6 +137,16 @@ JVM 메모리 영역은 'runtime data area'라고도 불리며 여러 영역으�
 .. remark
 .. cleanup
 .. copy
+* collection set
+** garbage collection할 set. region들의 집합
+* GC할 때 mixed collection set일 때 old region을 어떻게 정할것이냐
+** Most Garbage First
+** region에 제일 많은 쓰레기를 모을 수 있는 영역을 처리함
+** liveness가 가장 적은 애를 처리하겠다. 즉 메모리를 제일 많이 확보할 것
+** minor gc임.
+*** g1gc는 major gc를 피하겠다는 것이니
+* 태생상 한계가 멈출 수 밖에 없다. STW
+** 모든 GC는 다 멈출 수 밖에 없다.
 
 ==== References
 
