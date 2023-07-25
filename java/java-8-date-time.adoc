@@ -111,6 +111,14 @@ ____
 [NOTE]
 .TimeZone ID
 ====
+`ZoneId.of(zoneId)` 에 사용되는 파라미터인 Time-zone ID는 3가지 타입을 지원한다. (https://docs.oracle.com/javase/8/docs/api/java/time/ZoneId.html[참고])
+
+. (Simplest type) 'Z' 혹은 '+', '-'로 시작하는 offset. (ex. `+02:00`, `-12:00`, `Z`)
+. (Offset-style ID) 접두사('UTC', 'GMT', 'UT')가 포함된 offset-style ID. (ex. `UTC+01:00`, `GMT+2`)
+. (Region-based ID) https://docs.oracle.com/javase/8/docs/api/java/time/zone/ZoneRulesProvider.html[ZoneRulesProvider]에 의해 정의된 설정으로 동작하는 ID.
+** JVM에는 기본으로 IANA Time Zone Database (TZDB)에 정의된 시간대에 대한 영역 규칙을 제공하는 공급자가 있다.
++
+(다른 조직으로는 IATA, Microsoft가 있다.)
 
 [quote, 'https://stackoverflow.com/tags/timezone/info[timezone tag - stackoverflow]']
 ____
@@ -140,6 +148,9 @@ ____
 
 **[TZDB]** Eggert, P. and A.D. Olson, "Sources for Time Zone and Daylight Saving Time Data", July 2009, <http://www.twinsun.com/tz/tz-link.htm>.
 ____
+
+.참고
+* https://stackoverflow.com/questions/53545867/what-is-meaning-of-timezone-id-of-google-timezone-api
 
 ====
 
