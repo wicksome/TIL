@@ -98,6 +98,7 @@ DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 �
 |===
 
 [NOTE]
+.ISO 8601
 ====
 [quote, 'https://ko.wikipedia.org/wiki/ISO_8601[ISO 8601 - 위키피디아]']
 ____
@@ -105,6 +106,41 @@ ____
 이 표준은 국제 표준화 기구(ISO)에 의해 공포되었으며 1988년에 처음으로 공개되었다. 이 표준의 목적은 날짜와 시간을 표현함에 있어 명백하고 잘 정의된 방법을 제공함으로써, 
 날짜와 시간의 숫자 표현에 대한 오해를 줄이고자함에 있는데, 숫자로 된 날짜와 시간 작성에 있어 다른 관례를 가진 나라들간의 데이터가 오갈때 특히 그렇다.
 ____
+====
+
+[NOTE]
+.TimeZone ID
+====
+
+[quote, 'https://stackoverflow.com/tags/timezone/info[timezone tag - stackoverflow]']
+____
+https://www.iana.org/time-zones[**The IANA/Olson Time Zone Database**]
+
+Also known as ZoneInfo, TZDB or the TZ database
+
+* Example Identifier: `"America/New_York"`
+____
+
+[quote, 'https://data.iana.org/time-zones/theory.html#naming[Theory and progmatics of the `tz` code and data - IANA]']
+____
+The naming conventions attempt to strike a balance among the following goals:
+
+* Uniquely identify every timezone where clocks have agreed since 1970. This is essential for the intended use: static clocks keeping local civil time.
+* Indicate to experts where the timezone's clocks typically are.
+* Be robust in the presence of political changes. For example, names are typically not tied to countries, to avoid incompatibilities when countries change their name (e.g., Swaziland→Eswatini) or when locations change countries (e.g., Hong Kong from UK colony to China). There is no requirement that every country or national capital must have a timezone name.
+* Be portable to a wide variety of implementations.
+* Use a consistent naming conventions over the entire world.
+____
+
+[quote, 'https://www.rfc-editor.org/rfc/rfc5545#section-3.2.19[Time Zone Identifier - RFC5545]']
+____
+**Note**: This document does not define a naming convention for time zone identifiers.  Implementers may want to use the naming conventions defined in existing time zone specifications such as the public-domain TZ database [TZDB].  The specification of globally unique time zone identifiers is not addressed by this document and is left for future study.
+
+...
+
+**[TZDB]** Eggert, P. and A.D. Olson, "Sources for Time Zone and Daylight Saving Time Data", July 2009, <http://www.twinsun.com/tz/tz-link.htm>.
+____
+
 ====
 
 == 날짜, 시간 다루기
@@ -692,6 +728,7 @@ hk.withZoneSameInstant(ZoneId.of("Asia/Seoul")).also {
 * http://meetup.toast.com/posts/125[자바스크립트에서 타임존 다루기 (1) - Toast]
 * https://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html[Java 8 Date Time - 20 Examples of LocalDate, LocalTime, LocalDateTime]
 * https://jekalmin.tistory.com/entry/%EC%9E%90%EB%B0%94-18-%EB%82%A0%EC%A7%9C-%EC%A0%95%EB%A6%AC[Java 1.8 날짜 정리]
+* https://stackoverflow.com/tags/timezone/info
 
 ++++
 </details>
