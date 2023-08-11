@@ -21,3 +21,15 @@
 ** https://github.com/openzipkin/brave[OpenZipkin Brave]와 통합
 * https://github.com/openzipkin/brave[OpenZipkin Brave]
 ** 추적 관련 작업을 Brave에게 위임
+
+
+---
+
+* open tracing, open census(google) 트레이시용 인터페이스.
+** 이걸 하나로 합친게 open telemetry
+* tracer 구현제
+** zipkin에서는 brave
+* 원하는 보는거 -> 브릿지
+* sluth spring 3.0에서 deprecated
+* brave brige는 말그대로 브릿지. zipkin에서 만든 구현체(brave)를 spring에 붙히고 나갈 수 있는 것을 해주는 애
+
