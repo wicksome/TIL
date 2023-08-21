@@ -198,3 +198,7 @@ private fun Instant.deleteNanoSecond(): Instant = this.truncatedTo(ChronoUnit.MI
 // 00:00:00.1234567 → 00:00:00
 private fun Instant.deleteMilliSecond(): Instant = this.truncatedTo(ChronoUnit.SECONDS)
 ----
+
+== 인덱스
+
+* https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_fast_index_creation
