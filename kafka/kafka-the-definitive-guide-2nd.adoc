@@ -70,3 +70,39 @@
 * 파티션은 클러스터 안의 브로커 중 하나가 담당하며, 그 브로커는 파티션 리더~partition{sp}leader~라고 부른다.
 * 복제된 파티션이 여러 브로커에 할당될 수도 있는데 이것들은 파티션의 팔로워~follewer~라고 부른다.
 ** 복제replication~~ 기능은 파티션의 메시지를 중복 저장함으로써 리더 브로커에 장애가 발생했을 때 팔로워 중 하나가 리더 역할을 이어받을 수 있도록 한다.
+
+== 2. 카프카 설치하기
+
+* https://kafka.apache.org/quickstart[Apache Kafka Quickstart]
+
+[source, bash]
+----
+# step 1 - 다운로드
+# https://kafka.apache.org/downloads
+$ curl -O https://downloads.apache.org/kafka/3.5.1/kafka_2.13-3.5.1.tgz
+$ tar -xzf kafka_2.13-3.5.1.tgz
+$ cd kafka_2.13-3.5.1
+
+# step 2 - 카프카 실행
+# Kafka with KRaft
+$ KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+$ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+$ bin/kafka-server-start.sh config/kraft/server.properties
+
+# step 3 - 토픽 생성/확인
+$ bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --replication-factor 1 --partitions 1 --topic test
+$ bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test
+
+# step 4 - 메시지 생성
+$ bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test
+
+# step 5 - 메시지 읽기
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+# kafka-ui - https://github.com/provectus/kafka-ui
+# https://docs.kafka-ui.provectus.io/development/building/without-docker
+# https://github.com/provectus/kafka-ui/releases
+$ java -Dspring.config.additional-location=application.yml -jar kafka-ui-api-v0.7.1.jar
+----
+
+== 3. 카프카 프로듀서
