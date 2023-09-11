@@ -90,6 +90,7 @@ ____
 * KRaft
 ** 새로운 메타데이터 관리를 위함
 ** Raft 합의 프로토콜의 이벤트 기반 변형을 사용하는 kafka의 새로원 쿼럼 컨트롤러 서비스
+*** https://raft.github.io/
 *** https://seongjin.me/raft-consensus-algorithm/
 *** https://zetawiki.com/wiki/Raft_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98
 
@@ -139,6 +140,7 @@ $ java -Dspring.config.additional-location=application.yml -jar kafka-ui-api-v0.
 ** 브로커의 메타데이터가 저장되는 주키퍼의 위치
 * `log.dirs`
 ** 카프카는 모든 메시지를 로그 세그먼트~log{sp}segment~ 단위로 묶어서 지정된 디스크에 저장한다.
+*** https://strimzi.io/blog/2021/12/17/kafka-segment-retention/
 * `num.recovery.threads.per.data.dir`
 ** 카프카는 설정 가능한 스레드 풀을 사용해서 로그 세그먼트를 관리한다.
 ** 기본적으로 로그 디렉토리에 대해 하나의 스레드만이 사용된다.
