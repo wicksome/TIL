@@ -1,0 +1,11 @@
+= startup
+
+.스타트업이 자주 하는 실수들
+* https://brunch.co.kr/@lesstif/4[야크 털 깎기(Yak Shaving)]
+** "원래 목적이 무엇인지 잃어 버리고 엉뚱한 일을 하면서 엄청난 시간을 까 먹을 수 있기 때문입니다."
+* https://brunch.co.kr/@lesstif/9[마세라티 문제(Maserati Problem)]
+* https://brunch.co.kr/@lesstif/8[러시아 페인트공 알고리즘 - 일명 날코딩]
+
+---
+
+* https://news.hada.io/topic?id=8601&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7[(당신이 훔칠수 있는) 50개의 스타트업 아이디어 | GeekNews]
