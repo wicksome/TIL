@@ -33,7 +33,9 @@
 * https://support.apple.com/ko-kr/HT201361
 * https://blog.mrhaki.com/2015/04/awesome-asciidoctor-display-keyboard.html
 
-== 필수 어플리케이션
+== 어플리케이션
+
+=== 필수
 
 * https://apps.apple.com/kr/app/runcat/id1429033973?mt=12[RunCat] - 시스템 모니터링
 * https://www.macbartender.com/[Bartender] - 메뉴바 관리
@@ -49,9 +51,25 @@
 * https://www.taskpaper.com/[TaskPaper] - 할일 관리
 * 1Password
 * MindNode - 마인드맵
-* https://github.com/michaelvillar/timer-app[Timer] - 타이머
 * https://freemacsoft.net/appcleaner/[AppCleaner] - 어플리케이션 삭제툴
 * https://theunarchiver.com/[Unarchiver]
+* 집중 및 시간 관리
+** https://github.com/michaelvillar/timer-app[Timer] - 타이머
+** https://flowapp.info/[Flow]
+** https://fiplab.com/apps/window-focus-for-mac[Window Focus]
+
+
+=== 추천
+
+* https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저 `brew install --cask keycastr`
+* https://www.mowglii.com/itsycal/[Itsycal] - 심플 캘린더 위젯
+* https://giphy.com/[GIPHY] - gif 도구
+* asciinema
+* tab
+** https://contexts.co/
+** https://alt-tab-macos.netlify.app/
+* 스
+** https://shottr.cc/
 
 == 개발 도구
 
@@ -203,19 +221,6 @@ $ mkdir -p ~/workspace/flex-team
 [core]
     sshCommand = "ssh -i ~/.ssh/<ssh-for-work>"
 ----
-
-
-== 추천 어플리케이션
-
-* https://github.com/keycastr/keycastr[Keycastr] - 키 입력 비쥬얼라이저 `brew install --cask keycastr`
-* https://www.mowglii.com/itsycal/[Itsycal] - 심플 캘린더 위젯
-* https://giphy.com/[GIPHY] - gif 도구
-* asciinema
-* tab
-** https://contexts.co/
-** https://alt-tab-macos.netlify.app/
-* 스
-** https://shottr.cc/
 
 == windowserver
 
