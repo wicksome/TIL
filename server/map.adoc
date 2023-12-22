@@ -1,7 +1,0 @@
-= 지도
-
-* 표현방법
-** H3
-*** https://www.uber.com/en-KR/blog/h3/
-*** https://h3geo.org/
-*** https://zzsza.github.io/data/2019/03/31/uber-h3/

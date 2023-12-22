@@ -1,3 +1,0 @@
-* bracking change
-** https://en.wiktionary.org/wiki/breaking_change
-** https://sally-kang.tistory.com/11
