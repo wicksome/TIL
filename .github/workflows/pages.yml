@@ -85,9 +85,12 @@ jobs:
             git commit -m "Automated sitemap update" sitemap.xml
             git push origin gh-pages
           fi
-          
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: '.'
