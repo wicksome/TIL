@@ -1041,7 +1041,7 @@
 
                             let result = line
                             if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                result = `${line} // ${epochTime.toISOString()}`
+                                result = `${line} // ${toIsoString(epochTime)}`
                             }
                             return result
                         })
@@ -1163,6 +1163,23 @@
         }
 
         return date
+    }
+
+    const toIsoString = (date) => {
+        const tzo = -date.getTimezoneOffset(),
+            dif = tzo >= 0 ? '+' : '-',
+            pad = function (num) {
+                return (num < 10 ? '0' : '') + num;
+            };
+
+        return date.getFullYear() +
+            '-' + pad(date.getMonth() + 1) +
+            '-' + pad(date.getDate()) +
+            'T' + pad(date.getHours()) +
+            ':' + pad(date.getMinutes()) +
+            ':' + pad(date.getSeconds()) +
+            dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+            ':' + pad(Math.abs(tzo) % 60);
     }
 
     const appendJsonHistory = () => {
