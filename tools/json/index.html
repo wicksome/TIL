@@ -390,10 +390,24 @@
                                 <label for="editorLineWrap">wrap: </label>
                                 <input type="checkbox" id="editorLineWrap">
                             </div>
+                            <hr/>
+                            <h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-window-split" viewBox="0 0 16 16">
+                                    <path d="M2.5 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm2-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Zm1 .5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/>
+                                    <path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2Zm12 1a1 1 0 0 1 1 1v2H1V3a1 1 0 0 1 1-1h12ZM1 13V6h6.5v8H2a1 1 0 0 1-1-1Zm7.5 1V6H15v7a1 1 0 0 1-1 1H8.5Z"/>
+                                </svg>
+                                Result View
+                            </h5>
                             <div>
-                                <span style="color: #dc3545; font-size: .5rem">●</span>
                                 <label for="includeTimeStampToJsonResult">Include timestamp to result: </label>
                                 <input type="checkbox" id="includeTimeStampToJsonResult">
+                            </div>
+                            <div>
+                                <span style="color: #dc3545; font-size: .5rem">●</span>
+                                <label for="displayConvertedTimeStamp">Display timestamp converted to
+                                    LocalDateTime: </label>
+                                <input type="checkbox" id="displayConvertedTimeStamp">
                             </div>
                             <hr/>
                             <h5>
@@ -409,7 +423,6 @@
                                 <input type="checkbox" id="showTimestampConvertLayer" checked>
                             </div>
                             <div>
-                                <span style="color: #dc3545; font-size: .5rem">●</span>
                                 <label for="ignoreDuplicateLastRow">Ignore duplicated last row: </label>
                                 <input type="checkbox" id="ignoreDuplicateLastRow">
                             </div>
@@ -438,14 +451,15 @@
                                 More
                             </h5>
                             <div>
-                                <span>keyboard shortcut: <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts">link</a></span>
+                                <span>keyboard shortcut: <a
+                                        href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts">link</a></span>
                             </div>
-<!--                             <div class="shortcut-macos">
-                                <span>fold: <code class="metakey">cmd</code> + <code>shift</code> + <code>alt</code> + <code>L</code></span>
-                            </div>
-                            <div class="shortcut-window">
-                                <span>fold: <code>alt</code> + <code>L</code></span>
-                            </div> -->
+                            <!--                             <div class="shortcut-macos">
+                                                            <span>fold: <code class="metakey">cmd</code> + <code>shift</code> + <code>alt</code> + <code>L</code></span>
+                                                        </div>
+                                                        <div class="shortcut-window">
+                                                            <span>fold: <code>alt</code> + <code>L</code></span>
+                                                        </div> -->
                             <div>
                                 <span>more editor settings: click the editor → <code class="metakey">cmd</code> + <code>,</code></span>
                             </div>
@@ -453,7 +467,6 @@
                                 <span>more editor actions: click the editor → <code>f1</code></span>
                             </div>
                             <div>
-                                <span style="color: #dc3545; font-size: .5rem">●</span>
                                 <span>JSONata expression guide: <a
                                         href="https://docs.jsonata.org/simple">link</a></span>
                                 <div class="card card-body"
@@ -647,6 +660,7 @@
         document.querySelector("#editorLineWrap").checked = defaultOptions.wrap
         document.querySelector("#sortJson").checked = getSetting(SETTINGS.sortJson)
         document.querySelector("#includeTimeStampToJsonResult").checked = getSetting(SETTINGS.includeTimeStampToJsonResult)
+        document.querySelector("#displayConvertedTimeStamp").checked = getSetting(SETTINGS.displayConvertedTimeStamp)
 
         const editorWidth = getSetting(SETTINGS.latestInputEditorWidth)
         if (!!editorWidth) {
@@ -698,6 +712,7 @@
         jsonHistory: "jsonHistory",
         latestResultEditorTheme: "latestResultEditorTheme",
         includeTimeStampToJsonResult: "includeTimeStampToJsonResult",
+        displayConvertedTimeStamp: "displayConvertedTimeStamp",
     }
     // etc options
     const getSetting = (key) => {
@@ -728,6 +743,10 @@
 
         if (key === SETTINGS.includeTimeStampToJsonResult) {
             return toBoolean(localStorage.getItem(SETTINGS.includeTimeStampToJsonResult), false)
+        }
+
+        if (key === SETTINGS.displayConvertedTimeStamp) {
+            return toBoolean(localStorage.getItem(SETTINGS.displayConvertedTimeStamp), true)
         }
 
         if (key === SETTINGS.jsonHistory) {
@@ -995,10 +1014,46 @@
             console.log(result)
             if (!!result || result === "") {
                 let resultJson = result
+
+                // Adds a timestamp converted to a local date time.
+                if (getSetting(SETTINGS.displayConvertedTimeStamp)) {
+                    resultJson = resultJson
+                        .split("\n")
+                        .map((line) => {
+                            const separatedLine = line.split(" ")
+                            if (separatedLine.length === 0) return line
+
+                            const lastText = separatedLine[separatedLine.length - 1]
+                            if (!/^-?\d+(|,)$/.test(lastText)) return line
+
+                            let epochTime = undefined
+                            try {
+                                let inputTimeStamp
+                                if (lastText.slice(-1) === ',') {
+                                    inputTimeStamp = parseInt(lastText.slice(0, -1))
+                                } else {
+                                    inputTimeStamp = parseInt(lastText)
+                                }
+                                epochTime = convertTimeStampToDate(inputTimeStamp)
+                            } catch (e) {
+                                console.error(`fail parse value: ${lastText}`, e)
+                            }
+
+                            let result = line
+                            if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                result = `${line} // ${epochTime.toISOString()}`
+                            }
+                            return result
+                        })
+                        .join("\n")
+                }
+
+                // Add formatting time to first line
                 if (getSetting(SETTINGS.includeTimeStampToJsonResult)) {
                     const now = new Date()
-                    resultJson = `// ${now.toLocaleString()}\n` + result
+                    resultJson = `// ${now.toLocaleString()}\n${resultJson}`
                 }
+
                 resultEditor.setValue("")
                 resultEditor.insert(resultJson)
 
@@ -1087,20 +1142,27 @@
             if (!value) return
 
             // convert epoch millisecond or second to date
-            let date = new Date(value)
-            if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
-                // epoch millisecond
-                date = new Date(value)
-            } else {
-                // epoch second
-                date = new Date(value * 1000)
-            }
+            const date = convertTimeStampToDate(value)
 
             appendRow(value, date)
             if (!!func) {
                 func()
             }
         }, 10);
+    }
+
+    const convertTimeStampToDate = (timeStamp) => {
+        // convert epoch millisecond or second to date
+        let date = new Date(timeStamp)
+        if (Math.abs(Date.now() - date) < Math.abs(Date.now() - date * 1000)) {
+            // epoch millisecond
+            date = new Date(timeStamp)
+        } else {
+            // epoch second
+            date = new Date(timeStamp * 1000)
+        }
+
+        return date
     }
 
     const appendJsonHistory = () => {
@@ -1349,8 +1411,14 @@
             if (e.target.checked) enable = true
             updateEditorOptions({wrap: enable})
         })
+
         document.querySelector("#includeTimeStampToJsonResult").addEventListener("change", (e) => {
             setSetting(SETTINGS.includeTimeStampToJsonResult, e.target.checked)
+            runFormat({force: true})
+        })
+
+        document.querySelector("#displayConvertedTimeStamp").addEventListener("change", (e) => {
+            setSetting(SETTINGS.displayConvertedTimeStamp, e.target.checked)
             runFormat({force: true})
         })
 
