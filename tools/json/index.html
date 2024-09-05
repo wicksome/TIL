@@ -1032,36 +1032,51 @@
                             let jsonKey = undefined
                             let jsonValue = undefined
                             if (!!match && match.length > 1) {
-                                jsonKey = match[1]
-                                jsonValue = match[2]
-                            }
-
-                            // convert json value to epochTime
-                            let epochTime = undefined
-                            try {
-                                const inputTimeStamp = parseInt(jsonValue)
-
-                                // skip if zero
-                                if (inputTimeStamp !== 0) {
-                                    epochTime = convertTimeStampToDate(inputTimeStamp)
+                                // convert json key
+                                if (typeof match[1] === 'string' || match[1] instanceof String) {
+                                    jsonKey = match[1]
                                 }
-                            } catch (e) {
-                                console.error(`fail parse value: ${lastText}`, e)
+
+                                // convert json number value
+                                try {
+                                    jsonValue = parseInt(match[2])
+                                } catch (e) {
+                                    console.error(`fail parse value: ${lastText}`, e)
+                                }
                             }
+
+                            // return if undefined
+                            if (jsonKey === undefined || jsonValue === undefined) return line
 
                             // append converted number texts
                             let result = line
                             let annotation = []
-                            if (
-                                (typeof jsonKey === 'string' || jsonKey instanceof String)
-                                && jsonKey.endsWith("Minutes")
-                                && parseInt(jsonValue) > 60
-                            ) {
+
+                            if (jsonKey.endsWith("Minutes") && jsonValue > 60) {
+                                // convert minutes to hours
                                 annotation.push(`${jsonValue / 60}h`)
                             } else {
+                                // convert json value to epochTime
+                                let epochTime = undefined
+                                try {
+                                    // skip if zero
+                                    if (jsonValue !== 0) {
+                                        const temp = convertTimeStampToDate(jsonValue)
+                                        if (temp.getFullYear() !== 1970) {
+                                            epochTime = temp
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error(`fail parse value: ${jsonValue}`, e)
+                                }
+
                                 if (epochTime instanceof Date && !isNaN(epochTime)) {
                                     annotation.push(`${toIsoString(epochTime)}`)
                                 }
+                            }
+
+                            if (annotation.length === 0 && jsonKey.includes("Minutes") && jsonValue > 60) {
+                                annotation.push(`${jsonValue / 60}h`)
                             }
 
                             if (annotation.length > 0) {
