@@ -1024,24 +1024,48 @@
                             if (separatedLine.length === 0) return line
 
                             const lastText = separatedLine[separatedLine.length - 1]
+                            // check last text is number
                             if (!/^-?\d+(|,)$/.test(lastText)) return line
 
+                            // convert json key, value
+                            const match = line.match(/"(\w+)": (\d+)(|,)/)
+                            let jsonKey = undefined
+                            let jsonValue = undefined
+                            if (!!match && match.length > 1) {
+                                jsonKey = match[1]
+                                jsonValue = match[2]
+                            }
+
+                            // convert json value to epochTime
                             let epochTime = undefined
                             try {
-                                let inputTimeStamp
-                                if (lastText.slice(-1) === ',') {
-                                    inputTimeStamp = parseInt(lastText.slice(0, -1))
-                                } else {
-                                    inputTimeStamp = parseInt(lastText)
+                                const inputTimeStamp = parseInt(jsonValue)
+
+                                // skip if zero
+                                if (inputTimeStamp !== 0) {
+                                    epochTime = convertTimeStampToDate(inputTimeStamp)
                                 }
-                                epochTime = convertTimeStampToDate(inputTimeStamp)
                             } catch (e) {
                                 console.error(`fail parse value: ${lastText}`, e)
                             }
 
+                            // append converted number texts
                             let result = line
-                            if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                result = `${line} // ${toIsoString(epochTime)}`
+                            let annotation = []
+                            if (
+                                (typeof jsonKey === 'string' || jsonKey instanceof String)
+                                && jsonKey.endsWith("Minutes")
+                                && parseInt(jsonValue) > 60
+                            ) {
+                                annotation.push(`${jsonValue / 60}h`)
+                            } else {
+                                if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                    annotation.push(`${toIsoString(epochTime)}`)
+                                }
+                            }
+
+                            if (annotation.length > 0) {
+                                result += ` // ${annotation.join(", ")}`
                             }
                             return result
                         })
