@@ -1069,35 +1069,49 @@
 
                             // convert json value to epochTime
                             let epochTime = undefined
-                            try {
-                                // skip if zero
-                                if (jsonValue > 0) {
+                            if (jsonValue > 0) {
+                                try {
                                     const temp = convertTimeStampToDate(jsonValue)
                                     if (temp.getFullYear() !== 1970) {
                                         epochTime = temp
                                     }
+                                } catch (e) {
+                                    console.error(`fail parse value: ${jsonValue}`, e)
                                 }
-                            } catch (e) {
-                                console.error(`fail parse value: ${jsonValue}`, e)
                             }
                             if (epochTime instanceof Date && !isNaN(epochTime)) {
                                 annotation.push(`${toIsoString(epochTime)}`)
                             }
 
                             // convert minutes to hours
-                            if (jsonValue >= 60 || jsonValue <= -60) {
+                            if (!epochTime && jsonValue >= 60 || jsonValue <= -60) {
                                 if (!!jsonKey) {
                                     if (jsonKey.endsWith("Minutes")) {
-                                        annotation.push(`${jsonValue / 60}h`)
+                                        const hoursObj = convertMinutesToHours(jsonValue)
+                                        if (hoursObj.divisible) {
+                                            annotation.push(`${hoursObj.convertedHours}h`)
+                                        } else {
+                                            annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
+                                        }
                                     }
 
                                     if (annotation.length === 0 && jsonKey.includes("Minutes")) {
-                                        annotation.push(`${jsonValue / 60}h`)
+                                        const hoursObj = convertMinutesToHours(jsonValue)
+                                        if (hoursObj.divisible) {
+                                            annotation.push(`${hoursObj.convertedHours}h`)
+                                        } else {
+                                            annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
+                                        }
                                     }
                                 } else {
-                                    if (annotation.length === 0) {
-                                        annotation.push(`${jsonValue / 60}h`)
-                                    }
+                                    // if (annotation.length === 0) {
+                                    //     const hoursObj = convertMinutesToHours(jsonValue)
+                                    //     if (hoursObj.divisible) {
+                                    //         annotation.push(`${hoursObj.convertedHours}h`)
+                                    //     } else {
+                                    //         annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
+                                    //     }
+                                    // }
                                 }
                             }
 
