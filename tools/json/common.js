@@ -1,4 +1,3 @@
-
 const toBoolean = (value, returnIfNull = false) => {
     return (value === null) ? returnIfNull : /^true$/i.test(value)
 }
@@ -81,5 +80,24 @@ function formatTimeAgo(date) {
             return formatter.format(Math.round(duration), division.name)
         }
         duration /= division.amount
+    }
+}
+
+function convertMinutesToHours(minutes) {
+    const convertedHours = minutes / 60
+    const remainingMinutes = minutes % 60
+
+    let justHours = 0
+    if (remainingMinutes > 0) {
+        justHours = Math.floor(convertedHours)
+    }
+
+    return {
+        divisible: remainingMinutes === 0,
+        convertedHours: convertedHours,
+        detail: {
+            hours: justHours,
+            minutes: remainingMinutes
+        }
     }
 }
