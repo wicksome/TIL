@@ -929,12 +929,12 @@
         force: false,
         sort: false,
     }) => {
-        console.log("--------------------------------------------------------")
-        console.log("input", content)
-        console.log("expression", expression)
-        console.log("options", options)
-        console.log("temp", temp)
-        console.log("........................................................")
+        console.debug("--------------------------------------------------------")
+        console.debug("input", content)
+        console.debug("expression", expression)
+        console.debug("options", options)
+        console.debug("temp", temp)
+        console.debug("........................................................")
 
         if (!options.force && temp === content) return
         if (content.trim() === '') return ''
@@ -943,9 +943,9 @@
         let result
         try {
             let jsonResult = LosslessJSON.parse(content)
-            console.log("input(json)", jsonResult)
+            console.debug("input(json)", jsonResult)
             if (options.sort) {
-                console.log("sort!")
+                console.debug("sort!")
                 jsonResult = deepSort(jsonResult)
             }
 
@@ -953,7 +953,7 @@
         } catch (e) {
             throw e
         }
-        console.log("result(format)", result)
+        console.debug("result(format)", result)
         // result = Promise.resolve(result)
 
         // 2. json filtering
@@ -964,7 +964,7 @@
             const jsonataResult = await jsonataExp.evaluate(JSON.parse(result))
 
             filtered = JSON.stringify(jsonataResult, undefined, 2)
-            console.log("result(filter)", filtered)
+            console.debug("result(filter)", filtered)
 
             // [references]
             // https://try.jsonata.org/
@@ -1011,7 +1011,8 @@
             }
         ).then((result) => {
             // set result
-            console.log(result)
+            // console.log(result)
+            const currentTimezoneOffset = new Date().getTimezoneOffset()
             if (!!result || result === "") {
                 let resultJson = result
 
@@ -1019,100 +1020,74 @@
                 if (getSetting(SETTINGS.displayConvertedTimeStamp)) {
                     resultJson = resultJson
                         .split("\n")
+                        .filter((line) => !!line && line !== '{' && line !== '}')
                         .map((line) => {
-                            const separatedLine = line.split(" ")
-                            if (separatedLine.length === 0) return line
-
-                            const lastText = separatedLine[separatedLine.length - 1]
-                            // check last text is number
-                            if (!/^-?\d+(|,)$/.test(lastText)) return line
-
-                            // convert json key, value
-                            const jsonKeyValueMatch = line.match(/"(\w+)": ((-|)\d+)(|,)$/)
-                            let jsonKey = undefined
-                            let jsonValue = undefined
-
-                            // support json format
-                            if (!!jsonKeyValueMatch && jsonKeyValueMatch.length > 1) {
-                                // convert json key
-                                if (typeof jsonKeyValueMatch[1] === 'string' || jsonKeyValueMatch[1] instanceof String) {
-                                    jsonKey = jsonKeyValueMatch[1]
-                                }
-
-                                // convert json number value
-                                try {
-                                    jsonValue = parseInt(jsonKeyValueMatch[2])
-                                } catch (e) {
-                                    console.error(`fail parse value: ${lastText}`, e)
-                                }
-                            }
-
-                            // support json array format
-                            if (jsonValue === undefined) {
-                                const plainTextMatch = line.match(/((-|)\d+)(|,)$/)
-                                if (!!plainTextMatch && plainTextMatch.length > 0) {
-                                    try {
-                                        jsonValue = parseInt(plainTextMatch[1])
-                                    } catch (e) {
-                                        console.error(`fail parse value: ${lastText}`, e)
-                                    }
-                                }
-                            }
-                            console.log(jsonValue)
-
-                            // return if undefined
-                            if (jsonValue === undefined) return line
-
-                            // append converted number texts
                             let result = line
                             let annotation = []
 
-                            // convert json value to epochTime
-                            let epochTime = undefined
-                            if (jsonValue > 0) {
-                                try {
-                                    const temp = convertTimeStampToDate(jsonValue)
-                                    if (temp.getFullYear() !== 1970) {
-                                        epochTime = temp
+                            const lineObj = parseLine(line)
+                            switch (lineObj.type) {
+                                case ParseType.JSON_KEY_AND_NUMBER_VALUE: {
+                                    let epochTime = undefined
+                                    if (lineObj.value > 0) {
+                                        try {
+                                            const temp = convertTimeStampToDate(lineObj.value)
+                                            if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
+                                                epochTime = temp
+                                            }
+                                        } catch (e) {
+                                            console.error(`fail parse value: ${lineObj.value}`, e)
+                                        }
                                     }
-                                } catch (e) {
-                                    console.error(`fail parse value: ${jsonValue}`, e)
-                                }
-                            }
-                            if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                annotation.push(`${toIsoString(epochTime)}`)
-                            }
+                                    if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                        annotation.push(`${toIsoString(epochTime)}`)
+                                    }
 
-                            // convert minutes to hours
-                            if (!epochTime && jsonValue >= 60 || jsonValue <= -60) {
-                                if (!!jsonKey) {
-                                    if (jsonKey.endsWith("Minutes")) {
-                                        const hoursObj = convertMinutesToHours(jsonValue)
+                                    if (
+                                        !epochTime
+                                        && annotation.length === 0
+                                        && lineObj.key.includes("Minutes")
+                                        && (lineObj.value >= 60 || lineObj.value <= -60)
+                                    ) {
+                                        const hoursObj = convertMinutesToHours(lineObj.value)
                                         if (hoursObj.divisible) {
                                             annotation.push(`${hoursObj.convertedHours}h`)
                                         } else {
                                             annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
                                         }
                                     }
-
-                                    if (annotation.length === 0 && jsonKey.includes("Minutes")) {
-                                        const hoursObj = convertMinutesToHours(jsonValue)
-                                        if (hoursObj.divisible) {
-                                            annotation.push(`${hoursObj.convertedHours}h`)
-                                        } else {
-                                            annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
+                                    break
+                                }
+                                case ParseType.NUMBER_VALUE: {
+                                    let epochTime = undefined
+                                    if (lineObj.value > 0) {
+                                        try {
+                                            const temp = convertTimeStampToDate(lineObj.value)
+                                            if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
+                                                epochTime = temp
+                                            }
+                                        } catch (e) {
+                                            console.error(`fail parse value: ${lineObj.value}`, e)
                                         }
                                     }
-                                } else {
-                                    // if (annotation.length === 0) {
-                                    //     const hoursObj = convertMinutesToHours(jsonValue)
-                                    //     if (hoursObj.divisible) {
-                                    //         annotation.push(`${hoursObj.convertedHours}h`)
-                                    //     } else {
-                                    //         annotation.push(`${hoursObj.convertedHours}h (${hoursObj.detail.hours}h ${hoursObj.detail.minutes}m)`)
-                                    //     }
-                                    // }
+                                    if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                        annotation.push(`${toIsoString(epochTime)}`)
+                                    }
+                                    break
                                 }
+                                case ParseType.JSON_KEY_AND_DATE_STRING_VALUE:
+                                case ParseType.DATE_STRING_VALUE: {
+                                    if (stripQuotes(lineObj.originValue).endsWith("Z")) {
+                                        annotation.push(toIsoString(lineObj.value))
+                                    }
+                                    break
+                                }
+                                case ParseType.JSON_KEY_AND_STRING_VALUE:
+                                case ParseType.JSON_KEY_AND_NUMBER_STRING_VALUE:
+                                case ParseType.JSON_KEY_AND_UNKNOWN_VALUE:
+                                case ParseType.STRING_VALUE:
+                                case ParseType.NUMBER_STRING_VALUE:
+                                case ParseType.UNKNOWN_VALUE:
                             }
 
                             if (annotation.length > 0) {
@@ -1149,6 +1124,132 @@
         })
 
         updateJsonSize()
+    }
+
+    const ParseType = {
+        JSON_KEY_AND_NUMBER_VALUE: "JSON_KEY_AND_NUMBER_VALUE",
+        JSON_KEY_AND_NUMBER_STRING_VALUE: "JSON_KEY_AND_NUMBER_STRING_VALUE",
+        JSON_KEY_AND_DATE_STRING_VALUE: "JSON_KEY_AND_DATE_STRING_VALUE",
+        JSON_KEY_AND_STRING_VALUE: "JSON_KEY_AND_STRING_VALUE",
+        JSON_KEY_AND_UNKNOWN_VALUE: "JSON_KEY_AND_UNKNOWN_VALUE",
+        NUMBER_VALUE: "NUMBER_VALUE",
+        NUMBER_STRING_VALUE: "NUMBER_STRING_VALUE",
+        STRING_VALUE: "STRING_VALUE",
+        DATE_STRING_VALUE: "DATE_STRING_VALUE",
+        UNKNOWN_VALUE: "UNKNOWN_VALUE",
+    }
+
+    const parseLine = (line) => {
+        if (/["'](.+)["']: (.+)[,|]?$/.test(line)) {
+            const jsonKey = stripQuotes(line.substring(0, line.indexOf(': ')).trim())
+            const jsonValue = stripComma(line.substring(line.indexOf(': ') + 1).trim())
+
+            // parse json value
+            if (isNumeric(jsonValue)) {
+                try {
+                    return {
+                        "type": ParseType.JSON_KEY_AND_NUMBER_VALUE,
+                        "key": jsonKey,
+                        "value": parseInt(jsonValue),
+                    }
+                } catch (e) {
+                    return {
+                        "type": ParseType.JSON_KEY_AND_UNKNOWN_VALUE,
+                        "key": jsonKey,
+                        "value": jsonValue,
+                    }
+                }
+            }
+
+            const startChar = jsonValue.charAt(0)
+            const lastChar = jsonValue.charAt(jsonValue.length - 1)
+            if ((startChar === '"' || startChar === "'") && (lastChar === '"' || lastChar === "'")) {
+                const temp = stripQuotes(jsonValue)
+                if (isNumeric(temp)) {
+                    try {
+                        return {
+                            "type": ParseType.JSON_KEY_AND_NUMBER_STRING_VALUE,
+                            "key": jsonKey,
+                            "value": parseInt(temp),
+                            "originValue": jsonValue
+                        }
+                    } catch (e) {
+                        return {
+                            "type": ParseType.JSON_KEY_AND_UNKNOWN_VALUE,
+                            "key": jsonKey,
+                            "value": jsonValue,
+                        }
+                    }
+                } else {
+                    try {
+                        const temp = new Date(stripQuotes(jsonValue))
+                        if (!!temp && temp instanceof Date && !isNaN(temp)) {
+                            return {
+                                "type": ParseType.JSON_KEY_AND_DATE_STRING_VALUE,
+                                "key": jsonKey,
+                                "value": temp,
+                                "originValue": jsonValue
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`fail parse value: ${jsonValue}`, e)
+                    }
+
+                    return {
+                        "type": ParseType.JSON_KEY_AND_STRING_VALUE,
+                        "key": jsonKey,
+                        "value": temp,
+                        "originValue": jsonValue
+                    }
+                }
+            }
+
+            // default
+            return {
+                "type": ParseType.JSON_KEY_AND_UNKNOWN_VALUE,
+                "key": jsonKey,
+                "value": jsonValue,
+            }
+        }
+
+        // parse single line like element in array
+        const textValue = stripComma(line.trim())
+
+        if (isNumeric(textValue)) {
+            return {
+                "type": ParseType.NUMBER_VALUE,
+                "value": parseInt(textValue),
+            }
+        } else {
+            const tempTextValue = stripQuotes(textValue)
+
+            if (isNumeric(tempTextValue)) {
+                return {
+                    "type": ParseType.NUMBER_STRING_VALUE,
+                    "value": parseInt(tempTextValue),
+                    "originValue": textValue,
+                }
+            } else {
+                try {
+                    const temp = new Date(tempTextValue)
+                    if (!!temp && temp instanceof Date && !isNaN(temp)) {
+                        return {
+                            "type": ParseType.DATE_STRING_VALUE,
+                            "value": temp,
+                            "originValue": tempTextValue
+                        }
+                    }
+                } catch (e) {
+                    console.error(`fail parse value: ${tempTextValue}`, e)
+                }
+            }
+
+            // default
+            return {
+                "type": ParseType.UNKNOWN_VALUE,
+                "value": textValue,
+            }
+        }
     }
 
     const updateJsonSize = () => {
