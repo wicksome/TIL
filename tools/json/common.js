@@ -7,6 +7,8 @@ const toNumber = (value) => {
     return parseInt(value)
 }
 
+const isNumeric = (num) => (typeof (num) === 'number' || typeof (num) === "string" && num.trim() !== '') && !isNaN(num);
+
 const isIsoDate = (str) => {
     try {
         // https://stackoverflow.com/a/37563868/3793078
@@ -99,5 +101,21 @@ function convertMinutesToHours(minutes) {
             hours: justHours,
             minutes: remainingMinutes
         }
+    }
+}
+
+function stripQuotes(text) {
+    if (/^["']/.test(text) && /["']$/.test(text)) {
+        return text.slice(1, -1)
+    } else {
+        return text
+    }
+}
+
+function stripComma(text) {
+    if (text.endsWith(',')) {
+        return text.slice(0, -1)
+    } else {
+        return text
     }
 }
