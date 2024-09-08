@@ -336,7 +336,7 @@
                         </span>
                     </button>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                        <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                             Tools
                         </button>
@@ -1542,6 +1542,9 @@
             if (content.trim() === "") return
 
             const unescaped = LosslessJSON.parse(content)
+
+            if (unescaped instanceof Object) return
+
             inputEditor.setValue("")
             inputEditor.insert(unescaped)
         })
