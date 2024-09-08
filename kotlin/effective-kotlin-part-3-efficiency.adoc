@@ -1,8 +1,0 @@
-= 효율성
-:toc:
-
-[#chapter-7-make-it-cheap]
-== 비용 줄이기
-
-[#chapter-8-efficient-collection-processing]
-== 효율적인 컬렉션 처리
