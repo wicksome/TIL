@@ -1040,6 +1040,35 @@
 
                             const lineObj = parseLine(line)
                             switch (lineObj.type) {
+                                case ParseType.JSON_KEY_AND_NUMBER_STRING_VALUE:
+                                    if (
+                                        (
+                                            lineObj.key.includes("Minutes")
+                                            || lineObj.key.includes("At")
+                                            || lineObj.key.includes("Timestamp")
+                                            || lineObj.key.includes("TimeStamp")
+                                            || lineObj.key === "timeStamp"
+                                            || lineObj.key === "timestamp"
+                                        )
+                                        && (lineObj.value >= 60 || lineObj.value <= -60)
+                                    ) {
+                                        let epochTime = undefined
+                                        if (lineObj.value > 0) {
+                                            try {
+                                                const temp = convertTimeStampToDate(lineObj.value)
+                                                if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
+                                                    epochTime = temp
+                                                }
+                                            } catch (e) {
+                                                console.error(`fail parse value: ${lineObj.value}`, e)
+                                            }
+                                        }
+                                        if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                            annotation.push(`${toIsoString(epochTime)}`)
+                                        }
+                                    }
+
+                                    break
                                 case ParseType.JSON_KEY_AND_NUMBER_VALUE: {
                                     let epochTime = undefined
                                     if (lineObj.value > 0) {
@@ -1060,7 +1089,6 @@
                                         !epochTime
                                         && annotation.length === 0
                                         && lineObj.key.includes("Minutes")
-                                        && !lineObj.key.includes("Id")
                                         && (lineObj.value >= 60 || lineObj.value <= -60)
                                     ) {
                                         const hoursObj = convertMinutesToHours(lineObj.value)
@@ -1097,7 +1125,6 @@
                                     break
                                 }
                                 case ParseType.JSON_KEY_AND_STRING_VALUE:
-                                case ParseType.JSON_KEY_AND_NUMBER_STRING_VALUE:
                                 case ParseType.JSON_KEY_AND_UNKNOWN_VALUE:
                                 case ParseType.STRING_VALUE:
                                 case ParseType.NUMBER_STRING_VALUE:
