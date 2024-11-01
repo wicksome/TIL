@@ -1060,6 +1060,7 @@
                                         !epochTime
                                         && annotation.length === 0
                                         && lineObj.key.includes("Minutes")
+                                        && !lineObj.key.includes("Id")
                                         && (lineObj.value >= 60 || lineObj.value <= -60)
                                     ) {
                                         const hoursObj = convertMinutesToHours(lineObj.value)
