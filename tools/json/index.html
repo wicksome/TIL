@@ -1041,14 +1041,14 @@
                             const lineObj = parseLine(line)
                             switch (lineObj.type) {
                                 case ParseType.JSON_KEY_AND_NUMBER_STRING_VALUE:
+                                    const lowercaseKey = lineObj.key.toLowerCase()
                                     if (
                                         (
-                                            lineObj.key.includes("Minutes")
-                                            || lineObj.key.includes("At")
-                                            || lineObj.key.includes("Timestamp")
-                                            || lineObj.key.includes("TimeStamp")
-                                            || lineObj.key === "timeStamp"
-                                            || lineObj.key === "timestamp"
+                                            lineObj.key.endsWith("Minutes")
+                                            || lineObj.key.endsWith("At")
+                                            || lineObj.key.endsWith("From")
+                                            || lineObj.key.endsWith("To")
+                                            || lowercaseKey.includes("timestamp")
                                         )
                                         && (lineObj.value >= 60 || lineObj.value <= -60)
                                     ) {
