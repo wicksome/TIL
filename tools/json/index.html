@@ -1044,7 +1044,8 @@
                                     const lowercaseKey = lineObj.key.toLowerCase()
                                     if (
                                         (
-                                            lineObj.key.endsWith("Minutes")
+                                            lineObj.key === "minutes"
+                                            || lineObj.key.endsWith("Minutes")
                                             || lineObj.key.endsWith("At")
                                             || lineObj.key.endsWith("From")
                                             || lineObj.key.endsWith("To")
