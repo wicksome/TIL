@@ -1065,7 +1065,7 @@
                                             }
                                         }
                                         if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                            annotation.push(`${toIsoString(epochTime)}`)
+                                            annotation.push(`${toLocalIsoString(epochTime)}`)
                                         }
                                     }
 
@@ -1083,7 +1083,7 @@
                                         }
                                     }
                                     if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                        annotation.push(`${toIsoString(epochTime)}`)
+                                        annotation.push(`${toLocalIsoString(epochTime)}`)
                                     }
 
                                     if (
@@ -1114,16 +1114,21 @@
                                         }
                                     }
                                     if (epochTime instanceof Date && !isNaN(epochTime)) {
-                                        annotation.push(`${toIsoString(epochTime)}`)
+                                        annotation.push(`${toLocalIsoString(epochTime)}`)
                                     }
                                     break
                                 }
                                 case ParseType.JSON_KEY_AND_DATE_STRING_VALUE:
                                 case ParseType.DATE_STRING_VALUE: {
                                     if (stripQuotes(lineObj.originValue).endsWith("Z")) {
-                                        annotation.push(toIsoString(lineObj.value))
+                                        annotation.push(toLocalIsoString(lineObj.value))
+                                        break
                                     }
-                                    break
+
+                                    if (stripQuotes(lineObj.originValue).endsWith("+00:00")) {
+                                        annotation.push(toLocalIsoString(lineObj.value))
+                                        break
+                                    }
                                 }
                                 case ParseType.JSON_KEY_AND_STRING_VALUE:
                                 case ParseType.JSON_KEY_AND_UNKNOWN_VALUE:
@@ -1383,7 +1388,23 @@
         return date
     }
 
-    const toIsoString = (date) => {
+    /**
+     * Converts a JavaScript Date object to an ISO 8601 formatted string
+     * including the local timezone offset.
+     *
+     * Example:
+     * - Input Date (in local timezone): Sat Jan 20 2001 12:44:33 GMT+0900
+     * - Output String: "2001-01-20T12:44:33+09:00"
+     *
+     * @param {Date} date - The JavaScript Date object to format.
+     * @returns {string} An ISO 8601 formatted string that includes the local timezone offset.
+     *
+     * Notes:
+     * - The function uses the system's local timezone offset.
+     * - The resulting string is in the format "YYYY-MM-DDTHH:mm:ss±HH:mm".
+     * - If the date object is invalid, the function behavior is undefined.
+     */
+    const toLocalIsoString = (date) => {
         const tzo = -date.getTimezoneOffset(),
             dif = tzo >= 0 ? '+' : '-',
             pad = function (num) {
