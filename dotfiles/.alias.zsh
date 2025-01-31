@@ -62,17 +62,22 @@ alias dkc='docker-compose'
 
 function epoch2date() {
   if [ -z "$1" ]; then
-    echo "Usage: epoch2date <epoch_time>"
-    return 1
+    # echo "Usage: epoch2date <epoch_time>"
+    # return 1
+    input=$(date +%s) # 현재 시간의 epoch milliseconds
+  else
+    input=$1
   fi
 
   # 입력 길이에 따라 밀리초인지 초인지 판단
-  if [ ${#1} -gt 10 ]; then
+  if [ ${#input} -gt 10 ]; then
     # 밀리초인 경우
-    epoch_time=$(($1 / 1000))
+    time_unit="milliseconds"
+    epoch_time=$(($input / 1000))
   else
     # 초인 경우
-    epoch_time=$1
+    time_unit="seconds"
+    epoch_time=$input
   fi
 
   # 변환 후 출력
@@ -82,6 +87,9 @@ function epoch2date() {
   # seoul=$(date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S" | date -j -v+9H "+%Y-%m-%d %H:%M:%S")
   utc=$(TZ=UTC date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
 
+  if [ -z "$1" ]; then
+    echo "${input} (${time_unit})"
+  fi
   echo "${utc} (UTC)"
   echo "${local} ($offset)"
 }
