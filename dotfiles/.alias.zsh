@@ -64,7 +64,8 @@ function epoch2date() {
   if [ -z "$1" ]; then
     # echo "Usage: epoch2date <epoch_time>"
     # return 1
-    input=$(date +%s) # 현재 시간의 epoch milliseconds
+    input=$(date +%s000) # 현재 시간의 epoch milliseconds
+    #input=$(date +%s) # 현재 시간의 epoch seconds
   else
     input=$1
   fi
