@@ -1056,10 +1056,7 @@
                                         let epochTime = undefined
                                         if (lineObj.value > 0) {
                                             try {
-                                                const temp = convertTimeStampToDate(lineObj.value)
-                                                if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
-                                                    epochTime = temp
-                                                }
+                                                epochTime = convertTimeStampToDate(lineObj.value)
                                             } catch (e) {
                                                 console.error(`fail parse value: ${lineObj.value}`, e)
                                             }
@@ -1074,15 +1071,23 @@
                                     let epochTime = undefined
                                     if (lineObj.value > 0) {
                                         try {
-                                            const temp = convertTimeStampToDate(lineObj.value)
-                                            if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
-                                                epochTime = temp
-                                            }
+                                            epochTime = convertTimeStampToDate(lineObj.value)
                                         } catch (e) {
                                             console.error(`fail parse value: ${lineObj.value}`, e)
                                         }
                                     }
-                                    if (epochTime instanceof Date && !isNaN(epochTime)) {
+                                    if (
+                                        (
+                                            lineObj.key === "timeStamp"
+                                            || lineObj.key === "timestamp"
+                                            || lineObj.key.endsWith("At")
+                                            || lineObj.key.endsWith("From")
+                                            || lineObj.key.endsWith("To")
+                                            || lineObj.key.endsWith("Timestamp")
+                                            || lineObj.key.endsWith("TimeStamp")
+                                        )
+                                        && (epochTime instanceof Date && !isNaN(epochTime))
+                                    ) {
                                         annotation.push(`${toLocalIsoString(epochTime)}`)
                                     }
 
@@ -1105,10 +1110,7 @@
                                     let epochTime = undefined
                                     if (lineObj.value > 0) {
                                         try {
-                                            const temp = convertTimeStampToDate(lineObj.value)
-                                            if (temp.getFullYear() !== 1970 && temp.getMonth() !== 1) {
-                                                epochTime = temp
-                                            }
+                                            epochTime = convertTimeStampToDate(lineObj.value)
                                         } catch (e) {
                                             console.error(`fail parse value: ${lineObj.value}`, e)
                                         }
