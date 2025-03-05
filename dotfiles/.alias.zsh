@@ -61,6 +61,34 @@ alias dk='docker'
 alias dkc='docker-compose'
 
 function epoch2date() {
+  if [[ "$1" == "help" ]]; then
+    echo "Usage: epoch2date <timestamp> <timezone1> <timezone2> ..."
+    echo "       epoch2date"
+    echo "       epoch2date help"
+    echo ""
+    echo "Converts an epoch timestamp (in milliseconds or seconds) to different timezones."
+    echo ""
+    echo "Usage details:"
+    echo "  epoch2date <timestamp> <timezone1> <timezone2> ..."
+    echo "      - Converts the given epoch timestamp to the specified timezones."
+    echo "      - The timestamp can be in milliseconds (13 digits) or seconds (10 digits)."
+    echo "      - Example: epoch2date 1709122800000 \"America/New_York\" \"Asia/Tokyo\" \"Europe/London\""
+    echo ""
+    echo "  epoch2date"
+    echo "      - Uses the current system time as the timestamp and converts it to local time and UTC."
+    echo ""
+    echo "  epoch2date help"
+    echo "      - Displays this help message."
+    echo ""
+    echo "Example Output:"
+    echo "  2025-02-28 15:00:00 (UTC)"
+    echo "  2025-03-01 00:00:00 (+0900)"
+    echo "  2025-02-28 10:00:00 (America/New_York)"
+    echo "  2025-02-28 23:00:00 (Asia/Tokyo)"
+    echo "  2025-02-28 15:00:00 (Europe/London)"
+    return 0
+  fi
+
   if [ -z "$1" ]; then
     # echo "Usage: epoch2date <epoch_time>"
     # return 1
@@ -81,18 +109,25 @@ function epoch2date() {
     epoch_time=$input
   fi
 
-  # 변환 후 출력
-  local=$(date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
-  offset=$(date +%z)
-  
-  # seoul=$(date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S" | date -j -v+9H "+%Y-%m-%d %H:%M:%S")
-  utc=$(TZ=UTC date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
-
   if [ -z "$1" ]; then
     echo "${input} (${time_unit})"
   fi
+
+  # UTC 변환
+  utc=$(TZ=UTC date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
   echo "${utc} (UTC)"
+
+  # 로컬 시간 변환
+  local=$(date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
+  offset=$(date +%z)
   echo "${local} ($offset)"
+
+  shift
+  timezones=("$@")
+  for tz in  "${timezones[@]}"; do
+    tz_time=$(TZ=$tz date -j -f "%s" "$epoch_time" "+%Y-%m-%d %H:%M:%S")
+    echo "${tz_time} (${tz})"
+  done
 }
 
 alias epoch2date="epoch2date $@"
