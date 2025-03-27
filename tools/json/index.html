@@ -260,6 +260,13 @@
             border: 1px solid #ccc;
         }
 
+        .ts-history:has(.ts-history-row:nth-child(2))
+        .ts-history-row:first-child:hover:after {
+            content: "delete all"; /* This will render the 'X' */
+            color: red;
+            font-weight: bold;
+        }
+
         .ts-history-row:not(:first-child):hover:after {
             content: "\00d7"; /* This will render the 'X' */
             color: red;
@@ -568,7 +575,7 @@
     </div>
     <div class="collapse show ts-history-wrapper" id="navbarToggleExternalContent-disable">
         <div class="ts-history">
-            <div class="ts-history-row" data-date="Added time">
+            <div class="ts-history-row" data-date="Added time" onclick="removeAllTimeStampRows()">
                 <div>Input</div>
                 <div>UTC</div>
                 <div id="currentTimeZone"></div>
@@ -1361,6 +1368,14 @@
     const removeTimeStampRow = (rowId) => {
         [...document.querySelectorAll(".ts-history-row")]
             .filter((el) => !!el.dataset.id && Number(el.dataset.id) === rowId)
+            .forEach((el) => {
+                document.querySelector(".ts-history").removeChild(el)
+            })
+    }
+
+    const removeAllTimeStampRows = () => {
+        [...document.querySelectorAll(".ts-history-row")]
+            .slice(1)
             .forEach((el) => {
                 document.querySelector(".ts-history").removeChild(el)
             })
