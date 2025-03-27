@@ -485,6 +485,9 @@
                                     <span>func: <code>$distinct(Property)</code>, <code>$sum(Property)</code>, <code>$substring(Property, 0, 4)</code></span>
                                     <span>array func: <code>$sort(Array)</code>, <code>Array ~> $sort()</code>, <code>$count(Array)</code></span>
                                     <span>filter: <code>Property[SubProperty='Value']</code></span>
+                                    <span>filter: <code>$filter(function($v) { $v.blocks ~> $count() > 0 })</code></span>
+                                    <span>map: <code>$.{ "newProp": referProp }</code></span>
+                                    <span>exclude props: <code>$ ~> | $ | {}, ["excludeProp1", "excludeProp2"] |</code></span>
                                     <span>wildcard: <code>Property.*</code> (<a
                                             href="https://docs.jsonata.org/predicate#wildcards">#</a>)</span>
                                     <span>concat: <code>Property.(SubProperty & '=' & SubProperty)</code> (<a
