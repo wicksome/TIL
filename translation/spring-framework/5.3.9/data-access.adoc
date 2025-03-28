@@ -1,4 +1,0 @@
-= Spring Framework Documentation
-:toc:
-
-https://docs.spring.io/spring-framework/docs/5.3.9/reference/html/data-access.html#spring-data-tier[**5.3.9**]
