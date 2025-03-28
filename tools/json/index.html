@@ -88,6 +88,10 @@
             white-space: pre;
         }
 
+        .json-query-textarea.filled {
+            background: lightyellow;
+        }
+
         .json-history-wrapper {
             height: 300px;
         }
@@ -375,7 +379,8 @@
                         </span>
                     </button>
                     <div class="float-end json-query-wrapper">
-                        <textarea id="jsonQuery" type="text" class="form-control" placeholder="jsonata expression"
+                        <textarea id="jsonQuery" type="text" class="form-control json-query-textarea"
+                                  placeholder="jsonata expression"
                                   rows="1" style="tab-size: 4;"></textarea>
                     </div>
                 </div>
@@ -1560,6 +1565,7 @@
 
         // add dom events
         const $sortJson = document.querySelector("#sortJson")
+        const $jsonQuery = document.querySelector("#jsonQuery")
         const $resizer = document.querySelector("#editorResizer")
         const $editor = document.querySelector(".editor-view > .editor:first-child")
         const $fontSizeUp = document.querySelector("#sizeUpJsonFont")
@@ -1628,10 +1634,17 @@
             runFormat({force: true})
         })
 
-        document.querySelector("#jsonQuery").addEventListener("input", (e) => {
+        $jsonQuery.addEventListener("input", (e) => {
+            // apply textarea css
+            if (!!$jsonQuery.value.trim()) {
+                $jsonQuery.classList.add('filled')
+            } else {
+                $jsonQuery.classList.remove('filled')
+            }
+
             runFormat({force: true})
         })
-        document.querySelector("#jsonQuery").addEventListener("keydown", (e) => {
+        $jsonQuery.addEventListener("keydown", (e) => {
             if (e.key === 'Tab') {
                 e.preventDefault();
                 const {target} = e
