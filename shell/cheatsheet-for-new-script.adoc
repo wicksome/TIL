@@ -477,6 +477,10 @@ $ pbpaste > file.md
 * `${param?error_msg}`: param이 없을 경우 error_msg 표시하고 리턴 코드 1을 내며 스크립트 즉시 종료
 
 
+== timeout
+
+* https://news.hada.io/topic?id=21144&utm_source=slack&utm_medium=bot&utm_campaign=TK3T0NVK7
+* https://heitorpb.github.io/bla/timeout/
 
 == References
 
