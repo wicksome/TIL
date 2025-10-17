@@ -50,6 +50,9 @@ $ echo "**/CLAUDE.local.md" >> ~/.gitignore_global
 $ claude mcp list
 $ claude --dangerously-skip-permissions # YOLO mode
 > /mcp
+
+# 명령어 입력시 개행(opt+enter)을 추가할 수 있도록 설정
+> /terminal-setup
 ```
 ## Etc
 
