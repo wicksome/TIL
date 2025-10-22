@@ -11,9 +11,11 @@ $ git worktree remove claude-code
 ## claude code 활용하기
 
 ```bash
+$ git fetch --all
 $ git switch develop
 $ git pull origin develop
 $ git switch -c feature/blabla # 새 브랜치 생성
+$ git switch -c feature/blabla origin/develop
 
 # Add context7 MCP
 $ claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
