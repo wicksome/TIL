@@ -32,8 +32,7 @@ $ cp src/serena/resources/serena_config.template.yml ~/.serena/serena_config.yml
 $ echo "export SERENA_PATH=\"\$HOME/workspace/serena\"" >> ~/.zshrc
 $ source ~/.zshrc
 $ echo "**/.serena" >> ~/.gitignore_global
-
-## 2. Add the MCP
+## 2. Add the serena MCP
 $ j claude-code # claude-code 로 생성한 worktree로 이동 (https://github.com/wting/autojump)
 $ claude mcp remove serena # 잘못 설치되어 있었다면 제거
 $ claude mcp add serena -- uv run --directory $SERENA_PATH serena-mcp-server --context ide-assistant --project "$(pwd)"
@@ -42,6 +41,9 @@ $ claude mcp add serena -- uv run --directory $SERENA_PATH serena-mcp-server --c
 
 # Add seqeutial-thinking MCP
 $ claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+
+# Add playwright MCP
+$ claude mcp add playwright npx @playwright/mcp@latest
 
 # Install GitHub CLI (https://cli.github.com/)
 $ brew isntall gh
