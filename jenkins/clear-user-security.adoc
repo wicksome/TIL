@@ -1,5 +1,0 @@
-= 사용자 계정 초기화하기
-
-. `JENKINS_HOME` 에 `config.xml` 파일 열기
-. `<useSecurity>true</useSecurity>` 값을 `<useSecurity>false</useSecurity>` 로 변경
-. Jenkins 재시작
