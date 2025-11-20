@@ -168,6 +168,10 @@ $ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTO
 + )
 ----
 
+== Hammerspoon
+
+https://github.com/wicksome/dotfiles/tree/master/.hammerspoon
+
 == VIM 설정 및 플러그인 설치
 
 . https://github.com/wicksome/TIL/blob/master/dotfiles/.vimrc[`~/.vimrc`] 파일 생성
