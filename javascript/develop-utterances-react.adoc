@@ -1,7 +1,0 @@
-= utterances-react 개발하기
-:page-draft:
-
-코드가 길어져서 라이브러리로 분리
-npm에 publish 하기
-demo 페이지 만들기 with lerna
-storybook 적용하기
