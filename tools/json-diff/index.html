@@ -47,40 +47,279 @@
           rel="stylesheet">
 
     <style>
-        html {
-            /*font-family: 'JetBrains Mono', monospace;*/
-            /*font-size: 1rem;*/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         html, body {
             height: 100%;
+            overflow: hidden;
         }
 
-        main > .container-fluid {
-            padding: 60px 15px 0;
+        body {
+            padding-top: 56px; /* navbar height */
         }
 
-        .buttons {
-            margin-bottom: 10px;
+        .main-container {
+            display: flex;
+            height: calc(100vh - 56px);
+            padding: 12px;
+            gap: 12px;
+            background: #f5f5f5;
         }
 
-        .buttons > .col > *:not(:last-child) {
-            margin-left: 3px;
+        /* Left Sidebar */
+        .left-sidebar {
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        #setting > * {
-            /* above ace-diff */
-            z-index: 5;
+        .option-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 12px 16px;
+            flex-shrink: 0;
         }
 
+        /* Diff Navigation Panel */
+        .diff-nav-panel {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .diff-nav-header {
+            padding: 12px 16px;
+            background: #343a40;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .diff-nav-count {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .diff-nav-count.has-diff {
+            background: #dc3545;
+        }
+
+        .scroll-sync-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .scroll-sync-toggle input {
+            display: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 32px;
+            height: 18px;
+            background: #ccc;
+            border-radius: 9px;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .scroll-sync-toggle input:checked + .toggle-switch {
+            background: #0d6efd;
+        }
+
+        .scroll-sync-toggle input:checked + .toggle-switch::after {
+            transform: translateX(14px);
+        }
+
+        .scroll-sync-toggle .toggle-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .diff-nav-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .diff-nav-item {
+            padding: 8px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-bottom: 4px;
+            border-left: 3px solid transparent;
+            transition: all 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+
+        .diff-nav-item:hover {
+            background: #e9ecef;
+        }
+
+        .diff-nav-item.active {
+            background: #cfe2ff;
+            border-left-color: #0d6efd;
+        }
+
+        .diff-nav-item .line-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #495057;
+        }
+
+        .diff-nav-item .diff-type {
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .diff-nav-item .diff-type.delete {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .diff-nav-item .diff-type.insert {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .diff-nav-item .diff-type.change {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        /* Diff Editor Area */
+        .diff-editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .diff-editor-header {
+            display: flex;
+            flex-shrink: 0;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .diff-editor-title {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .diff-editor-title.before {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .diff-editor-title.gutter {
+            flex: 0 0 60px;
+            background: #f5f5f5;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swap-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 36px;
+            height: 28px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swap-btn:hover {
+            background: #5a6268;
+        }
+
+        .swap-btn:active {
+            background: #495057;
+        }
+
+        .diff-editor-title.after {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .diff-editor-body {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+
+        /* ace-diff overrides */
         .acediff__wrap {
-            margin-top: calc(7rem);
-            max-height: calc(100vh - 7rem);
-            width: 100%;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            margin: 0 !important;
+            max-height: none !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+        .acediff__gutter {
+            background: #f5f5f5 !important;
         }
     </style>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Tools</span>
@@ -110,48 +349,40 @@
         </div>
     </div>
 </nav>
-<main>
-    <div class="container-fluid">
-        <div class="contents">
-            <div class="row clearfix buttons">
-                <div class="col float-start">
-                    <!--                    <button type="button" class="btn btn-light" id="formatting">format</button>-->
-                </div>
-                <div class="col float-end">
-                    <button type="button" class="btn btn-light float-end" data-bs-toggle="collapse"
-                            data-bs-target="#setting"
-                            aria-expanded="false" aria-controls="setting">
-                        settings
-                    </button>
-                </div>
+<div class="main-container">
+    <div class="left-sidebar">
+        <div class="option-panel">
+            <label class="scroll-sync-toggle">
+                <input type="checkbox" id="scrollSyncToggle" checked>
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">스크롤 연동</span>
+            </label>
+        </div>
+        <div class="diff-nav-panel">
+            <div class="diff-nav-header">
+                <span>변경점 목록</span>
+                <span class="diff-nav-count" id="diffNavCount">0</span>
             </div>
-            <div class="collapse" id="setting">
-                <div class="card card-body">
-                    <!--                    <div>-->
-                    <!--                        <label for="editorLineWrap">wrap: </label>-->
-                    <!--                        <input type="checkbox" id="editorLineWrap">-->
-                    <!--                    </div>-->
-                    <!--                    <div>fontSize:-->
-                    <!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeUpJsonFont">+</button>-->
-                    <!--                        <button type="button" class="btn btn-dark btn-sm" id="sizeDownJsonFont">-</button>-->
-                    <!--                        <button type="button" class="btn btn-warning btn-sm" id="resetJsonFont">reset</button>-->
-                    <!--                    </div>-->
-                    <!--                    <div>-->
-                    <!--                        <label for="showTimestampConvertLayer">show timestamp converter: </label>-->
-                    <!--                        <input type="checkbox" id="showTimestampConvertLayer" checked>-->
-                    <!--                    </div>-->
-                </div>
-                <br/>
-            </div>
-
-            <div class="row editor-container">
-                <div class="editor-view">
-                    <div class="acediff"></div>
+            <div class="diff-nav-list" id="diffNavList">
+                <div style="padding: 16px; text-align: center; color: #6c757d; font-size: 12px;">
+                    변경점 없음
                 </div>
             </div>
         </div>
     </div>
-</main>
+    <div class="diff-editor-area">
+        <div class="diff-editor-header">
+            <div class="diff-editor-title before">Left</div>
+            <div class="diff-editor-title gutter">
+                <button type="button" class="swap-btn" id="swapBtn" title="Swap Left ↔ Right">⇄</button>
+            </div>
+            <div class="diff-editor-title after">Right</div>
+        </div>
+        <div class="diff-editor-body">
+            <div class="acediff"></div>
+        </div>
+    </div>
+</div>
 
 <!--<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/src-min-noconflict/ace.min.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/ace.min.js"></script>
@@ -169,6 +400,7 @@
         element: '.acediff',
         theme: "ace/theme/dawn",
         mode: "ace/mode/json",
+        lockScrolling: true,
         left: {
             content: latestLeftContent,
         },
@@ -187,10 +419,110 @@
 
     leftEditor.on("input", () => {
         localStorage.setItem("latestLeftContent", leftEditor.getValue());
+        buildDiffNavigation();
     });
     rightEditor.on("input", () => {
         localStorage.setItem("latestRightContent", rightEditor.getValue());
+        buildDiffNavigation();
     });
+
+    // Setup scroll synchronization toggle
+    document.getElementById('scrollSyncToggle').addEventListener('change', (e) => {
+        differ.setOptions({ lockScrolling: e.target.checked });
+    });
+
+    // Swap left and right content
+    document.getElementById('swapBtn').addEventListener('click', () => {
+        const leftContent = leftEditor.getValue();
+        const rightContent = rightEditor.getValue();
+
+        leftEditor.setValue(rightContent, -1);
+        rightEditor.setValue(leftContent, -1);
+
+        // Update localStorage
+        localStorage.setItem("latestLeftContent", rightContent);
+        localStorage.setItem("latestRightContent", leftContent);
+
+        // Rebuild diff navigation
+        buildDiffNavigation();
+    });
+
+    // Build diff navigation list
+    function buildDiffNavigation() {
+        const navList = document.getElementById('diffNavList');
+        const navCount = document.getElementById('diffNavCount');
+        if (!navList) return;
+
+        const diffs = differ.diffs || [];
+        navCount.textContent = diffs.length;
+        navCount.classList.toggle('has-diff', diffs.length > 0);
+
+        if (diffs.length === 0) {
+            navList.innerHTML = `
+                <div style="padding: 16px; text-align: center; color: #198754; font-size: 12px;">
+                    ✓ 변경점 없음
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        diffs.forEach((diff, index) => {
+            let typeClass = 'change';
+            let typeLabel = '변경';
+
+            // Determine diff type based on line ranges
+            if (diff.leftEndLine === diff.leftStartLine) {
+                typeClass = 'insert';
+                typeLabel = '추가';
+            } else if (diff.rightEndLine === diff.rightStartLine) {
+                typeClass = 'delete';
+                typeLabel = '삭제';
+            }
+
+            const leftLine = diff.leftStartLine + 1;
+            const rightLine = diff.rightStartLine + 1;
+
+            html += `
+                <div class="diff-nav-item" data-index="${index}" data-left-line="${diff.leftStartLine}" data-right-line="${diff.rightStartLine}">
+                    <span class="line-info">L${leftLine} / R${rightLine}</span>
+                    <span class="diff-type ${typeClass}">${typeLabel}</span>
+                </div>
+            `;
+        });
+
+        navList.innerHTML = html;
+
+        // Bind click events
+        navList.querySelectorAll('.diff-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active from all items
+                navList.querySelectorAll('.diff-nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+
+                const leftLine = parseInt(this.dataset.leftLine);
+                const rightLine = parseInt(this.dataset.rightLine);
+
+                // Temporarily disable lockScrolling to scroll each editor independently
+                const wasLocked = differ.options.lockScrolling;
+                differ.setOptions({ lockScrolling: false });
+
+                // Scroll both editors to the diff location
+                leftEditor.scrollToLine(leftLine, true, true, function() {});
+                leftEditor.gotoLine(leftLine + 1, 0, true);
+                rightEditor.scrollToLine(rightLine, true, true, function() {});
+                rightEditor.gotoLine(rightLine + 1, 0, true);
+
+                // Restore lockScrolling state after scroll completes
+                setTimeout(() => {
+                    differ.setOptions({ lockScrolling: wasLocked });
+                }, 100);
+            });
+        });
+    }
+
+    // Initialize
+    setTimeout(() => buildDiffNavigation(), 300);
 </script>
 </body>
 </html>
