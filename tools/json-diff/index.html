@@ -33,8 +33,8 @@
     <meta name="naver-site-verification" content="19e1704de71915e3321e6c7b25780884d9f96975"/>
 
     <!-- https://ace.c9.io/ -->
-    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/css/ace.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/ace-diff@^3.0.0/dist/ace-diff.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/css/ace.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/ace-diff@3.3.0/dist/ace-diff.min.css" rel="stylesheet">
     <!-- https://diff2html.xyz/ -->
 
     <!-- Bootstrap-->
@@ -154,54 +154,43 @@
 </main>
 
 <!--<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.17.0/src-min-noconflict/ace.min.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.13.1/ace.js"></script>
-<script src="https://unpkg.com/ace-diff@^3.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/ace.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let latestLeftContent = localStorage.getItem("latestLeftContent")
-        if (!latestLeftContent) {
-            latestLeftContent = ""
-        }
-        let latestRightContent = localStorage.getItem("latestRightContent")
-        if (!latestRightContent) {
-            latestRightContent = ""
-        }
+<script type="module">
+    import AceDiff from 'https://cdn.jsdelivr.net/npm/ace-diff@3.3.0/+esm';
 
-        const differ = new AceDiff({
-            element: '.acediff',
-            theme: "ace/theme/dawn",
-            mode: "ace/mode/json",
-            left: {
-                content: latestLeftContent,
-            },
-            right: {
-                content: latestRightContent,
-            },
-        });
+    let latestLeftContent = localStorage.getItem("latestLeftContent") || "";
+    let latestRightContent = localStorage.getItem("latestRightContent") || "";
 
-        const leftEditor = differ.getEditors().left
-        const rightEditor = differ.getEditors().right
+    const differ = new AceDiff({
+        element: '.acediff',
+        theme: "ace/theme/dawn",
+        mode: "ace/mode/json",
+        left: {
+            content: latestLeftContent,
+        },
+        right: {
+            content: latestRightContent,
+        },
+    });
 
-        leftEditor.setOption("fontFamily", "JetBrains Mono")
-        leftEditor.setOption("fontSize", 13)
-        rightEditor.setOption("fontFamily", "JetBrains Mono")
-        rightEditor.setOption("fontSize", 13)
+    const leftEditor = differ.getEditors().left;
+    const rightEditor = differ.getEditors().right;
 
-        // TODO: set options
-        // https://github.com/ace-diff/ace-diff#api
-        // differ.setOption("fontFamily", "JetBrains Mono")
+    leftEditor.setOption("fontFamily", "JetBrains Mono");
+    leftEditor.setOption("fontSize", 13);
+    rightEditor.setOption("fontFamily", "JetBrains Mono");
+    rightEditor.setOption("fontSize", 13);
 
-        leftEditor.on("input", () => {
-            localStorage.setItem("latestLeftContent", leftEditor.getValue())
-        })
-        rightEditor.on("input", () => {
-            localStorage.setItem("latestRightContent", rightEditor.getValue())
-        })
-    }, false);
+    leftEditor.on("input", () => {
+        localStorage.setItem("latestLeftContent", leftEditor.getValue());
+    });
+    rightEditor.on("input", () => {
+        localStorage.setItem("latestRightContent", rightEditor.getValue());
+    });
 </script>
 </body>
 </html>
