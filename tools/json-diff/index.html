@@ -355,17 +355,17 @@
             <label class="scroll-sync-toggle">
                 <input type="checkbox" id="scrollSyncToggle" checked>
                 <span class="toggle-switch"></span>
-                <span class="toggle-label">스크롤 연동</span>
+                <span class="toggle-label">Scroll Sync</span>
             </label>
         </div>
         <div class="diff-nav-panel">
             <div class="diff-nav-header">
-                <span>변경점 목록</span>
+                <span>Changes</span>
                 <span class="diff-nav-count" id="diffNavCount">0</span>
             </div>
             <div class="diff-nav-list" id="diffNavList">
                 <div style="padding: 16px; text-align: center; color: #6c757d; font-size: 12px;">
-                    변경점 없음
+                    No changes
                 </div>
             </div>
         </div>
@@ -460,7 +460,7 @@
         if (diffs.length === 0) {
             navList.innerHTML = `
                 <div style="padding: 16px; text-align: center; color: #198754; font-size: 12px;">
-                    ✓ 변경점 없음
+                    ✓ No changes
                 </div>
             `;
             return;
@@ -469,15 +469,15 @@
         let html = '';
         diffs.forEach((diff, index) => {
             let typeClass = 'change';
-            let typeLabel = '변경';
+            let typeLabel = 'Changed';
 
             // Determine diff type based on line ranges
             if (diff.leftEndLine === diff.leftStartLine) {
                 typeClass = 'insert';
-                typeLabel = '추가';
+                typeLabel = 'Added';
             } else if (diff.rightEndLine === diff.rightStartLine) {
                 typeClass = 'delete';
-                typeLabel = '삭제';
+                typeLabel = 'Deleted';
             }
 
             const leftLine = diff.leftStartLine + 1;
