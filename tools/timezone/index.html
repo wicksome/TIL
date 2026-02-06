@@ -1,0 +1,892 @@
+
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timezone Converter</title>
+<style>
+  :root[data-theme="dark"] {
+    --bg: #0f0f0f;
+    --text: #e0e0e0;
+    --text-muted: #999;
+    --text-dim: #888;
+    --text-faint: #555;
+    --surface: #161616;
+    --surface-hover: #1e1e1e;
+    --input-bg: #1a1a1a;
+    --border: #333;
+    --border-focus: #666;
+    --placeholder: #666;
+    --btn-text: #ccc;
+    --btn-hover: #fff;
+    --error: #f66;
+    --cal-day: #bbb;
+    --cal-day-other: #555;
+    --cal-today: #7aafff;
+    --cal-selected-bg: #2a5aaa;
+    --cal-selected: #fff;
+    --cal-hover-bg: #2a2a2a;
+    --cal-nav: #999;
+    --cal-nav-hover: #fff;
+    --cal-nav-hover-bg: #282828;
+    --suggestion-hover-bg: #2a2a2a;
+    --suggestion-hover: #fff;
+    --offset-color: #888;
+    --suggestion-offset: #777;
+    --remove: #666;
+    --remove-hover: #f66;
+    --drag-border: #4a8aff;
+    --time-empty: #444;
+    --theme-btn-icon: "☀️";
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f5f5;
+    --text: #1a1a1a;
+    --text-muted: #555;
+    --text-dim: #777;
+    --text-faint: #aaa;
+    --surface: #fff;
+    --surface-hover: #f0f0f0;
+    --input-bg: #fff;
+    --border: #ddd;
+    --border-focus: #999;
+    --placeholder: #aaa;
+    --btn-text: #555;
+    --btn-hover: #111;
+    --error: #d33;
+    --cal-day: #333;
+    --cal-day-other: #ccc;
+    --cal-today: #2563eb;
+    --cal-selected-bg: #2563eb;
+    --cal-selected: #fff;
+    --cal-hover-bg: #eee;
+    --cal-nav: #666;
+    --cal-nav-hover: #111;
+    --cal-nav-hover-bg: #eee;
+    --suggestion-hover-bg: #f0f0f0;
+    --suggestion-hover: #111;
+    --offset-color: #777;
+    --suggestion-offset: #999;
+    --remove: #bbb;
+    --remove-hover: #d33;
+    --drag-border: #2563eb;
+    --time-empty: #ccc;
+    --theme-btn-icon: "🌙";
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .container { max-width: 680px; margin: 0 auto; }
+
+  .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  h1 { font-size: 1.1rem; font-weight: 500; color: var(--text-muted); }
+  #themeBtn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: border-color 0.15s;
+  }
+  #themeBtn:hover { border-color: var(--border-focus); }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  #formatSelect {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 12px 10px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    text-align: center;
+    min-width: 56px;
+    transition: border-color 0.15s;
+  }
+  #formatSelect:focus { border-color: var(--border-focus); }
+  #timeInput {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  #timeInput:focus { border-color: var(--border-focus); }
+  #timeInput::placeholder { color: var(--placeholder); }
+
+  .btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--btn-text);
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn:hover { border-color: var(--border-focus); color: var(--btn-hover); }
+
+  .error { color: var(--error); font-size: 0.8rem; margin-bottom: 8px; min-height: 1.2em; }
+
+  .calendar {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    user-select: none;
+  }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-title { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+  .cal-nav {
+    background: none;
+    border: none;
+    color: var(--cal-nav);
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .cal-nav:hover { color: var(--cal-nav-hover); background: var(--cal-nav-hover-bg); }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    text-align: center;
+  }
+  .cal-dow { font-size: 0.75rem; color: var(--text-dim); padding: 6px 0; }
+  .cal-day {
+    font-size: 0.88rem;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--cal-day);
+    transition: background 0.1s, color 0.1s;
+  }
+  .cal-day:hover { background: var(--cal-hover-bg); color: var(--btn-hover); }
+  .cal-day.other { color: var(--cal-day-other); }
+  .cal-day.today { color: var(--cal-today); font-weight: 600; }
+  .cal-day.selected { background: var(--cal-selected-bg); color: var(--cal-selected); }
+  .cal-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.95rem;
+  }
+  .cal-time-input {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 8px;
+    width: 40px;
+    text-align: center;
+    font-family: inherit;
+    font-size: inherit;
+    border-radius: 6px;
+    outline: none;
+  }
+  .cal-time-input:focus { border-color: var(--border-focus); }
+  .cal-time-sep { color: var(--text-dim); }
+
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  #tzSearch {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  #tzSearch:focus { border-color: var(--border-focus); }
+  #tzSearch::placeholder { color: var(--placeholder); }
+
+  .suggestions { position: relative; }
+  .suggestions-list {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+  }
+  .suggestions-list.open { display: block; }
+  .suggestion-item {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .suggestion-item:hover, .suggestion-item.active {
+    background: var(--suggestion-hover-bg);
+    color: var(--suggestion-hover);
+  }
+  .suggestion-offset {
+    font-size: 0.75rem;
+    color: var(--suggestion-offset);
+    margin-left: 12px;
+    flex-shrink: 0;
+  }
+  .suggestion-hint {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  .tz-list { display: flex; flex-direction: column; gap: 2px; }
+  .tz-card {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--surface);
+    border-radius: 6px;
+    transition: background 0.1s, opacity 0.15s;
+    cursor: grab;
+  }
+  .tz-card:hover { background: var(--surface-hover); }
+  .tz-card:active { cursor: grabbing; }
+  .tz-card.dragging { opacity: 0.3; }
+  .tz-card.drag-over { border-top: 2px solid var(--drag-border); margin-top: -2px; }
+  .tz-flag { font-size: 1.2rem; width: 28px; flex-shrink: 0; }
+  .tz-name { font-size: 0.8rem; color: var(--text-muted); min-width: 180px; }
+  .tz-time {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 1rem;
+    color: var(--text);
+    flex: 1;
+    text-align: right;
+  }
+  .tz-offset {
+    font-size: 0.75rem;
+    color: var(--offset-color);
+    margin-left: 12px;
+    min-width: 70px;
+    text-align: right;
+  }
+  .tz-remove {
+    background: none;
+    border: none;
+    color: var(--remove);
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 12px;
+    padding: 0 4px;
+    transition: color 0.15s;
+  }
+  .tz-remove:hover { color: var(--remove-hover); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-row">
+    <h1>Timezone Converter</h1>
+    <button id="themeBtn" title="Toggle theme"></button>
+  </div>
+
+  <div class="input-row">
+    <select id="formatSelect">
+      <option value="iso">ISO</option>
+      <option value="epoch">Epoch</option>
+    </select>
+    <input type="text" id="timeInput" placeholder="2025-01-15T09:00:00+09:00" />
+    <button class="btn" id="nowBtn">Now</button>
+  </div>
+  <div id="error" class="error"></div>
+
+  <div class="calendar" id="calendar"></div>
+
+  <div class="add-row">
+    <input type="text" id="tzSearch" placeholder="Asia/Tokyo or UTC+5:30" autocomplete="off" />
+  </div>
+  <div class="suggestions">
+    <div class="suggestions-list" id="suggestionsList"></div>
+  </div>
+
+  <div class="tz-list" id="tzList"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'tz-converter-zones';
+const THEME_KEY = 'tz-converter-theme';
+const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
+const DEFAULT_ZONES = ['Asia/Seoul', 'America/New_York', 'Europe/London', 'UTC'];
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+// Theme
+function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem(THEME_KEY, t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+setTheme(getTheme());
+document.getElementById('themeBtn').addEventListener('click', () => {
+  setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+});
+
+const TZ_TO_CC = {
+  'Asia/Seoul':'KR','Asia/Tokyo':'JP','Asia/Shanghai':'CN','Asia/Hong_Kong':'HK',
+  'Asia/Taipei':'TW','Asia/Singapore':'SG','Asia/Kolkata':'IN','Asia/Calcutta':'IN',
+  'Asia/Bangkok':'TH','Asia/Ho_Chi_Minh':'VN','Asia/Saigon':'VN','Asia/Jakarta':'ID',
+  'Asia/Manila':'PH','Asia/Kuala_Lumpur':'MY','Asia/Dubai':'AE','Asia/Riyadh':'SA',
+  'Asia/Tehran':'IR','Asia/Karachi':'PK','Asia/Dhaka':'BD','Asia/Colombo':'LK',
+  'Asia/Kathmandu':'NP','Asia/Yangon':'MM','Asia/Almaty':'KZ','Asia/Tashkent':'UZ',
+  'Asia/Bishkek':'KG','Asia/Tbilisi':'GE','Asia/Yerevan':'AM','Asia/Baku':'AZ',
+  'Asia/Beirut':'LB','Asia/Jerusalem':'IL','Asia/Amman':'JO','Asia/Baghdad':'IQ',
+  'Asia/Kuwait':'KW','Asia/Qatar':'QA','Asia/Bahrain':'BH','Asia/Muscat':'OM',
+  'Asia/Kabul':'AF','Asia/Ulaanbaatar':'MN','Asia/Phnom_Penh':'KH','Asia/Vientiane':'LA',
+  'Asia/Brunei':'BN','Asia/Dili':'TL','Asia/Macau':'MO',
+  'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE','Europe/Rome':'IT',
+  'Europe/Madrid':'ES','Europe/Lisbon':'PT','Europe/Amsterdam':'NL','Europe/Brussels':'BE',
+  'Europe/Zurich':'CH','Europe/Vienna':'AT','Europe/Stockholm':'SE','Europe/Oslo':'NO',
+  'Europe/Copenhagen':'DK','Europe/Helsinki':'FI','Europe/Warsaw':'PL','Europe/Prague':'CZ',
+  'Europe/Budapest':'HU','Europe/Bucharest':'RO','Europe/Sofia':'BG','Europe/Athens':'GR',
+  'Europe/Istanbul':'TR','Europe/Moscow':'RU','Europe/Kiev':'UA','Europe/Kyiv':'UA',
+  'Europe/Dublin':'IE','Europe/Tallinn':'EE','Europe/Riga':'LV','Europe/Vilnius':'LT',
+  'Europe/Belgrade':'RS','Europe/Zagreb':'HR','Europe/Ljubljana':'SI','Europe/Bratislava':'SK',
+  'Europe/Luxembourg':'LU','Europe/Monaco':'MC','Europe/Malta':'MT','Europe/Sarajevo':'BA',
+  'Europe/Skopje':'MK','Europe/Podgorica':'ME','Europe/Tirane':'AL','Europe/Minsk':'BY',
+  'Europe/Chisinau':'MD','Europe/Reykjavik':'IS',
+  'America/New_York':'US','America/Chicago':'US','America/Denver':'US',
+  'America/Los_Angeles':'US','America/Anchorage':'US','America/Phoenix':'US',
+  'America/Toronto':'CA','America/Vancouver':'CA','America/Edmonton':'CA',
+  'America/Winnipeg':'CA','America/Halifax':'CA','America/St_Johns':'CA',
+  'America/Mexico_City':'MX','America/Cancun':'MX','America/Tijuana':'MX',
+  'America/Sao_Paulo':'BR','America/Manaus':'BR','America/Fortaleza':'BR',
+  'America/Argentina/Buenos_Aires':'AR','America/Buenos_Aires':'AR',
+  'America/Santiago':'CL','America/Lima':'PE','America/Bogota':'CO',
+  'America/Caracas':'VE','America/Guayaquil':'EC','America/La_Paz':'BO',
+  'America/Asuncion':'PY','America/Montevideo':'UY',
+  'America/Havana':'CU','America/Jamaica':'JM','America/Panama':'PA',
+  'America/Costa_Rica':'CR','America/Guatemala':'GT','America/Tegucigalpa':'HN',
+  'America/El_Salvador':'SV','America/Managua':'NI',
+  'Pacific/Auckland':'NZ','Pacific/Fiji':'FJ','Pacific/Honolulu':'US',
+  'Pacific/Guam':'GU','Pacific/Tahiti':'PF','Pacific/Port_Moresby':'PG',
+  'Pacific/Noumea':'NC','Pacific/Tongatapu':'TO','Pacific/Apia':'WS',
+  'Africa/Cairo':'EG','Africa/Lagos':'NG','Africa/Johannesburg':'ZA',
+  'Africa/Nairobi':'KE','Africa/Casablanca':'MA','Africa/Algiers':'DZ',
+  'Africa/Tunis':'TN','Africa/Accra':'GH','Africa/Addis_Ababa':'ET',
+  'Africa/Dar_es_Salaam':'TZ','Africa/Kampala':'UG','Africa/Khartoum':'SD',
+  'Africa/Tripoli':'LY','Africa/Abidjan':'CI','Africa/Dakar':'SN',
+  'Australia/Sydney':'AU','Australia/Melbourne':'AU','Australia/Brisbane':'AU',
+  'Australia/Perth':'AU','Australia/Adelaide':'AU','Australia/Darwin':'AU',
+  'Australia/Hobart':'AU','Australia/Lord_Howe':'AU',
+  'Indian/Maldives':'MV','Indian/Mauritius':'MU','Indian/Reunion':'RE',
+};
+
+function ccToFlag(cc) {
+  if (!cc || cc.length !== 2) return '';
+  return String.fromCodePoint(...[...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
+function getFlag(tz) {
+  if (isCustomOffset(tz)) return '🌐';
+  if (tz === 'UTC') return '🌐';
+  const cc = TZ_TO_CC[tz];
+  if (cc) return ccToFlag(cc);
+  if (tz.split('/')[0] === 'Etc') return '🌐';
+  return '';
+}
+
+const CUSTOM_OFFSET_RE = /^UTC([+-])(\d{1,2})(?::(\d{2}))?$/i;
+
+function isCustomOffset(tz) { return CUSTOM_OFFSET_RE.test(tz); }
+
+function parseCustomOffset(tz) {
+  const m = tz.match(CUSTOM_OFFSET_RE);
+  if (!m) return null;
+  const sign = m[1] === '+' ? 1 : -1;
+  return sign * (parseInt(m[2], 10) * 60 + parseInt(m[3] || '0', 10));
+}
+
+function normalizeCustomOffset(raw) {
+  const m = raw.match(CUSTOM_OFFSET_RE);
+  if (!m) return null;
+  const h = parseInt(m[2], 10);
+  const min = parseInt(m[3] || '0', 10);
+  if (h * 60 + min > 840) return null;
+  return `UTC${m[1]}${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
+}
+
+function formatCustomOffset(date, offsetMin) {
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+  const target = new Date(utc + offsetMin * 60000);
+  const p = (n) => String(n).padStart(2, '0');
+  return `${target.getFullYear()}-${p(target.getMonth()+1)}-${p(target.getDate())}T${p(target.getHours())}:${p(target.getMinutes())}:${p(target.getSeconds())}`;
+}
+
+let zones = loadZones();
+let currentDate = null;
+let selectedSuggestion = -1;
+let calYear, calMonth;
+
+function loadZones() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) { const p = JSON.parse(s); if (Array.isArray(p) && p.length > 0) return p; }
+  } catch {}
+  return [...DEFAULT_ZONES];
+}
+function saveZones() { localStorage.setItem(STORAGE_KEY, JSON.stringify(zones)); }
+
+function getFormat() { return document.getElementById('formatSelect').value; }
+
+function toISO(date) {
+  const off = -date.getTimezoneOffset();
+  const sign = off >= 0 ? '+' : '-';
+  const h = String(Math.floor(Math.abs(off) / 60)).padStart(2, '0');
+  const m = String(Math.abs(off) % 60).padStart(2, '0');
+  const p = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${p(date.getMonth()+1)}-${p(date.getDate())}T${p(date.getHours())}:${p(date.getMinutes())}:${p(date.getSeconds())}${sign}${h}:${m}`;
+}
+
+function formatForInput(date) {
+  return getFormat() === 'epoch' ? String(date.getTime()) : toISO(date);
+}
+
+function getPlaceholder() {
+  return getFormat() === 'epoch' ? '1700000000000' : '2025-01-15T09:00:00+09:00';
+}
+
+function setNow() {
+  const now = new Date();
+  document.getElementById('timeInput').value = formatForInput(now);
+  document.getElementById('timeInput').placeholder = getPlaceholder();
+  currentDate = now;
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  renderCalendar();
+  renderTz();
+}
+
+function parseAndRender() {
+  const raw = document.getElementById('timeInput').value.trim();
+  const errEl = document.getElementById('error');
+  if (!raw) { errEl.textContent = ''; currentDate = null; renderCalendar(); renderTz(); return; }
+
+  let d;
+  if (getFormat() === 'epoch') {
+    const num = Number(raw);
+    if (!Number.isFinite(num) || num < 0) {
+      errEl.textContent = 'Invalid epoch milliseconds';
+      currentDate = null;
+      renderCalendar();
+      renderTz();
+      return;
+    }
+    d = new Date(num);
+  } else {
+    d = new Date(raw);
+  }
+
+  if (isNaN(d.getTime())) {
+    errEl.textContent = getFormat() === 'epoch' ? 'Invalid epoch milliseconds' : 'Invalid ISO 8601 format';
+    currentDate = null;
+    renderCalendar();
+    renderTz();
+    return;
+  }
+  errEl.textContent = '';
+  currentDate = d;
+  calYear = d.getFullYear();
+  calMonth = d.getMonth();
+  renderCalendar();
+  renderTz();
+}
+
+function applyCalendarSelection(year, month, day) {
+  const hEl = document.getElementById('calH');
+  const mEl = document.getElementById('calM');
+  const sEl = document.getElementById('calS');
+  const hh = parseInt(hEl?.value || '0', 10) || 0;
+  const mm = parseInt(mEl?.value || '0', 10) || 0;
+  const ss = parseInt(sEl?.value || '0', 10) || 0;
+  const d = new Date(year, month, day, clamp(hh,0,23), clamp(mm,0,59), clamp(ss,0,59));
+  document.getElementById('timeInput').value = formatForInput(d);
+  currentDate = d;
+  renderCalendar();
+  renderTz();
+}
+
+function applyTimeChange() {
+  if (!currentDate) return;
+  const hh = clamp(parseInt(document.getElementById('calH').value || '0', 10), 0, 23);
+  const mm = clamp(parseInt(document.getElementById('calM').value || '0', 10), 0, 59);
+  const ss = clamp(parseInt(document.getElementById('calS').value || '0', 10), 0, 59);
+  const d = new Date(currentDate);
+  d.setHours(hh, mm, ss);
+  document.getElementById('timeInput').value = formatForInput(d);
+  currentDate = d;
+  renderTz();
+}
+
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function renderCalendar() {
+  const cal = document.getElementById('calendar');
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
+  const selDay = currentDate ? currentDate.getDate() : -1;
+  const selMonth = currentDate ? currentDate.getMonth() : -1;
+  const selYear = currentDate ? currentDate.getFullYear() : -1;
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+  let html = `<div class="cal-header">
+    <button class="cal-nav" id="calPrev">&lsaquo;</button>
+    <span class="cal-title">${MONTH_NAMES[calMonth]} ${calYear}</span>
+    <button class="cal-nav" id="calNext">&rsaquo;</button>
+  </div>`;
+
+  html += '<div class="cal-grid">';
+  DOW.forEach(d => { html += `<div class="cal-dow">${d}</div>`; });
+
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const d = daysInPrev - i;
+    html += `<div class="cal-day other" data-y="${calMonth === 0 ? calYear-1 : calYear}" data-m="${calMonth === 0 ? 11 : calMonth-1}" data-d="${d}">${d}</div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = `${calYear}-${calMonth}-${d}` === todayStr;
+    const isSel = calYear === selYear && calMonth === selMonth && d === selDay;
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (isSel) cls += ' selected';
+    html += `<div class="${cls}" data-y="${calYear}" data-m="${calMonth}" data-d="${d}">${d}</div>`;
+  }
+
+  const totalCells = firstDay + daysInMonth;
+  const remaining = (7 - totalCells % 7) % 7;
+  for (let d = 1; d <= remaining; d++) {
+    html += `<div class="cal-day other" data-y="${calMonth === 11 ? calYear+1 : calYear}" data-m="${calMonth === 11 ? 0 : calMonth+1}" data-d="${d}">${d}</div>`;
+  }
+  html += '</div>';
+
+  const hh = currentDate ? String(currentDate.getHours()).padStart(2,'0') : '00';
+  const mm = currentDate ? String(currentDate.getMinutes()).padStart(2,'0') : '00';
+  const ss = currentDate ? String(currentDate.getSeconds()).padStart(2,'0') : '00';
+  html += `<div class="cal-time">
+    <input type="text" class="cal-time-input" id="calH" value="${hh}" maxlength="2" />
+    <span class="cal-time-sep">:</span>
+    <input type="text" class="cal-time-input" id="calM" value="${mm}" maxlength="2" />
+    <span class="cal-time-sep">:</span>
+    <input type="text" class="cal-time-input" id="calS" value="${ss}" maxlength="2" />
+  </div>`;
+
+  cal.innerHTML = html;
+
+  document.getElementById('calPrev').addEventListener('click', () => {
+    calMonth--;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+  });
+  document.getElementById('calNext').addEventListener('click', () => {
+    calMonth++;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCalendar();
+  });
+
+  cal.querySelectorAll('.cal-day').forEach(el => {
+    el.addEventListener('click', () => {
+      applyCalendarSelection(parseInt(el.dataset.y), parseInt(el.dataset.m), parseInt(el.dataset.d));
+    });
+  });
+
+  ['calH','calM','calS'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('change', applyTimeChange);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') applyTimeChange(); });
+  });
+}
+
+function formatInZone(date, tz) {
+  if (isCustomOffset(tz)) return formatCustomOffset(date, parseCustomOffset(tz));
+  const fmt = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: tz,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false,
+  });
+  return fmt.format(date).replace(' ', 'T');
+}
+
+function getOffset(date, tz) {
+  if (isCustomOffset(tz)) {
+    const m = tz.match(CUSTOM_OFFSET_RE);
+    return `UTC${m[1]}${String(parseInt(m[2])).padStart(2,'0')}:${String(parseInt(m[3]||'0')).padStart(2,'0')}`;
+  }
+  const utcStr = date.toLocaleString('en-US', { timeZone: 'UTC' });
+  const tzStr = date.toLocaleString('en-US', { timeZone: tz });
+  const diff = (new Date(tzStr) - new Date(utcStr)) / 60000;
+  const sign = diff >= 0 ? '+' : '-';
+  return `UTC${sign}${String(Math.floor(Math.abs(diff)/60)).padStart(2,'0')}:${String(Math.abs(diff)%60).padStart(2,'0')}`;
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderTz() {
+  const list = document.getElementById('tzList');
+  list.innerHTML = zones.map((tz, idx) => {
+    const flag = getFlag(tz);
+    const time = currentDate ? formatInZone(currentDate, tz) : '--';
+    const offset = currentDate ? getOffset(currentDate, tz) : '--';
+    const timeStyle = currentDate ? '' : ' style="color:var(--time-empty)"';
+    return `<div class="tz-card" draggable="true" data-idx="${idx}">
+      <span class="tz-flag">${flag}</span>
+      <span class="tz-name">${esc(tz)}</span>
+      <span class="tz-time"${timeStyle}>${esc(time)}</span>
+      <span class="tz-offset">${esc(offset)}</span>
+      <button class="tz-remove" data-tz="${esc(tz)}">&times;</button>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.tz-remove').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      zones = zones.filter(z => z !== btn.dataset.tz);
+      saveZones();
+      renderTz();
+    });
+  });
+  bindDragAndDrop();
+}
+
+let dragSrcIdx = null;
+
+function bindDragAndDrop() {
+  const cards = document.querySelectorAll('.tz-card');
+  cards.forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      dragSrcIdx = parseInt(card.dataset.idx);
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      cards.forEach(c => c.classList.remove('drag-over'));
+      dragSrcIdx = null;
+    });
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      cards.forEach(c => c.classList.remove('drag-over'));
+      card.classList.add('drag-over');
+    });
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('drag-over');
+    });
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const targetIdx = parseInt(card.dataset.idx);
+      if (dragSrcIdx !== null && dragSrcIdx !== targetIdx) {
+        const [moved] = zones.splice(dragSrcIdx, 1);
+        zones.splice(targetIdx, 0, moved);
+        saveZones();
+        renderTz();
+      }
+    });
+  });
+}
+
+function addZone(tz) {
+  if (!zones.includes(tz)) { zones.push(tz); saveZones(); renderTz(); }
+  document.getElementById('tzSearch').value = '';
+  closeSuggestions();
+}
+
+function getSuggestionOffset(tz) {
+  const now = new Date();
+  if (isCustomOffset(tz)) {
+    const m = tz.match(CUSTOM_OFFSET_RE);
+    return `UTC${m[1]}${String(parseInt(m[2])).padStart(2,'0')}:${String(parseInt(m[3]||'0')).padStart(2,'0')}`;
+  }
+  try {
+    const utcStr = now.toLocaleString('en-US', { timeZone: 'UTC' });
+    const tzStr = now.toLocaleString('en-US', { timeZone: tz });
+    const diff = (new Date(tzStr) - new Date(utcStr)) / 60000;
+    const sign = diff >= 0 ? '+' : '-';
+    return `UTC${sign}${String(Math.floor(Math.abs(diff)/60)).padStart(2,'0')}:${String(Math.abs(diff)%60).padStart(2,'0')}`;
+  } catch { return ''; }
+}
+
+// Parse shorthand offsets: "+9", "+09:00", "09:00", "5:30"
+function parseShorthandOffsets(query) {
+  const results = [];
+  // "+HH:MM" or "+HH" or "+H"
+  const signedRe = /^([+-])(\d{1,2})(?::(\d{2}))?$/;
+  // "HH:MM" or "HH" (no sign → suggest both + and -)
+  const unsignedRe = /^(\d{1,2})(?::(\d{2}))?$/;
+
+  let m = query.match(signedRe);
+  if (m) {
+    const norm = normalizeCustomOffset(`UTC${m[1]}${m[2]}${m[3] ? ':' + m[3] : ''}`);
+    if (norm) results.push(norm);
+    return results;
+  }
+
+  m = query.match(unsignedRe);
+  if (m) {
+    const plus = normalizeCustomOffset(`UTC+${m[1]}${m[2] ? ':' + m[2] : ''}`);
+    const minus = normalizeCustomOffset(`UTC-${m[1]}${m[2] ? ':' + m[2] : ''}`);
+    if (plus) results.push(plus);
+    if (minus) results.push(minus);
+    return results;
+  }
+
+  return results;
+}
+
+function showSuggestions(query) {
+  const list = document.getElementById('suggestionsList');
+  if (!query) { closeSuggestions(); return; }
+  const q = query.toLowerCase();
+  const customNorm = normalizeCustomOffset(query);
+  const shorthandOffsets = !customNorm ? parseShorthandOffsets(query) : [];
+  const partialCustom = /^utc[+-]?\d{0,2}:?\d{0,2}$/i.test(query) || /^[+-]?\d{0,2}:?\d{0,2}$/.test(query);
+  const matches = ALL_TIMEZONES.filter(tz => tz.toLowerCase().includes(q) && !zones.includes(tz)).slice(0, 8);
+
+  const items = [];
+  const added = new Set();
+  if (customNorm && !zones.includes(customNorm)) {
+    items.push({ tz: customNorm, label: `🌐  ${customNorm}`, offset: getSuggestionOffset(customNorm) });
+    added.add(customNorm);
+  }
+  shorthandOffsets.forEach(tz => {
+    if (!added.has(tz) && !zones.includes(tz)) {
+      items.push({ tz, label: `🌐  ${tz}`, offset: getSuggestionOffset(tz) });
+      added.add(tz);
+    }
+  });
+  matches.forEach(tz => {
+    const flag = getFlag(tz);
+    items.push({ tz, label: `${flag ? flag + '  ' : ''}${tz}`, offset: getSuggestionOffset(tz) });
+  });
+
+  if (items.length === 0 && !partialCustom) { closeSuggestions(); return; }
+  if (items.length === 0) {
+    list.innerHTML = `<div class="suggestion-hint">e.g. UTC+9, +5:30, 09:00</div>`;
+    list.classList.add('open');
+    return;
+  }
+
+  selectedSuggestion = -1;
+  list.innerHTML = items.map((it, i) =>
+    `<div class="suggestion-item" data-tz="${esc(it.tz)}" data-idx="${i}"><span>${it.label}</span><span class="suggestion-offset">${esc(it.offset)}</span></div>`
+  ).join('');
+  list.classList.add('open');
+  list.querySelectorAll('.suggestion-item').forEach(el => {
+    el.addEventListener('click', () => addZone(el.dataset.tz));
+  });
+}
+
+function closeSuggestions() {
+  document.getElementById('suggestionsList').classList.remove('open');
+  selectedSuggestion = -1;
+}
+
+// Events
+document.getElementById('timeInput').addEventListener('input', parseAndRender);
+document.getElementById('nowBtn').addEventListener('click', setNow);
+document.getElementById('formatSelect').addEventListener('change', () => {
+  document.getElementById('timeInput').placeholder = getPlaceholder();
+  if (currentDate) {
+    document.getElementById('timeInput').value = formatForInput(currentDate);
+  }
+});
+
+document.getElementById('tzSearch').addEventListener('input', (e) => showSuggestions(e.target.value.trim()));
+document.getElementById('tzSearch').addEventListener('keydown', (e) => {
+  const list = document.getElementById('suggestionsList');
+  const items = list.querySelectorAll('.suggestion-item');
+  if (!list.classList.contains('open') || items.length === 0) {
+    if (e.key === 'Enter') {
+      const val = e.target.value.trim();
+      const norm = normalizeCustomOffset(val);
+      if (norm) { addZone(norm); return; }
+      const sh = parseShorthandOffsets(val);
+      if (sh.length > 0) { addZone(sh[0]); return; }
+      if (ALL_TIMEZONES.includes(val)) addZone(val);
+    }
+    return;
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    selectedSuggestion = Math.min(selectedSuggestion + 1, items.length - 1);
+    items.forEach((it, i) => it.classList.toggle('active', i === selectedSuggestion));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    selectedSuggestion = Math.max(selectedSuggestion - 1, 0);
+    items.forEach((it, i) => it.classList.toggle('active', i === selectedSuggestion));
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (selectedSuggestion >= 0 && selectedSuggestion < items.length)
+      addZone(items[selectedSuggestion].dataset.tz);
+  } else if (e.key === 'Escape') {
+    closeSuggestions();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
+});
+
+// Init
+const now = new Date();
+calYear = now.getFullYear();
+calMonth = now.getMonth();
+setNow();
+</script>
+</body>
+</html>
