@@ -93,7 +93,8 @@
     margin-bottom: 24px;
   }
   h1 { font-size: 1.1rem; font-weight: 500; color: var(--text-muted); }
-  #themeBtn {
+  .top-right { display: flex; gap: 6px; }
+  #themeBtn, #langBtn {
     background: none;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -103,7 +104,8 @@
     line-height: 1;
     transition: border-color 0.15s;
   }
-  #themeBtn:hover { border-color: var(--border-focus); }
+  #themeBtn:hover, #langBtn:hover { border-color: var(--border-focus); }
+  #langBtn { font-size: 0.75rem; color: var(--text-muted); }
 
   .input-row {
     display: flex;
@@ -200,30 +202,6 @@
   .cal-day.other { color: var(--cal-day-other); }
   .cal-day.today { color: var(--cal-today); font-weight: 600; }
   .cal-day.selected { background: var(--cal-selected-bg); color: var(--cal-selected); }
-  .cal-time {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin-top: 12px;
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 0.95rem;
-  }
-  .cal-time-input {
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 8px;
-    width: 40px;
-    text-align: center;
-    font-family: inherit;
-    font-size: inherit;
-    border-radius: 6px;
-    outline: none;
-  }
-  .cal-time-input:focus { border-color: var(--border-focus); }
-  .cal-time-sep { color: var(--text-dim); }
-
   .add-row {
     display: flex;
     gap: 8px;
@@ -322,14 +300,64 @@
     transition: color 0.15s;
   }
   .tz-remove:hover { color: var(--remove-hover); }
+  .tz-copy-wrap { position: relative; margin-left: 8px; }
+  .tz-copy {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--btn-text);
+    cursor: pointer;
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .tz-copy:hover { color: var(--btn-hover); border-color: var(--border-focus); }
+  .tz-copy-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 0;
+    z-index: 100;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;
+  }
+  .tz-copy-menu.open { display: block; }
+  .tz-copy-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 12px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+    white-space: nowrap;
+    gap: 12px;
+  }
+  .tz-copy-item:hover { background: var(--surface-hover); color: var(--text); }
+  .tz-copy-item .label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+  .tz-copy-item .value {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+  }
 </style>
 </head>
 <body>
 
 <div class="container">
   <div class="top-row">
-    <h1>Timezone Converter</h1>
-    <button id="themeBtn" title="Toggle theme"></button>
+    <h1 id="title">Timezone Converter</h1>
+    <div class="top-right">
+      <button id="langBtn">EN</button>
+      <button id="themeBtn" title="Toggle theme"></button>
+    </div>
   </div>
 
   <div class="input-row">
@@ -345,7 +373,7 @@
   <div class="calendar" id="calendar"></div>
 
   <div class="add-row">
-    <input type="text" id="tzSearch" placeholder="Asia/Tokyo or UTC+5:30" autocomplete="off" />
+    <input type="text" id="tzSearch" placeholder="Asia/Seoul or UTC+5:30" autocomplete="off" />
   </div>
   <div class="suggestions">
     <div class="suggestions-list" id="suggestionsList"></div>
@@ -357,10 +385,69 @@
 <script>
 const STORAGE_KEY = 'tz-converter-zones';
 const THEME_KEY = 'tz-converter-theme';
+const LANG_KEY = 'tz-converter-lang';
 const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
 const DEFAULT_ZONES = ['Asia/Seoul', 'America/New_York', 'Europe/London', 'UTC'];
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DOW = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+const I18N = {
+  en: {
+    title: 'Timezone Converter',
+    toggleTheme: 'Toggle theme',
+    now: 'Now',
+    placeholderIso: '2025-01-15T09:00:00+09:00',
+    placeholderTz: 'Asia/Seoul or UTC+5:30',
+    invalidEpoch: 'Invalid epoch milliseconds',
+    invalidIso: 'Invalid ISO 8601 format',
+    copy: 'copy',
+    copied: 'copied!',
+    epochSeconds: 'Epoch Seconds',
+    epochMilliseconds: 'Epoch Milliseconds',
+    localDate: 'LocalDate',
+    localDateTime: 'LocalDateTime',
+    isoOffset: 'ISO Offset',
+    suggestionHint: 'e.g. UTC+9, +5:30, 09:00',
+    months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    dow: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+  },
+  ko: {
+    title: '타임존 변환기',
+    toggleTheme: '테마 전환',
+    now: '현재',
+    placeholderIso: '2025-01-15T09:00:00+09:00',
+    placeholderTz: 'Asia/Seoul 또는 UTC+5:30',
+    invalidEpoch: '유효하지 않은 epoch 밀리초',
+    invalidIso: '유효하지 않은 ISO 8601 형식',
+    copy: '복사',
+    copied: '완료!',
+    epochSeconds: 'Epoch Seconds',
+    epochMilliseconds: 'Epoch Milliseconds',
+    localDate: 'LocalDate',
+    localDateTime: 'LocalDateTime',
+    isoOffset: 'ISO Offset',
+    suggestionHint: '예: UTC+9, +5:30, 09:00',
+    months: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    dow: ['일','월','화','수','목','금','토'],
+  },
+};
+
+function getLang() { return localStorage.getItem(LANG_KEY) || 'en'; }
+function t(key) { return I18N[getLang()][key]; }
+
+function setLang(lang) {
+  localStorage.setItem(LANG_KEY, lang);
+  document.getElementById('langBtn').textContent = lang.toUpperCase();
+  document.getElementById('title').textContent = t('title');
+  document.getElementById('themeBtn').title = t('toggleTheme');
+  document.getElementById('nowBtn').textContent = t('now');
+  document.getElementById('timeInput').placeholder = t('placeholderIso');
+  document.getElementById('tzSearch').placeholder = t('placeholderTz');
+  renderCalendar();
+  renderTz();
+}
+
+document.getElementById('langBtn').addEventListener('click', () => {
+  setLang(getLang() === 'en' ? 'ko' : 'en');
+});
 
 // Theme
 function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
@@ -455,6 +542,7 @@ function normalizeCustomOffset(raw) {
   const h = parseInt(m[2], 10);
   const min = parseInt(m[3] || '0', 10);
   if (h * 60 + min > 840) return null;
+  if (h === 0 && min === 0) return 'UTC';
   return `UTC${m[1]}${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
 }
 
@@ -462,7 +550,7 @@ function formatCustomOffset(date, offsetMin) {
   const utc = date.getTime() + date.getTimezoneOffset() * 60000;
   const target = new Date(utc + offsetMin * 60000);
   const p = (n) => String(n).padStart(2, '0');
-  return `${target.getFullYear()}-${p(target.getMonth()+1)}-${p(target.getDate())}T${p(target.getHours())}:${p(target.getMinutes())}:${p(target.getSeconds())}`;
+  return `${target.getFullYear()}-${p(target.getMonth()+1)}-${p(target.getDate())} ${p(target.getHours())}:${p(target.getMinutes())}:${p(target.getSeconds())}`;
 }
 
 let zones = loadZones();
@@ -495,7 +583,7 @@ function formatForInput(date) {
 }
 
 function getPlaceholder() {
-  return getFormat() === 'epoch' ? '1700000000000' : '2025-01-15T09:00:00+09:00';
+  return getFormat() === 'epoch' ? '1700000000000' : t('placeholderIso');
 }
 
 function setNow() {
@@ -518,7 +606,7 @@ function parseAndRender() {
   if (getFormat() === 'epoch') {
     const num = Number(raw);
     if (!Number.isFinite(num) || num < 0) {
-      errEl.textContent = 'Invalid epoch milliseconds';
+      errEl.textContent = t('invalidEpoch');
       currentDate = null;
       renderCalendar();
       renderTz();
@@ -530,7 +618,7 @@ function parseAndRender() {
   }
 
   if (isNaN(d.getTime())) {
-    errEl.textContent = getFormat() === 'epoch' ? 'Invalid epoch milliseconds' : 'Invalid ISO 8601 format';
+    errEl.textContent = getFormat() === 'epoch' ? t('invalidEpoch') : t('invalidIso');
     currentDate = null;
     renderCalendar();
     renderTz();
@@ -545,28 +633,10 @@ function parseAndRender() {
 }
 
 function applyCalendarSelection(year, month, day) {
-  const hEl = document.getElementById('calH');
-  const mEl = document.getElementById('calM');
-  const sEl = document.getElementById('calS');
-  const hh = parseInt(hEl?.value || '0', 10) || 0;
-  const mm = parseInt(mEl?.value || '0', 10) || 0;
-  const ss = parseInt(sEl?.value || '0', 10) || 0;
-  const d = new Date(year, month, day, clamp(hh,0,23), clamp(mm,0,59), clamp(ss,0,59));
+  const d = new Date(year, month, day, 0, 0, 0);
   document.getElementById('timeInput').value = formatForInput(d);
   currentDate = d;
   renderCalendar();
-  renderTz();
-}
-
-function applyTimeChange() {
-  if (!currentDate) return;
-  const hh = clamp(parseInt(document.getElementById('calH').value || '0', 10), 0, 23);
-  const mm = clamp(parseInt(document.getElementById('calM').value || '0', 10), 0, 59);
-  const ss = clamp(parseInt(document.getElementById('calS').value || '0', 10), 0, 59);
-  const d = new Date(currentDate);
-  d.setHours(hh, mm, ss);
-  document.getElementById('timeInput').value = formatForInput(d);
-  currentDate = d;
   renderTz();
 }
 
@@ -587,12 +657,12 @@ function renderCalendar() {
 
   let html = `<div class="cal-header">
     <button class="cal-nav" id="calPrev">&lsaquo;</button>
-    <span class="cal-title">${MONTH_NAMES[calMonth]} ${calYear}</span>
+    <span class="cal-title">${t('months')[calMonth]} ${calYear}</span>
     <button class="cal-nav" id="calNext">&rsaquo;</button>
   </div>`;
 
   html += '<div class="cal-grid">';
-  DOW.forEach(d => { html += `<div class="cal-dow">${d}</div>`; });
+  t('dow').forEach(d => { html += `<div class="cal-dow">${d}</div>`; });
 
   for (let i = firstDay - 1; i >= 0; i--) {
     const d = daysInPrev - i;
@@ -615,17 +685,6 @@ function renderCalendar() {
   }
   html += '</div>';
 
-  const hh = currentDate ? String(currentDate.getHours()).padStart(2,'0') : '00';
-  const mm = currentDate ? String(currentDate.getMinutes()).padStart(2,'0') : '00';
-  const ss = currentDate ? String(currentDate.getSeconds()).padStart(2,'0') : '00';
-  html += `<div class="cal-time">
-    <input type="text" class="cal-time-input" id="calH" value="${hh}" maxlength="2" />
-    <span class="cal-time-sep">:</span>
-    <input type="text" class="cal-time-input" id="calM" value="${mm}" maxlength="2" />
-    <span class="cal-time-sep">:</span>
-    <input type="text" class="cal-time-input" id="calS" value="${ss}" maxlength="2" />
-  </div>`;
-
   cal.innerHTML = html;
 
   document.getElementById('calPrev').addEventListener('click', () => {
@@ -645,11 +704,6 @@ function renderCalendar() {
     });
   });
 
-  ['calH','calM','calS'].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('change', applyTimeChange);
-    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') applyTimeChange(); });
-  });
 }
 
 function formatInZone(date, tz) {
@@ -660,7 +714,7 @@ function formatInZone(date, tz) {
     hour: '2-digit', minute: '2-digit', second: '2-digit',
     hour12: false,
   });
-  return fmt.format(date).replace(' ', 'T');
+  return fmt.format(date);
 }
 
 function getOffset(date, tz) {
@@ -677,6 +731,25 @@ function getOffset(date, tz) {
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+function getIsoOffsetStr(date, tz) {
+  const offset = getOffset(date, tz);
+  return offset.replace('UTC', '');
+}
+
+function getCopyValues(date, tz) {
+  const time = formatInZone(date, tz);
+  const offsetStr = getIsoOffsetStr(date, tz);
+  const datePart = time.split(' ')[0];
+  const isoTime = time.replace(' ', 'T');
+  return {
+    epochMs: String(date.getTime()),
+    epochS: String(Math.floor(date.getTime() / 1000)),
+    localDate: datePart,
+    localDateTime: isoTime,
+    isoOffset: isoTime + offsetStr,
+  };
+}
+
 function renderTz() {
   const list = document.getElementById('tzList');
   list.innerHTML = zones.map((tz, idx) => {
@@ -684,11 +757,27 @@ function renderTz() {
     const time = currentDate ? formatInZone(currentDate, tz) : '--';
     const offset = currentDate ? getOffset(currentDate, tz) : '--';
     const timeStyle = currentDate ? '' : ' style="color:var(--time-empty)"';
+    const timeHtml = currentDate ? esc(time) : '--';
+    let copyHtml = '';
+    if (currentDate) {
+      const cv = getCopyValues(currentDate, tz);
+      copyHtml = `<div class="tz-copy-wrap">
+        <button class="tz-copy" data-idx="${idx}">${t('copy')}</button>
+        <div class="tz-copy-menu" data-idx="${idx}">
+          <div class="tz-copy-item" data-val="${esc(cv.epochS)}"><span class="label">${t('epochSeconds')}</span><span class="value">${esc(cv.epochS)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.epochMs)}"><span class="label">${t('epochMilliseconds')}</span><span class="value">${esc(cv.epochMs)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.localDate)}"><span class="label">${t('localDate')}</span><span class="value">${esc(cv.localDate)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.localDateTime)}"><span class="label">${t('localDateTime')}</span><span class="value">${esc(cv.localDateTime)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.isoOffset)}"><span class="label">${t('isoOffset')}</span><span class="value">${esc(cv.isoOffset)}</span></div>
+        </div>
+      </div>`;
+    }
     return `<div class="tz-card" draggable="true" data-idx="${idx}">
       <span class="tz-flag">${flag}</span>
       <span class="tz-name">${esc(tz)}</span>
-      <span class="tz-time"${timeStyle}>${esc(time)}</span>
+      <span class="tz-time"${timeStyle}>${timeHtml}</span>
       <span class="tz-offset">${esc(offset)}</span>
+      ${copyHtml}
       <button class="tz-remove" data-tz="${esc(tz)}">&times;</button>
     </div>`;
   }).join('');
@@ -700,8 +789,31 @@ function renderTz() {
       renderTz();
     });
   });
+  list.querySelectorAll('.tz-copy').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeAllCopyMenus();
+      const menu = btn.parentElement.querySelector('.tz-copy-menu');
+      menu.classList.toggle('open');
+    });
+  });
+  list.querySelectorAll('.tz-copy-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(item.dataset.val);
+      closeAllCopyMenus();
+      const btn = item.closest('.tz-copy-wrap').querySelector('.tz-copy');
+      btn.textContent = t('copied');
+      setTimeout(() => { btn.textContent = t('copy'); }, 1200);
+    });
+  });
   bindDragAndDrop();
 }
+
+function closeAllCopyMenus() {
+  document.querySelectorAll('.tz-copy-menu.open').forEach(m => m.classList.remove('open'));
+}
+document.addEventListener('click', closeAllCopyMenus);
 
 let dragSrcIdx = null;
 
@@ -781,7 +893,7 @@ function parseShorthandOffsets(query) {
     const plus = normalizeCustomOffset(`UTC+${m[1]}${m[2] ? ':' + m[2] : ''}`);
     const minus = normalizeCustomOffset(`UTC-${m[1]}${m[2] ? ':' + m[2] : ''}`);
     if (plus) results.push(plus);
-    if (minus) results.push(minus);
+    if (minus && minus !== plus) results.push(minus);
     return results;
   }
 
@@ -810,13 +922,15 @@ function showSuggestions(query) {
     }
   });
   matches.forEach(tz => {
+    if (added.has(tz)) return;
     const flag = getFlag(tz);
     items.push({ tz, label: `${flag ? flag + '  ' : ''}${tz}`, offset: getSuggestionOffset(tz) });
+    added.add(tz);
   });
 
   if (items.length === 0 && !partialCustom) { closeSuggestions(); return; }
   if (items.length === 0) {
-    list.innerHTML = `<div class="suggestion-hint">e.g. UTC+9, +5:30, 09:00</div>`;
+    list.innerHTML = `<div class="suggestion-hint">${t('suggestionHint')}</div>`;
     list.classList.add('open');
     return;
   }
@@ -883,6 +997,13 @@ document.addEventListener('click', (e) => {
 });
 
 // Init
+const initLang = getLang();
+document.getElementById('langBtn').textContent = initLang.toUpperCase();
+document.getElementById('title').textContent = t('title');
+document.getElementById('themeBtn').title = t('toggleTheme');
+document.getElementById('nowBtn').textContent = t('now');
+document.getElementById('timeInput').placeholder = t('placeholderIso');
+document.getElementById('tzSearch').placeholder = t('placeholderTz');
 const now = new Date();
 calYear = now.getFullYear();
 calMonth = now.getMonth();
