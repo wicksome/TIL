@@ -341,11 +341,28 @@
     gap: 12px;
   }
   .tz-copy-item:hover { background: var(--surface-hover); color: var(--text); }
-  .tz-copy-item .label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+  .tz-copy-item .label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; flex: 1; text-align: left; }
   .tz-copy-item .value {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.7rem;
     color: var(--text-faint);
+  }
+  .tz-copy-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    box-shadow: 0 1px 0 var(--border);
   }
 </style>
 </head>
@@ -764,11 +781,11 @@ function renderTz() {
       copyHtml = `<div class="tz-copy-wrap">
         <button class="tz-copy" data-idx="${idx}">${t('copy')}</button>
         <div class="tz-copy-menu" data-idx="${idx}">
-          <div class="tz-copy-item" data-val="${esc(cv.epochS)}"><span class="label">${t('epochSeconds')}</span><span class="value">${esc(cv.epochS)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.epochMs)}"><span class="label">${t('epochMilliseconds')}</span><span class="value">${esc(cv.epochMs)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.localDate)}"><span class="label">${t('localDate')}</span><span class="value">${esc(cv.localDate)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.localDateTime)}"><span class="label">${t('localDateTime')}</span><span class="value">${esc(cv.localDateTime)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.isoOffset)}"><span class="label">${t('isoOffset')}</span><span class="value">${esc(cv.isoOffset)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.epochS)}" data-key="1"><span class="tz-copy-key">1</span><span class="label">${t('epochSeconds')}</span><span class="value">${esc(cv.epochS)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.epochMs)}" data-key="2"><span class="tz-copy-key">2</span><span class="label">${t('epochMilliseconds')}</span><span class="value">${esc(cv.epochMs)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.localDate)}" data-key="3"><span class="tz-copy-key">3</span><span class="label">${t('localDate')}</span><span class="value">${esc(cv.localDate)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.localDateTime)}" data-key="4"><span class="tz-copy-key">4</span><span class="label">${t('localDateTime')}</span><span class="value">${esc(cv.localDateTime)}</span></div>
+          <div class="tz-copy-item" data-val="${esc(cv.isoOffset)}" data-key="5"><span class="tz-copy-key">5</span><span class="label">${t('isoOffset')}</span><span class="value">${esc(cv.isoOffset)}</span></div>
         </div>
       </div>`;
     }
@@ -814,6 +831,19 @@ function closeAllCopyMenus() {
   document.querySelectorAll('.tz-copy-menu.open').forEach(m => m.classList.remove('open'));
 }
 document.addEventListener('click', closeAllCopyMenus);
+
+document.addEventListener('keydown', (e) => {
+  const openMenu = document.querySelector('.tz-copy-menu.open');
+  if (!openMenu) return;
+  const item = openMenu.querySelector(`.tz-copy-item[data-key="${e.key}"]`);
+  if (!item) return;
+  e.preventDefault();
+  navigator.clipboard.writeText(item.dataset.val);
+  closeAllCopyMenus();
+  const btn = openMenu.closest('.tz-copy-wrap').querySelector('.tz-copy');
+  btn.textContent = t('copied');
+  setTimeout(() => { btn.textContent = t('copy'); }, 1200);
+});
 
 let dragSrcIdx = null;
 
