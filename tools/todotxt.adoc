@@ -1,3 +1,0 @@
-= todo.txt
-
-* https://medevel.com/todo-txt/

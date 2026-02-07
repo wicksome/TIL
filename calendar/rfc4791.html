@@ -1,0 +1,4121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>RFC 4791 - CalDAV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>RFC 4791 - CalDAV</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_개요">개요</a></li>
+<li><a href="#_1_introduction">1. Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_1_1_notational_conventions">1.1. Notational Conventions</a></li>
+<li><a href="#_1_2_xml_namespace_and_processing">1.2. XML Namespace and Processing</a></li>
+<li><a href="#_1_3_method_preconditions_and_postconditions">1.3. Method Preconditions and Postconditions</a></li>
+</ul>
+</li>
+<li><a href="#_2_requirements_overview">2. Requirements Overview</a></li>
+<li><a href="#_3_calendaring_data_model">3. Calendaring Data Model</a>
+<ul class="sectlevel2">
+<li><a href="#_3_1_calendar_server">3.1. Calendar Server</a></li>
+<li><a href="#_3_2_recurrence_and_the_data_model">3.2. Recurrence and the Data Model</a></li>
+</ul>
+</li>
+<li><a href="#_4_calendar_resources">4. Calendar Resources</a>
+<ul class="sectlevel2">
+<li><a href="#_4_1_calendar_object_resources">4.1. Calendar Object Resources</a></li>
+<li><a href="#_4_2_calendar_collection">4.2. Calendar Collection</a></li>
+</ul>
+</li>
+<li><a href="#_5_calendar_access_feature">5. Calendar Access Feature</a>
+<ul class="sectlevel2">
+<li><a href="#_5_1_calendar_access_support">5.1. Calendar Access Support</a></li>
+<li><a href="#_5_2_calendar_collection_properties">5.2. Calendar Collection Properties</a></li>
+<li><a href="#_5_2_creating_resources">5.2. Creating Resources</a></li>
+</ul>
+</li>
+<li><a href="#_6_calendaring_access_control">6. Calendaring Access Control</a>
+<ul class="sectlevel2">
+<li><a href="#_6_1_calendaring_privilege">6.1. Calendaring Privilege</a></li>
+<li><a href="#_6_2_additional_principal_property">6.2. Additional Principal Property</a></li>
+</ul>
+</li>
+<li><a href="#_7_calendaring_reports">7. Calendaring Reports</a>
+<ul class="sectlevel2">
+<li><a href="#_7_1_report_method">7.1. REPORT Method</a></li>
+<li><a href="#_7_2_ordinary_collections">7.2. Ordinary Collections</a></li>
+<li><a href="#_7_3_date_and_floating_time">7.3. Date and Floating Time</a></li>
+<li><a href="#_7_4_time_range_filtering">7.4. Time Range Filtering</a></li>
+<li><a href="#_7_5_searching_text_collations">7.5. Searching Text: Collations</a></li>
+<li><a href="#_7_6_partial_retrieval">7.6. Partial Retrieval</a></li>
+<li><a href="#_7_7_non_standard_components_properties_and_parameters">7.7. Non-Standard Components, Properties, and Parameters</a></li>
+<li><a href="#_7_8_caldavcalendar_query_report">7.8. CALDAV:calendar-query REPORT</a></li>
+<li><a href="#_7_9_caldavcalendar_multiget_report">7.9. CALDAV:calendar-multiget REPORT</a></li>
+<li><a href="#_7_10_caldavfree_busy_query_report">7.10. CALDAV:free-busy-query REPORT</a></li>
+</ul>
+</li>
+<li><a href="#_8_guidelines">8. Guidelines</a>
+<ul class="sectlevel2">
+<li><a href="#_8_1_client_to_client_interoperability">8.1. Client-to-Client Interoperability</a></li>
+<li><a href="#_8_2_synchronization_operations">8.2. Synchronization Operations</a></li>
+<li><a href="#_8_3_use_of_locking">8.3. Use of Locking</a></li>
+<li><a href="#_8_4_finding_calendars">8.4. Finding Calendars</a></li>
+<li><a href="#_8_5_storing_and_using_attachments">8.5. Storing and Using Attachments</a></li>
+<li><a href="#_8_6_storing_and_using_alarms">8.6. Storing and Using Alarms</a></li>
+</ul>
+</li>
+<li><a href="#_9_xml_element_definitions">9. XML Element Definitions</a>
+<ul class="sectlevel2">
+<li><a href="#_9_1_caldavcalendar_xml_element">9.1. CALDAV:calendar XML Element</a></li>
+<li><a href="#_9_2_caldavmkcalendar_xml_element">9.2. CALDAV:mkcalendar XML Element</a></li>
+<li><a href="#_9_3_caldavmkcalendar_response_xml_element">9.3. CALDAV:mkcalendar-response XML Element</a></li>
+<li><a href="#_9_4_caldavsupported_collation_xml_element">9.4. CALDAV:supported-collation XML Element</a></li>
+<li><a href="#_9_5_caldavcalendar_query_xml_element">9.5. CALDAV:calendar-query XML Element</a></li>
+<li><a href="#_9_6_caldavcalendar_data_xml_element">9.6. CALDAV:calendar-data XML Element</a></li>
+<li><a href="#_9_7_caldavfilter_xml_element">9.7. CALDAV:filter XML Element</a></li>
+<li><a href="#_9_8_caldavtimezone_xml_element">9.8. CALDAV:timezone XML Element</a></li>
+<li><a href="#_9_9_caldavtime_range_xml_element">9.9. CALDAV:time-range XML Element</a></li>
+<li><a href="#_9_10_caldavcalendar_multiget_xml_element">9.10. CALDAV:calendar-multiget XML Element</a></li>
+<li><a href="#_9_11_caldavfree_busy_query_xml_element">9.11. CALDAV:free-busy-query XML Element</a></li>
+</ul>
+</li>
+<li><a href="#_10_internationalization_considerations">10. Internationalization Considerations</a></li>
+<li><a href="#_11_security_considerations">11. Security Considerations</a></li>
+<li><a href="#_12_iana_considerations">12. IANA Considerations</a>
+<ul class="sectlevel2">
+<li><a href="#_12_1_namespace_registration">12.1. Namespace Registration</a></li>
+</ul>
+</li>
+<li><a href="#_13_acknowledgements">13. Acknowledgements</a></li>
+<li><a href="#_14_references">14. References</a></li>
+<li><a href="#_appendix_a_caldav_method_privilege_table_normative">Appendix A. CalDAV Method Privilege Table (Normative)</a></li>
+<li><a href="#_appendix_b_calendar_collections_used_in_the_examples">Appendix B. Calendar Collections Used in the Examples</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="sidebarblock text-center">
+<div class="content">
+<div class="paragraph">
+<p><a href="https://www.rfc-editor.org/rfc/rfc4791"><strong>Calendaring Extensions to WebDAV (CalDAV)</strong></a><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_개요">개요</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>이 문서는 iCalendar 형식을 기반으로 캘린더 및 일정 정보에 액세스, 관리, 공유하는 표준 방법을 지정하기 위해 WebDAV(Web Distributed Authoring and Versioning) 프로토콜의 확장을 정의합니다. 이 문서는 CalDAV의 'calendar-access' 기능을 정의합니다.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_1_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>캘린더 액세스 프로토콜의 기반으로 HTTP [<a href="https://www.rfc-editor.org/rfc/rfc2616">RFC2616</a>]와 WebDAV [<a href="https://www.rfc-editor.org/rfc/rfc2518">RFC2518</a>]를 사용하는 개념으로 결코 새로운 개념이 아니며, 1997년 또는 1998년 초에 IETF CALSCH 워킹 그룹에서 논의된 바 있습니다. 여러 회사에서 HTTP를 사용하여 iCalendar [<a href="https://www.rfc-editor.org/rfc/rfc2445">RFC2445</a>] 개체를 업로드 및 다운로드하고 WebDAV를 사용하여 리소스 목록을 가져오는 캘린더 액세스 프로토콜을 구현한 바 있습니다. 그러나 이러한 구현은 상호 운용되지 않는데, 그 이유는 캘린더 데이터를 WebDAV 리소스로 모델링하는 방법과 WebDAV에 아직 포함되지 않은 필수 기능을 구현하는 방법에서 크고 작은 많은 결정을 내려야 하기 때문입니다. 이 문서에서는 상호 운용 가능한 캘린더 액세스 프로토콜을 만들기 위한 추가 기능과 함께 WebDAV에서 캘린더 데이터를 모델링하는 방법을 제안합니다.</p>
+</div>
+<div class="sect2">
+<h3 id="_1_1_notational_conventions">1.1. Notational Conventions</h3>
+<div class="paragraph">
+<p>본 문서에서 "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMAND", "MAY" 및 "OPTIONAL" 키워드는 [RFC2119]에 설명된 대로 해석해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>"protected"이라는 용어는 [<a href="https://www.rfc-editor.org/rfc/rfc3253">RFC3253</a>]의 1.4.2절에 정의된 대로 속성 정의의 적합성 필드에 사용됩니다.</p>
+</div>
+<div class="paragraph">
+<p>본 문서에서 XML fragment의 컨텍스트 외부에서 "DAV:" 및 "urn:ietf:params:xml:ns:caldav" 네임스페이스의 XML 요소 유형을 참조하는 경우, 요소 유형 이름 앞에 각각 "DAV:" 및 "CALDAV:" 문자열이 접두사로 붙게 됩니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_2_xml_namespace_and_processing">1.2. XML Namespace and Processing</h3>
+<div class="paragraph">
+<p>이 문서에서 XML 요소의 정의는 [W3C.REC-xml-20060816]의 3.2절에 설명된 XML 요소 유형 선언(XML 문서 유형 선언에서 찾을 수 있음)을 사용합니다.</p>
+</div>
+<div class="paragraph">
+<p>네임스페이스 "urn:ietf:params:xml:ns:caldav"는 이 사양, 그 개정판 및 관련 CalDAV 사양에 정의된 XML 요소를 위해 예약되어 있습니다. 개별 구현에 의해 정의된 XML 요소는 "urn:ietf:params:xml:ns:caldav" 네임스페이스를 사용해서는 안 되며, 대신 해당 구현이 제어하는 네임스페이스를 사용해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 문서에 사용된 XML 선언에는 네임스페이스 정보가 포함되어 있지 않습니다. 따라서 구현자는 이러한 선언을 유효한 CalDAV 프로퍼티를 생성하거나 CalDAV XML 요소 유형의 유효성을 검사하는 유일한 방법으로 사용해서는 안 됩니다. 일부 선언은 "DAV:" 네임스페이스를 사용하는 WebDAV [<a href="https://www.rfc-editor.org/rfc/rfc2518">RFC2518</a>]에 정의된 XML 요소를 참조합니다. 이러한 XML 요소가 나타나는 곳에는 혼동을 피하기 위해 명시적으로 "DAV:"가 접두사로 붙습니다.</p>
+</div>
+<div class="paragraph">
+<p>또한, 일부 CalDAV XML 요소 이름은 네임스페이스는 다르지만 WebDAV XML 요소 이름과 동일합니다. 두 세트의 이름을 혼동하지 않도록 주의해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 클라이언트 및 서버에 의한 XML 처리는 [<a href="https://www.rfc-editor.org/rfc/rfc2518">RFC2518</a>]에 설명된 규칙을 따라야 합니다. 특히 해당 사양의 섹션 14 및 부록 3을 참조하십시오.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_3_method_preconditions_and_postconditions">1.3. Method Preconditions and Postconditions</h3>
+<div class="paragraph">
+<p>메서드의 "precondition"(전제 조건)은 해당 메서드가 수행되기 위해 참이어야 하는 서버의 상태를 설명합니다. 메서드의 "postcondition"(사후 조건)은 해당 메서드가 완료된 후 참이어야 하는 서버의 상태를 설명합니다. 요청에 대한 메서드 전조건 또는 후조건이 충족되지 않으면 요청이 항상 실패하므로 요청을 반복해서는 안 되는 경우 요청의 응답 상태는 403(Forbidden)이거나 사용자가 충돌을 해결하고 요청을 다시 제출할 수 있을 것으로 예상되는 경우 409(Conflict)여야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트가 403 및 409 응답을 더 잘 처리할 수 있도록 요청의 각 메서드 전제 조건 및 후제 조건에 고유한 XML 요소 유형이 연관됩니다. 특정 전제 조건이 충족되지 않거나 특정 후제 조건을 달성할 수 없는 경우, 요청에서 달리 협상하지 않는 한 응답 본문에서 최상위 DAV:error 요소의 하위 요소로 적절한 XML 요소를 반환해야 합니다.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_requirements_overview">2. Requirements Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>이 섹션에서는 CalDAV 서버에 필요한 기능을 나열합니다. 서버가 CalDAV 지원을 알리려면 다음과 같이 해야 합니다:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(MUST) 캘린더 객체 리소스 형식의 미디어 유형으로 iCalendar [<a href="https://www.rfc-editor.org/rfc/rfc2445">RFC2445</a>]를 지원해야 합니다;</p>
+</li>
+<li>
+<p>(MUST) WebDAV 클래스 1 [<a href="https://www.rfc-editor.org/rfc/rfc2518">RFC2518</a>]을 지원해야 합니다([rfc2518bis]에는 상호 운용성을 지원하는 [<a href="https://www.rfc-editor.org/rfc/rfc2518">RFC2518</a>]에 대한 설명이 나와 있습니다);</p>
+</li>
+<li>
+<p>(MUST) 이 문서의 섹션 6.1에 정의된 추가 권한으로 WebDAV ACL [<a href="https://www.rfc-editor.org/rfc/rfc3744">RFC3744</a>]을 지원해야 합니다;</p>
+</li>
+<li>
+<p>(MUST) [RFC2818]에 정의된 대로 TLS[RFC2246]를 통한 전송을 지원해야 합니다([RFC2246]은 [RFC4346]에 의해 폐기되었음에 유의);</p>
+</li>
+<li>
+<p>(MUST) 이 문서의 섹션 5.3.4에 명시된 추가 요구 사항과 함께 ETag [RFC2616]을 지원해야 합니다;</p>
+</li>
+<li>
+<p>(MUST) 이 문서의 섹션 7에 정의된 모든 calendaring reports를 지원해야 합니다.</p>
+</li>
+<li>
+<p>(MUST) WebDAV[RFC3253] Versioning Extensions에 정의된 대로 모든 캘린더 컬렉션 및 캘린더 객체 리소스에서 calendaring reports에 대한 지원을 DAV:supported- report-set 속성에 공표해야 합니다.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>또한 서버는 다음을 수행해야 합니다:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(SHOULD) 이 문서의 5.3.1절에 정의된 MKCALENDAR 메서드를 지원해야 합니다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_3_calendaring_data_model">3. Calendaring Data Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>WebDAV를 성공적인 프로토콜로 만든 기능 중 하나는 확고한 데이터 모델입니다. 이는 캘린더와 같은 다른 애플리케이션에 유용한 프레임워크입니다. 이 사양은 잘 설명된 데이터 모델을 기반으로 모든 기능을 개발함으로써 동일한 패턴을 따릅니다.</p>
+</div>
+<div class="paragraph">
+<p>간단히 요약하면, CalDAV 캘린더는 정의된 구조를 가진 WebDAV 컬렉션으로 모델링되며, 각 캘린더 컬렉션에는 직접 하위 리소스로서 캘린더 개체를 나타내는 여러 리소스가 포함되어 있습니다. 캘린더 객체(event, to-do, journal or other calendar components)를 나타내는 각 리소스를 "calendar object resource"라고 합니다. 각 캘린더 객체 리소스와 각 캘린더 컬렉션은 개별적으로 잠글 수 있으며 개별 WebDAV 속성을 가질 수 있습니다. 이 모델에서 파생된 요구사항은 섹션 4.1과 섹션 4.2에 나와 있습니다.</p>
+</div>
+<div class="sect2">
+<h3 id="_3_1_calendar_server">3.1. Calendar Server</h3>
+<div class="paragraph">
+<p>캘린더 서버는 WebDAV 저장소와 결합된 calendaring-aware engine입니다. WebDAV 리포지토리는 통합 URL 네임스페이스 내에 다른 WebDAV 리소스를 포함하는 WebDAV 컬렉션의 집합입니다. 예를 들어, 리포지토리 "http://www.example.com/webdav/"에는 모두 "http://www.example.com/webdav/"로 시작하는 URL을 가진 WebDAV 컬렉션 및 리소스가 포함될 수 있습니다. 루트 URL인 "http://www.example.com/"는 그 자체로 WebDAV 리포지토리가 아닐 수도 있습니다(예: WebDAV 지원이 서블릿 또는 기타 웹 서버 확장을 통해 구현되는 경우).</p>
+</div>
+<div class="paragraph">
+<p>WebDAV 리포지토리는 URL 네임스페이스의 일부에 캘린더 데이터를 포함하고 다른 부분에는 비캘린더 데이터를 포함할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>WebDAV 리포지토리는 리포지토리 루트 내의 어느 지점에서든 이 사양에 정의된 기능을 지원하는 경우 스스로를 CalDAV 서버로 광고할 수 있습니다. 이는 캘린더 데이터가 리포지토리 전체에 분산되어 있고 인근 컬렉션의 비캘린더 데이터와 혼합되어 있음을 의미할 수 있습니다(예: 캘린더 데이터는 /home/lisa/calendars/와 /home/bernard/calendars/에서 찾을 수 있고, 비캘린더 데이터는 /home/lisa/contacts/에서 찾을 수 있음). 또는 리포지토리의 특정 섹션(예: /calendar/)에서만 캘린더 데이터를 찾을 수 있다는 의미일 수도 있습니다. 캘린더 기능은 캘린더 객체 리소스를 포함하거나 포함하는 리포지토리 섹션에만 필요합니다. 따라서 캘린더 데이터를 /calendar/ 컬렉션에 한정하는 리포지토리는 해당 컬렉션 내에서 CalDAV 필수 기능만 지원하면 됩니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버 또는 리포지토리는 캘린더 데이터 및 상태 정보를 위한 표준 위치입니다. 클라이언트는 데이터 변경 또는 데이터 다운로드 요청을 제출할 수 있습니다. 클라이언트는 캘린더 개체를 오프라인으로 저장하고 나중에 동기화를 시도할 수 있습니다. 그러나 클라이언트는 여러 클라이언트를 통해 캘린더 컬렉션을 공유하고 액세스할 수 있으므로 마지막 동기화 시점과 업데이트 시도 시점 사이에 서버의 캘린더 데이터가 변경될 수 있으므로 이에 대비해야 합니다. 엔티티 태그 및 기타 기능을 통해 이를 가능하게 합니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_2_recurrence_and_the_data_model">3.2. Recurrence and the Data Model</h3>
+<div class="paragraph">
+<p>반복은 얼마나 많은 리소스가 존재할 것으로 예상되는지를 관리하기 때문에 데이터 모델에서 중요한 부분입니다. 이 사양에서는 recurring calendar component와 recurrence exception를 단일 리소스로 모델링합니다. 이 모델에서는 반복 규칙, 반복 날짜, 예외 규칙 및 예외 날짜가 모두 단일 캘린더 객체 리소스에 있는 데이터의 일부입니다. 이 모델은 리포지토리에 저장할 반복 인스턴스 수 제한, 반복 인스턴스를 반복 캘린더 구성 요소와 동기화하는 방법, 반복 예외를 반복 캘린더 구성 요소와 연결하는 방법 등의 문제를 피할 수 있습니다. 또한 클라이언트와 서버 간에 동기화할 데이터가 줄어들고 모든 반복 인스턴스 또는 반복 규칙을 더 쉽게 변경할 수 있습니다. 반복 캘린더 컴포넌트를 더 쉽게 만들고 모든 반복 인스턴스를 삭제할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 반복 구성 요소의 모든 반복 인스턴스에 대한 정보를 강제로 검색하지 않아도 됩니다. 이 문서에 정의된 CALDAV:calendar-query 및 CALDAV:calendar-multiget 보고서를 사용하면 클라이언트가 지정된 시간 범위와 겹치는 반복 인스턴스만 검색할 수 있습니다.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_4_calendar_resources">4. Calendar Resources</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_4_1_calendar_object_resources">4.1. Calendar Object Resources</h3>
+<div class="paragraph">
+<p>캘린더 컬렉션에 포함된 캘린더 객체 리소스에는 두 가지 이상의 유형의 캘린더 컴포넌트(예: VEVENT, VTODO, VJOURNAL, VFREEBUSY 등)가 포함되어서는 안 되며, iCalendar 객체에 지정된 각 고유 TZID 파라미터 값에 대해 지정되어야 하는 VTIMEZONE 컴포넌트를 제외하고는 두 가지 이상을 포함할 수 없습니다. 예를 들어, 캘린더 객체 리소스에는 하나의 VEVENT 구성 요소와 하나의 VTIMEZONE 구성 요소가 포함될 수 있지만 하나의 VEVENT 구성 요소와 하나의 VTODO 구성 요소는 포함될 수 없습니다. 대신, VEVENT 구성 요소와 VTODO 구성 요소는 동일한 컬렉션에 있는 별도의 캘린더 객체 리소스에 저장해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 컬렉션에 포함된 캘린더 객체 리소스는 iCalendar METHOD 속성을 지정하지 않아야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 객체 리소스에 포함된 캘린더 구성 요소의 UID 속성 값은 해당 구성 요소가 저장된 캘린더 컬렉션의 범위 내서 고유해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 컬렉션의 캘린더 구성요소 중 UID 속성 값이 다른 구성요소는 별도의 캘린더 객체 리소스에 저장해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>특정 캘린더 컬렉션에서 동일한 UID 속성 값을 가진 캘린더 구성요소는 반드시 동일한 캘린더 객체 리소스에 포함되어야 합니다. 이렇게 하면 반복 'set&#8217;의 모든 구성요소가 동일한 캘린더 객체 리소스에 포함될 수 있습니다. 캘린더 객체 리소스에는 "overridden" 인스턴스(일반 인스턴스의 동작을 수정하는 인스턴스이므로 RECURRENCE-ID 속성을 포함하는 인스턴스)를 나타내는 구성 요소만 포함할 수 있으며, "master" 반복 구성 요소(반복 "set"를 정의하고 RECURRENCE-ID 속성을 포함하지 않는 구성 요소)는 포함하지 않을 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>예를 들어, 다음 iCalendar 개체가 있습니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">BEGIN:VCALENDAR
+PRODID:-//Example Corp.//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VEVENT
+UID:1@example.com
+SUMMARY:One-off Meeting
+DTSTAMP:20041210T183904Z
+DTSTART:20041207T120000Z
+DTEND:20041207T130000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:2@example.com
+SUMMARY:Weekly Meeting
+DTSTAMP:20041210T183838Z
+DTSTART:20041206T120000Z
+DTEND:20041206T130000Z
+RRULE:FREQ=WEEKLY
+END:VEVENT
+BEGIN:VEVENT
+UID:2@example.com
+SUMMARY:Weekly Meeting
+RECURRENCE-ID:20041213T120000Z
+DTSTAMP:20041210T183838Z
+DTSTART:20041213T130000Z
+DTEND:20041213T140000Z
+END:VEVENT
+END:VCALENDAR</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>UID 값이 "<a href="mailto:1@example.com">1@example.com</a>"인 <code>VEVENT</code> 컴포넌트는 자체 달력 개체 리소스에 저장됩니다. 하나의 반복 인스턴스가 재정의된 반복 이벤트를 나타내는 UID 값이 "<a href="mailto:2@example.com">2@example.com</a>"인 두 개의 <code>VEVENT</code> 구성 요소는 동일한 일정 개체 리소스에 저장됩니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_2_calendar_collection">4.2. Calendar Collection</h3>
+<div class="paragraph">
+<p>캘린더 컬렉션에는 달력 내의 캘린더 컴포넌트를 나타내는 캘린더 객체 리소스가 포함되어 있습니다. 캘린더 컬렉션은 URL로 식별되는 WebDAV 리소스 컬렉션으로 클라이언트에 나타납니다. 캘린더 컬렉션은 <code>DAV:resourcetype</code> 프로퍼티 값에서 <code>DAV:collection</code> 및 <code>CALDAV:calendar</code> XML 요소를 보고해야 합니다. <code>CALDAV:calendar</code> 에 대한 요소 유형 선언은 다음과 같습니다. <code>CALDAV:calendar</code> 에 대한 요소 타입 선언은 다음과 같습니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT calendar EMPTY&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>캘린더 컬렉션은 프로비저닝을 통해 만들거나(즉, 사용자 계정이 프로비저닝될 때 자동으로 만들어짐), MKCALENDAR 메서드를 사용하여 만들 수 있습니다(5.3.1절 참조). 이 방법은 사용자가 추가 캘린더(예: 축구 일정)를 만들거나 사용자가 캘린더(예: 팀 이벤트 또는 회의실)를 공유할 때 유용할 수 있습니다. 하지만 이 문서에서는 추가 캘린더 컬렉션의 용도를 정의하고 있지 않다는 점에 유의하세요. 사용자는 비표준 단서에 의존하여 캘린더 컬렉션의 용도를 찾거나 섹션 5.2.1에 정의된 CALDAV:calendar-description 속성을 사용하여 그러한 단서를 제공해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 컬렉션 내의 리소스에는 다음과 같은 제한이 적용됩니다:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>캘린더 컬렉션은 캘린더 컬렉션이 아닌 캘린더 객체 리소스 및 컬렉션만 포함해야 합니다. 즉, 캘린더 컬렉션에서 허용되는 유일한 'top-level' 비컬렉션 리소스는 캘린더 객체 리소스입니다. 이렇게 하면 캘린더 클라이언트가 캘린더 컬렉션의 비캘린더 데이터를 처리할 필요가 없지만 컬렉션의 내용을 검사하기 위해 표준 WebDAV 기술을 사용할 때 캘린더 개체 자원과 컬렉션을 구별해야 합니다.</p>
+</li>
+<li>
+<p>캘린더 컬렉션에 포함된 컬렉션은 어떤 깊이의 캘린더 컬렉션도 포함해서는 안 됩니다. 이 사양은 캘린더 컬렉션에 포함된 컬렉션이 사용되는 방식 또는 캘린더 컬렉션에 포함된 캘린더 개체 리소스와 관련된 방식을 정의하지 않습니다.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>여러 캘린더 컬렉션은 동일한 컬렉션의 하위 항목일 수 있습니다.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_5_calendar_access_feature">5. Calendar Access Feature</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_5_1_calendar_access_support">5.1. Calendar Access Support</h3>
+<div class="paragraph">
+<p>이 문서에 설명된 기능을 지원하는 서버는 캘린더 속성, 보고서, 메서드 또는 권한을 지원하는 리소스에 대한 OPTIONS 요청의 DAV 응답 헤더에 "calendar-access"를 필드로 포함해야 합니다. DAV 응답 헤더의 "calendar- access" 값은 서버가 이 문서에 명시된 모든 MUST 수준 요구 사항을 지원함을 나타내야 합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_5_1_1_example_using_options_for_the_discovery_of_calendar_access">5.1.1. Example: Using OPTIONS for the Discovery of Calendar Access</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">>> Request <<
+
+OPTIONS /home/bernard/calendars/ HTTP/1.1
+Host: cal.example.com
+
+>> Response <<
+
+HTTP/1.1 200 OK
+Allow: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, COPY, MOVE
+Allow: PROPFIND, PROPPATCH, LOCK, UNLOCK, REPORT, ACL
+DAV: 1, 2, access-control, <mark>calendar-access</mark>
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Length: 0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이 예에서 OPTIONS 메서드는 DAV 응답 헤더에 "calendar- access" 값을 반환하여 "/home/bernard/calendars/" 컬렉션이 이 사양에 정의된 속성, 보고서, 메서드 또는 권한을 지원한다는 것을 나타냅니다.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_2_calendar_collection_properties">5.2. Calendar Collection Properties</h3>
+<div class="paragraph">
+<p>이 섹션에서는 캘린더 컬렉션의 속성을 정의합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_5_2_1_caldavcalendar_description_property">5.2.1. CALDAV:calendar-description Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>calendar-description</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션에 대해 사람이 읽을 수 있는 설명을 제공합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다. 정의된 경우, 이 속성은 보호될 수 있으며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨). 설명의 인간 언어를 나타내는 xml:lang 속성은 클라이언트 또는 서버 프로비저닝을 통해 이 속성에 대해 설정되어야 합니다. 서버는 속성에 대해 설정된 경우 xml:lang 속성을 반환해야 합니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>있는 경우 이 속성에는 사용자에게 표시하기에 적합한 캘린더 컬렉션에 대한 설명이 포함됩니다. 없는 경우 클라이언트는 캘린더 컬렉션에 대한 설명이 없다고 가정해야 합니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"> &lt;!ELEMENT calendar-description (#PCDATA)&gt;
+ PCDATA value: string</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:calendar-description xml:lang="fr-CA"
+   xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;Calendrier de Mathilde Desruisseaux&lt;/C:calendar-description&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_2_caldavcalendar_timezone_property">5.2.2. CALDAV:calendar-timezone Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>calendar-timezone</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션의 표준 시간대를 지정합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의되어야 합니다. 정의된 경우 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되지 않아야 합니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:calendar-timezone 속성은 서버가 "date" 값과 "date with local time" 값(즉, floating time)을 "date with UTC time" 값으로 변환할 때 사용해야 하는 시간대를 지정하는 데 사용됩니다. 서버는 "date" 값 또는 "date with local time" 값으로 예약된 캘린더 구성 요소가 CALDAV:calendar-query REPORT에 지정된 CALDAV:time-range와 겹치는지 확인하기 위해 이 정보를 필요로 합니다. 또한 서버는 "date" 값 또는 "date with local time" 값으로 예약된 캘린더 구성 요소를 고려하는 CALDAV:free-busy-query REPORT 요청에 대한 응답으로 반환되는 VFREEBUSY 구성 요소에서 "date with UTC time"로 적절한 FREEBUSY 기간을 계산하기 위해 이 정보를 필요로 합니다. 이 속성이 없는 경우 서버는 선택한 표준 시간대를 사용할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Note</dt>
+<dd>
+<p>CALDAV:calendar- 시간대 XML 요소에 포함된 iCalendar 데이터는 &lt;![CDATA[ &#8230;&#8203; ]]&gt; 엔티티 인코딩 사용 또는 &lt;![CDATA[ &#8230;&#8203; ]]&gt; 구문 사용 등 표준 XML 문자 데이터 인코딩 규칙을 따라야 합니다. 후자의 경우 iCalendar 데이터에는 CDATA 섹션의 끝 구분 기호인 문자 시퀀스 "]]&gt;"를 포함할 수 없습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT calendar-timezone (#PCDATA)&gt;
+PCDATA value: an iCalendar object with exactly one VTIMEZONE
+       component.</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:calendar-timezone
+   xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;BEGIN:VCALENDAR
+PRODID:-//Example Corp.//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:US-Eastern
+LAST-MODIFIED:19870101T000000Z
+BEGIN:STANDARD
+DTSTART:19671029T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:Eastern Standard Time (US &amp;amp; Canada)
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19870405T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:Eastern Daylight Time (US &amp;amp; Canada)
+END:DAYLIGHT
+END:VTIMEZONE
+END:VCALENDAR
+&lt;/C:calendar-timezone&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_3_caldavsupported_calendar_component_set_property">5.2.3. CALDAV:supported-calendar-component-set Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>supported-calendar-component-set</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 객체 리소스가 캘린더 컬렉션에 포함할 수 있는 캘린더 구성요소 유형(예: VEVENT, VTODO 등)을 지정합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의할 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:supported-calendar-component-set 속성은 캘린더 개체 리소스가 캘린더 컬렉션에 포함할 수 있는 캘린더 구성 요소 유형에 대한 제한을 지정하는 데 사용됩니다. 클라이언트가 이 속성에 나열되지 않은 구성 요소 유형이 있는 캘린더 객체 리소스를 저장하려고 시도하면 반드시 오류가 발생하며, CALDAV:supported-calendar-component 전제 조건(섹션 5.3.2.1)을 위반한 것이 됩니다. 이 속성은 보호되어 있으므로 클라이언트가 PROPPATCH 요청을 사용하여 변경할 수 없습니다. 그러나 클라이언트는 MKCALENDAR를 사용하여 새 캘린더 컬렉션을 만들 때 이 속성의 값을 초기화할 수 있습니다. 빈 요소 태그 &lt;C:comp name="VTIMEZONE"/&gt;는 VTIMEZONE 구성 요소만 포함된 캘린더 객체 리소스에 대한 지원이 제공되거나 원하는 경우에만 지정해야 합니다. VEVENT 또는 VTODO 구성 요소가 포함된 캘린더 객체 리소스에서 VTIMEZONE 구성 요소에 대한 지원은 항상 가정됩니다. 이 속성이 없는 경우 서버는 모든 구성 요소 유형을 수락해야 하며 클라이언트는 모든 구성 요소 유형이 수락된다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT supported-calendar-component-set (comp+)&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;C:supported-calendar-component-set
+xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+&lt;C:comp name="VEVENT"/&gt;
+&lt;C:comp name="VTODO"/&gt;
+&lt;/C:supported-calendar-component-set&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_4_caldavsupported_calendar_data_property">5.2.4. CALDAV:supported-calendar-data Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>supported-calendar-data</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션의 캘린더 객체 리소스에 허용되는 미디어 유형을 지정합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:supported-calendar-data 속성은 지정된 캘린더 컬렉션에 포함된 캘린더 객체 리소스에 대해 지원되는 미디어 유형을 지정하는 데 사용됩니다(예: iCalendar 버전 2.0). 클라이언트가 이 속성에 나열되지 않은 미디어 유형으로 캘린더 객체 리소스를 저장하려고 시도하면 반드시 오류가 발생하며, CALDAV:supported-calendar-data 전제 조건(섹션 5.3.2.1)을 위반한 것입니다. 이 속성이 없는 경우 서버는 미디어 유형이 "text/calendar" 및 iCalendar 버전 2.0인 데이터만 허용해야 하며, 클라이언트는 서버가 이 데이터만 허용한다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT supported-calendar-data (calendar-data+)&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:supported-calendar-data
+    xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+   &lt;C:calendar-data content-type="text/calendar" version="2.0"/&gt;
+&lt;/C:supported-calendar-data&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_5_caldavmax_resource_size_property">5.2.5. CALDAV:max-resource-size Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>max-resource-size</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의될 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518] 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:max-resource-size는 캘린더 객체 리소스가 캘린더 컬렉션에 저장될 때 서버가 허용할 수 있는 최대 크기를 옥텟 단위로 나타내는 숫자 값을 지정하는 데 사용됩니다. 이 크기를 초과하는 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV:max-resource-size 전제 조건(섹션 5.3.2.1)을 위반한 것입니다. 이 속성이 없는 경우 클라이언트는 서버가 합리적인 크기의 리소스 저장을 허용한다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT max-resource-size (#PCDATA)&gt;
+PCDATA value: a numeric value (positive integer)</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:max-resource-size xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;102400&lt;/C:max-resource-size&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_6_caldavmin_date_time_property">5.2.6. CALDAV:min-date-time Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>min-date-time</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션에 저장된 캘린더 객체 리소스의 모든 DATE 또는 DATE-TIME 값에 대해 서버가 수락할 수 있는 가장 빠른 날짜 및 시간(UTC)을 나타내는 DATE-TIME 값을 제공합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의할 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518] 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:min-date-time은 캘린더 컬렉션에 저장된 캘린더 객체 리소스에 있는 명시적 DATE 또는 DATE-TIME 값에 대해 서버가 수락할 수 있는 가장 빠른 포함 날짜를 나타내는 UTC 단위의 iCalendar DATE-TIME 값을 지정하는 데 사용됩니다. 이 값보다 이전 DATE 또는 DATE-TIME 값을 사용하여 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV:min-date-time 전제 조건(섹션 5.3.2.1)을 위반한 것입니다. 서버는 이 제한을 초과하는 인스턴스를 지정하는 반복 컴포넌트를 재정의된 인스턴스가 없는 경우 반드시 허용해야 합니다. 이 경우 서버는 캘린더 객체 리소스에 대한 보고서를 처리할 때 허용 범위를 벗어난 인스턴스를 무시할 수 있습니다. 이 속성이 없는 경우 클라이언트는 적어도 CALDAV:max-date-time 값(정의된 경우)까지는 유효한 모든 iCalendar 날짜가 사용될 수 있다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT min-date-time (#PCDATA)&gt;
+PCDATA value: an iCalendar format DATE-TIME value in UTC</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:min-date-time xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;19000101T000000Z&lt;/C:min-date-time&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_7_caldavmax_date_time_property">5.2.7. CALDAV:max-date-time Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>max-date-time</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션에 저장된 캘린더 객체 리소스의 모든 DATE 또는 DATE-TIME 값에 대해 서버가 허용할 수 있는 최신 날짜 및 시간(UTC)을 나타내는 DATE-TIME 값을 제공합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의할 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518] 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p><code>CALDAV:max-date-time</code> 은 캘린더 컬렉션에 저장된 캘린더 객체 리소스의 날짜 또는 시간 값에 대해 서버가 허용할 수 있는 포괄적인 최신 날짜를 나타내는 UTC 단위의 iCalendar DATE-TIME 값을 지정하는 데 사용됩니다. 이 값보다 늦은 날짜 또는 날짜-시간 값을 사용하여 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV:최대 날짜-시간 전제 조건(섹션 5.3.2.1)을 위반한 것입니다. 서버는 이 제한을 초과하는 인스턴스를 지정하는 반복 컴포넌트를 재정의된 인스턴스가 없는 경우 반드시 허용해야 합니다. 이 경우 서버는 캘린더 객체 리소스에 대한 보고서를 처리할 때 허용 범위를 벗어난 인스턴스를 무시할 수 있습니다. 이 속성이 없는 경우 클라이언트는 적어도 CALDAV:min-date-time 값(정의된 경우)까지는 유효한 모든 iCalendar 날짜를 사용할 수 있다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT max-date-time (#PCDATA)&gt;
+PCDATA value: an iCalendar format DATE-TIME value in UTC</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:max-date-time xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;20491231T235959Z&lt;/C:max-date-time&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_8_caldavmax_instances_property">5.2.8. CALDAV:max-instances Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>max-instances</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션에 저장된 캘린더 객체 리소스가 생성할 수 있는 최대 반복 인스턴스 수를 나타내는 숫자 값을 제공합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 모든 캘린더 컬렉션에 정의할 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:max-instances는 캘린더 컬렉션에 저장된 캘린더 객체 리소스가 생성할 수 있는 최대 반복 인스턴스 수를 나타내는 숫자 값을 지정하는 데 사용됩니다. 이 값보다 많은 인스턴스를 생성하는 반복 패턴을 가진 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV:max-instances 전제 조건(섹션 5.3.2.1)을 위반한 것입니다. 이 속성이 없는 경우 클라이언트는 서버가 처리하거나 확장할 수 있는 리커버리 인스턴스 수에 제한이 없다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT max-instances (#PCDATA)&gt;
+PCDATA value: a numeric value (integer greater than zero)</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:max-instances xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;100&lt;/C:max-instances&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_9_caldavmax_attendees_per_instance_property">5.2.9. CALDAV:max-attendees-per-instance Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>max-attendees-per-instance</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션에 저장된 캘린더 객체 리소스의 모든 인스턴스에서 최대 참석자 속성 수를 나타내는 숫자 값을 제공합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 프로퍼티는 모든 캘린더 컬렉션에 정의될 수 있습니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:max-attendees-per-instance는 캘린더 컬렉션에 저장된 캘린더 객체 리소스의 한 인스턴스에 있는 iCalendar 참석자 속성의 최대 개수를 나타내는 숫자 값을 지정하는 데 사용됩니다. 이 값보다 인스턴스당 참석자 속성이 많은 캘린더 객체 리소스를 저장하려고 하면 반드시 오류가 발생하며, CALDAV: max-attendees-per-instance 전제조건(섹션 5.3.2.1)을 위반한 것입니다. 이 속성이 없는 경우 클라이언트는 서버가 캘린더 구성 요소의 참석자 속성을 원하는 수만큼 처리할 수 있다고 가정할 수 있습니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT max-attendees-per-instance (#PCDATA)&gt;
+PCDATA value: a numeric value (integer greater than zero)</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:max-attendees-per-instance
+  xmlns:C="urn:ietf:params:xml:ns:caldav"
+&gt;25&lt;/C:max-attendees-per-instance&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_10_additional_precondition_for_proppatch">5.2.10. Additional Precondition for PROPPATCH</h4>
+<div class="paragraph">
+<p>이 사양에는 PROPPATCH 메서드에 대한 추가 전제 조건이 필요합니다. 전제 조건은 다음과 같습니다:</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:valid-calendar-data): CALDAV:calendar-timezone 속성에 지정된 표준 시간대는 유효한 단일 VTIMEZONE 구성 요소를 포함하는 유효한 iCalendar 객체여야 합니다.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_2_creating_resources">5.2. Creating Resources</h3>
+<div class="paragraph">
+<p>캘린더 컬렉션과 캘린더 객체 리소스는 CalDAV 클라이언트 또는 CalDAV 서버에 의해 생성될 수 있습니다. 이 사양은 클라이언트와 서버가 이러한 캘린더 데이터를 조작할 때 반드시 준수해야 하는 제한 사항과 데이터 모델을 정의합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_5_3_1_mkcalendar_method">5.3.1. MKCALENDAR Method</h4>
+<div class="paragraph">
+<p>MKCALENDAR 메서드를 사용하는 HTTP 요청은 새 캘린더 컬렉션 리소스를 생성합니다. 서버는 캘린더 컬렉션 생성을 특정 컬렉션으로 제한할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>일부 캘린더 저장소는 사용자(또는 본인) 당 하나의 캘린더만 지원하며 일반적으로 각 계정에 대해 미리 생성되기 때문에 서버에서 MKCALENDAR를 지원하는 것은 권장 사항일 뿐 필수는 아닙니다. 그러나 서버와 클라이언트는 사용자가 여러 개의 캘린더 컬렉션을 만들어 데이터를 더 잘 정리할 수 있도록 가능하면 MKCALENDAR를 지원할 것을 적극 권장합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 사람이 읽을 수 있는 캘린더 이름에 DAV:displayname 속성을 사용해야 합니다. 클라이언트는 MKCALENDAR 요청의 요청 본문에서 DAV:displayname 속성의 값을 지정하거나, 또는 MKCALENDAR 요청을 발행한 후 즉시 PROPPATCH 요청을 발행하여 DAV:displayname 속성을 적절한 값으로 변경할 수 있습니다. 클라이언트는 동일한 URI "level"에 있는 다른 캘린더 컬렉션과 동일하게 DAV: displayname 속성을 설정해서는 안 됩니다. 캘린더 컬렉션을 사용자에게 표시할 때 클라이언트는 DAV:displayname 속성을 확인하고 해당 값을 캘린더의 이름으로 사용해야 합니다. DAV: displayname 속성이 비어 있는 경우 클라이언트는 캘린더 컬렉션 URI의 마지막 부분을 이름으로 사용할 수 있지만, 해당 경로 세그먼트는 "opaque"하여 사람이 읽을 수 있는 의미 있는 텍스트를 나타내지 않을 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>MKCALENDAR 요청이 실패하면 요청 이전의 서버 상태가 반드시 복원되어야 합니다.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Marshalling</dt>
+<dd>
+<div class="paragraph">
+<p>요청 본문이 포함된 경우, 반드시 CALDAV:mkcalendar XML 요소여야 합니다. 명령 처리는 명령이 수신된 순서대로(즉, 위에서 아래로) 수행되어야 합니다. 인스트럭션은 모두 실행되거나 실행되지 않아야 합니다. 따라서 처리 중에 오류가 발생하면 실행된 모든 인스트럭션을 취소하고 적절한 오류 결과를 반환해야 합니다. 명령어 처리에 대한 자세한 내용은 [RFC2518] 섹션 12.13.2의 DAV:set 명령어 정의에서 확인할 수 있습니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT mkcalendar (DAV:set)&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>성공적인 요청에 대한 응답 본문이 포함된 경우, 반드시 CALDAV:mkcalendar-response XML 요소여야 합니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT mkcalendar-response ANY&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>응답에는 Cache-Control:no-cache 헤더가 포함되어야 합니다.</p>
+</div>
+</dd>
+<dt class="hdlist1">Postconditions</dt>
+<dd>
+<div class="paragraph">
+<p>(CALDAV:initialize-calendar-collection): 새 캘린더 컬렉션이 Reqeust-URI에 존재합니다. 캘린더 컬렉션의 DAV:resourcetype 에는 DAV:collection CALDAV:calendar XML 요소가 모두 포함되어야 합니다.</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="sect4">
+<h5 id="_5_3_1_1_status_codes">5.3.1.1. Status Codes</h5>
+<div class="paragraph">
+<p>다음은 MKCALENDAR 요청에 대한 응답으로 받을 수 있는 응답 코드의 예시입니다. 이 목록은 결코 완전한 목록이 아닙니다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>201(Created) - 캘린더 컬렉션 리소스가 완전히 생성되었습니다;</p>
+</li>
+<li>
+<p>207(Multi-Status) - 요청 본문에 지정된 하나 이상의 DAV:set 명령어를 성공적으로 처리할 수 없기 때문에 캘린더 컬렉션 리소스를 만들지 못했습니다. 다음은 이 상황에서 207(다중 상태) 응답에 사용될 것으로 예상되는 응답 코드의 예입니다:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>403(Forbidden) - 서버가 지정하지 않은 이유로 클라이언트가 속성 중 하나를 변경할 수 없습니다;</p>
+</li>
+<li>
+<p>409(Conflict) - 클라이언트가 해당 프로퍼티에 적합하지 않은 의미를 가진 값을 제공했습니다. 여기에는 읽기 전용 속성을 설정하려는 시도가 포함됩니다;</p>
+</li>
+<li>
+<p>424(Failed Dependency) - 요청 본문에 지정된 다른 DAV:set 명령의 실패가 아니었다면 지정된 리소스에 대한 DAV:set 명령이 성공했을 것입니다;</p>
+</li>
+<li>
+<p>423(Locked) - 지정한 리소스가 잠겨 있고 클라이언트가 잠금 소유자가 아니거나 잠금 유형에 잠금 토큰을 제출해야 하는데 클라이언트가 제출하지 않았습니다.</p>
+</li>
+<li>
+<p>507 (Insufficient Storage) - 서버에 속성을 기록할 공간이 충분하지 않습니다;</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>403(Forbidden) - 다음 두 가지 조건 중 하나 이상을 나타냅니다: 1) 서버가 네임스페이스의 지정된 위치에 캘린더 컬렉션을 만드는 것을 허용하지 않거나 2) Request-URI의 상위 컬렉션이 존재하지만 구성원을 받아들일 수 없습니다;</p>
+</li>
+<li>
+<p>409(Conflict) - 하나 이상의 중간 컬렉션이 만들어질 때까지 Request-URI에서 컬렉션을 만들 수 없습니다;</p>
+</li>
+<li>
+<p>415(Unsupported Media Type) - 서버가 본문의 요청 유형을 지원하지 않습니다.</p>
+</li>
+<li>
+<p>507(Insufficient Storage) - 이 메서드 실행 후 리소스의 상태를 기록할 공간이 충분하지 않습니다.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_5_3_1_2_example_successful_mkcalendat_request">5.3.1.2. Example: Successful MKCALENDAT Request</h5>
+<div class="paragraph">
+<p>이 예에서는 서버 cal.example.com에 /home/lisa/calendars/events/라는 캘린더 컬렉션을 생성하고, DAV:displayname, CALDAV:calendar-description, CALDAV:supported-calendar-component-set 및 CALDAV:calendar-timezone 속성에 대한 특정 값을 지정합니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+MKCALENDAR /home/lisa/calendars/events/ HTTP/1.1
+Host: cal.example.com
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:mkcalendar xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:set&gt;
+   &lt;D:prop&gt;
+     &lt;D:displayname&gt;Lisa's Events&lt;/D:displayname&gt;
+     &lt;C:calendar-description xml:lang="en"
+&gt;Calendar restricted to events.&lt;/C:calendar-description&gt;
+     &lt;C:supported-calendar-component-set&gt;
+       &lt;C:comp name="VEVENT"/&gt;
+     &lt;/C:supported-calendar-component-set&gt;
+     &lt;C:calendar-timezone&gt;&lt;![CDATA[BEGIN:VCALENDAR
+PRODID:-//Example Corp.//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:US-Eastern
+LAST-MODIFIED:19870101T000000Z
+BEGIN:STANDARD
+DTSTART:19671029T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:Eastern Standard Time (US &amp; Canada)
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19870405T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:Eastern Daylight Time (US &amp; Canada)
+END:DAYLIGHT
+END:VTIMEZONE
+END:VCALENDAR
+]]&gt;&lt;/C:calendar-timezone&gt;
+   &lt;/D:prop&gt;
+ &lt;/D:set&gt;
+&lt;/C:mkcalendar&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 201 Created
+Cache-Control: no-cache
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Length: 0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_3_2_creating_calendar_object_resources">5.3.2. Creating Calendar Object Resources</h4>
+<div class="paragraph">
+<p>클라이언트는 캘린더 개체 리소스로 캘린더 컬렉션을 채웁니다. 각 캘린더 객체 리소스의 URL은 전적으로 임의적이며 캘린더 객체 리소스의 iCalendar 속성 또는 기타 메타데이터와 특정 관계를 가질 필요가 없습니다. 새 캘린더 객체 리소스는 매핑되지 않은 URI를 대상으로 하는 PUT 요청으로 만들어야 합니다. 매핑된 URI를 대상으로 하는 PUT 요청은 기존 캘린더 객체 리소스를 업데이트합니다.</p>
+</div>
+<div class="paragraph">
+<p>서버가 새 리소스를 만들 때 서버가 매핑되지 않은 URI를 선택하는 것은 어렵지 않습니다. 클라이언트는 컬렉션의 모든 리소스를 검사하고 싶지 않을 수도 있고 새 리소스가 이름 충돌로 생성되지 않도록 전체 컬렉션을 잠그고 싶지 않을 수도 있기 때문에 약간 더 까다롭습니다. 하지만 이를 완화하는 HTTP 기능이 있습니다. 클라이언트가 새 이벤트와 같이 컬렉션이 아닌 리소스를 새로 만들려는 경우, 클라이언트는 PUT 요청에 HTTP 요청 헤더 "If-None-Match: *"를 PUT 요청에 사용해야 합니다. PUT 요청의 Request-URI는 리소스가 생성될 대상 컬렉션과 마지막 경로 세그먼트에 있는 리소스 이름을 포함해야 합니다. "If-None-Match: *" 요청 헤더는 마지막 경로 세그먼트가 이미 사용된 것으로 판명된 경우 클라이언트가 실수로 기존 리소스를 덮어쓰지 않도록 보장합니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+PUT /home/lisa/calendars/events/qwue23489.ics HTTP/1.1
+If-None-Match: *
+Host: cal.example.com
+Content-Type: text/calendar
+Content-Length: xxxx
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+UID:20010712T182145Z-123401@example.com
+DTSTAMP:20060712T182145Z
+DTSTART:20060714T170000Z
+DTEND:20060715T040000Z
+SUMMARY:Bastille Day Party
+END:VEVENT
+END:VCALENDAR
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+ETag: "123456789-000-111"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>기존 이벤트를 변경하는 요청은 동일하지만 "If-None- Match" 헤더가 아닌 "If-Match" 헤더에 특정 ETag를 사용합니다.</p>
+</div>
+<div class="paragraph">
+<p>[RFC2445] 섹션 3.10에 명시된 대로 캘린더 및 스케줄링 정보를 포함하는 (임의의) 캘린더 객체 리소스의 URL에는 ".ics"가 붙을 수 있으며, 여유 시간 또는 바쁜 시간 정보를 포함하는 캘린더 객체 리소스의 URL에는 ".ifb"가 붙을 수 있습니다.</p>
+</div>
+<div class="sect4">
+<h5 id="_5_3_2_1_additional_preconditions_for_put_copy_and_move">5.3.2.1. Additional Preconditions for PUT, COPY, and MOVE</h5>
+<div class="paragraph">
+<p>이 사양은 PUT, COPY 및 MOVE 메서드에 대한 추가 전제 조건을 생성합니다. 이러한 전제 조건은 캘린더 객체 리소스를 캘린더 컬렉션으로 PUT 작업할 때, 캘린더 객체 리소스를 캘린더 컬렉션으로 COPY 또는 MOVE 작업할 때 또는 캘린더 컬렉션에서 COPY 또는 MOVE 작업이 발생할 때 적용됩니다.</p>
+</div>
+<div class="paragraph">
+<p>새로운 전제 조건은 다음과 같습니다:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(CALDAV:supported-calendar-data): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 캘린더 객체 리소스에 대해 지원되는 미디어 유형(즉, iCalendar)이어야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:valid-calendar-data): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 지정된 미디어 유형에 유효한 데이터여야 합니다(즉, 유효한 iCalendar 데이터를 포함해야 합니다);</p>
+</li>
+<li>
+<p>(CALDAV:valid-calendar-object-resource): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 섹션 4.1에 명시된 모든 제한 사항을 준수해야 합니다(예: 캘린더 객체 리소스는 두 가지 이상의 캘린더 구성 요소 유형을 포함해서는 안 되며, 캘린더 객체 리소스는 iCalendar METHOD 속성을 지정해서는 안 됨 등);</p>
+</li>
+<li>
+<p>(CALDAV:supported-calendar-component): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스에는 대상 캘린더 컬렉션에서 지원되는 캘린더 컴포넌트 유형이 포함되어야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:no-uid-conflict): PUT 요청에 제출되거나 COPY 또는 MOVE 요청에 의해 대상이 되는 리소스는 대상 캘린더 컬렉션에서 이미 사용 중인 iCalendar UID 속성 값을 지정하거나 기존 캘린더 개체 리소스를 다른 UID 속성 값을 가진 것으로 덮어쓰지 않아야 합니다. 서버는 DAV:href 요소에 이미 동일한 UID 속성 값을 사용하고 있는 리소스의 URL을 보고해야 합니다;</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT no-uid-conflict (DAV:href)&gt;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>(CALDAV:calendar-collection-location-ok): 복사 또는 이동 요청에서 Request-URI가 캘린더 컬렉션인 경우, Descrination-URI는 캘린더 컬렉션을 만들 수 있는 위치를 식별해야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:max-resource-size): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 CALDAV:max-resource- size 속성 값(섹션 5.2.5)의 값보다 작거나 같은 옥텟 크기를 가져야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:min-date-time): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 모든 iCalendar DATE 또는 DATE-TIME 속성 값(각 반복 인스턴스에 대해)이 CALDAV:min-date-time 속성 값(섹션 5.2.6)보다 크거나 같아야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:max-date-time): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 모든 iCalendar DATE 또는 DATE-TIME 속성 값(각 반복 인스턴스에 대해)이 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작아야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:max-instances): PUT 요청에 제출되거나 COPY 또는 MOVE 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션에서 CALDAV: max-instances 속성 값(섹션 5.2.8)의 값보다 작거나 같은 수의 반복 인스턴스를 생성해야 합니다;</p>
+</li>
+<li>
+<p>(CALDAV:max-attendees-per-instance): PUT 요청에 제출된 리소스 또는 복사 또는 이동 요청의 대상이 되는 리소스는 리소스가 저장될 캘린더 컬렉션의 CALDAV:max-attendees-per-instance 속성 값(섹션 5.2.9) 값보다 작거나 같은 수의 참석자 속성을 하나의 인스턴스에서 가져야 합니다;</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_3_3_non_standard_components_properties_and_parameters">5.3.3. Non-Standard Components, Properties, and Parameters</h4>
+<div class="paragraph">
+<p>iCalendar는 "standdatd mechanism for doing non-standard things"을 제공합니다. 이 확장 지원을 통해 구현자는 이름 앞에 "X-"라는 텍스트가 붙은 비표준 컴포넌트, 속성 및 매개변수를 사용할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 PUT 메서드를 통해 저장된 캘린더 객체 리소스에서 비표준 컴포넌트, 속성 및 파라미터의 사용을 지원해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 자체 "private" 컴포넌트, 속성 또는 매개변수에 대한 규칙을 적용해야 할 수 있으므로 서버는 클라이언트가 해당 컴포넌트를 변경하거나 서버가 가진 제한을 벗어난 값을 사용하려는 시도를 거부할 수 있습니다. 서버는 사용하는 모든 "private" 컴포넌트, 속성 또는 매개변수가 [RFC2445] 섹션 4.2에 설명된 대로 "X-" 이름에 공급업체 ID를 포함하는 규칙을 따르도록 해야 합니다(예: "X-ABC-PRIVATE").</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_3_4_calendar_object_resource_entity_tag">5.3.4. Calendar Object Resource Entity Tag</h4>
+<div class="paragraph">
+<p>모든 캘린더 객체 리소스에서 DAV:getetag 속성을 정의하고 강력한 엔티티 태그로 설정해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 객체 리소스를 대상으로 하는 GET 요청에 대한 응답에는 캘린더 객체 리소스의 강력한 엔티티 태그의 현재 값을 나타내는 ETag 응답 헤더 필드가 포함되어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 저장된 캘린더 객체 리소스가 PUT 요청 본문에 제출된 캘린더 객체 리소스와 옥텟 단위로 동등한 경우 PUT 응답에 강력한 엔티티 태그(ETag 헤더)를 반환해야 합니다. 이를 통해 클라이언트는 반환된 강력한 엔티티 태그를 데이터 동기화 목적으로 안정적으로 사용할 수 있습니다. 예를 들어, 클라이언트는 저장된 캘린더 객체 리소스에 대해 PROPFIND 요청을 수행하여 DAV:getetag 속성을 반환받고, 이 값을 PUT 응답에서 받은 강력한 엔티티 태그와 비교하여 두 값이 같으면 서버의 캘린더 객체 리소스가 변경되지 않았음을 알 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>PUT 요청의 결과로 서버에 저장된 데이터가 제출된 캘린더 객체 리소스와 옥텟 단위로 동일하지 않은 경우, 강력한 엔티티 태그가 응답에 반환되지 않아야 한다는 점을 제외하고는 ETag 응답 헤더의 동작이 여기에 지정되어 있지 않습니다. 따라서 클라이언트는 PUT 요청과 함께 보낸 캘린더 객체 리소스를 사용하는 대신 추가 변경을 위해 수정된 캘린더 객체 리소스(및 ETag)를 검색해야 할 수 있습니다.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_calendaring_access_control">6. Calendaring Access Control</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_6_1_calendaring_privilege">6.1. Calendaring Privilege</h3>
+<div class="paragraph">
+<p>CalDAV 서버는 WebDAV ACL [RFC3744]의 요구 사항을 지원 및 준수해야 합니다. WebDAV ACL은 WebDAV 컬렉션과 일반 리소스에 적용할 수 있는 확장 가능한 권한 집합을 위한 프레임워크를 제공합니다. CalDAV 서버는 이 섹션에 정의된 캘린더 권한도 지원해야 합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_6_1_1_caldavread_free_busy_privilege">6.1.1. CALDAV:read-free-busy Privilege</h4>
+<div class="paragraph">
+<p>캘린더 사용자는 종종 다른 사용자가 캘린더 구성 요소의 다른 세부 정보(예: 위치, 요약, 참석자)는 보지 않고 자신의 바쁜 시간 정보만 볼 수 있도록 허용하기를 원합니다. 이렇게 하면 사용자가 한가할 것 같은 시간에 다른 사용자가 미팅을 예약할 수 있도록 하면서도 상당한 수준의 프라이버시를 보호할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:읽기-바쁨 권한은 CALDAV:읽기-바쁨 쿼리 REPORT 요청이 처리될 때 검사할 캘린더 컬렉션, 일반 컬렉션 및 캘린더 객체 리소스를 제어합니다(섹션 7.10 참조). 이 권한은 캘린더 컬렉션, 일반 컬렉션 또는 캘린더 개체 리소스에 부여할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 모든 캘린더 컬렉션, 일반 컬렉션 및 캘린더 객체 리소스에서 이 권한을 지원해야 합니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT read-free-busy EMPTY&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>CALDAV:read-free-busy 권한은 DAV:read 권한에 집계되어야 합니다. 서버는 DAV:read 권한이 부여되지 않은 상태에서 CALDAV:read-free-busy 권한이 부여되도록 허용해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 리소스에 대해 CALDAV:read-free-busy 권한만 부여된 경우 리소스에 대한 GET, HEAD, OPTIONS 및 PROPFIND에 대한 액세스가 암시되지 않는다는 점에 유의해야 합니다(해당 작업은 DAV:read 권한의 적용을 받습니다).</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_6_2_additional_principal_property">6.2. Additional Principal Property</h3>
+<div class="paragraph">
+<p>이 섹션에서는 [RFC3744]에 정의된 대로 WebDAV 주 리소스에 대한 추가 속성을 정의합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_6_2_1_caldavcalendar_home_set_property">6.2.1. CALDAV:calendar-home-set Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>calendar-home-set</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>연결된 주 리소스가 소유한 캘린더 컬렉션이 포함된 모든 WebDAV 컬렉션의 URL을 식별합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 주 리소스에 정의되어야 합니다. 정의된 경우, 이 속성은 보호될 수 있으며 PROPFIND DAV:allprop 요청에 의해 반환되어서는 안 됩니다([RFC2518]의 12.14.1절에 정의됨).</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:calendar-home-set 속성은 사용자가 주체가 소유한 캘린더 컬렉션을 쉽게 찾을 수 있도록 하기 위한 것입니다. 일반적으로 사용자는 자신이 소유한 모든 캘린더 컬렉션을 공통 컬렉션 아래에 그룹화합니다. 이 속성은 캘린더 컬렉션 또는 주체가 소유한 하위 또는 하위 캘린더 컬렉션이 있는 일반 컬렉션인 컬렉션의 URL을 지정합니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT calendar-home-set (DAV:href*)&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:calendar-home-set xmlns:D="DAV:"
+                    xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:href&gt;http://cal.example.com/home/bernard/calendars/&lt;/D:href&gt;
+&lt;/C:calendar-home-set&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_7_calendaring_reports">7. Calendaring Reports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>이 섹션에서는 캘린더 컬렉션 및 캘린더 객체 리소스에서 CalDAV 서버가 반드시 지원해야 하는 리포트를 정의합니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버는 모든 캘린더 컬렉션 및 캘린더 객체 리소스에서 [<a href="https://www.rfc-editor.org/rfc/rfc3253">RFC3253</a>]의 3.1.5절에 정의된 DAV: supported-report-set 속성을 사용하여 이러한 보고서에 대한 지원을 알려야 합니다. CalDAV 서버는 일반 컬렉션에서 이러한 보고서에 대한 지원을 광고할 수도 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이러한 보고서 중 일부는 여러 리소스에서 캘린더 데이터를 반환할 수 있습니다.</p>
+</div>
+<div class="sect2">
+<h3 id="_7_1_report_method">7.1. REPORT Method</h3>
+<div class="paragraph">
+<p>REPORT 메서드([<a href="https://www.rfc-editor.org/rfc/rfc3253">RFC3253</a>] 섹션 3.6에 정의됨)는 하나 이상의 리소스에 대한 정보를 얻기 위한 확장 가능한 메커니즘을 제공합니다. 하나 이상의 명명된 프로퍼티의 값을 반환하는 <code>PROPFIND</code> 메서드와 달리 <code>REPORT</code> 메서드는 더 복잡한 처리를 포함할 수 있습니다. REPORT는 서버가 쿼리와 같은 복잡한 요청을 수행하는 데 필요한 모든 정보에 액세스할 수 있고 클라이언트가 동일한 요청을 수행하는 데 필요한 정보를 검색하기 위해 여러 번 요청해야 하는 경우에 유용합니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버는 [<a href="https://www.rfc-editor.org/rfc/rfc3253">RFC3253</a>]의 섹션 3.8에 정의된 DAV:expand-property REPORT를 지원해야 합니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_2_ordinary_collections">7.2. Ordinary Collections</h3>
+<div class="paragraph">
+<p>서버는 캘린더 컬렉션 또는 캘린더 객체 리소스 외에 일반 컬렉션(캘린더 컬렉션이 아닌 컬렉션)에 대해 이 문서에 정의된 보고서를 지원할 수 있습니다. 일반 컬렉션에 대한 보고서에 대한 응답을 계산할 때 서버는 Depth request header의 값에 따라 REPORT 요청의 대상이 되는 캘린더 컬렉션에 포함된 캘린더 객체 리소스만 고려해야 합니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_3_date_and_floating_time">7.3. Date and Floating Time</h3>
+<div class="paragraph">
+<p>iCalendar는 특정 시간대에 구속되지 않는 DATE 및 DATE-TIME 값을 지정하는 방법을 제공합니다(이하 각각 "floating date" 및 "floating time"이라고 함). 이러한 값은 관찰 중인 표준 시간대에 관계없이 동일한 일, 시, 분, 초 값을 나타내는 데 사용됩니다. 예를 들어, DATE 값 "20051111"은 특정 시간대에 관계없이 2005년 11월 11일을 나타내며, DATE-TIME 값 "20051111T111100"은 특정 시간대에 관계없이 2005년 11월 11일 오전 11:11을 나타냅니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버는 캘린더 REPORT 요청을 처리할 때 날짜의 "floating date" 및 "floating time" 값을 UTC 시간 값으로 변환해야 할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:calendar-query REPORT의 경우, CalDAV 서버는 request body의 일부로 지정된 경우 "floating date" 및 "floating time" 값을 UTC 시간 값으로 날짜로 적절하게 변환하기 위해 CALDAV:timezone XML 요소의 값에 의존해야 합니다. 요청 본문에 CALDAV:timezone XML 요소가 지정되지 않은 경우, CalDAV 서버는 정의된 경우 CALDAV:calendar-timezone 속성의 값을 사용해야 하며, 그렇지 않은 경우 CalDAV 서버가 선택한 시간대를 사용할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:free-busy-query REPORT의 경우, CalDAV 서버는 "floating date" 또는 "floating time"으로 예약된 캘린더 구성 요소에 대해 UTC 시간이 포함된 날짜로 적절한 FREEBUSY 기간 값을 계산하기 위해 정의된 경우 CALDAV:calendar-timezone 속성의 값에 의존해야 합니다. CALDAV:calendar-timezone 속성이 정의되지 않은 경우, CalDAV 서버는 선택한 시간대를 사용할 수 있습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_4_time_range_filtering">7.4. Time Range Filtering</h3>
+<div class="paragraph">
+<p>이 섹션에 정의된 일부 보고서에는 반환되는 캘린더 객체 리소스 집합을 지정된 시간 범위와 겹치는 리소스로만 제한하는 데 사용되는 시간 범위 필터가 포함될 수 있습니다. 시간 범위 필터는 캘린더 구성요소 전체에 적용하거나 날짜 또는 DATE-TIME 값 유형이 있는 특정 캘린더 구성요소 속성에 적용할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 객체 리소스가 시간 범위 필터 요소와 일치하는지 여부를 결정하기 위해 대상 구성요소 또는 속성의 시작 및 종료 시간을 결정한 다음 요청된 시간 범위와 비교합니다. 요청된 시간 범위와 겹치는 시간이 있으면 캘린더 객체 리소스가 필터 요소와 일치하는 것입니다. 캘린더 컴포넌트의 실제 시작 및 종료 시간을 결정하기 위해 [RFC2445]에 정의된 규칙을 사용해야 하며, 이러한 규칙은 이 문서의 섹션 9.9에 완전히 열거되어 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이러한 시간 범위 필터링을 사용할 때는 VEVENT 및 VTODO와 같은 반복 캘린더 컴포넌트에 대해 특별한 고려가 필요합니다. 서버는 반드시 반복 구성요소를 확장하여 지정된 시간 범위와 겹치는 반복 인스턴스가 있는지 확인해야 합니다. 하나 이상의 반복 인스턴스가 시간 범위와 겹치는 경우 캘린더 객체 리소스가 필터 요소와 일치합니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_5_searching_text_collations">7.5. Searching Text: Collations</h3>
+<div class="paragraph">
+<p>이 섹션에 정의된 보고서 중 일부는 클라이언트가 제공한 문자열의 텍스트 일치를 수행하며 저장된 캘린더 데이터와 비교됩니다. iCalendar 데이터는 기본적으로 UTF-8 문자셋으로 인코딩되며 일부 속성 및 매개변수 값에 US-ASCII 문자셋 범위를 벗어난 문자가 포함될 수 있으므로 텍스트 일치가 잘 정의된 규칙을 따르도록 해야 할 필요가 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이 문제를 해결하기 위해 이 사양에서는 [RFC4790]에 정의된 IANA Collation Registry를 사용하여 잘 정의된 규칙으로 텍스트 비교 작업을 수행하는 데 사용할 수 있는 콜레이션을 지정합니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV에서 사용되는 비교는 [RFC4790], 섹션 4.2에 따라 모두 "substring" 일치입니다. 서버에서 지원하는 콜레이션은 반드시 "substring" 일치 연산을 지원해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버는 [RFC4790]에 설명된 대로 "i;ascii-casemap" 및 "i;octet" 콜레이션을 지원해야 하며, 다른 콜레이션도 지원할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 콜레이션을 사용하는 보고서를 지원하는 리소스에 정의된 CALDAV:supported-collation-set 속성을 통해 지원하는 콜레이션 집합을 알릴 수 있어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 서버가 광고한 목록의 데이터 정렬만 사용해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트가 명시적으로 지정한 콜레이션이 없거나 클라이언트가 "default" 콜레이션 식별자([RFC4790] 3.1절에 정의됨)를 지정한 경우, 서버는 기본적으로 "i;ascii-casemap"을 콜레이션으로 사용해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>와일드카드([RFC4790], 섹션 3.2에 정의됨)는 콜레이션 식별자에 사용해서는 안 됩니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트가 서버에서 지원하지 않는 콜레이션을 선택하면 서버는 반드시 CALDAV:supported-collation 전제 조건 오류 응답으로 응답해야 합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_7_5_1_caldavsupported_collation_set_property">7.5.1. CALDAV:supported-collation-set Property</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>supported-collation-set</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>텍스트 일치 작업을 위해 서버에서 지원하는 데이터 정렬 집합을 식별합니다.</p>
+</dd>
+<dt class="hdlist1">Conformance</dt>
+<dd>
+<p>이 속성은 텍스트 일치를 수행하는 보고서를 지원하는 모든 리소스에 정의되어야 합니다. 정의된 경우 반드시 보호되어야 하며 PROPFIND DAV:allprop 요청([RFC2518]의 12.14.1절에 정의됨)에 의해 반환되어서는 안 됩니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>CALDAV:supported-collation-set 속성은 서버에서 지원하는 콜레이션의 컬렉션 식별자를 지정하는 0개 이상의 CALDAV:support-collation-set 요소를 포함합니다.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT supported-collation-set (supported-collation*)&gt;
+
+&lt;!ELEMENT supported-collation (#PCDATA)&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Example</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;C:supported-collation-set
+    xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+  &lt;C:supported-collation&gt;i;ascii-casemap&lt;/C:supported-collation&gt;
+  &lt;C:supported-collation&gt;i;octet&lt;/C:supported-collation&gt;
+&lt;/C:supported-collation-set&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_6_partial_retrieval">7.6. Partial Retrieval</h3>
+<div class="paragraph">
+<p>이 문서에 정의된 일부 캘린더 보고서는 캘린더 객체 리소스의 부분 검색을 허용합니다. CalDAV 클라이언트는 캘린더 REPORT 요청 본문에서 반환할 정보를 지정할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV 클라이언트는 특정 WebDAV 속성 값, 모든 WebDAV 속성 값 또는 리소스의 WebDAV 속성 이름 목록을 요청할 수 있습니다. 또한 캘린더 데이터를 반환하도록 요청하고 모든 캘린더 구성 요소 및 속성을 반환할지 아니면 특정 속성만 반환할지 지정할 수 있습니다. 9.6절의 CALDAV:calendar-data를 참조하세요.</p>
+</div>
+<div class="paragraph">
+<p>기본적으로 반환되는 캘린더 데이터에는 "master component"라고 하는 반복 집합을 정의하는 구성 요소와 "overridden components"라고 하는 반복 집합에 대한 예외를 정의하는 구성 요소가 포함됩니다.</p>
+</div>
+<div class="paragraph">
+<p>지정된 시간 범위와 겹치는 반복 인스턴스에만 관심이 있는 CalDAV 클라이언트는 지정된 시간 범위에 영향을 미치는 "overridden components"와 함께 "master component"만 수신하도록 요청하여 서버에서 반환되는 데이터를 제한할 수 있습니다(섹션 9.6.6의 CALDAV:limit-recurrence-set 참조). 재정의된 구성 요소는 현재 시작 및 종료 시간이 시간 범위와 겹치거나 인스턴스가 재정의되지 않았을 경우 사용되었을 원래 시작 및 종료 시간이 시간 범위와 겹치거나 시간 범위와 겹치는 다른 인스턴스에 영향을 미치는 경우 시간 범위에 영향을 미칩니다.</p>
+</div>
+<div class="paragraph">
+<p>리커런시 속성(예: EXDATE, EXRULE, RDATE 및 RRULE)과 VTIMEZONE 구성 요소를 지원하지 않거나 제한된 처리 능력으로 인해 리커런시 확장을 수행하지 않으려는 클라이언트는 지정된 시간 범위와 겹치는 리커런시 인스턴스만 각각 정확히 하나의 리커런시 인스턴스를 정의하는 별도의 캘린더 구성 요소로 수신하도록 요청할 수 있습니다(9.6.5장의 CALDAV:expand 참조).</p>
+</div>
+<div class="paragraph">
+<p>마지막으로, VFREEBUSY 구성 요소의 경우, CalDAV 클라이언트는 지정된 시간 범위와 겹치는 FREEBUSY 속성 값만 수신하도록 요청할 수 있습니다(9.6.7절의 CALDAV:limit-freebusy-set 참조).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_7_non_standard_components_properties_and_parameters">7.7. Non-Standard Components, Properties, and Parameters</h3>
+<div class="paragraph">
+<p>서버는 클라이언트가 응답에 제공된 캘린더 데이터에 비표준 구성 요소, 속성 및 매개 변수를 반환하도록 요청할 수 있도록 캘린더 REPORT 요청에서 CALDAV:calendar-data XML 요소에 비표준 구성 요소, 속성 또는 매개 변수 이름을 사용할 수 있도록 지원해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 캘린더 REPORT 요청의 CALDAV:filter XML 요소에 지정된 CALDAV:comp-filter, CALDAV:prop-filter 및 CALDAV:param-filter XML 요소에서 비표준 구성 요소, 속성 또는 매개 변수 이름을 사용하는 것을 지원할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>서버가 쿼리를 지원하지 않는 비표준 구성 요소, 속성 또는 매개변수 이름을 참조하는 CALDAV:comp-filter, CALDAV:prop- filter 또는 CALDAV:param-filter XML 요소를 캘린더 REPORT 요청에 사용하는 경우 서버는 CALDAV:supported-filter 전제 조건에 따라 실패해야 합니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_8_caldavcalendar_query_report">7.8. CALDAV:calendar-query REPORT</h3>
+<div class="paragraph">
+<p>CALDAV:calendar-query REPORT는 지정된 필터와 일치하는 모든 캘린더 객체 리소스를 검색합니다.  이 보고서의 응답에는 요청에 지정된 모든 WebDAV 속성 및 캘린더 개체 리소스 데이터가 포함됩니다.  CALDAV: calendar-data XML 요소의 경우 필터와 일치하는 캘린더 객체 리소스 데이터에서 반환되어야 하는 캘린더 구성 요소 및 속성을 명시적으로 지정할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이 보고서의 형식은 PROPFIND 메서드를 모델로 합니다.  CALDAV:calendar-query REPORT의 요청 및 응답 본문은 PROPFIND에서도 사용되는 XML 요소를 사용합니다.  특히 요청에는 반환할 WebDAV 속성을 요청하는 XML 요소가 포함될 수 있습니다.  이 경우 응답은 특정 속성 결과를 반환하는 데 사용되는 DAV:multistatus 응답 요소와 관련하여 PROPFIND와 동일한 동작을 따라야 합니다.  예를 들어, 존재하지 않는 속성 값을 검색하라는 요청은 오류이므로 404(찾을 수 없음) 상태 값을 포함하는 응답 XML 요소에 유의해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:calendar-query REPORT에 대한 지원이 필요합니다.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Marshalling</dt>
+<dd>
+<div class="paragraph">
+<p>요청 본문은 섹션 9.5에 정의된 대로 CALDAV:calendar-query XML 요소여야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>요청에 Depth 헤더가 포함될 수 있습니다.  Depth 헤더가 포함되지 않으면 Depth:0으로 가정합니다.</p>
+</div>
+<div class="paragraph">
+<p>성공적인 요청에 대한 응답 본문은 반드시 DAV: 다중 상태 XML 요소여야 합니다(즉, 응답은 PROPFIND에 대한 응답과 동일한 형식을 사용함).  응답 요소가 없는 경우 반환된 DAV:multistatus XML 요소는 비어 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>성공적인 CALDAV:캘린더 쿼리 REPORT 요청에 대한 응답 본문에는 검색 필터와 일치하는 각 iCalendar 개체에 대한 DAV:응답 요소가 포함되어야 합니다.  캘린더 데이터는 DAV: propstat XML 요소 내부의 CALDAV:calendar-data XML 요소에 반환됩니다.</p>
+</div>
+</dd>
+<dt class="hdlist1">Preconditions</dt>
+<dd>
+<div class="paragraph">
+<p>(CALDAV:supported-calendar-data): CALDAV:calendar-data XML 요소(9.6절 참조)의 "content-type" 및 "version" 속성은 캘린더 객체 리소스에 대해 서버에서 지원하는 미디어 유형을 지정합니다.</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:valid-filter): REPORT 요청에 지정된 CALDAV:filter XML 요소(9.7절 참조)가 유효해야 합니다.  예를 들어, <code>&lt;C:comp name="VEVENT"&gt;</code> 요소는 <code>&lt;C:comp name="VTODO"&gt;</code> 요소에 중첩될 수 없으며, <code>&lt;C:time-range start="&#8230;&#8203;" end="&#8230;&#8203;"&gt;</code> 요소는 <code>&lt;C:prop name="SUMMARY"&gt;</code> 요소에 중첩될 수 없습니다.</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:param-filter): REPORT 요청의 CALDAV:filter XML 요소(9.7절 참조)에 사용되는 CALDAV:comp-filter(9.7.1절 참조), CALDAV:prop-filter(9.7.2절 참조), CALDAV:param-filter(9.7.3절 참조) XML 요소는 서버에서 쿼리가 지원되는 구성 요소, 속성 및 매개변수만 참조한다, CALDAV: 필터 요소가 지원되지 않는 컴포넌트, 속성 또는 파라미터를 참조하려고 시도하면 이 전제 조건이 위반됩니다.  서버는 지원하지 않는 CALDAV:comp-filter, CALDAV:prop-filter 또는 CALDAV:param-filter를 보고해야 합니다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT supported-filter (comp-filter*,
+                            prop-filter*,
+                            param-filter*)&gt; &gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(CALDAV:valid-calendar-data): REPORT 요청에 지정된 표준 시간대는 단일 유효한 VTIMEZONE 구성 요소를 포함하는 유효한 iCalendar 객체여야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:min-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 종료 DATE 또는 DATE-TIME 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:min-date-time 속성 값(섹션 5.2.6)보다 크거나 같아야 합니다;</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:max-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작거나 같아야 합니다;</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:supported-collation): 콜레이션을 지정하는 모든 XML 속성은 7.5절에 설명된 대로 서버에서 지원하는 콜레이션을 지정해야 합니다.</p>
+</div>
+</dd>
+<dt class="hdlist1">Postconditions</dt>
+<dd>
+<div class="paragraph">
+<p>(DAV:number-of-matches-within-limits): 일치하는 캘린더 객체 리소스의 수가 서버별로 미리 정의된 한도 내에 있어야 합니다.  예를 들어 검색 사양으로 인해 매우 많은 수의 응답이 반환되는 경우 이 조건이 트리거될 수 있습니다.</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="sect3">
+<h4 id="_7_8_1_example_partial_retrieval_of_events_by_time_range">7.8.1. Example: Partial Retrieval of Events by Time Range</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 서버에 2006년 1월 4일 AM 00:00:00 UTC부터 2006년 1월 5일 AM 00:00:00 UTC까지의 시간 범위와 겹치는 특정 구성 요소와 VEVENT 구성 요소의 속성을 반환하도록 요청합니다.  또한 DAV:getetag 속성도 요청되어 응답의 일부로 반환됩니다.  반환되는 첫 번째 캘린더 객체는 첫 번째 인스턴스가 요청된 시간 범위를 벗어나지만 세 번째 인스턴스가 시간 범위와 겹치는 반복 이벤트입니다.  CALDAV:calendar-data 요소 제한으로 인해 VEVENT 구성 요소의 DTSTAMP 속성은 반환되지 않으며, VCALENDAR 객체에서 반환되는 유일한 속성은 VERSION입니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하십시오.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data&gt;
+     &lt;C:comp name="VCALENDAR"&gt;
+       &lt;C:prop name="VERSION"/&gt;
+       &lt;C:comp name="VEVENT"&gt;
+         &lt;C:prop name="SUMMARY"/&gt;
+         &lt;C:prop name="UID"/&gt;
+         &lt;C:prop name="DTSTART"/&gt;
+         &lt;C:prop name="DTEND"/&gt;
+         &lt;C:prop name="DURATION"/&gt;
+         &lt;C:prop name="RRULE"/&gt;
+         &lt;C:prop name="RDATE"/&gt;
+         &lt;C:prop name="EXRULE"/&gt;
+         &lt;C:prop name="EXDATE"/&gt;
+         &lt;C:prop name="RECURRENCE-ID"/&gt;
+       &lt;/C:comp&gt;
+       &lt;C:comp name="VTIMEZONE"/&gt;
+     &lt;/C:comp&gt;
+   &lt;/C:calendar-data&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:time-range start="20060104T000000Z"
+                     end="20060105T000000Z"/&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd2.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd2"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060106T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060106T120000
+SUMMARY:Event #2 bis bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_2_example_partial_retrieval_of_recurring_events">7.8.2. Example: Partial Retrieval of Recurring Events</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 2006년 1월 3일 오전 00:00:00 UTC부터 2006년 1월 5일 오전 00:00:00 UTC까지의 시간 범위와 겹치는 VEVENT 구성 요소를 반환하도록 요청합니다.  CALDAV:limit-recurrence-set 요소를 사용하면 서버는 해당 요소에 지정된 시간 범위와 겹치거나 시간 범위와 겹치는 다른 인스턴스에 영향을 주는 재정의된 반복 구성 요소만 반환합니다(예: THISANDFUTURE 동작의 경우).  이 예에서는 일치하는 리소스에서 첫 번째로 재정의된 구성 요소가 반환되지만 두 번째 구성 요소는 반환되지 않습니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;C:calendar-data&gt;
+     &lt;C:limit-recurrence-set start="20060103T000000Z"
+                             end="20060105T000000Z"/&gt;
+   &lt;/C:calendar-data&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:time-range start="20060103T000000Z"
+                     end="20060105T000000Z"/&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd2.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd2"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_3_example_expanded_retrieval_of_recurring_events">7.8.3. Example: Expanded Retrieval of Recurring Events</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 2006년 1월 2일 오전 00:00:00 UTC부터 2006년 1월 5일 오전 00:00:00 UTC까지의 시간 범위와 겹치는 VEVENT 구성 요소를 반환하고 개별 반복 인스턴스 캘린더 구성 요소로 확장된 반복 캘린더 구성 요소를 반환하도록 요청합니다.  CALDAV:expand 요소를 사용하면 서버는 해당 요소에 지정된 시간 범위와 겹치는 재정의된 반복 인스턴스만 반환합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;C:calendar-data&gt;
+     &lt;C:expand start="20060103T000000Z"
+               end="20060105T000000Z"/&gt;
+   &lt;/C:calendar-data&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:time-range start="20060103T000000Z"
+                     end="20060105T000000Z"/&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+          xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd2.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd2"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART:20060103T170000
+DURATION:PT1H
+RECURRENCE-ID:20060103T170000
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART:20060104T190000
+DURATION:PT1H
+RECURRENCE-ID:20060104T170000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART:20060104T150000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_4_example_partial_retrieval_of_stored_free_busy_components">7.8.4. Example: Partial Retrieval of Stored Free Busy Components</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 2006년 1월 2일 오전 00:00:00 UTC(포함)부터 2006년 1월 3일 오전 00:00:00 UTC(제외)까지의 시간 범위와 겹치는 사용 중 정보(free busy)가 있는 VFREEBUSY 구성 요소를 반환하도록 요청합니다.  CALDAV:limit-freebusy-set 요소를 사용하면 서버가 해당 요소에 지정된 시간 범위와 겹치는 FREEBUSY 속성 값만 반환합니다.  이 예는 캘린더 소유자가 바쁜 시간을 검색하는 예가 아닙니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;C:calendar-data&gt;
+     &lt;C:limit-freebusy-set start="20060102T000000Z"
+                             end="20060103T000000Z"/&gt;
+   &lt;/C:calendar-data&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VFREEBUSY"&gt;
+       &lt;C:time-range start="20060102T000000Z"
+                       end="20060103T000000Z"/&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd8.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd8"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VFREEBUSY
+ORGANIZER;CN="Bernard Desruisseaux":mailto:bernard@example.com
+UID:76ef34-54a3d2@example.com
+DTSTAMP:20050530T123421Z
+DTSTART:20060101T100000Z
+DTEND:20060108T100000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060102T100000Z/20060102T120000Z
+END:VFREEBUSY
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_5_example_retrieval_of_to_dos_by_alarm_time_range">7.8.5. Example: Retrieval of To-Dos by Alarm Time Range</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 지정된 시간 범위에서 알람 트리거가 예약된 VTODO 구성 요소를 반환하도록 서버에 요청합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VTODO"&gt;
+       &lt;C:comp-filter name="VALARM"&gt;
+         &lt;C:time-range start="20060106T100000Z"
+                         end="20060107T100000Z"/&gt;
+       &lt;/C:comp-filter&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd4.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd4"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235300Z
+DUE;TZID=US/Eastern:20060106T120000
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:NEEDS-ACTION
+SUMMARY:Task #2
+UID:E10BA47467C5C69BB74E8720@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_6_example_retrieval_of_event_by_uid">7.8.6. Example: Retrieval of Event by UID</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 서버에 UID 속성이 "<a href="mailto:DC6C50A017428C5216A2F1CD@example.com">DC6C50A017428C5216A2F1CD@example.com</a>"로 설정된 VEVENT 컴포넌트를 반환하도록 요청합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:prop-filter name="UID"&gt;
+         &lt;C:text-match collation="i;octet"
+         &gt;DC6C50A017428C5216A2F1CD@example.com&lt;/C:text-match&gt;
+       &lt;/C:prop-filter&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_7_example_retrieval_of_events_by_partstat">7.8.7. Example: Retrieval of Events by PARTSTAT</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 "mailto:lisa@example.com" 값의 참석자 속성을 가지고 있고 PARTSTAT 매개 변수가 NEEDS-ACTION으로 설정된 VEVENT 구성 요소를 반환하도록 요청합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상으로 하는 캘린더 데이터는 부록 B를 참조하십시오.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:prop-filter name="ATTENDEE"&gt;
+         &lt;C:text-match collation="i;ascii-casemap"
+          &gt;mailto:lisa@example.com&lt;/C:text-match&gt;
+         &lt;C:param-filter name="PARTSTAT"&gt;
+           &lt;C:text-match collation="i;ascii-casemap"
+            &gt;NEEDS-ACTION&lt;/C:text-match&gt;
+         &lt;/C:param-filter&gt;
+       &lt;/C:prop-filter&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_8_example_retrieval_of_events_only">7.8.8. Example: Retrieval of Events Only</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 서버에 모든 이벤트 구성 요소를 반환하도록 요청합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 타겟팅하는 캘린더 데이터는 부록 B를 참조하십시오.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"/&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd1.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd1"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001102Z
+DTSTART;TZID=US/Eastern:20060102T100000
+DURATION:PT1H
+SUMMARY:Event #1
+Description:Go Steelers!
+UID:74855313FA803DA593CD579A@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd2.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd2"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060106T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060106T120000
+SUMMARY:Event #2 bis bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+X-ABC-GUID:E1CX5Dr-0007ym-Hz@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_9_example_retrieval_of_all_pending_to_dos">7.8.9. Example: Retrieval of All Pending To-Dos</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 COMPLETED 속성을 포함하지 않고 상태 속성 값이 CANCELLED와 일치하지 않는 모든 VTODO 구성요소, 즉 아직 작업해야 하는 VTODO를 반환하도록 요청합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VTODO"&gt;
+       &lt;C:prop-filter name="COMPLETED"&gt;
+         &lt;C:is-not-defined/&gt;
+       &lt;/C:prop-filter&gt;
+       &lt;C:prop-filter name="STATUS"&gt;
+         &lt;C:text-match
+            negate-condition="yes"&gt;CANCELLED&lt;/C:text-match&gt;
+       &lt;/C:prop-filter&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd4.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd4"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235335Z
+DUE;VALUE=DATE:20060104
+STATUS:NEEDS-ACTION
+SUMMARY:Task #1
+UID:DDDEEB7915FA61233B861457@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd5.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd5"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235300Z
+DUE;VALUE=DATE:20060106
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:NEEDS-ACTION
+SUMMARY:Task #2
+UID:E10BA47467C5C69BB74E8720@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_8_10_example_attempt_to_query_unsupported_property">7.8.10. Example: Attempt to Query Unsupported Property</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 서버에 "ABC"와 일치하는 값을 가진 X-ABC-GUID 속성을 포함하는 모든 VEVENT 컴포넌트를 반환하도록 요청합니다.  그러나 서버는 해당 비표준 속성 쿼리를 지원하지 않으며 대신 오류 응답을 반환합니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상으로 하는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop xmlns:D="DAV:"&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:prop-filter name="X-ABC-GUID"&gt;
+         &lt;C:text-match&gt;ABC&lt;/C:text-match&gt;
+       &lt;/C:prop-filter&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 403 Forbidden
+Date: Sat, 11 Nov 2005 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:error&gt;
+ &lt;C:supported-filter&gt;
+   &lt;C:prop-filter name="X-ABC-GUID"/&gt;
+ &lt;/C:supported-filter&gt;
+&lt;/D:error&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_9_caldavcalendar_multiget_report">7.9. CALDAV:calendar-multiget REPORT</h3>
+<div class="paragraph">
+<p>CALDAV:calendar-multiget REPORT는 요청-URI가 컬렉션인 경우 컬렉션 내에서 특정 캘린더 객체 리소스를 검색하거나 요청-URI가 캘린더 객체 리소스인 경우 특정 캘린더 객체 리소스를 검색하는 데 사용됩니다.  이 보고서는 반환할 캘린더 객체 리소스를 결정하기 위해 CALDAV:필터 요소 대신 DAV:href 요소의 목록을 사용한다는 점을 제외하면 CALDAV:calendar-query REPORT(7.8절 참조)와 유사합니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:calendar-multiget REPORT에 대한 지원은 필수입니다.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Marshalling</dt>
+<dd>
+<div class="paragraph">
+<p>요청 본문은 반드시 CALDAV:calendar-multiget XML 요소여야 합니다(섹션 9.10 참조).  요청-URI가 컬렉션 리소스인 경우 DAV:href 요소는 해당 컬렉션 내의 캘린더 객체 리소스를 참조해야 하며, 컬렉션 내의 모든 깊이에 있는 캘린더 객체 리소스를 참조할 수 있습니다.  따라서 서버는 "Depth" 헤더를 무시해야 하며 클라이언트에서 전송해서는 안 됩니다.  요청-URI가 컬렉션이 아닌 리소스를 참조하는 경우 요청-URI와 동일한 단일 DAV:href 요소가 있어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>성공적인 요청에 대한 응답 본문은 반드시 DAV: 다중 상태 XML 요소여야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>성공적인 CALDAV:calendar-multiget REPORT 요청에 대한 응답 본문에는 제공된 DAV:href 요소 집합에서 참조하는 각 캘린더 개체 리소스에 대한 DAV:응답 요소가 포함되어야 합니다.  캘린더 데이터는 DAV:prop 요소 내부의 CALDAV:calendar- 데이터 요소에서 반환됩니다.</p>
+</div>
+<div class="paragraph">
+<p>제공된 DAV:href 리소스에 액세스하는 데 오류가 발생하는 경우 서버는 해당 DAV:응답 요소의 DAV:status 요소에 적절한 오류 상태 코드를 반환해야 합니다.</p>
+</div>
+</dd>
+<dt class="hdlist1">Preconditions</dt>
+<dd>
+<div class="paragraph">
+<p>(CALDAV:supported-calendar-data): CALDAV:calendar-data XML 요소(9.6절 참조)의 "content-type" 및 "version" 속성은 캘린더 객체 리소스에 대해 서버에서 지원하는 미디어 유형을 지정합니다.</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:min-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:min-date-time 속성 값(5.2.6절)보다 크거나 같아야 합니다;</p>
+</div>
+<div class="paragraph">
+<p>(CALDAV:max-date-time): 시간 범위를 지정하는 모든 XML 요소는 시작 또는 끝 날짜 또는 날짜-시간 값이 REPORT 요청의 대상이 되는 캘린더 컬렉션의 CALDAV:max-date-time 속성 값(섹션 5.2.7)보다 작거나 같아야 합니다;</p>
+</div>
+</dd>
+<dt class="hdlist1">Postconditions</dt>
+<dd>
+<p>None.</p>
+</dd>
+</dl>
+</div>
+<div class="sect3">
+<h4 id="_7_9_1_example_successful_caldavcalendar_multiget_report">7.9.1. Example: Successful CALDAV:calendar-multiget REPORT</h4>
+<div class="paragraph">
+<p>이 예제에서 클라이언트는 서버에 특정 URI가 참조하는 VEVENT 컴포넌트의 특정 속성을 반환하도록 요청합니다.  또한 DAV:getetag 속성도 요청되어 응답의 일부로 반환됩니다.  이 예에서는 <a href="http://cal.example.com/bernard/work/mtg1.ics" class="bare">http://cal.example.com/bernard/work/mtg1.ics</a> 리소스가 존재하지 않으므로 오류 상태 응답이 반환됩니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 타겟팅하는 캘린더 데이터는 부록 B를 참조하세요.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-multiget xmlns:D="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;D:href&gt;/bernard/work/abcd1.ics&lt;/D:href&gt;
+ &lt;D:href&gt;/bernard/work/mtg1.ics&lt;/D:href&gt;
+&lt;/C:calendar-multiget&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+              xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd1.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd1"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001102Z
+DTSTART;TZID=US/Eastern:20060102T100000
+DURATION:PT1H
+SUMMARY:Event #1
+Description:Go Steelers!
+UID:74855313FA803DA593CD579A@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/mtg1.ics&lt;/D:href&gt;
+   &lt;D:status&gt;HTTP/1.1 404 Not Found&lt;/D:status&gt;
+ &lt;/D:response&gt;
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_10_caldavfree_busy_query_report">7.10. CALDAV:free-busy-query REPORT</h3>
+<div class="paragraph">
+<p>CALDAV:free-busy-query REPORT는 요청의 대상이 되고 현재 사용자에게 CALDAV:read-free- busy 또는 DAV:read 권한이 부여된 모든 캘린더 객체 리소스에 대한 사용 가능 시간 정보를 포함하는 VFREEBUSY 구성 요소를 생성합니다.</p>
+</div>
+<div class="paragraph">
+<p>TRANSP 속성이 없거나 TRANSP 속성이 OPAQUE로 설정된 VEVENT 구성 요소와 VFREEBUSY 구성 요소만 여유 사용 시간 정보를 생성할 때 고려해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>VEVENT 컴포넌트의 경우, 아래 표에 설명된 바와 같이 반환된 VFREEBUSY 컴포넌트의 FREEBUSY 프로퍼티의 사용 가능 또는 사용 중 시간 유형(FBTYPE)은 TRANSP 및 STATUS 프로퍼티의 값에서 파생되어야 합니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">+---------------------------++------------------+
+|          VEVENT           ||    VFREEBUSY     |
++-------------+-------------++------------------+
+| TRANSP      | STATUS      || FBTYPE           |
++=============+=============++==================+
+|             | CONFIRMED   || BUSY             |
+|             | (default)   ||                  |
+| OPAQUE      +-------------++------------------+
+| (default)   | CANCELLED   || FREE             |
+|             +-------------++------------------+
+|             | TENTATIVE   || BUSY-TENTATIVE   |
+|             +-------------++------------------+
+|             | x-name      || BUSY or          |
+|             |             || x-name           |
++-------------+-------------++------------------+
+|             | CONFIRMED   ||                  |
+| TRANSPARENT | CANCELLED   || FREE             |
+|             | TENTATIVE   ||                  |
+|             | x-name      ||                  |
++-------------+-------------++------------------+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>반환된 VFREEBUSY 구성 요소에 동일한 FBTYPE 파라미터 값을 가진 중복된 사용 시간대를 지정해서는 안 됩니다.  서버는 동일한 유형의 연속되거나 겹치는 사용량이 많은 기간을 합쳐야 합니다.  FBTYPE 매개변수 값이 다른 바쁜 기간이 겹칠 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:free-busy-query REPORT에 대한 지원이 필요합니다.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Marshalling</dt>
+<dd>
+<div class="paragraph">
+<p>요청 본문은 9.9절에 정의된 대로 정확히 하나의 CALDAV:free-busy-query XML 요소(9.11절 참조)여야 하며, 이 요소에는 9.9절에 정의된 대로 정확히 하나의 CALDAV:time-range XML 요소가 포함되어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>요청에 Depth 헤더가 포함될 수 있습니다.  Depth 헤더가 포함되지 않으면 Depth:0으로 간주합니다.</p>
+</div>
+<div class="paragraph">
+<p>성공적인 요청에 대한 응답 본문은 VEVENT를 포함하는 캘린더 객체 리소스의 사용 중 시간 간격을 설명하는 정확히 하나의 VFREEBUSY 구성 요소 또는 Depth 값을 만족하고 현재 사용자에게 최소한 CALDAV:read-free-busy 권한이 부여된 VFREEBUSY 구성 요소를 포함하는 iCalendar 객체여야 합니다.  이러한 조건을 충족하는 캘린더 객체 리소스가 없는 경우 FREEBUSY 속성이 없는 VFREEBUSY 구성 요소를 반환해야 합니다.  이 보고서는 바쁜 시간 정보만 반환합니다.  반환된 사용 시간 정보에서 여유 시간 정보를 유추할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>현재 사용자에게 Request-URI에 대한 CALDAV:read-free-busy 또는 DAV:read 권한이 부여되지 않은 경우, CALDAV:free-busy-query REPORT 요청은 실패하고 404(찾을 수 없음) 상태 값을 반환해야 합니다.  이 제한으로 인해 사용자는 CALDAV:read-free- busy 권한만 부여된 리소스의 URL을 검색할 수 없습니다.</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:free-busy-query REPORT 요청은 컬렉션(일반 컬렉션 또는 캘린더 컬렉션)에 대해서만 실행할 수 있습니다.  캘린더 객체 리소스에 대해 보고서를 실행하려는 시도는 반드시 실패하고 403(금지됨) 상태 값을 반환해야 합니다.</p>
+</div>
+</dd>
+<dt class="hdlist1">Preconditions</dt>
+<dd>
+<p>None</p>
+</dd>
+<dt class="hdlist1">Postconditions</dt>
+<dd>
+<div class="paragraph">
+<p>(DAV:number-of-matches-within-limits): 일치하는 캘린더 객체 리소스의 수가 서버별로 미리 정의된 한도 내에 있어야 합니다.  예를 들어, 이 사후 조건은 지정된 CALDAV:시간 범위로 인해 응답을 계산할 때 매우 많은 수의 캘린더 개체 리소스가 고려되는 경우 실패할 수 있습니다.</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="sect3">
+<h4 id="_7_10_1_example_successful_caldavfree_busy_query_report">7.10.1. Example: Successful CALDAV:free-busy-query REPORT</h4>
+<div class="paragraph">
+<p>이 예에서 클라이언트는 서버에 2006년 1월 4일 오전 9시부터 오후 5시(동부 표준시 오후 2시부터 오후 10시) 사이에 /bernard/work/ 캘린더 컬렉션에 대한 무료 사용 중 정보를 반환하도록 요청합니다.  서버가 응답하여 1시간 간격으로 두 개의 바쁜 시간 간격을 표시하며, 그 중 하나는 잠정적인 시간입니다.</p>
+</div>
+<div class="paragraph">
+<p>이 예제에서 대상이 되는 캘린더 데이터는 부록 B를 참조하십시오.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:free-busy-query xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;C:time-range start="20060104T140000Z"
+                 end="20060105T220000Z"/&gt;
+&lt;/C:free-busy-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 200 OK
+Date: Sat, 11 Nov 2006 09:32:12 GMT
+Content-Type: text/calendar
+Content-Length: xxxx
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Server//EN
+BEGIN:VFREEBUSY
+DTSTAMP:20050125T090000Z
+DTSTART:20060104T140000Z
+DTEND:20060105T220000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060104T150000Z/PT1H
+FREEBUSY:20060104T190000Z/PT1H
+END:VFREEBUSY
+END:VCALENDAR</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_guidelines">8. Guidelines</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_8_1_client_to_client_interoperability">8.1. Client-to-Client Interoperability</h3>
+<div class="paragraph">
+<p>클라이언트가 합법적(서버가 오류를 반환하지 않음)이지만 동일한 데이터에 액세스하는 다른 클라이언트 구현과의 상호 운용성을 저하시킬 수 있는 여러 가지 조치를 취할 수 있습니다. 예를 들어, 반복 규칙을 반복 날짜 집합으로 대체하거나, 단일 반복 이벤트를 독립적인 리소스 집합으로 대체하여 각 반복을 나타내거나, 시작/종료 시간 값을 원래 시간대에서 다른 시간대로 변환할 수 있습니다. 이 조언은 iCalendar 상호 운용성 모범 사례에 해당하며 CalDAV 사용에만 국한되지는 않지만, 상호 운용성 문제는 CalDAV 사용 사례에서 더 분명하게 드러날 가능성이 높습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_2_synchronization_operations">8.2. Synchronization Operations</h3>
+<div class="paragraph">
+<p>WebDAV는 이미 컬렉션 또는 컬렉션 집합을 동기화하고 오프라인에서 변경하는 데 필요한 기능을 제공하고 있으며, 재연결 시 충돌을 해결하는 간단한 방법을 제공합니다. ETag는 이 기능을 작동시키는 핵심 요소이지만 모든 WebDAV 서버에 반드시 필요한 것은 아닙니다. 오프라인 기능은 다른 WebDAV 애플리케이션보다 캘린더 애플리케이션에 더 중요하므로, CalDAV 서버는 섹션 5.3.4에 명시된 대로 ETags를 반드시 지원해야 합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_8_2_1_use_of_reports">8.2.1. Use of Reports</h4>
+<div class="sect4">
+<h5 id="_8_2_1_1_restrict_the_time_range">8.2.1.1. Restrict the Time Range</h5>
+<div class="paragraph">
+<p>클라이언트는 CalDAV에서 제공하는 보고서를 사용하여 로컬 클라이언트 컴퓨터의 네트워크 대역폭 사용량과 리소스 소비 측면에서 성능을 최적화할 수 있습니다. 이 두 가지 모두 용량이 제한된 모바일 또는 휴대용 장치에 대한 주요 고려 사항이지만, 캘린더 컬렉션에 많은 양의 데이터가 포함된 경우 데스크톱 클라이언트 애플리케이션과도 관련이 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>일반적으로 클라이언트는 한정된 시간 간격에 걸쳐 사용자에게 캘린더 데이터를 보기로 표시하므로, 가능하면 클라이언트는 CALDAV:calendar-query REPORT를 사용하여 서버에서 캘린더 구성 요소만 검색하고 CALDAV:time-range 요소와 결합하여 반환되는 구성 요소 집합을 현재 보기를 채우는 데 필요한 요소로만 제한해야 합니다.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_8_2_1_2_synchronize_by_time_range">8.2.1.2. Synchronize by Time Range</h5>
+<div class="paragraph">
+<p>일반적으로 캘린더에서 기록 데이터(현재 날짜 이전에 완료된 이벤트, 할 일 등)는 삭제할 수는 있지만 변경되지 않습니다. 따라서 클라이언트는 현재와 미래의 데이터만 합리적인 한도(예: 1주일, 1개월)까지만 고려함으로써 동기화 프로세스의 속도를 높일 수 있습니다. 그런 다음 사용자가 동기화된 범위를 벗어난 캘린더의 일부를 검사하려고 하면 클라이언트는 검사 중인 새 시간 간격에 대해 다른 동기화 작업을 수행할 수 있습니다. 이러한 "적시" 동기화는 일반적인 사용자 상호 작용 동작에 대한 대역폭을 최소화할 수 있습니다.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_8_2_1_3_synchronization_process">8.2.1.3. Synchronization Process</h5>
+<div class="paragraph">
+<p>캘린더 데이터가 필요할 때마다 다운로드하는 대신 캘린더 데이터 동기화를 지원하려는 클라이언트는 실제 캘린더 데이터와 함께 캘린더 객체 리소스의 URI 및 ETag를 캐시해야 합니다. URI는 캘린더 객체 리소스의 수명 동안 정적으로 유지되지만, ETag는 캘린더 객체 리소스가 연속적으로 변경될 때마다 변경됩니다. 따라서 로컬 데이터 캐시를 서버와 동기화하기 위해 클라이언트는 먼저 고려 중인 시간 간격에 대한 URI/ETag 쌍을 가져와서 그 결과를 캐시된 데이터와 비교할 수 있습니다. ETag가 서버에 있는 것과 다른 캐시된 컴포넌트는 모두 새로 고쳐야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>서버와 클라이언트 데이터 간의 변경 사항을 제대로 감지하려면 클라이언트가 마지막 동기화 작업 이후 어떤 캘린더 객체 리소스가 생성, 변경 또는 삭제되었는지 기록을 유지하여 이러한 변경 사항을 서버의 데이터와 조정할 수 있도록 해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>다음은 이를 수행하는 방법의 예입니다:</p>
+</div>
+<div class="paragraph">
+<p>클라이언트가 특정 시간 범위에 대한 CALDAV:calendar-query REPORT 요청을 실행하고 DAV:getetag 속성만 반환하도록 요청합니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;D:getetag/&gt;
+ &lt;/D:prop&gt;
+ &lt;C:filter&gt;
+   &lt;C:comp-filter name="VCALENDAR"&gt;
+     &lt;C:comp-filter name="VEVENT"&gt;
+       &lt;C:time-range start="20040902T000000Z"
+                       end="20040903T000000Z"/&gt;
+     &lt;/C:comp-filter&gt;
+   &lt;/C:comp-filter&gt;
+ &lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>그런 다음 클라이언트는 결과를 사용하여 서버에서 변경, 생성 또는 삭제된 캘린더 객체 리소스와 이러한 리소스가 변경, 생성 또는 삭제되었을 수 있는 로컬로 캐시된 캘린더 객체 리소스와 어떻게 관련되는지 확인합니다. 클라이언트가 서버에 가져와야 하는 캘린더 객체 리소스가 있다고 판단하면 클라이언트는 캘린더 데이터를 가져오기 위해 CALDAV:calendar-multiget REPORT 요청을 실행합니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-multiget xmlns:D="DAV:"
+                    xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+ &lt;D:prop&gt;
+   &lt;D:getetag/&gt;
+   &lt;C:calendar-data/&gt;
+ &lt;/D:prop&gt;
+ &lt;D:href&gt;/bernard/work/abcd1.ics&lt;/D:href&gt;
+ &lt;D:href&gt;/bernard/work/mtg1.ics&lt;/D:href&gt;
+&lt;/C:calendar-multiget&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_8_2_2_restrict_the_properties_returned">8.2.2. Restrict the Properties Returned</h4>
+<div class="paragraph">
+<p>클라이언트는 사용자에게 정보를 제공할 때 캘린더 객체 리소스의 모든 캘린더 속성이 필요하지 않을 수 있습니다.  일부 캘린더 속성 값(예: 첨부 또는 참석자)은 클 수 있으므로 클라이언트는 캘린더 REPORT 요청에서 반환되는 캘린더 속성을 사용할 것으로 알고 있는 속성으로 제한하도록 선택할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>그러나 클라이언트가 캘린더 객체 리소스를 변경해야 하는 경우에는 PUT 요청을 통해서만 전체 캘린더 객체 리소스를 변경할 수 있습니다.  현재 캘린더 객체 리소스의 캘린더 속성 집합을 점진적으로 변경할 수 있는 방법은 없습니다. 따라서 클라이언트는 변경 중인 전체 캘린더 객체 리소스를 가져와야 합니다.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_3_use_of_locking">8.3. Use of Locking</h3>
+<div class="paragraph">
+<p>동일한 리소스를 수정하는 두 클라이언트가 서로의 변경 내용을 덮어쓰거나(이 문제는 ET태그를 사용하여 해결할 수도 있지만) 다른 변경 집합과 충돌하는 변경을 하는 데 시간을 낭비하는 것을 방지하기 위해 WebDAV 잠금을 사용할 수 있습니다. 다중 사용자 캘린더 시스템에서 대화형 캘린더 클라이언트는 사용자가 이벤트를 편집하는 동안 이벤트를 잠그고, 사용자가 이벤트를 완료하거나 취소하면 잠금을 해제할 수 있습니다.  데이터를 재구성하는 동안 변경을 방지하는 데에도 잠금을 사용할 수 있습니다.  예를 들어 캘린더 클라이언트는 여러 개의 캘린더 리소스를 서로 이동하기 전에 두 개의 캘린더 컬렉션을 잠글 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 사용 사례에 적합한 잠금 시간 제한 기간을 요청할 책임이 있습니다.  사용자가 명시적으로 리소스를 예약하고 다른 변경을 방지하기로 결정한 경우에는 긴 시간 제한이 적절할 수 있지만, 클라이언트가 자동으로 리소스를 잠그기로 결정한 경우에는 시간 제한이 짧아야 합니다(클라이언트는 필요한 경우 언제든지 잠금을 새로 고칠 수 있음).  잠금 시간 제한이 짧으면 클라이언트가 잠금을 해제할 수 없는 경우에도 다른 캘린더 사용자가 변경을 할 수 없게 되지 않습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_4_finding_calendars">8.4. Finding Calendars</h3>
+<div class="paragraph">
+<p>대부분의 경우 캘린더 클라이언트(또는 상담원)는 URL을 직접 제공받아 새 캘린더의 위치를 찾습니다.  예를 들어, 사용자가 자신의 캘린더 위치를 클라이언트 구성 정보에 입력하거나 이메일에서 URL을 복사하여 캘린더 애플리케이션에 붙여넣을 수 있습니다.  클라이언트는 URL이 캘린더 컬렉션인 리소스를 가리키고 있는지 확인하기만 하면 됩니다.  클라이언트는 WebDAV 컬렉션을 검색하여 캘린더 컬렉션을 찾을 수도 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>HTTP URL을 선택하면 캘린더 객체 리소스가 기존 소프트웨어와 역호환되지만, 기존 소프트웨어는 일반적으로 해당 URL에 대한 OPTIONS 응답을 보고 무엇을 할 수 있는지 알 수 없다는 단점이 있습니다.  이는 CalDAV 사용과 마찬가지로 WebDAV 사용에도 다소 장애가 됩니다.  이 사양에서는 요청이 있을 경우 OPTIONS 응답에 정보를 제공하는 것 외에는 이 문제를 해결할 수 있는 방법을 제공하지 않습니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 공유 및 일정 예약 사용 사례의 경우 다른 사용자의 캘린더를 찾고자 할 수 있습니다.  다른 사용자가 동일한 리포지토리에 캘린더를 가지고 있는 경우, 해당 캘린더는 WebDAV ACL 지원에서 요구하는 주 네임스페이스를 사용하여 찾을 수 있습니다.  다른 경우에는 범용적인 해결책이 없지만, 구현자는 캘린더 속성[RFC2739]과 함께 vCard[RFC2426] 또는 LDAP[RFC4511] 표준을 사용할지 여부를 고려할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>CalDAV를 사용하려면 서버가 주 네임스페이스를 포함하여 WebDAV ACL[RFC3744]을 지원해야 하고, CALDAV: calendar-home-set 속성이 추가되었으므로, CalDAV 클라이언트가 자신의 캘린더 또는 다른 사용자의 캘린더를 찾을 수 있는 몇 가지 옵션이 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이 경우, 현재 사용자의 Principal-URL에서 명명된 속성(CALDAV:calendar-home-set)을 찾기 위해 DAV:principal-match REPORT가 사용됩니다.  이를 사용하여 WebDAV 클라이언트는 "내가 누구인지", "내 캘린더가 어디에 있는지"를 알 수 있습니다.  REPORT 요청 본문은 다음과 같습니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:principal-match xmlns:D="DAV:"&gt;
+ &lt;D:self/&gt;
+ &lt;D:prop&gt;
+   &lt;C:calendar-home-set
+      xmlns:C="urn:ietf:params:xml:ns:caldav"/&gt;
+ &lt;/D:prop&gt;
+&lt;/D:principal-match&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다른 사용자의 캘린더를 찾으려면 DAV:principal-property-search REPORT를 사용하여 일부 속성을 필터링하고 다른 속성을 반환할 수 있습니다. '로리&#8217;라는 사용자가 소유한 캘린더를 검색하려면 REPORT 요청 본문은 다음과 같아야 합니다:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:principal-property-search xmlns:D="DAV:"&gt;
+ &lt;D:property-search&gt;
+   &lt;D:prop&gt;
+     &lt;D:displayname/&gt;
+   &lt;/D:prop&gt;
+   &lt;D:match&gt;Laurie&lt;/D:match&gt;
+ &lt;/D:property-search&gt;
+ &lt;D:prop&gt;
+   &lt;C:calendar-home-set
+      xmlns:C="urn:ietf:params:xml:ns:caldav"/&gt;
+   &lt;D:displayname/&gt;
+ &lt;/D:prop&gt;
+&lt;/D:principal-property-search&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>서버는 DAV:displayname 속성 내에서 "Laurie"와 일치하는 문자열 하위 집합에 대해 대/소문자를 구분하거나 대/소문자를 구분하지 않는 검색을 수행합니다.  따라서 서버는 일치하는 DAV:표시이름 값으로 "Laurie Dusseault", "Laurier Desruisseaux" 또는 "Wilfrid Laurier"를 반환하고 각각에 대한 캘린더를 반환할 수 있습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_5_storing_and_using_attachments">8.5. Storing and Using Attachments</h3>
+<div class="paragraph">
+<p>CalDAV 클라이언트는 캘린더 구성 요소에서 첨부파일을 인라인 또는 외부로 만들 수 있습니다.  이 섹션에는 첨부파일을 만들고 관리하기 위한 몇 가지 지침이 포함되어 있습니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_8_5_1_inline_attachments">8.5.1. Inline Attachments</h4>
+<div class="paragraph">
+<p>CalDAV 클라이언트는 iCalendar [RFC2445]에 명시된 대로 인라인 첨부파일을 지원해야 합니다.  CalDAV 서버는 반드시 인라인 첨부파일을 지원해야 하므로 클라이언트는 이러한 방식으로 첨부파일을 생성할 수 있습니다.  반면에 인라인 첨부파일에는 몇 가지 단점이 있습니다:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>서버가 캘린더 객체 리소스 크기에 제한을 둘 수 있습니다(즉, 매우 큰 iCalendar 객체의 PUT 요청을 거부할 수 있음).  이러한 제한을 적용하는 서버는 캘린더 컬렉션에 CALDAV:max-resource-size 속성을 사용하여 클라이언트에게 제한이 무엇인지 알려야 합니다(5.2.5절 참조).</p>
+</li>
+<li>
+<p>서버는 캘린더 컬렉션에 스토리지 할당량 제한을 부과할 수 있습니다([RFC4331] 참조).</p>
+</li>
+<li>
+<p>인라인 첨부파일이 포함된 캘린더 객체 리소스를 변경할 경우 전체 인라인 첨부파일을 다시 업로드해야 합니다.</p>
+</li>
+<li>
+<p>변경된 캘린더 객체 리소스를 동기화하는 클라이언트는 첨부파일이 변경되지 않은 경우에도 전체 캘린더 객체 리소스를 다운로드해야 합니다.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_8_5_2_external_attachments">8.5.2. External Attachments</h4>
+<div class="paragraph">
+<p>CalDAV 클라이언트는 임의의 URI 스키마로 참조되는 외부 첨부 파일을 직접 처리하거나, 해당 응용 프로그램이 있는 경우 처리를 위해 적절한 "도우미 응용 프로그램"에 첨부 파일 URI를 전달하여 외부 첨부 파일의 다운로드를 지원해야 합니다.  CalDAV 클라이언트는 "http" 또는 "https" URI 스키마로 참조되는 외부 첨부 파일의 다운로드를 지원해야 합니다.  외부 첨부 파일은 다음과 같습니다:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>캘린더 객체 리소스가 포함된 캘린더 컬렉션의 컬렉션에 있습니다;</p>
+</li>
+<li>
+<p>캘린더 컬렉션을 호스팅하는 동일한 리포지토리의 다른 곳에 있음, 또는</p>
+</li>
+<li>
+<p>다른 곳의 HTTP 또는 FTP 서버에 있습니다.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>CalDAV 서버는 캘린더 컬렉션에서 하위 컬렉션을 지원할 수 있습니다.  캘린더 컬렉션의 하위 컬렉션을 생성하기 위해 MKCOL 메서드를 허용할 수 있습니다.  캘린더 컬렉션의 하위 컬렉션에는 반드시 포함하지 않아야 하는 캘린더 컬렉션을 제외한 모든 유형의 리소스가 포함될 수 있습니다.  일부 CalDAV 서버는 캘린더 컬렉션의 하위 컬렉션을 허용하지 않으며, 이러한 서버에서는 첨부파일을 저장할 수 있는 다른 위치를 검색할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>외부 첨부파일에 연결되는 캘린더 구성요소와의 참조 일관성을 유지할 책임은 전적으로 클라이언트에게 있습니다.  따라서 외부 첨부파일이 있는 캘린더 구성요소를 삭제하는 클라이언트는 해당 첨부파일도 삭제할 수 있지만, 그 적절성을 판단하기는 매우 어려울 수 있습니다. 새 구성요소는 캘린더 구성요소와 독립적으로 존재하는 기존 웹 리소스를 쉽게 참조할 수 있습니다(예를 들어 '첨부파일&#8217;은 회의에서 논의될 주요 안건일 수 있습니다).  모범 사례가 등장할 것이고 문서화되어야 하겠지만, 현재로서는 클라이언트가 외부 첨부파일을 적극적으로 '정리&#8217;하는 것에 주의해야 합니다.  클라이언트는 참조되지 않은 문서의 삭제에 대한 결정을 내릴 때 사용자를 참여시킬 수도 있고, 클라이언트가 만든 첨부파일만 삭제하는 보수적인 태도를 취할 수도 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>또한 클라이언트는 외부 첨부파일을 사용할 때 권한의 일관성을 유지할 책임이 있습니다.  서버가 캘린더 컬렉션의 하위 컬렉션 내에 첨부파일 저장을 지원하는 이유 중 하나는 ACL 상속을 통해 캘린더 컬렉션에 부여된 것과 동일한 권한을 첨부파일에 더 쉽게 부여할 수 있기 때문입니다.  그렇지 않으면 권한을 동기화하기가 매우 어려울 수 있습니다.  첨부파일이 별도의 리포지토리에 저장되어 있으면 두 리포지토리가 동일한 권한을 지원하지 않거나 동일한 권한 집합을 가질 수 있으므로 권한을 일관되게 유지하는 것이 불가능할 수 있습니다.  일부 시스템에서는 티켓이나 기타 익명 액세스 제어 메커니즘을 사용하여 이러한 종류의 문제에 대해 부분적으로 만족스러운 해결책을 제공하기도 합니다.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_6_storing_and_using_alarms">8.6. Storing and Using Alarms</h3>
+<div class="paragraph">
+<p>사용자가 공개 캘린더 또는 그룹 캘린더로 취급할 수 있는 캘린더 컬렉션을 포함한 모든 CalDAV 캘린더 컬렉션에는 이벤트 및 할 일에 대한 알람 정보가 포함될 수 있습니다.  사용자는 여러 장치 간에 캘린더를 동기화하고 알람을 만든 장치와 다른 장치에서 알람이 실행되도록 설정할 수 있습니다.  모든 알람 작업 유형이 완전히 상호 운용되는 것은 아닙니다(예: 재생할 사운드 파일에 이름을 지정하는 작업).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>동작이 AUDIO이고 클라이언트가 알람을 실행하도록 구성된 경우 클라이언트는 제안된 사운드를 사용할 수 있는 경우 재생하거나 다른 사운드를 재생해야 하지만, 제안된 사운드를 로컬에서 사용할 수 있는 사운드로 바꾸기 위해 알람을 다시 작성해서는 안 됩니다.</p>
+</li>
+<li>
+<p>동작이 디스플레이이고 클라이언트가 알람을 실행하도록 구성된 경우 클라이언트는 제안된 설명에 따라 디스플레이 알람을 실행하거나 합리적인 대체물을 표시해야 하지만, 자체 편의를 위해 알람을 다시 작성해서는 안 됩니다.</p>
+</li>
+<li>
+<p>동작이 이메일이고 클라이언트가 이메일을 보낼 수 없는 경우, 클라이언트는 알람을 무시해야 하지만 알람 자체는 계속 동기화해야 합니다.</p>
+</li>
+<li>
+<p>이 사양에서는 PROCEDURE 유형의 알람 실행에 대한 권장 사항은 없지만, 클라이언트가 이러한 알람을 실행하여 보안 허점을 만들지 않도록 주의해야 한다는 점을 참고하시기 바랍니다.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>모든 장치에서 기본 알람을 사용할 수 있도록 하기 위해 상호 운용이 불가능한 알람 정보(예: 디스플레이 알람에 사용할 색상을 정의하는 경우)는 VALARM 컴포넌트 내부의 비표준 프로퍼티에 넣어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>캘린더 객체 리소스의 변경을 허용하는 클라이언트는 리소스에 이미 존재하는 알람 데이터를 동기화해야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>클라이언트는 사용자 기본 설정에 따라 이러한 방식으로 다운로드한 알람을 실행할 수 있습니다.  클라이언트가 캘린더에서 읽기 작업만 수행하고 알람 정보를 잃을 위험이 없는 경우 클라이언트는 알람 정보를 삭제할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>이 사양은 그룹 캘린더에서 다중 사용자 알람을 제공하거나 알람이 누구를 위한 것인지 알아내려는 시도를 하지 않습니다. 이러한 문제를 해결하려면 사용자별로 알람을 저장하거나 알람이 어떤 사용자를 대상으로 하는지 표시하는 등 iCalendar를 확장해야 할 수 있습니다.  그 동안 클라이언트는 일반적으로 공개, 그룹 또는 리소스 캘린더에 알람 정보를 업로드하지 않음으로써 상호 운용성을 극대화할 수 있습니다.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_xml_element_definitions">9. XML Element Definitions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_9_1_caldavcalendar_xml_element">9.1. CALDAV:calendar XML Element</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>calendar</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>캘린더 컬렉션의 리소스 유형을 지정합니다.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>See Section 4.2.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT calendar EMPTY&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_2_caldavmkcalendar_xml_element">9.2. CALDAV:mkcalendar XML Element</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>mkcalendar</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>Specifies a request that includes the WebDAV property
+values to be set for a calendar collection resource when it is
+created.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>See Section 5.3.1.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT mkcalendar (DAV:set)&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_3_caldavmkcalendar_response_xml_element">9.3. CALDAV:mkcalendar-response XML Element</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>mkcalendar-response</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>Specifies a response body for a successful MKCALENDAR request.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>See Section 5.3.1.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT mkcalendar-response ANY&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_4_caldavsupported_collation_xml_element">9.4. CALDAV:supported-collation XML Element</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>supported-collation</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>Identifies a single collation via its collation identifier, as defined by [RFC4790].</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>The CALDAV:supported-collation contains the text of a collation identifier, as described in Section 7.5.1.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT supported-collation (#PCDATA)&gt;
+PCDATA value: collation identifier</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_5_caldavcalendar_query_xml_element">9.5. CALDAV:calendar-query XML Element</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Name</dt>
+<dd>
+<p>calendar-query</p>
+</dd>
+<dt class="hdlist1">Namespace</dt>
+<dd>
+<p>urn:ietf:params:xml:ns:caldav</p>
+</dd>
+<dt class="hdlist1">Purpose</dt>
+<dd>
+<p>Defines a report for querying calendar object resources.</p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>See Section 7.8.</p>
+</dd>
+<dt class="hdlist1">Definition</dt>
+<dd>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;!ELEMENT calendar-query ((DAV:allprop |
+                           DAV:propname |
+                           DAV:prop)?, filter, timezone?)&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_6_caldavcalendar_data_xml_element">9.6. CALDAV:calendar-data XML Element</h3>
+<div class="sect3">
+<h4 id="_9_6_1_caldavcomp_xml_element">9.6.1. CALDAV:comp XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_2_caldavallcomp_xml_element">9.6.2. CALDAV:allcomp XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_3_caldavallprop_xml_element">9.6.3. CALDAV:allprop XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_4_caldavprop_xml_element">9.6.4. CALDAV:prop XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_5_caldavexpand_xml_element">9.6.5. CALDAV:expand XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_6_caldavlimit_recurrence_set_xml_element">9.6.6. CALDAV:limit-recurrence-set XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_6_7_caldavlimit_freebusy_set_xml_element">9.6.7. CALDAV:limit-freebusy-set XML Element</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_7_caldavfilter_xml_element">9.7. CALDAV:filter XML Element</h3>
+<div class="sect3">
+<h4 id="_9_7_1_caldavcomp_filter_xml_element">9.7.1. CALDAV:comp-filter XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_7_2_caldavprop_filter_xml_element">9.7.2. CALDAV:prop-filter XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_7_3_caldavparam_filter_xml_element">9.7.3. CALDAV:param-filter XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_7_4_caldavis_not_defined_xml_element">9.7.4. CALDAV:is-not-defined XML Element</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_9_7_5_caldavtext_match_xml_element">9.7.5. CALDAV:text-match XML Element</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_8_caldavtimezone_xml_element">9.8. CALDAV:timezone XML Element</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_9_9_caldavtime_range_xml_element">9.9. CALDAV:time-range XML Element</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_9_10_caldavcalendar_multiget_xml_element">9.10. CALDAV:calendar-multiget XML Element</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_9_11_caldavfree_busy_query_xml_element">9.11. CALDAV:free-busy-query XML Element</h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_10_internationalization_considerations">10. Internationalization Considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CalDAV를 사용하면 캘린더 컬렉션 설명을 위해 국제화된 문자열을 저장하고 검색할 수 있습니다(섹션 5.2.1 참조).</p>
+</div>
+<div class="paragraph">
+<p>CALDAV:calendar-query REPORT(섹션 7.8)에는 CALDAV:text-match 요소에 의해 제어되는 텍스트 검색 옵션이 포함되어 있습니다. 문자 처리에 대한 자세한 내용은 해당 요소에 대한 설명에서 다룹니다(섹션 9.7.5 참조).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_11_security_considerations">11. Security Considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>스누핑으로부터의 보호가 협상되지 않는 한 HTTP 프로토콜 트랜잭션은 네트워크를 통해 투명하게 전송됩니다.  이는 [RFC2818]에 정의된 대로 TLS를 사용하여 수행할 수 있습니다.  특히, TLS가 적용되지 않는 한 HTTP 기본 인증은 사용해서는 안 됩니다.</p>
+</div>
+<div class="paragraph">
+<p>서버는 악의적인 클라이언트가 신중하게 작성된 보고서를 통해 과도한 서버 리소스(CPU, 메모리, 디스크 등)를 소비하지 못하도록 적절한 예방 조치를 취해야 합니다.  예를 들어, 클라이언트가 향후 100년 동안 매초마다 발생하는 반복 이벤트를 지정하는 반복 규칙이 포함된 이벤트를 업로드하면 약 3 x 10^9개의 인스턴스가 발생할 수 있습니다!  이 범위 이상으로 반복을 확장하도록 요청하는 보고서는 서버에 대한 서비스 거부 공격으로 간주될 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>새 리소스(캘린더 컬렉션 포함)를 생성할 때 클라이언트는 새 리소스에 할당된 리소스 이름(리소스 URI의 마지막 경로 세그먼트)이 iCalendar 리소스 자체의 데이터나 캘린더 컬렉션의 특성에 대한 정보를 노출하지 않는지 확인해야 합니다.  이는 리소스 이름에 따라 특정 iCalendar 구성 요소의 존재 여부나 컬렉션의 구성 요소 특성을 유추할 수 없도록 하기 위해 필요합니다.</p>
+</div>
+<div class="paragraph">
+<p>사용 중인 정보를 롤업할 때 사용 중인 기간이 겹치거나 인접한 경우 사용자의 이벤트에 대한 더 많은 정보가 노출됩니다(이는 사용 중인 정보를 요청하는 클라이언트에게 캘린더 소유자가 사용 중인 기간에 하나 이상의 이벤트가 있다는 사실만 알려주는 것이 아니라 캘린더 소유자가 적어도 두 개의 이벤트를 가지고 있다는 것을 알려줍니다). 따라서 캘린더 데이터 프라이버시에 대한 보수적인 접근 방식은 서버가 같은 유형의 바쁜 기간에 대해 항상 통합하도록 하는 것입니다.</p>
+</div>
+<div class="paragraph">
+<p>프로시저 알람은 클라이언트나 서버가 처리해야 하는 알려진 보안 위험이며, 특히 다른 상담원이 알람을 생성한 경우에는 더욱 그렇습니다.  클라이언트와 서버는 이러한 프로시저 알람을 실행할 필요가 없습니다.</p>
+</div>
+<div class="paragraph">
+<p>iCalendar [RFC2445] 및 iTIP [RFC2446]에 설명된 보안 고려 사항은 CalDAV에도 적용됩니다.</p>
+</div>
+<div class="paragraph">
+<p>이 외에도 CalDAV는 HTTP [RFC2616] 및 WebDAV [RFC2518], [RFC3253], [RFC3744]에 존재하지 않는 보안 고려 사항을 제기하지 않습니다.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_12_iana_considerations">12. IANA Considerations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>이 문서는 하나의 새로운 URN을 사용하여 새로운 XML 네임스페이스를 식별합니다.  URN은 [RFC3688]에 설명된 레지스트리 메커니즘을 준수합니다.</p>
+</div>
+<div class="sect2">
+<h3 id="_12_1_namespace_registration">12.1. Namespace Registration</h3>
+<div class="paragraph">
+<p>Registration request for the CalDAV namespace:</p>
+</div>
+<div class="paragraph">
+<p>URI: urn:ietf:params:xml:ns:caldav</p>
+</div>
+<div class="paragraph">
+<p>Registrant Contact: See the "Authors' Addresses" section of this
+document.</p>
+</div>
+<div class="paragraph">
+<p>XML: None.  Namespace URIs do not represent an XML specification.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_13_acknowledgements">13. Acknowledgements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The authors would like to thank the following individuals for contributing their ideas and support for writing this specification: Michael Arick, Mario Bonin, Chris Bryant, Scott Carr, Andre Courtemanche, Mike Douglass, Ted Hardie, Marten den Haring, Jeffrey Harris, Sam Hartman, Helge Hess, Jeff McCullough, Alexey Melnikov, Dan Mosedale, Brian Moseley, Francois Perrault, Kervin L. Pierre, Julian F. Reschke, Wilfredo Sanchez Vega, Mike Shaver, Jari Urpalainen, Simon Vaillancourt, and Jim Whitehead.</p>
+</div>
+<div class="paragraph">
+<p>The authors would also like to thank the Calendaring and Scheduling Consortium for advice with this specification, and for organizing interoperability testing events to help refine it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_14_references">14. References</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_appendix_a_caldav_method_privilege_table_normative">Appendix A. CalDAV Method Privilege Table (Normative)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following table extends the WebDAV Method Privilege Table specified in Appendix B of [RFC3744].</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">+------------+------------------------------------------------------+
+| METHOD     | PRIVILEGES                                           |
++------------+------------------------------------------------------+
+| MKCALENDAR | DAV:bind                                             |
+| REPORT     | DAV:read or CALDAV:read-free-busy (on all referenced |
+|            | resources)                                           |
++------------+------------------------------------------------------+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_appendix_b_calendar_collections_used_in_the_examples">Appendix B. Calendar Collections Used in the Examples</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This appendix shows the calendar object resources contained in the calendar collection queried in the examples throughout this document.</p>
+</div>
+<div class="paragraph">
+<p>The content of the calendar collection is being shown as if it were returned by a CALDAV:calendar-query REPORT request designed to return all the calendar data in the collection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&gt;&gt; Request &lt;&lt;
+
+REPORT /bernard/work/ HTTP/1.1
+Host: cal.example.com
+Depth: 1
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;C:calendar-query xmlns:D="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+&lt;D:prop&gt;
+  &lt;D:getetag/&gt;
+  &lt;C:calendar-data/&gt;
+&lt;/D:prop&gt;
+&lt;C:filter&gt;
+  &lt;C:comp-filter name="VCALENDAR"/&gt;
+&lt;/C:filter&gt;
+&lt;/C:calendar-query&gt;
+
+&gt;&gt; Response &lt;&lt;
+
+HTTP/1.1 207 Multi-Status
+Content-Type: application/xml; charset="utf-8"
+Content-Length: xxxx
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;D:multistatus xmlns:D="DAV:"
+             xmlns:C="urn:ietf:params:xml:ns:caldav"&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd1.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd1"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001102Z
+DTSTART;TZID=US/Eastern:20060102T100000
+DURATION:PT1H
+SUMMARY:Event #1
+Description:Go Steelers!
+UID:74855313FA803DA593CD579A@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd2.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd2"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060102T120000
+DURATION:PT1H
+RRULE:FREQ=DAILY;COUNT=5
+SUMMARY:Event #2
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20060206T001121Z
+DTSTART;TZID=US/Eastern:20060104T140000
+DURATION:PT1H
+RECURRENCE-ID;TZID=US/Eastern:20060104T120000
+SUMMARY:Event #2 bis
+UID:00959BC664CA650E933C892C@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd3.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd3"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTIMEZONE
+LAST-MODIFIED:20040110T032845Z
+TZID:US/Eastern
+BEGIN:DAYLIGHT
+DTSTART:20000404T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZNAME:EDT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20001026T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZNAME:EST
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+ATTENDEE;PARTSTAT=ACCEPTED;ROLE=CHAIR:mailto:cyrus@example.com
+ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:lisa@example.com
+DTSTAMP:20060206T001220Z
+DTSTART;TZID=US/Eastern:20060104T100000
+DURATION:PT1H
+LAST-MODIFIED:20060206T001330Z
+ORGANIZER:mailto:cyrus@example.com
+SEQUENCE:1
+STATUS:TENTATIVE
+SUMMARY:Event #3
+UID:DC6C50A017428C5216A2F1CD@example.com
+END:VEVENT
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd4.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd4"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235335Z
+DUE;VALUE=DATE:20060104
+STATUS:NEEDS-ACTION
+SUMMARY:Task #1
+UID:DDDEEB7915FA61233B861457@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd5.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd5"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235300Z
+DUE;VALUE=DATE:20060106
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:NEEDS-ACTION
+SUMMARY:Task #2
+UID:E10BA47467C5C69BB74E8720@example.com
+BEGIN:VALARM
+ACTION:AUDIO
+TRIGGER;RELATED=START:-PT10M
+END:VALARM
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd6.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd6"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+COMPLETED:20051223T122322Z
+DTSTAMP:20060205T235400Z
+DUE;VALUE=DATE:20051225
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:COMPLETED
+SUMMARY:Task #3
+UID:E10BA47467C5C69BB74E8722@example.com
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd7.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd7"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VTODO
+DTSTAMP:20060205T235600Z
+DUE;VALUE=DATE:20060101
+LAST-MODIFIED:20060205T235308Z
+SEQUENCE:1
+STATUS:CANCELLED
+SUMMARY:Task #4
+UID:E10BA47467C5C69BB74E8725@example.com
+END:VTODO
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+ &lt;D:response&gt;
+   &lt;D:href&gt;http://cal.example.com/bernard/work/abcd8.ics&lt;/D:href&gt;
+   &lt;D:propstat&gt;
+     &lt;D:prop&gt;
+       &lt;D:getetag&gt;"fffff-abcd8"&lt;/D:getetag&gt;
+       &lt;C:calendar-data&gt;BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp.//CalDAV Client//EN
+BEGIN:VFREEBUSY
+ORGANIZER;CN="Bernard Desruisseaux":mailto:bernard@example.com
+UID:76ef34-54a3d2@example.com
+DTSTAMP:20050530T123421Z
+DTSTART:20060101T000000Z
+DTEND:20060108T000000Z
+FREEBUSY:20050531T230000Z/20050601T010000Z
+FREEBUSY;FBTYPE=BUSY-TENTATIVE:20060102T100000Z/20060102T120000Z
+FREEBUSY:20060103T100000Z/20060103T120000Z
+FREEBUSY:20060104T100000Z/20060104T120000Z
+FREEBUSY;FBTYPE=BUSY-UNAVAILABLE:20060105T100000Z/20060105T120000Z
+FREEBUSY:20060106T100000Z/20060106T120000Z
+END:VFREEBUSY
+END:VCALENDAR
+&lt;/C:calendar-data&gt;
+     &lt;/D:prop&gt;
+     &lt;D:status&gt;HTTP/1.1 200 OK&lt;/D:status&gt;
+   &lt;/D:propstat&gt;
+ &lt;/D:response&gt;
+
+&lt;/D:multistatus&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-02-07 06:03:56 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+</body>
+</html>

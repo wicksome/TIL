@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<meta name="author" content="Yeongjun Kim">
+<title>Getting Started the Stream API</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+</head>
+<body class="article toc2 toc-right">
+<div id="header">
+<h1>Getting Started the Stream API</h1>
+<div class="details">
+<span id="author" class="author">Yeongjun Kim</span><br>
+<span id="email" class="email"><a href="mailto:opid911@gmail.com">opid911@gmail.com</a></span><br>
+<span id="revdate">2019-08-13</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_stream_api">Stream API</a></li>
+<li><a href="#_stream_creation">Stream Creation</a>
+<ul class="sectlevel2">
+<li><a href="#_array_to_stream">Array to Stream</a></li>
+<li><a href="#_collection_to_stream">Collection to Stream</a></li>
+<li><a href="#_empty_stream">Empty Stream</a></li>
+<li><a href="#_stream_builder"><em>Stream.builder()</em></a></li>
+<li><a href="#_stream_generate"><em>Stream.generate()</em></a></li>
+<li><a href="#_stream_iterate"><em>Stream.iterate()</em></a></li>
+<li><a href="#_primitive_type_stream">Primitive Type Stream</a></li>
+<li><a href="#_string_to_stream">String to Stream</a></li>
+<li><a href="#_file_to_stream">File to Stream</a></li>
+<li><a href="#_parallel_stream">Parallel Stream</a></li>
+<li><a href="#_merging_streams">Merging Streams</a></li>
+</ul>
+</li>
+<li><a href="#_stream_operations">Stream Operations</a>
+<ul class="sectlevel2">
+<li><a href="#_intermediate_operations">Intermediate Operations</a></li>
+<li><a href="#_terminal_operations">Terminal Operations</a></li>
+</ul>
+</li>
+<li><a href="#_concurrency">Concurrency</a>
+<ul class="sectlevel2">
+<li><a href="#_future">Future</a></li>
+<li><a href="#_listenablefuture">ListenableFuture</a></li>
+<li><a href="#_completablefuture">CompletableFuture</a></li>
+<li><a href="#_resttemplate_with_async">RestTemplate with @Async</a></li>
+<li><a href="#_asyncresttemplate">AsyncRestTemplate</a></li>
+<li><a href="#_webclient">WebClient</a></li>
+</ul>
+</li>
+<li><a href="#_examples">Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_example_1_asyncresttemplate_vs_resttemplate">Example 1: <em>AsyncRestTemplate</em> vs <em>RestTemplate</em></a></li>
+<li><a href="#_example_2_getuser">Example 2: getUser</a></li>
+</ul>
+</li>
+<li><a href="#_cautions">Cautions</a>
+<ul class="sectlevel2">
+<li><a href="#_references_3">References</a></li>
+</ul>
+</li>
+<li><a href="#_references_4">References</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_stream_api">Stream API</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html
+int sum = widgets.stream()
+                 .filter(w -&gt; w.getColor() == RED)
+                 .mapToInt(w -&gt; w.getWeight())
+                 .sum();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>스트림<sup>Stream</sup>은 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html">Java 8에서 추가</a>되었고, 컬렉션의 map/reduce 같은 elements의 흐름을 함수형 스타일로 (람다식도 적용하여) 처리할 수 있도록 지원해주는 라이브러리다.
+스트림은 컬렉션과 비슷하지만 다음과 같은 차이점이 있다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>스트림은 값을 읽기만 할 뿐 저장하지 않는다.</p>
+</li>
+<li>
+<p>스트림의 모든 함수는 순수함수<sup>pure</sup> <sup>function</sup>이다.</p>
+</li>
+<li>
+<p>스트림은 게으르게<sup>lazy</sup> 동작한다.</p>
+</li>
+<li>
+<p>무한한 스트림이 가능하다.</p>
+</li>
+<li>
+<p>스트림은 일회성으로 사용과 동시에 소멸된다.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Functional Interface</div>
+<div class="paragraph">
+<p>Java에서 <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><em>Functional Interface</em></a>는 하나의 abstract method를 가진 인터페이스로, 한가지 기능만 할 수 있다는 것을 나타낸다.
+<code>@FunctionalInterface</code> 은 <em>Functional Interface</em> 로 선언되어 있다는 것을 나타내기 위한 어노테이션으로 컴파일 단계에서 확인해준다. 이는 리팩토링할 때 에러를 빠르게 해결할 수 있도록 해준다.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">java.util.function</a> 패키지 하위에는 <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">lambda expressions</a> 과 <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html">method references</a> 를 위한 <em>Functional Interface</em> 들이 존재한다.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="http://blog.orfjackal.net/2014/07/java-8-functional-interface-naming-guide.html"><img src="http://2.bp.blogspot.com/-BxiAtQEbcBE/U8fX-k54krI/AAAAAAAAAR4/ke6Ccy4xf0Y/s4000/Java+8+Functional+Interface+Naming+Guide.png" alt="FunctionalInterfaceNamingGuide" width="800"></a>
+</div>
+<div class="title">Image: Functional Interface Naming Guide</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Lambda Expressions</div>
+<div class="paragraph">
+<p>람다 표현식(람다식)을 짧게 설명하면 간단한 방식으로 코드를 작성하고 실행하는 방법이라고 할 수 있다. 함수를 간결하게 표현하고, 프로그래밍 언어 개념으로는 단순한 익명 함수를 생성하는 문법으로 볼 수 있다. 아래는 람다식으로 간결하게 표현한 코드 예제이다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">interface Printer {
+    void print(String str);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// as-is
+Printer p1 = new Printer() {
+    @Override
+    public void print(String str) {
+        System.out.println(str);
+    }
+};
+// to-be
+Printer p2 = str -&gt; System.out.println(str);
+Printer p3 = System.out::println; // Java 8 method reference</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stream_creation">Stream Creation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>스트림을 생성하는 방법에는 여러가지가 있으며, 이미 많은 클래스들에 구현되어 있다.</p>
+</div>
+<div class="sect2">
+<h3 id="_array_to_stream">Array to Stream</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">String[] arr = new String[]{"a", "b", "c"};
+// String[] arr = Arrays.asList("a", "b", "c");
+Stream&lt;String&gt; stream = Arrays.stream(arr);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_collection_to_stream">Collection to Stream</h3>
+<div class="paragraph">
+<p><code>stream()</code> 디폴트 메서드가 <em>Collection</em> 인터페이스에 추가되어 있어 모든 컬렉션에서 스트림을 생성할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;String&gt; list = Arrays.asList("a", "b", "c");
+Stream&lt;String&gt; stream1 = list.stream();
+Stream&lt;String&gt; stream2 = list.parallelStream(); // 병렬 처리 스트림</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_empty_stream">Empty Stream</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// Null-Safe
+public Stream&lt;String&gt; streamOf(Collection&lt;String&gt; list) {
+  returen list == null || list.isEmpty() ? Stream.empty() : list.stream();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://www.baeldung.com/java-null-safe-streams-from-collections">Java Null-Safe Streams from Collections</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stream_builder"><em>Stream.builder()</em></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;String&gt; s = Stream.&lt;String&gt;builder()
+                         .add("a")
+                         .add("b")
+                         .add("c")
+                         .build();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stream_generate"><em>Stream.generate()</em></h3>
+<div class="paragraph">
+<p><code>generate()</code> 는 무한 스트림을 생성하기 때문에 최대 크기를 지정해줘야 한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream.generate(() -&gt; "str").limit(5);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stream_iterate"><em>Stream.iterate()</em></h3>
+<div class="paragraph">
+<p><code>iterate()</code> 는 초깃값과 다음 요소에 반영될 람다식이 들어간다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;Integer&gt; s = Stream.iterate(10, n -&gt; n + 1).limit(5); // 10, 11, 12, 13, 14</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_primitive_type_stream">Primitive Type Stream</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream s1 = IntStream.range(1, 5); // 1, 2, 3, 4
+LongStream s2 = LongStream.rangeClosed(1, 5); // 1, 2, 3, 4, 5
+DoubleStream s3 = DoubleStream.of(0, 4, 3); // 0.0, 4.0, 3.0
+DoubleStream s4 = new Random().doubles(3)
+// boxing
+Stream&lt;Integer&gt; s5 = IntStream.range(1, 5).boxed();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>원시 스트림<sup>primitive stream</sup>을 객체 스트림으로 변환하려면 <code>mapToObj()</code> 를  사용한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream.rangeClosed(2, 12) // 2 ~ 12
+         .mapToObj(month -&gt; new Month(month))
+         .collect(Collectors.toList());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_string_to_stream">String to Stream</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream s1 = "abc".chars();
+Stream&lt;String&gt; s2 = Pattern.compile("\\|").splitAsStream("a|b|c");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_file_to_stream">File to Stream</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;String&gt; s1 = Files.lines(Paths.get("~/words.txt"), StandardCharsets.UTF_8);
+Stream&lt;Path&gt; s2 = Files.list(Paths.get("~/Documents"));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_parallel_stream">Parallel Stream</h3>
+<div class="paragraph">
+<p>스트림 생성 시 <code>stream()</code> 대신 <code>parallelStream()</code> 을 사용하면 된다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;String&gt; s = list.parallelStream();
+
+boolean isParallel = s.isParallel(); // Check parallel stream
+
+s.sequential(); // Change parallel to sequential stream
+
+s.parallel();  // Change sequential to parallel stream</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>스레드를 처리하기 위해 Java 7부터 도입된 <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html">Fork/Join framework</a>를 내부적으로 사용한다.
+스레드의 개수의 기본값은 <code>Runtime.getRuntime().availableProcessors() - 1</code> 로 '<em>CPU 개수 - 1</em>'이다(1은 메인 스레드이지 않을까?).
+스래드 개수는 아래와 같이 지정할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_merging_streams">Merging Streams</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;Integer&gt; s1 = Stream.of(1, 3, 5);
+Stream&lt;Integer&gt; s2 = Stream.of(2, 4, 6);
+
+Stream&lt;Integer&gt; resultingStream = Stream.concat(s1, s2);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;Integer&gt; s1 = Stream.of(1, 3, 5);
+Stream&lt;Integer&gt; s2 = Stream.of(2, 4, 6);
+Stream&lt;Integer&gt; s2 = Stream.of(18, 15, 36);
+
+Stream&lt;Integer&gt; resultingStream = Stream.concat(Stream.concat(s1, s2), s3);
+// using flatMap()
+// Stream&lt;Integer&gt; resultingStream = Stream.of(s1, s2, s3).flatMap(i -&gt; i);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_stream_operations">Stream Operations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>스트림 연산은 크게 <strong>intermediate operations</strong>(return <em>Stream&lt;T&gt;</em>) 과 <strong>terminal operations</strong>(특정 타입의 결과를 반환) 나뉘어있다. 자세한 내용은 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html">Stream 문서</a>에서 확인할 수 있다.</p>
+</div>
+<div class="sect2">
+<h3 id="_intermediate_operations">Intermediate Operations</h3>
+<div class="paragraph">
+<p><span class="line-through"><em>중간 작업, 중개 연산, 중간 연산자</em></span></p>
+</div>
+<div class="paragraph">
+<p>모든 Intermediate Operations 은 pure function으로 구현되어 있으며, <em>Stream&lt;T&gt;</em> 을 반환해 메서드 체이닝(chaining)이 가능하다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">long count = list.stream()
+                 .filter(n -&gt; n &gt; 100) // <b class="conum">(1)</b>
+                 .distinct()
+                 .count(); // <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><code>filter()</code> , <code>distinct()</code> 는 intermediate operations를 나타낸다.</p>
+</li>
+<li>
+<p>stream의 사이즈를 반환하는 terminal operations이다.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_filtering">Filtering</h4>
+<div class="sect4">
+<h5 id="_filter"><em>filter</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">ArrayList&lt;String&gt; list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream&lt;String&gt; s1 = list.stream()
+                        .filter(str -&gt; {
+                            return "a".equals(str);
+                        });
+Stream&lt;String&gt; s2 = list.stream()
+                        .filter(str -&gt; "a".equals(str));
+Stream&lt;String&gt; s3 = list.stream()
+                        .filter("a"::equals); // Java 8 method reference
+// a</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_limit"><em>limit</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">ArrayList&lt;String&gt; list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream&lt;String&gt; s1 = list.stream()
+                        .limit(3);
+// a b c</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_skip"><em>skip</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">ArrayList&lt;String&gt; list = Arrays.asList("a", "b", "c", "A", "B", "C");
+Stream&lt;String&gt; s1 = list.stream()
+                        .skip(3);
+// A B C</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_takewhile"><em>takeWhile</em></h5>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/9/docs/api/java/util/stream/Stream.html#takeWhile-java.util.function.Predicate-">JDK9</a>에서 추가되었다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream.of(2, 4, 6, 8, 9, 10, 12)
+    .takeWhile(n -&gt; n % 2 == 0)
+    .forEach(System.out::println);
+// 2
+// 4
+// 6
+// 8</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_mapping">Mapping</h4>
+<div class="sect4">
+<h5 id="_map"><em>map</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;String&gt; list = Arrays.asList("a", "b", "c");
+Stream&lt;String&gt; s1 = list.stream()
+                        .map(s -&gt; s.toUpperCase());
+Stream&lt;String&gt; s2 = list.stream()
+                        .map(String::toUpperCase); // Java 8 method reference
+// A B C</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_flatmap"><em>flatMap</em></h5>
+<div class="paragraph">
+<p>중첩 구조를 단일 구조로 풀어주는 작업을 한다. 이러한 작업을 flattening 이라고 한다.</p>
+</div>
+<div class="openblock float-group">
+<div class="content">
+<div class="imageblock left">
+<div class="content">
+<a class="image" href="https://www.superdatascience.com/blogs/convolutional-neural-networks-cnn-step-3-flattening"><img src="https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/73_blog_image_1.png" alt="Flattening1" width="475"></a>
+</div>
+<div class="title">Image: Flattening</div>
+</div>
+<div class="imageblock left">
+<div class="content">
+<a class="image" href="https://www.superdatascience.com/blogs/convolutional-neural-networks-cnn-step-3-flattening"><img src="https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/73_blog_image_2.png" alt="Flattening2" width="475"></a>
+</div>
+</div>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;String&gt; list1 = Arrays.asList("a", "b", "c");
+List&lt;String&gt; list2 = Arrays.asList("A", "B", "C");
+
+Stream&lt;String&gt; s1 = Stream.of(list1.stream(), list2.stream())
+                          .flatMap(strings -&gt; strings);
+// a b c A B C</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_boxed"><em>boxed</em></h5>
+<div class="paragraph">
+<p>Primitive Type Stream의 각 Element를 boxing 시켜 Wrapper class 변환시켜준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int[] a1 = IntStream.of(3, 2, 1)
+                    .toArray();
+// [3, 2, 1]
+
+List&lt;Integer&gt; l1= IntStream.of(3, 2, 1)
+                           .boxed()
+                           .collect(Collectors.toList());
+// [3, 2, 1]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sorting">Sorting</h4>
+<div class="paragraph">
+<p><a href="https://www.baeldung.com/java-stream-ordering">Stream Ordering in Java</a></p>
+</div>
+<div class="sect4">
+<h5 id="_sorted"><em>sorted</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int[] a1 = IntStream.of(3, 2, 1)
+                    .sorted()
+                    .toArray();
+// [1, 2, 3]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;User&gt; list1 = Arrays.asList(new User("c"), new User("b"), new User("a"));
+
+Stream&lt;User&gt; s1 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName));
+// User(name=a), User(name=b), User(name=c)
+
+Stream&lt;User&gt; s2 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName).reversed());
+// User(name=c), User(name=b), User(name=a)</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="title">비교하려는 값에 Null이 있을 경우</div>
+<div class="paragraph">
+<p>정렬 기준 값이 Null이 있을 경우 NPE가 발생하게 된다. 이러한 NPE를 피하기 위해서는 <code>Comparator.nullsLast()</code>, <code>Comparator.nullsFirst()</code> 를 사용하면 안전하게 정렬을 할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Null safe</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;User&gt; list1 = Arrays.asList(new User("c"), new User(null), new User("a"));
+
+Stream&lt;User&gt; s1 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsLast(Comparator.naturalOrder())));
+// User(name=a), User(name=c), User(name=null)
+
+Stream&lt;User&gt; s2 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsLast(Comparator.reverseOrder())));
+// User(name=c), User(name=a), User(name=null)
+
+Stream&lt;User&gt; s3 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsFirst(Comparator.naturalOrder())));
+// User(name=null), User(name=a), User(name=c)
+
+Stream&lt;User&gt; s4 = list1.stream()
+                       .sorted(Comparator.comparing(User::getName, Comparator.nullsFirst(Comparator.reverseOrder())));
+// User(name=null), User(name=c), User(name=a)</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_distinct"><em>distinct</em></h5>
+<div class="paragraph">
+<p>Stream 내에 Element의 중복을 제거한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream.of(1, 2, 3, 3)
+         .distinct()
+         .toArray()
+// [1, 2, 3]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iterating">Iterating</h4>
+<div class="sect4">
+<h5 id="_peek"><em>peek</em></h5>
+<div class="paragraph">
+<p>'peek&#8217;는 '훔쳐보다', '살짝 보이다&#8217;는 뜻으로, Stream API에서는 intermediate operation 에서 값을 확인할 수 있는 메서드로 사용한다. <em>peek</em> 메서드만으로는 스트림을 소비하지 않는다.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://www.baeldung.com/java-streams-peek-api">Java 8 Streams peek() API</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream.of(1, 2, 3, 4)
+         .filter(e -&gt; e &gt; 2)
+         .peek(e -&gt; System.out.println("Filtered value: " + e))
+         .map(e -&gt; e * e)
+         .peek(e -&gt; System.out.println("Mapped value: " + e))
+         .sum();
+// Filtered value: 3
+// Mapped value: 9
+// Filtered value: 4
+// Mapped value: 16</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">peek vs fxjs/tap</div>
+<div class="paragraph">
+<p>peek은 한개씩 볼 수 있는 반면에 fxjs의 <a href="https://github.com/marpple/FxJS/blob/master/API.md#tap">tap</a>은 전체를 볼 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="title"><a href="https://jsfiddle.net/yeongjun_kim/20zbw1c9/">JSFiddle</a></div>
+<div class="content">
+<pre class="highlight"><code class="language-javascript" data-lang="javascript">fx.go(
+  [10, 20, 30],
+  fx.tap(
+    a =&gt; a,
+    log), // [10, 20, 30]
+  a =&gt; a,
+  log); // [10, 20, 30]</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_terminal_operations">Terminal Operations</h3>
+<div class="paragraph">
+<p><span class="line-through"><em>최종 연산</em></span></p>
+</div>
+<div class="paragraph">
+<p>스트림을 가지고 결과값을 만들어내는 연산이다. 스트림은 평가되기 전까지 실행되지 않는데(lazy), terminal operation이 스트림을 평가하는 역할이다.</p>
+</div>
+<div class="sect3">
+<h4 id="_collecting">Collecting</h4>
+<div class="sect4">
+<h5 id="_collect"><em>collect</em></h5>
+<div class="paragraph">
+<p>아마 가장 많이 사용하는 Terminal Operation은 <code>collect()</code> 일 것 같다.
+이 메서드와 <code>Collectors</code> 클래스의 static 메서드를 활용하여 스트림을 여러 결과로 반환할 수 있다.
+<code>Collectors</code> 는 컬렉션의 요소<sup>element</sup>를 다양한 기준에 따라 summarizing 하거나 모으는 등 유용한 리덕션 연산을 static 메서드로 구현해둔 클래스이다.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>일부 메서드에는 Java 8 이전의 코드스타일과 스트림을 사용한 코드와 비교하기 위해 <code>Before</code> 코드와 <code>After</code> 코드를 추가하였다.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_collectors_tolist"><em>Collectors.toList()</em></h6>
+<div class="paragraph">
+<p>결과를 <code>List</code> 로 변환해주는 메서드이다. 내 경험상 Terminal Operation 내에서 가장 자주 사용하는 메서드인 것 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// as-is
+final List&lt;String&gt; list = Arrays.asList("a", "b", "c");
+
+// to-be
+// [A, B, C]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Before</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;String&gt; upperCaseList = new ArrayList&lt;&gt;();
+for (String str : list) {
+    upperCaseList.add(str.toUpperCase());
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">list.stream()
+    .map(String::toUpperCase)
+    .collect(Collectors.toList())</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">JDK 버전업에 따른 변화</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>JDK8: <code>.collect(Collectors.toList())</code> 추가. but, mutable list 반환</p>
+</li>
+<li>
+<p>JDK10: <code>.collect(Collectors.toUnmodifiableList())</code> 추가.</p>
+</li>
+<li>
+<p>JDK16: <code>Stream.toList()</code> 추가.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><code>toUnmodifiableList()</code> 의 경우 엘리먼트로 <code>null</code> 을 허용하지 않으므로 스트림에 <code>null</code> 이 있을 경우 NPE가 발생한다. 이와 달리, <code>Stream.toList()</code> 은 <code>null</code> 을 허용하므로 NPE가 발생하지 않는다.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://stackoverflow.com/questions/65969919/differences-of-java-16s-stream-tolist-and-stream-collectcollectors-tolist">reference</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_tomap"><em>Collectors.toMap()</em></h6>
+<div class="paragraph">
+<p><code>List&lt;T&gt;</code> 에서 특정 값을 key로 사용하여 <code>Map</code> 으로 변환하는 메서드이다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// as-is
+final List&lt;Payment&gt; payments = Arrays.asList(
+    new Payment("p01", 10_000),
+    new Payment("p02", 20_000),
+    new Payment("p03", 50_100));
+
+// to-be
+// {p01=10000, p03=50100, p02=20000}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Before</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Map&lt;String, Payment&gt; map = new HashMap&lt;&gt;();
+
+for (Payment payment : payments) {
+    map.put(payment.getId(), payment);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">After</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">final Map&lt;String, Payment&gt; map = payments.stream()
+    .collect(Collectors.toMap(Payment::getId, payment -&gt; payment));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_joining"><em>Collectors.joining()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream.of("a", "b", "c")
+    .map(String::toUpperCase)
+    .collect(Collectors.joining(", "))
+// A, B, C
+
+Stream.of("a", "b", "c")
+    .map(String::toUpperCase)
+    .collect(Collectors.joining(", ", "&lt;", "&gt;"))
+// &lt;A, B, C&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_groupingby"><em>Collectors.groupingBy()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Map&lt;Integer, List&lt;User&gt;&gt; u1 = Stream.of(
+    User.builder().name("a").age(29).build(),
+    User.builder().name("b").age(19).build(),
+    User.builder().name("c").age(29).build(),
+    User.builder().name("d").age(19).build(),
+    User.builder().name("e").age(39).build()
+).collect(Collectors.groupingBy(User::getAge));</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>{
+  19=[User(name=b, age=19), User(name=d, age=19)],
+  39=[User(name=e, age=39)],
+  29=[User(name=a, age=29), User(name=c, age=29)]
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title"><em>groupingBy</em> 로 chunk 구현하기</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">TODO</dt>
+<dd>
+<p>jdk9 takeWhile 활용해서 작성해보기. 아래 chunk 구현체들은 지연동작하지 않는다. 이미 평가가 된 상태로 반환.</p>
+</dd>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Test
+public void fp() {
+    final List&lt;Integer&gt; list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+    System.out.println(chunk(list, 4));
+    // [[1, 2, 3, 4], [5, 6, 7, 8], [9]]
+
+    chunkStream(list, 4)
+        .limit(1)
+        .forEach(System.out::println);
+    // [1, 2, 3, 4]
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">chunk(), chunkStream()</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/
+private Collection&lt;? extends List&lt;?&gt;&gt; chunk(List&lt;?&gt; list, int size) {
+    final AtomicInteger counter = new AtomicInteger();
+
+    return list.stream()
+        .collect(Collectors.groupingBy(
+            it -&gt; counter.getAndIncrement() / size))
+        .values();
+}
+
+private Stream&lt;?&gt; chunkStream(List&lt;?&gt; list, int size) {
+    return chunk.stream();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>References</strong></p>
+</div>
+<div class="paragraph">
+<p><a href="https://e.printstacktrace.blog/divide-a-list-to-lists-of-n-size-in-Java-8/">Divide a list to lists of n size in Java 8</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_partitioningby"><em>Collectors.partitioningBy()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Map&lt;Boolean, List&lt;Integer&gt;&gt; result;
+result = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+               .collect(Collectors.partitioningBy(n -&gt; n &gt; 3));
+// {false=[1, 2, 3], true=[4, 5, 6, 7, 8, 9, 10]}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+      .collect(Collectors.partitioningBy(n -&gt; n &gt; 3, Collectors.counting()));
+// {false=3, true=7}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_collectingandthen"><em>Collectors.collectingAndThen()</em></h6>
+<div class="paragraph">
+<p><em>collect</em> 한 이후에 필요한 작업을 추가한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Set&lt;Product&gt; unmodifiableSet = productList.stream()
+                                          .collect(Collectors.collectingAndThen(
+                                              Collectors.toSet(),
+                                              Collections::unmodifiableSet));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_averageingint"><em>Collectors.averageingInt()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// average
+Integer averageAge = Stream.of(user1, user2, user2)
+                           .collect(Collectors.averageingInt(User::getAge));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_summingint"><em>Collectors.summingInt()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// 1. sum
+Integer sumAge1 = Stream.of(user1, user2, user2)
+                        .collect(Collectors.summingInt(User::getAge));
+// 2. mapToInt를 활용해 sum 구하는 방법
+Integer sumAge2 = Stream.of(user1, user2, user2)
+                        .mapToInt(User::getAge)
+                        .sum();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_summarizingint"><em>Collectors.summarizingInt()</em></h6>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream&lt;BigDecimal&gt; s = Stream.iterate(BigDecimal.ONE, n -&gt; n.add(BigDecimal.ONE))
+                             .limit(10);
+IntSummaryStatistics i = s.collect(Collectors.summarizingInt(BigDecimal::intValue));
+// IntSummaryStatistics{count=10, sum=55, min=1, average=5.500000, max=10}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_collectors_of"><em>Collectors.of()</em></h6>
+<div class="paragraph">
+<p>collector를 직접 만들어서 사용하고자 할 경우 <em>of()</em> 를 활용할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">List&lt;Integer&gt; c = Arrays.asList(1, 2, 3, 4, 5, 6, 7).stream()
+                        .collect(Collector.of(
+                            ArrayList::new,
+                            List::add,
+                            (left, right) -&gt; {
+                                left.addAll(right);
+                                return left;
+                            }));
+// [1, 2, 3, 4, 5, 6, 7]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collector.html#of-java.util.function.Supplier-java.util.function.BiConsumer-java.util.function.BinaryOperator-java.util.function.Function-java.util.stream.Collector.Characteristics&#8230;&#8203;-">Java Document - <em>Interface Collector&lt;T,A,R&gt;</em></a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_toarray"><em>toArray</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int[] a1 = Stream.of(1, 2, 3)
+                 .toArray();
+String[] a2 = Arrays.stream("a", "b", "c")
+                    .map(String::toUpperCase)
+                    .toArray(String[]::new);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_reduction">Reduction</h4>
+<div class="paragraph">
+<p>reduce는 캐터모피즘<sup>catamorphism</sup> 이라는 목록 조작 개념의 특별한 변형으로, 컬렉션을 줄여나가는 방법이다.
+스트림 API에서는 <em>reduce()</em> 로 리듀싱을 제공한다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Stream.of(1, 2, 3).reduce(0, (x, y) -&gt; x + y); // 6
+Stream.of(1, 2, 3).reduce(0, Integer::sum);    // 6</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-java.util.function.BinaryOperator-">Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</a></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int sum = Stream.of(1, 2, 3)
+                .reduce((l, r) -&gt; {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r);
+                }).get();
+System.out.println("sum:" + sum);</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>l=1, r= 2
+l=3, r= 3
+sum: 6</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-">T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</a></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int sum = Stream.of(1, 2, 3)
+                .reduce(10, (l, r) -&gt; {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r);
+                });
+System.out.println("sum:" + sum);</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>l=10, r= 1
+l=11, r= 2
+l=13, r= 3
+sum: 16</pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="title">collect vs reduce</div>
+<div class="paragraph">
+<p><em>collect</em> 는 변경 가능한(mutable) 결과 객체를 사용하여 동작한다. 즉, 내부적으로 mutable한 collection이 하나 생성되고 각 요소를 collection에 축적해나가며 동작한다.
+그에 반해, <em>reduce</em> 는 immutable한 결과 객체(누산기<sup>accumulator</sup>)를 사용한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">int sum = Stream.of(1, 2, 3)
+                .reduce((l, r) -&gt; {
+                    System.out.println("l=" + l + ", r= " + r);
+                    return (l + r); // <b class="conum">(1)</b>
+                }).get();
+System.out.println("sum: " + sum);
+// l=1, r= 2
+// l=3, r= 3
+// sum: 6
+
+String result = Stream.of("1", "2", "3")
+                      .collect(
+                          StringBuilder::new, // supplier
+                          (sb, s) -&gt; { // accumulator
+                              System.out.println("sb:" + sb + ", s: " + s);
+                              sb.append(" ").append(s); // <b class="conum">(2)</b>
+                          },
+                          (r1, r2) -&gt; { // combiner
+                              System.out.println(r1 + ", " + r2);
+                              r1.append(",").append(r2.toString());
+                          })
+                      .toString();
+System.out.println("result: " + result);
+// sb:, s: 1
+// sb: 1, s: 2
+// sb: 1 2, s: 3
+// Result:  1 2 3</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><em>reduce</em> 에서는 새로운 immutable 객체를 반환한다.</p>
+</li>
+<li>
+<p><em>collect</em> 에서는 새로운 값을 반환하지 않고, 값을 변경 시켜준다.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>만약 <code>int</code>, <code>double</code> 같은 immutable한 값을 다룬다면 <em>reduce</em> 를, mutable한 데이터를 다룬다면 <em>collect</em> 를 사용하면 된다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://stackoverflow.com/questions/22577197/java-8-streams-collect-vs-reduce">Java 8 Streams - collect vs reduce</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_matching">Matching</h4>
+<div class="paragraph">
+<p><em>Predicate</em> 를 받아 해당 조건을 만족하는지 체크한 결과를 반환한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream.of(1, 1, 1).allMatch(a -&gt; a == 1);  // true
+IntStream.of(1, 2, 3).anyMatch(a -&gt; a == 1);  // true
+IntStream.of(1, 2, 3).noneMatch(a -&gt; a == 4); // true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>anyMatch</em> : 하나라도 만족하는지</p>
+</li>
+<li>
+<p><em>allMatch</em> : 모두 만족하는지</p>
+</li>
+<li>
+<p><em>noneMatch</em> : 모두 만족하지 않는지</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iterating_2">Iterating</h4>
+<div class="sect4">
+<h5 id="_foreach"><em>forEach</em></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// stream
+Arrays.asList(1, 2, 3)
+      .stream()
+      .forEach(System.out::println);</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>1
+2
+3</pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="title">Stream.forEach vs Collection.forEach</div>
+<div class="paragraph">
+<p>두 코드의 결과는 동일하다. 하지만 두 코드의 속도만 비교한다면 <code>Collection.forEach()</code> 가 더 빠르게 동작한다.
+그러므로 단순히 <code>stream().forEach()</code> 만 사용할 것이라면 <em>Collection.forEach</em> 를 사용할 것을 권장한다. IntelliJ IDEA에서는 <code>stream().forEach()</code> 코드를 검사해준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// iterable
+Arrays.asList(1, 2, 3).stream().forEach(System.out::println); // <b class="conum">(1)</b>
+Arrays.asList(1, 2, 3).forEach(System.out::println); // <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>for-each Loop of <em>Stream</em></p>
+</li>
+<li>
+<p>for-each of <em>Iterable</em></p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">참고링크</div>
+<ul>
+<li>
+<p><a href="http://wonwoo.ml/index.php/post/1812">java의 몇 가지 이야기</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/23218874/what-is-difference-between-collection-stream-foreach-and-collection-foreach">What is difference between Collection.stream().forEach() and Collection.forEach()?</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_calculating">Calculating</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntStream.of(1, 2, 3).count()   // 3
+IntStream.of(1, 2, 3).sum()     // 6
+IntStream.of(1, 2, 3).min()     // OptionalInt[1]
+IntStream.of(1, 2, 3).max()     // OptionalInt[3]
+IntStream.of(1, 2, 3).average() // OptionalDouble[2.0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">IntSummaryStatistics s = IntStream.of(1, 2, 3).summaryStatistics();
+// {count=3, sum=6, min=1, average=2.000000, max=3}
+
+s.getCount();   // 3
+s.getMin();     // 1
+s.getMax();     // 3
+s.getSum();     // 6
+s.getAverage(); // 2.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concurrency">Concurrency</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Asynchronous Execution</dt>
+<dd>
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html?is-external=true"><em>Future</em></a> (java 5) → <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/ListenableFuture.html"><em>ListenableFuture</em></a> (spring 3.0) → <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html"><em>CompletableFuture</em></a> (java 8)</p>
+<div class="literalblock">
+<div class="content">
+<pre>class Future
+class ListenableFuture
+class CompletableFuture
+
+Future &lt;|-- CompletableFuture
+Future &lt;|-- ListenableFuture</pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">HTTP Client</dt>
+<dd>
+<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html"><em>RestTemplate</em></a> (spring 3.0) → <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/AsyncRestTemplate.html"><em>AsyncRestTemplate</em></a> (spring 4.0) → <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/reactive/function/client/WebClient.html"><em>WebClient</em></a> (spring 5.0)</p>
+</dd>
+</dl>
+</div>
+<div class="sect2">
+<h3 id="_future">Future</h3>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html?is-external=true"><em>Future</em></a>는 Java 5에 추가된 클래스로, 비동기 연산 결과를 나타낸다.
+작업이 완료되었는지 확인하고(<code>isDone()</code>), 완료를 기다리며, 계산 결과를 확인하는(<code>get()</code>) 메서드와 작업을 취소(<code>cancel()</code>)하는 메서드가 제공된다.
+일단 작업이 완료되면 취소할 수 없으며, 결과는 작업이 완료되었을 때만 메서드를 통해 확인할 수 있고, 필요한 경우 준비가 될 때까지 blocking 한다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Test
+void futureTest() throws InterruptedException, ExecutionException {
+    System.out.println("Thread#" + Thread.currentThread().getId());
+
+    ExecutorService executor = Executors.newFixedThreadPool(1); // <b class="conum">(1)</b>
+    Future&lt;Integer&gt; future = executor.submit(() -&gt; {
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Thread#" + Thread.currentThread().getId());
+        return 123;
+    });
+
+    System.out.println("future done? " + future.isDone());
+
+    Integer result = future.get(); // <b class="conum">(2)</b>
+
+    System.out.println("future done? " + future.isDone());
+    System.out.println("result:" + result);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Java5 에서 멀티스레드와 콜백 사용하기 위해 ExecutorService 사용</p>
+</li>
+<li>
+<p><em>get()</em> 은 blocking 메서드이다.</p>
+</li>
+</ol>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>Thread#1
+future done? false
+Thread#12
+future done? true
+result:123</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listenablefuture">ListenableFuture</h3>
+<div class="paragraph">
+<p>Spring Framework 4.0 에서 추가된 <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/ListenableFuture.html"><em>ListenableFuture</em></a>는 callback을 적용한 <em>Future</em> 의 확장 클래스이다. <em>AsyncRestTemplate</em> 의 리턴타입이기도 하다.
+<span class="line-through gray">JQuery에서 Promise 사용하기 전 Ajax 호출하는 것과 비슷한것 같다.</span></p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Test
+void async() throws InterruptedException {
+    AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+
+    ListenableFuture&lt;ResponseEntity&lt;Map&gt;&gt; entity =
+        asyncRestTemplate.getForEntity("https://httpbin.org/get", Map.class);
+
+    entity.addCallback(
+        result -&gt; System.out.println(result.getStatusCode()), // <b class="conum">(1)</b>
+        err -&gt; System.out.println(Arrays.toString(err.getStackTrace()))); // <b class="conum">(2)</b>
+
+    System.out.println("test1");
+    TimeUnit.SECONDS.sleep(5); // <b class="conum">(3)</b>
+    System.out.println("test2");
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>성공시 실행할 callback 함수(<a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/SuccessCallback.html"><em>SuccessCallback</em></a> 인스턴스)</p>
+</li>
+<li>
+<p>실패시 실행할 callback 함수(<a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/FailureCallback.html"><em>FailureCallback</em></a> 인스턴스)</p>
+</li>
+<li>
+<p><em>sleep()</em> 을 주지않으면 메인 스레드가 바로 종료되면서 HTTP 응답값을 확인 할 수 없다.</p>
+</li>
+</ol>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>DEBUG: Created asynchronous GET request for "https://httpbin.org/get" ...
+DEBUG: Setting request Accept header to [application/json, application/*+json]
+test1 <b class="conum">(1)</b>
+DEBUG: Async GET request for "https://httpbin.org/get" resulted in 200 (OK)
+DEBUG: Reading [interface java.util.Map] as "application/json" using [o.s.h.c.j.MappingJackson2HttpMessageConverter]
+200 <b class="conum">(2)</b>
+test2 <b class="conum">(3)</b></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>코드를 실행시키면 바로 출력</p>
+</li>
+<li>
+<p>HTTP 응답을 받을 때 바로 출력(sleep와 무관하게 동작)</p>
+</li>
+<li>
+<p>"test1" 출력하고 5초 이후에 출력</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Java 8 lambda expression을 활용함으로써 코드가 간결해진다.</p>
+</div>
+<div class="listingblock">
+<div class="title">lambda expression을 사용안할 경우</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">entity.addCallback(new SuccessCallback&lt;ResponseEntity&lt;Map&gt;&gt;() {
+    @Override
+    public void onSuccess(ResponseEntity&lt;Map&gt; result) {
+        System.out.println(result.getStatusCode());
+        System.out.println(result.getBody());
+    }
+}, new FailureCallback() {
+    @Override
+    public void onFailure(Throwable err) {
+        System.out.println(Arrays.toString(err.getStackTrace()))
+    }
+});</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_references">References</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://wonwoo.ml/index.php/post/903">AsyncRestTemplate (비동기 RestTemplate)</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_completablefuture">CompletableFuture</h3>
+<div class="paragraph">
+<p>Java 8에 추가된 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html"><em>CompletableFuture</em></a>는 <em>Future</em> 뿐만 아니라 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletionStage.html"><em>CompletionStage</em></a>를 함께 확장한 클래스이다.
+<em>CompletableFuture</em> 의 개념은 다른 프로그래밍 언어에서는 <em>Deferred</em> 또는 <em>Promise</em> 라고 부른다.</p>
+</div>
+<div class="paragraph">
+<p><span class="line-through gray"><em>CompletionStage</em> 는 다른 <em>CompletionStage</em> 가 완료될 때 작업을 수행하거나 계산하기 위한 비동기 작업의 stage이다. stage는 작업이 종료될 때 완료되지만, 종속적인 다른 stage를 트리거 할 수도 있다.</span></p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public Future&lt;String&gt; getStringAsync() throws InterruptedException {
+    CompletableFuture&lt;String&gt; cf = new CompletableFuture&lt;&gt;();
+    Executors.newCachedThreadPool().submit(() -&gt; {
+        TimeUnit.SECONDS.sleep(1);
+        cf.complete("Hello");
+        return null;
+    });
+    return cf;
+}
+
+@Test
+public void completableFutureExample() throws InterruptedException {
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 1");
+
+    CompletableFuture&lt;String&gt; cf = (CompletableFuture)getAsync();
+    cf.thenAccept(s -&gt; { // <b class="conum">(1)</b>
+        System.out.println("Thread#" + Thread.currentThread().getId() + ": 2");
+        System.out.println(s);
+    });
+
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 3");
+    TimeUnit.SECONDS.sleep(3);
+
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": 4");
+}
+// Output:
+//   Thread#1: 1
+//   Thread#1: 3 <b class="conum">(2)</b>
+//   Thread#12: 2 <b class="conum">(3)</b>
+//   Hello
+//   Thread#1: 4 <b class="conum">(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><em>thenAccept</em> 에는 <em>Callable</em> 의 return 값이 아니라 <em>CompletableFuture</em> 인스턴스의  <em>complete</em> 로부터 전달받은 인자가 파라미터로 들어온다.</p>
+</li>
+<li>
+<p>응용 프로그램이 실행되면 메인 스레드에서 바로 "1", "3"이 출력된다.</p>
+</li>
+<li>
+<p>메인 스레드는 3초 기다리고 있는 중이지만 cf의 값이 반환되면서 "2"가 출력된다.</p>
+</li>
+<li>
+<p>메인 스레드에서 3초가 지나고나서 "4"가 출력되면서 프로그램이 종료된다.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_supplyasync"><em>supplyAsync</em></h4>
+<div class="paragraph">
+<p><em>CompletableFuture</em> 를 생성하는 팩토리 메서드로 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Supplier.html"><em>Supplier</em></a>를 인자로 받는 <em>supplyAsync()</em> 가 있다. 비동기적으로 실행해서 결과를 생성하며 람다식을 이용하여 쉽게 구성하고 조합할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Test
+public void completableFutureExample() throws InterruptedException, ExecutionException {
+    print.accept("1");
+
+    CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+        sleep(1); // <b class="conum">(1)</b>
+        print.accept("2");
+        return "Hello World";
+    });
+
+    print.accept("3"); // <b class="conum">(2)</b>
+    print.accept(future.get()); // <b class="conum">(3)</b>
+    print.accept("4");
+}
+// Output:
+//   Thread#1: 1
+//   Thread#1: 3
+//   Thread#12: 2 // <b class="conum">(4)</b>
+//   Thread#12: Hello World <b class="conum">(5)</b>
+//   Thread#1: 4</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>별도의 스레드에서 1초를 기다린다.</p>
+</li>
+<li>
+<p>응용 프로그램을 실행되면 메인 스레드에서 바로 "1", "3"이 출력된다.</p>
+</li>
+<li>
+<p><code>future</code> 의 값을 확인하기 위해 blocking 된 상태로 기다린다.</p>
+</li>
+<li>
+<p>1초간 멈춰있던 Thread#12가 동작하며 "2"를 출력한다.</p>
+</li>
+<li>
+<p>blocking 되어 있던 <em>get</em> 이 동작하면서 "Hello World"를 출력하고 나머지 작업을 진행한다.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_runasync"><em>runAsync</em></h4>
+<div class="paragraph">
+<p><em>CompletableFuture</em> 를 생성하는 팩토리 메서드로 <em>Runnable</em> 을 인자로 받기 떄문에 반환값이 없다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">CompletableFuture.runAsync(() -&gt; {
+    log.info("test");
+}).get();</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_thenapply"><em>thenApply</em></h4>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenApply-java.util.function.Function-"><em>thenApply</em></a>는 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html"><em>Function</em></a>을 인자로 받으며, 비동기 연산 결과에 추가 작업을 한 뒤 반환하고 싶을 때 사용된다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private static Function&lt;String, String&gt; appendName = (String name) -&gt; "Hello " + name + "!";
+
+@Test
+public void completableFutureExample() throws InterruptedException, ExecutionException {
+    print.accept("1");
+
+    CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+        sleep(1); // <b class="conum">(1)</b>
+        print.accept("2");
+        return "Jun";
+    }).thenApply(appendName);
+
+    print.accept("3"); // <b class="conum">(2)</b>
+    print.accept(future.get()); // <b class="conum">(3)</b>
+    print.accept("4");
+    sleep(3);
+}
+// Output:
+//   Thread#1: 1
+//   Thread#1: 3
+//   Thread#12: 2 // <b class="conum">(4)</b>
+//   Thread#1: Hello Jun! // <b class="conum">(5)</b>
+//   Thread#1: 4</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>별도의 스레드에서 1초를 기다린다.</p>
+</li>
+<li>
+<p>응용 프로그램을 실행하면 메인 스레드에서 바로 "1", "3"이 출력된다.</p>
+</li>
+<li>
+<p><code>future</code> 의 값을 확인하기 위해 blocking 된 상태로 기다린다.</p>
+</li>
+<li>
+<p>1초간 멈춰있던 Thread#12가 동작하며 "2"를 출력한다.</p>
+</li>
+<li>
+<p>blocking 되어 있던 <em>get</em> 은 <code>appendName</code> 이후의 결과를 출력한다.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_thencompose"><em>thenCompose</em></h4>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCompose-java.util.function.Function-"><em>thenCompose</em></a>는 여러 <em>CompletableFuture</em> 를 조립해서 순차적으로 실행하기 위한 메서드이다. <code>CompletableFuture&lt;U&gt;</code> 를 반환하기 때문에 chaining이 가능하다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private static Consumer&lt;String&gt; print = (String str) -&gt;
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": " + str);
+
+@Test
+public void completableFutureExample() throws ExecutionException, InterruptedException {
+    CompletableFuture cf = CompletableFuture.supplyAsync(() -&gt; {
+        sleep(2);
+        print.accept("1");
+        return "Hello";
+    }).thenCompose(s -&gt; CompletableFuture.supplyAsync(() -&gt; {
+        sleep(2);
+        print.accept("2");
+        return s + " Beautiful";
+    })).thenCompose(s -&gt; CompletableFuture.supplyAsync(() -&gt; {
+        sleep(2);
+        print.accept("3");
+        return s + " World";
+    })).thenAccept(str -&gt; {
+        sleep(2);
+        print.accept("4");
+        System.out.println(str);
+    });
+
+    print.accept("5");
+    System.out.println(cf.isDone());
+    System.out.println(cf.get());
+
+    sleep(10);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Output</div>
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">Thread#1: 5
+false <b class="conum">(1)</b>
+Thread#12: 1 <b class="conum">(2)</b>
+Thread#13: 2 <b class="conum">(3)</b>
+Thread#13: 3 <b class="conum">(4)</b>
+Thread#13: 4 <b class="conum">(5)</b>
+Hello Beautiful World
+null <b class="conum">(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><code>isDone()</code> 의 결과로 아직 완료되지 않아 false가 출력된다.</p>
+</li>
+<li>
+<p>2초 뒤 "1"이 출력되고, "Hello"과 함께 CompletableFuture 값을 반환한다.</p>
+</li>
+<li>
+<p>2초 뒤 "2"이 출력되고, 앞에서 전달받은 "Hello"에 "Beautiful"을 조합한 CompletableFuture 값을 반환한다.</p>
+</li>
+<li>
+<p>2초 뒤 "3"이 출력된고, 앞에서 전달받은 "Hello Beautiful"에 "World"을 조합한 CompletableFuture 값을 반환한다.</p>
+</li>
+<li>
+<p><code>thenAccept()</code> 에서 2초 뒤 "4"와 함께 "Hello Beautiful World"가 출력된다.</p>
+</li>
+<li>
+<p><code>cf</code> 의 작업이 완료되었으므로 <code>cf.get()</code> 가 동작한다. 마지막에 호출된 <em>thenAccept</em> 는 <em>Consumer</em> 를 파라미터로 받는데, 이것은 반환값이 없으므로 <em>null</em> 을 출력한다.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exceptionally"><em>exceptionally</em></h4>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#exceptionally-java.util.function.Function-"><em>exceptionally</em></a>는 <em>CompletableFuture</em> 작업 내에서 발생하는 Exception을 처리하기 위한 메서드이다.
+<em>ListenableFuture</em> 에서 <em>FailCallback</em> 의 <em>onFailure</em> 를 대신할 수 있다. <em>ListenableFuture</em> 는 요청별로 실패 로직을 설정하는 반면 <em>exceptionally</em> 는 모든 Exception을 통합적으로 처리할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Test
+public void exceptionallyExample1() throws InterruptedException, ExecutionException {
+    final String result = CompletableFuture.supplyAsync(() -&gt; {
+        System.out.println("1");
+        return "1";
+    }).thenApply(s -&gt; {
+        System.out.println("2");
+        throw new RuntimeException();
+    }).thenApply(s -&gt; {
+        System.out.println("3");
+        return s + "3";
+    }).exceptionally(throwable -&gt; {
+        System.out.println("4");
+        log.error("catch error", throwable);
+        return "exception!!!";
+    }).get();
+
+    System.out.println(result);
+}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>1
+2
+4
+21:11:10.349 [main] ERROR com.example.demo.LocalTest - catch error
+java.util.concurrent.CompletionException: java.lang.RuntimeException
+  at java.base/java.u.c.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
+  at java.base/java.u.c.CompletableFuture.uniApplyNow(CompletableFuture.java:683)
+  at java.base/java.u.c.CompletableFuture.uniApplyStage(CompletableFuture.java:658)
+  at java.base/java.u.c.CompletableFuture.thenApply(CompletableFuture.java:2094)
+  ...
+exception!!!</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_allof"><em>allOf</em></h4>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture&#8230;&#8203;-"><em>allOf</em></a>는 여러 <em>CompletableFuture</em> 의 작업들이 모두 완료되었는지 확인하고자 할 때 사용한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public static CompletableFuture&lt;Void&gt; allOf(CompletableFuture&lt;?&gt;... cfs)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>확인할 <em>CompletableFuture</em> 들을 가변인자<sup><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs">varargs</a></sup> 를 받고 <code>CompletableFuture&lt;Void&gt;</code> 를 반환한다.
+반환값의 <code>get()</code> 혹은 <code>join()</code> 을 통해 모든 작업이 완료되기를 기다릴 수 있다.</p>
+</div>
+<div class="paragraph">
+<p><em>allOf</em> 의 반대로는, 여러 <em>CompletableFuture</em> 중 하나라도 완료되었는지 확인할 수 있는 <em>anyOf</em> 가 있다.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="title">CompletableFuture vs Promise</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Java</th>
+<th class="tableblock halign-left valign-top">JavaScript</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>CompletableFuture.allOf</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all"><em>Promise.all</em></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>CompletableFuture.anyOf</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race"><em>Promise.race</em></a></p></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private static Consumer&lt;String&gt; print = (String str) -&gt;
+    System.out.println("Thread#" + Thread.currentThread().getId() + ": " + str);
+
+@Test
+public void completableFutureExample() throws InterruptedException, ExecutionException {
+    print.accept("1");
+    CompletableFuture&lt;String&gt; f1 = CompletableFuture.supplyAsync(() -&gt; {
+        sleep(1);
+        print.accept("2");
+        return "Hello";
+    });
+    CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; "Beautiful");
+    CompletableFuture&lt;String&gt; f3 = CompletableFuture.supplyAsync(() -&gt; "World");
+
+    print.accept("3");
+
+    CompletableFuture&lt;Void&gt; combinedFuture = CompletableFuture.allOf(f1, f2, f3);
+    print.accept("4");
+    combinedFuture.get();
+    print.accept("5");
+
+    TimeUnit.SECONDS.sleep(3);
+    print.accept("6");
+}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>Thread#1: 1
+Thread#1: 3 <b class="conum">(1)</b>
+Thread#1: 4
+Thread#12: 2 <b class="conum">(2)</b>
+Thread#1: 5
+Thread#1: 6 <b class="conum">(3)</b></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>실행되면 메인 스레드에서 "1", "3", "4" 가 출력된다.</p>
+</li>
+<li>
+<p>1초 뒤 "2"가 출력되면서 <code>combinedFuture.get()</code> 아래의 "5"도 출력된다.</p>
+</li>
+<li>
+<p>"4"가 출력되고 3초 뒤 "5"가 출력되면서 프포그램이 종료된다.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_join"><em>join</em></h4>
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#join--"><em>join</em></a>은 <em>CompletableFuture</em> 의 작업이 완료되면 결과를 반환하거나, 예외 발생시 (unchecked)예외를 던지는 메서드이다.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">CompletableFuture&lt;String&gt; f1 = CompletableFuture.supplyAsync(() -&gt; "Hello");
+CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; "Beautiful");
+CompletableFuture&lt;String&gt; f3 = CompletableFuture.supplyAsync(() -&gt; "World");
+
+String str = Stream.of(f1, f2, f3)
+                // .map(f -&gt; { return f.join(); })
+                // .map(f -&gt; f.join())
+                   .map(CompletableFuture::join)
+                   .collect(Collectors.joining(" "));
+
+System.out.println(str); // Hello Beautiful World</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title"><em>get</em> vs <em>join</em></div>
+<div class="paragraph">
+<p><em>CompletableFuture</em> 의 <em>get</em> 과 <em>join</em> 은 작업이 완료되기를 기다리고 값을 반환하는 작업을 한다.
+동일한 동작을 하지만 다음과 같은 차이점이 있다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>get</em> 은 <em>Future</em> 의 메서드를 구현한 것이고, <em>join</em> 은 <em>CompletableFuture</em> 의 메서드이다.</p>
+</li>
+<li>
+<p><em>get</em> 은  checked exception을 던지고, <em>join</em> 은 unchecked exception을 던지지 않는다.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">V get() throws InterruptedException, ExecutionException { ... }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">public T join() { ... }</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>따라서, <em>get</em> 은 명시적으로 try-catch를 해줘야하는 반면 <em>join</em> 은 에러를 밖으로 던질 수 있게된다.
+즉, 여러 CompletableFuture 를 다룰 때 <em>join</em> 과 <em>exceptionally</em> 를 통해 통합적인 에러 핸들링이 가능해진다.</p>
+</div>
+<div class="paragraph">
+<p><strong>References</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://stackoverflow.com/a/47463228">completablefuture join vs get</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resttemplate_with_async">RestTemplate with @Async</h3>
+<div class="paragraph">
+<p>주로 배치성 프로젝트에서 컨트롤러에 비동기적으로 동작시키기 위해 <code>@Async</code> 을 사용했었다. 이 때, 대부분(내가 본 프로젝트) <code>void</code> 를 반환하였다.
+하지만 <em>Async</em> 문서를 보면 <code>void</code> 혹은 <code>Future</code> 를 반환시킬 수 있다. 즉, <code>CompletableFuture</code> 를 활용할 수 있게 된다.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>메서드에 <code>@Async</code> 사용시 반드시 <code>public</code> 접근자이어야 한다.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="quoteblock">
+<blockquote>
+However, the return type is constrained to either void or Future.
+</blockquote>
+<div class="attribution">
+&#8212; Spring Framework, <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/annotation/Async.html">Annotation Type Async</a>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">ReceiptService.java</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Service
+public class ReceiptService {
+    @Async
+    public CompletableFuture&lt;Receipt&gt; getAsync(@NotNull String paymentId) {
+        final Receipt receipt = restTemplate.getForObject(url, Receipt.class);
+
+        return CompletableFuture.completableFuture(receipt);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">ReceiptController.java</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RestController
+public class ReceiptController {
+    @GetMapping("/")
+    public List&lt;Receipt&gt; getReceipts() {
+        CompletableFuture&lt;Receipt&gt; receipt1 = receiptService.getAsync(id);
+        ...
+        CompletableFuture.allOf(receipt1, ...);
+
+        return ...;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TODO: 실제 동작하는 코드인지 테스트해보고 수정할 것</p>
+</div>
+<div class="paragraph">
+<p>참고: <a href="https://github.com/OsoriAndOmori/book-shelf/blob/master/programming/spring-maven/%5BSpring%5D%20HttpRequest%20Async%EB%A1%9C%20%EB%B3%B4%EB%82%B4%EB%8A%94%20%EB%B0%A9%EB%B2%95%EC%97%90%20%EA%B4%80%ED%95%98%EC%97%AC.md">HttpRequest Async로 보내는 방법에 관하여</a></p>
+</div>
+<div class="sect3">
+<h4 id="_references_2">References</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.hungrydiver.co.kr/bbs/detail/develop?id=2">Java8 CompletableFuture 사용하기</a></p>
+</li>
+<li>
+<p><a href="https://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/">Java 8: Writing asynchronous code with CompletableFuture</a></p>
+</li>
+<li>
+<p><a href="https://gist.github.com/HomoEfficio/be081b92a0d1ae078cbcc410c71415bc">SpringBoot2-SpringWebFlux-BasicExample</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/43019126/completablefuture-thenapply-vs-thencompose/43116156#43116156">thenApply vs thenCompose</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/54425624/javascript-like-promise-all-on-java-8-maybe-with-lambdas/54431501#54431501">Javascript Like "Promise.all" in Java 8</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asyncresttemplate">AsyncRestTemplate</h3>
+<div class="paragraph">
+<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/AsyncRestTemplate.html"><em>AsyncRestTemplate</em></a>은 Spring Framework 4.0 이후부터 제공되는 비동기 HTTP 요청을 위한 클래스이다.
+<a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/client/RestTemplate.html"><em>RestTemplate</em></a> 와 유사하지만 <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/concurrent/ListenableFuture.html"><em>ListenableFuture</em></a> wrapper를 반환한다.</p>
+</div>
+<div class="paragraph">
+<p>Spring Framework 5.0 부터 <em>AsyncRestTemplate</em> 클래스는 deprecated 되었고 <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/reactive/function/client/WebClient.html"><em>WebClient</em></a> 사용을 권장한다.
+<em>RestTemplate</em> 또한 앞으로 deprecated 될 예정이고 새로운 기능이 추가되지 않는다고 말한다.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="title">Convert ListenableFuture to CompletableFuture</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">// https://jongmin92.github.io/2019/05/05/Java/java-async-4/
+private &lt;T&gt; CompletableFuture&lt;T&gt; convert(ListenableFuture&lt;T&gt; lf) {
+    final CompletableFuture&lt;T&gt; cf = new CompletableFuture&lt;&gt;();
+    lf.addCallback(cf::complete, cf::completeExceptionally);
+    return cf;
+}</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_webclient">WebClient</h3>
+<div class="paragraph">
+<p>Spring Framework 5.0에서 추가된 <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/reactive/function/client/WebClient.html"><em>WebClient</em></a>는 기존의 <em>AsyncRestTemplate</em> 역할을 한다.
+<em>WebClient</em> 는 Non-Block I/O 기반에 ThreadSafe 하다.</p>
+</div>
+<div class="paragraph">
+<p>TODO: Reactive programming, Flux, Mono 등 추가적인 학습이 더 필요할 것 같다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private static final String HOST = "http://fakerestapi.azurewebsites.net/api";
+
+@Test
+public void webClientExample() {
+    WebClient client = WebClient.create(HOST);
+
+    WebClient.RequestBodySpec req1 = client
+        .method(HttpMethod.GET)
+        .uri("/Users/1")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .accept(MediaType.APPLICATION_JSON_UTF8);
+    WebClient.RequestBodySpec req2 = client
+        .method(HttpMethod.GET)
+        .uri("/Users/2");
+
+    User user1 = req1.exchange().block().bodyToMono(User.class).block();
+    User user2 = req2.exchange().block().bodyToMono(User.class).block();
+
+    System.out.println(user1);
+    System.out.println(user2);
+}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>User(id=1, name=User 1, password=Password1)
+User(id=2, name=User 2, password=Password2)</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://tech.kakao.com/2018/05/29/reactor-programming/">사용하면서 알게 된 Reactor, 예제 코드로 살펴보기</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_examples">Examples</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>여러 메서드들을 조합하여 몇가지 예제를 만들어 보고자 한다. Mock 데이터를 위해 <a href="https://fakerestapi.azurewebsites.net/">Fake Rest API</a>와 <a href="http://slowwly.robertomurray.co.uk/">Slowwly</a>를 사용할 것이며,
+모든 예제 코드에는 아래와 같은 <em>User</em> 클래스가 선언되어 있다고 가정한다.</p>
+</div>
+<div class="listingblock">
+<div class="title">User class</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@Data
+class User {
+    @JsonProperty("ID")
+    private String id;
+    @JsonProperty("UserName")
+    private String name;
+    @JsonProperty("Password")
+    private String password;
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_1_asyncresttemplate_vs_resttemplate">Example 1: <em>AsyncRestTemplate</em> vs <em>RestTemplate</em></h3>
+<div class="paragraph">
+<p>다음 예제는 <code>AsyncRestTemplate</code> 과 <code>RestTemplate</code> 의 속도를 비교해보려 한다.</p>
+</div>
+<div class="paragraph">
+<p><code>asyncRestTemplate</code> , <code>restTemplate</code> , <code>restTemplateWithParallel</code> 메서드로 나눠져 있으며,
+모든 메서드가 ID가 1 부터 9까지의 사용자를 조회하고 응답값을 반환하는 작업을 한다. 모든 HTTP API에는 2초간 딜레이가 존재한다.</p>
+</div>
+<div class="paragraph">
+<p>결과는 <code>asyncRestTemplate</code> 이 가장 빠르게 동작했다. 모든 요청을 한번에 조회하고 <code>CompletableFuture::join</code> 에서 모든 응답을 모아 작업이 진행되었다.
+<code>restTemplate</code> 은 예상대로 한번 요청하고 응답 받고 하는 식으로 진행되었고, 가장 느린 결과를 보였다.
+<span class="line-through"><code>restTemplateWithParallel</code> 은 로컬 환경에서 <code>Runtime.getRuntime().availableProcessors() - 1</code> 이 3으로 3번씩 호출하는 것 같았다.</span></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">private final static String SLOW_HOST =
+    "http://slowwly.robertomurray.co.uk/delay/2000/url/http://fakerestapi.azurewebsites.net";
+
+private final AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+private final RestTemplate restTemplate = new RestTemplate();
+
+@Test
+public void test() {
+    final List&lt;String&gt; ids = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9");
+    final Map&lt;String, Long&gt; resultsTime = new HashMap&lt;&gt;(3);
+    long startTime;
+
+    // asyncRestTemplate
+    startTime = System.nanoTime();
+    System.out.println(asyncRestTemplate(ids));
+    resultsTime.put("asyncRestTemplateElapsedTime", System.nanoTime() - startTime);
+
+    // restTemplate
+    startTime = System.nanoTime();
+    System.out.println(restTemplate(ids));
+    resultsTime.put("restTemplateElapsedTime", System.nanoTime() - startTime);
+
+    // restTemplate with parallel
+    startTime = System.nanoTime();
+    System.out.println(restTemplateWithParallel(ids));
+    resultsTime.put("restTemplateWithParallelElapsedTime", System.nanoTime() - startTime);
+
+    // results
+    final DecimalFormat formatter = new DecimalFormat("#,###ms");
+    resultsTime.entrySet().stream()
+        .sorted(Comparator.comparing(Map.Entry::getValue))
+        .forEach(result -&gt; System.out.println(
+            result.getKey() + ": " + formatter.format(result.getValue() / 1_000_000)));
+}
+
+private List&lt;User&gt; asyncRestTemplate(List&lt;String&gt; ids) {
+    List&lt;CompletableFuture&lt;ResponseEntity&lt;User&gt;&gt;&gt; res = new ArrayList&lt;&gt;(ids.size());
+
+    // stream 으로 만들면 lazy하게 동작하면서 한번씩 API 요청?
+    ids.forEach(id -&gt; res.add(convert(asyncRestTemplate.getForEntity(
+        SLOW_HOST + "/api/Users/" + id, User.class))));
+
+    return res.stream()
+        .map(CompletableFuture::join)
+        .map(HttpEntity::getBody)
+        .collect(Collectors.toList());
+}
+
+private List&lt;User&gt; restTemplate(List&lt;String&gt; ids) {
+    List&lt;User&gt; users = ids.stream()
+        .map(id -&gt; restTemplate.getForEntity(SLOW_HOST + "/api/Users/" + id, User.class))
+        .map(HttpEntity::getBody)
+        .collect(Collectors.toList());
+    return users;
+}
+
+private List&lt;User&gt; restTemplateWithParallel(List&lt;String&gt; ids) {
+    List&lt;User&gt; users = ids.parallelStream()
+        .map(id -&gt; restTemplate.getForEntity(SLOW_HOST + "/api/Users/" + id, User.class))
+        .map(HttpEntity::getBody)
+        .collect(Collectors.toList());
+    return users;
+}</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Output</div>
+<div class="content">
+<pre>asyncRestTemplateElapsedTime: 3,746ms
+restTemplateWithParallelElapsedTime: 8,353ms
+restTemplateElapsedTime: 25,067ms</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_2_getuser">Example 2: getUser</h3>
+<div class="paragraph">
+<p>슈도 코드</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@GetMapping("/users/{userId}")
+public UserDetail get(@PathVariable(value = "userId") String id) {
+    try {
+        return Stream.of(id)
+            .map(userMapper::get)
+            .map(validate) // throw InvalidException
+            .map(user -&gt; {
+                final String uuid = user.getId();
+
+                CompletableFuture&lt;Accounts&gt; fAccounts = accountConnector.getAccounts(uuid);
+                CompletableFuture&lt;Cards&gt; fCards = cardConnector.getCards(uuid);
+                CompletableFuture&lt;Point&gt; fPoint = pointConnector.getPoint(uuid);
+
+                return CompletableFuture.allOf(accountsFuture, cardsFuture, pointFuture)
+                    .thenApply(ignore -&gt; UserDetail.builder()
+                        .user(user)
+                        .accounts(fAccounts.join())
+                        .cards(fCards.join())
+                        .point(fPoint.join())
+                        .build())
+                    .exceptionally(err -&gt; {
+                        throw new ConnectorException(err);
+                    });
+            })
+            .map(CompletableFuture::join)
+            .findFirst()
+            .orElse(null);
+    } catch (InvalidException | ConnectorException e) {
+        log.debug(e.getMessage(), e);
+        throw e;
+    } catch (Exception e) {
+        log.error(e.getMessage(), e);
+        throw e;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cautions">Cautions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TODO</p>
+</div>
+<div class="sect2">
+<h3 id="_references_3">References</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://hamait.tistory.com/547">자바8 Stream API 를 다룰때 실수하기 쉬운것 10가지</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references_4">References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.baeldung.com/java-8-streams-introduction">Introduction to Java 8 Streams</a></p>
+</li>
+<li>
+<p><a href="https://futurecreator.github.io/2018/08/26/java-8-streams/">Java 스트림 Stream (1) 총정리</a></p>
+</li>
+<li>
+<p><a href="https://futurecreator.github.io/2018/08/26/java-8-streams-advanced/">Java 스트림 Stream (2) 고급</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-02-07 06:03:56 UTC
+</div>
+</div>
+</body>
+</html>

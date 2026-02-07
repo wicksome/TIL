@@ -1,4 +1,0 @@
-= 크롬 확장
-
-== https://github.com/sindresorhus/refined-github[refind-github]
-* https://github.com/sindresorhus/refined-github/pull/1146#issuecomment-475872046[소스코드 블럭에 스크롤 제거하기]

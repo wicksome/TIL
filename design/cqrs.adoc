@@ -1,5 +1,0 @@
-= CQRS, Command and Query Responsibility Segregation
-Yeongjun Kim <opid911@gmail.com>
-:revdate: 2019-
-:page-tags: cqrs, eventsourcing, desing
-:page-draft:

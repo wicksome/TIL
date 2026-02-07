@@ -1,8 +1,0 @@
-= References
-
-* https://blog.devgenius.io/top-10-architecture-characteristics-non-functional-requirements-with-cheatsheat-7ad14bbb0a9b[Top 10 Architecture Characteristics / Non-Functional Requirements with Cheatsheet]
-+
-[#img-architecture-characteristics]
-.Architecture Characteristics
-[link=https://imgur.com/a/HzPp8s0]
-image::https://i.imgur.com/zdnIkSL.png[]
