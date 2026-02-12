@@ -333,6 +333,21 @@ annotation class ClientIp
 * CLASS: 클래스(.class) 파일까지 남음 = 바이트 코드
 * RUNTIME: 런타임까지 남음
 
+==== Annotation use-site targets
+
+* 어노테이션이 Java 바이트코드에서 field, getter, setter, parameter 등 어디에 붙을지 명시하는 문법
+* 참고: https://kotlinlang.org/docs/annotations.html#annotation-use-site-targets[kotlin docs]
+
+|===
+| Target | Description
+
+| `field` | Java 필드 (backing field)
+| `property` | Kotlin 프로퍼티 (Java에서 안보임)
+| `get` | property getter
+| `set` | property setter
+| `all` | https://kotlinlang.org/docs/annotations.html#all-meta-target[all-meta-target] 참고
+| `param` | 생성자 파라미터
+|===
 
 == Conditionals
 
