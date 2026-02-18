@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko" data-theme="dark">
 <head>
@@ -1026,6 +1025,37 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
 });
 
+// Hash-based time input: #epochMillis, #epochSeconds, #ISO8601
+function parseHash() {
+  const hash = decodeURIComponent(window.location.hash.slice(1)).trim();
+  if (!hash) return null;
+  // All digits → epoch
+  if (/^\d+$/.test(hash)) {
+    const num = Number(hash);
+    // 13+ digits or value > 1e12 → millis, otherwise seconds
+    const ms = num > 1e12 ? num : num * 1000;
+    const d = new Date(ms);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  // Try ISO 8601 parse
+  const d = new Date(hash);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function applyHash() {
+  const d = parseHash();
+  if (!d) return false;
+  document.getElementById('timeInput').value = formatForInput(d);
+  currentDate = d;
+  calYear = d.getFullYear();
+  calMonth = d.getMonth();
+  renderCalendar();
+  renderTz();
+  return true;
+}
+
+window.addEventListener('hashchange', () => { applyHash(); });
+
 // Init
 const initLang = getLang();
 document.getElementById('langBtn').textContent = initLang.toUpperCase();
@@ -1037,7 +1067,7 @@ document.getElementById('tzSearch').placeholder = t('placeholderTz');
 const now = new Date();
 calYear = now.getFullYear();
 calMonth = now.getMonth();
-setNow();
+if (!applyHash()) setNow();
 </script>
 </body>
 </html>
