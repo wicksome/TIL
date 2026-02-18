@@ -363,6 +363,33 @@
     margin-right: 8px;
     box-shadow: 0 1px 0 var(--border);
   }
+
+  .usage {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .usage-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .usage-item {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .usage-item strong { color: var(--text-muted); font-weight: 500; }
+  .usage-example {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.68rem;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
 </style>
 </head>
 <body>
@@ -396,6 +423,8 @@
   </div>
 
   <div class="tz-list" id="tzList"></div>
+
+  <div class="usage" id="usage"></div>
 </div>
 
 <script>
@@ -422,6 +451,15 @@ const I18N = {
     localDateTime: 'LocalDateTime',
     isoOffset: 'ISO Offset',
     suggestionHint: 'e.g. UTC+9, +5:30, 09:00',
+    usageTitle: 'Usage',
+    usageItems: [
+      ['Time Input', 'Enter time in ISO 8601 or Epoch milliseconds format. Switch format with the dropdown.'],
+      ['Timezone Search', 'Search by IANA name (Asia/Seoul) or UTC offset (UTC+9, +5:30).'],
+      ['Copy', 'Click a timezone card to copy in various formats. Use number keys 1–5 for quick copy.'],
+      ['Drag & Drop', 'Reorder timezone cards by dragging.'],
+      ['URL Hash', 'Append #epoch or #ISO8601 to the URL to open with a specific time.'],
+    ],
+    usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
     months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
     dow: ['Su','Mo','Tu','We','Th','Fr','Sa'],
   },
@@ -441,6 +479,15 @@ const I18N = {
     localDateTime: 'LocalDateTime',
     isoOffset: 'ISO Offset',
     suggestionHint: '예: UTC+9, +5:30, 09:00',
+    usageTitle: '사용법',
+    usageItems: [
+      ['시간 입력', 'ISO 8601 또는 Epoch 밀리초 형식으로 입력. 드롭다운으로 형식 전환.'],
+      ['타임존 검색', 'IANA 이름(Asia/Seoul) 또는 UTC 오프셋(UTC+9, +5:30)으로 검색.'],
+      ['복사', '타임존 카드를 클릭하면 다양한 형식으로 복사. 숫자키 1–5로 빠른 복사.'],
+      ['드래그 & 드롭', '타임존 카드를 드래그하여 순서 변경.'],
+      ['URL 해시', 'URL 뒤에 #epoch 또는 #ISO8601을 붙여 특정 시간으로 열기.'],
+    ],
+    usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
     months: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
     dow: ['일','월','화','수','목','금','토'],
   },
@@ -457,6 +504,7 @@ function setLang(lang) {
   document.getElementById('nowBtn').textContent = t('now');
   document.getElementById('timeInput').placeholder = t('placeholderIso');
   document.getElementById('tzSearch').placeholder = t('placeholderTz');
+  renderUsage();
   renderCalendar();
   renderTz();
 }
@@ -602,6 +650,12 @@ function getPlaceholder() {
   return getFormat() === 'epoch' ? '1700000000000' : t('placeholderIso');
 }
 
+function updateHash(date) {
+  if (!date) { history.replaceState(null, '', window.location.pathname + window.location.search); return; }
+  const val = getFormat() === 'epoch' ? String(date.getTime()) : toISO(date);
+  history.replaceState(null, '', '#' + val);
+}
+
 function setNow() {
   const now = new Date();
   document.getElementById('timeInput').value = formatForInput(now);
@@ -609,6 +663,7 @@ function setNow() {
   currentDate = now;
   calYear = now.getFullYear();
   calMonth = now.getMonth();
+  updateHash(now);
   renderCalendar();
   renderTz();
 }
@@ -644,6 +699,7 @@ function parseAndRender() {
   currentDate = d;
   calYear = d.getFullYear();
   calMonth = d.getMonth();
+  updateHash(d);
   renderCalendar();
   renderTz();
 }
@@ -652,6 +708,7 @@ function applyCalendarSelection(year, month, day) {
   const d = new Date(year, month, day, 0, 0, 0);
   document.getElementById('timeInput').value = formatForInput(d);
   currentDate = d;
+  updateHash(d);
   renderCalendar();
   renderTz();
 }
@@ -1025,6 +1082,19 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
 });
 
+function renderUsage() {
+  const el = document.getElementById('usage');
+  const items = t('usageItems');
+  const examples = t('usageHashExamples');
+  el.innerHTML = `<div class="usage-title">${t('usageTitle')}</div>` +
+    items.map((item, i) => {
+      let html = `<div class="usage-item"><strong>${item[0]}</strong> — ${item[1]}`;
+      if (i === items.length - 1) html += `<div class="usage-example">${examples}</div>`;
+      html += '</div>';
+      return html;
+    }).join('');
+}
+
 // Hash-based time input: #epochMillis, #epochSeconds, #ISO8601
 function parseHash() {
   const hash = decodeURIComponent(window.location.hash.slice(1)).trim();
@@ -1064,6 +1134,7 @@ document.getElementById('themeBtn').title = t('toggleTheme');
 document.getElementById('nowBtn').textContent = t('now');
 document.getElementById('timeInput').placeholder = t('placeholderIso');
 document.getElementById('tzSearch').placeholder = t('placeholderTz');
+renderUsage();
 const now = new Date();
 calYear = now.getFullYear();
 calMonth = now.getMonth();
