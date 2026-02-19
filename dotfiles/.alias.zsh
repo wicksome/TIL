@@ -6,7 +6,12 @@
 alias gs="git status"
 alias gd="git diff"
 alias gl='git lg1'
+alias gl10='git lg1'
 alias gc='git commit'
+
+gln() {
+    git lgn -"$1"
+}
 
 function git_find_branches()
 {
@@ -39,7 +44,7 @@ function git_find_branches()
         for sub in *; do
             [[ -d "${sub}/.git" ]] || continue
             local branches=$(cd "$sub"; git branch --all | grep "$_branch" | cut -c 3-)
-            
+
             [[ -n $branches ]] || continue
 
             for branch in $branches; do
@@ -59,6 +64,12 @@ alias port='port $@'
 
 alias dk='docker'
 alias dkc='docker-compose'
+
+function docker_exec() {
+    docker exec -it $1 /bin/bash $2
+}
+alias dexec='docker_exec $@'
+alias dcat='docker_exec $1 "cat $2"'
 
 function epoch2date() {
   if [[ "$1" == "help" ]]; then
@@ -132,3 +143,4 @@ function epoch2date() {
 
 alias epoch2date="epoch2date $@"
 alias epoch="epoch2date $@"
+alias e="epoch $@"
