@@ -889,10 +889,19 @@
       return isNaN(d.getTime()) ? null : d;
     }
 
-    const lacksOffset = inputLacksTimezone(hash);
-    const d = (lacksOffset && getDefaultTz() === 'utc')
-      ? new Date(hash.replace(' ', 'T') + 'Z')
-      : new Date(hash);
+    const normalized = hash.replace(' ', 'T');
+    const dateOnly = DATE_ONLY_RE.test(normalized);
+    const lacksOffset = dateOnly || inputLacksTimezone(hash);
+    let d;
+
+    if (lacksOffset && getDefaultTz() === 'utc') {
+      d = dateOnly ? new Date(normalized) : new Date(normalized + 'Z');
+    } else if (lacksOffset && dateOnly) {
+      const [y, m, day] = normalized.split('-').map(Number);
+      d = new Date(y, m - 1, day);
+    } else {
+      d = new Date(hash);
+    }
     return isNaN(d.getTime()) ? null : d;
   }
 
@@ -901,7 +910,7 @@
     if (!d) return false;
 
     const hash = decodeURIComponent(location.hash.slice(1)).trim();
-    state.assumedLocal = !/^\d+$/.test(hash) && inputLacksTimezone(hash);
+    state.assumedLocal = !/^\d+$/.test(hash) && (DATE_ONLY_RE.test(hash) || inputLacksTimezone(hash));
     state.currentDate  = d;
     state.calYear      = d.getFullYear();
     state.calMonth     = d.getMonth();
@@ -1218,40 +1227,66 @@
     setDate(new Date(), false);
   }
 
+  function tryParseEpoch(raw) {
+    const num = Number(raw);
+    if (!Number.isFinite(num) || num < 0) return null;
+    const d = new Date(num);
+    return isNaN(d.getTime()) ? null : { date: d, assumed: false };
+  }
+
+  const DATE_ONLY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+  function tryParseIso(raw) {
+    const normalized = raw.replace(' ', 'T');
+    const dateOnly = DATE_ONLY_RE.test(normalized);
+    const lacksOffset = dateOnly || inputLacksTimezone(raw);
+    let d;
+
+    if (lacksOffset && getDefaultTz() === 'utc') {
+      // date-only는 이미 UTC로 파싱되므로 Z 불필요, datetime은 Z 추가
+      d = dateOnly ? new Date(normalized) : new Date(normalized + 'Z');
+    } else if (lacksOffset && dateOnly) {
+      // date-only + local: JS 스펙상 UTC로 파싱되므로 로컬 시간으로 직접 생성
+      const [y, m, day] = normalized.split('-').map(Number);
+      d = new Date(y, m - 1, day);
+    } else {
+      d = new Date(raw);
+    }
+
+    if (isNaN(d.getTime())) return null;
+    return { date: d, assumed: lacksOffset };
+  }
+
+  function switchFormat(fmt) {
+    dom.formatSelect.value = fmt;
+    dom.timeInput.placeholder = getPlaceholder();
+  }
+
   function parseAndRender() {
     const raw = dom.timeInput.value.trim();
     if (!raw) { clearDate(); return; }
 
-    let d;
-    let assumed = false;
+    const fmt = getFormat();
+    let result = fmt === 'epoch' ? tryParseEpoch(raw) : tryParseIso(raw);
 
-    if (getFormat() === 'epoch') {
-      const num = Number(raw);
-      if (!Number.isFinite(num) || num < 0) {
-        dom.error.textContent = t('invalidEpoch');
-        clearDate();
-        return;
-      }
-      d = new Date(num);
-    } else {
-      const lacksOffset = inputLacksTimezone(raw);
-      d = (lacksOffset && getDefaultTz() === 'utc')
-        ? new Date(raw.replace(' ', 'T') + 'Z')
-        : new Date(raw);
-      assumed = lacksOffset;
+    // Fallback: try the other format
+    if (!result) {
+      const alt = fmt === 'epoch' ? 'iso' : 'epoch';
+      result = alt === 'epoch' ? tryParseEpoch(raw) : tryParseIso(raw);
+      if (result) switchFormat(alt);
     }
 
-    if (isNaN(d.getTime())) {
-      dom.error.textContent = getFormat() === 'epoch' ? t('invalidEpoch') : t('invalidIso');
+    if (!result) {
+      dom.error.textContent = fmt === 'epoch' ? t('invalidEpoch') : t('invalidIso');
       clearDate();
       return;
     }
 
     dom.error.textContent = '';
-    state.currentDate  = d;
-    state.assumedLocal = assumed;
-    state.calYear      = d.getFullYear();
-    state.calMonth     = d.getMonth();
+    state.currentDate  = result.date;
+    state.assumedLocal = result.assumed;
+    state.calYear      = result.date.getFullYear();
+    state.calMonth     = result.date.getMonth();
     syncHash();
     render();
   }
