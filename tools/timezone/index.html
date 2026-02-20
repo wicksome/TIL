@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Timezone Converter</title>
 <style>
+  /* ─── Theme Variables ──────────────────────────────── */
+
   :root[data-theme="dark"] {
     --bg: #0f0f0f;
     --text: #e0e0e0;
@@ -37,8 +39,8 @@
     --remove-hover: #f66;
     --drag-border: #4a8aff;
     --time-empty: #444;
-    --theme-btn-icon: "☀️";
   }
+
   :root[data-theme="light"] {
     --bg: #f5f5f5;
     --text: #1a1a1a;
@@ -71,10 +73,12 @@
     --remove-hover: #d33;
     --drag-border: #2563eb;
     --time-empty: #ccc;
-    --theme-btn-icon: "🌙";
   }
 
+  /* ─── Reset & Base ─────────────────────────────────── */
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     background: var(--bg);
@@ -83,7 +87,10 @@
     padding: 40px 20px;
     transition: background 0.2s, color 0.2s;
   }
+
   .container { max-width: 680px; margin: 0 auto; }
+
+  /* ─── Header ───────────────────────────────────────── */
 
   .top-row {
     display: flex;
@@ -91,8 +98,11 @@
     justify-content: space-between;
     margin-bottom: 24px;
   }
+
   h1 { font-size: 1.1rem; font-weight: 500; color: var(--text-muted); }
+
   .top-right { display: flex; gap: 6px; }
+
   #themeBtn, #langBtn, #defaultTzBtn {
     background: none;
     border: 1px solid var(--border);
@@ -103,14 +113,17 @@
     line-height: 1;
     transition: border-color 0.15s;
   }
-  #themeBtn:hover, #langBtn:hover, #defaultTzBtn:hover { border-color: var(--border-focus); }
+
+  #themeBtn:hover, #langBtn:hover, #defaultTzBtn:hover {
+    border-color: var(--border-focus);
+  }
+
   #langBtn, #defaultTzBtn { font-size: 0.75rem; color: var(--text-muted); }
 
-  .input-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+  /* ─── Input ────────────────────────────────────────── */
+
+  .input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+
   #formatSelect {
     background: var(--input-bg);
     border: 1px solid var(--border);
@@ -126,13 +139,11 @@
     min-width: 56px;
     transition: border-color 0.15s;
   }
+
   #formatSelect:focus { border-color: var(--border-focus); }
-  .input-wrap {
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+
+  .input-wrap { flex: 1; position: relative; display: flex; align-items: center; }
+
   #timeInput {
     width: 100%;
     background: var(--input-bg);
@@ -145,6 +156,7 @@
     outline: none;
     transition: border-color 0.15s, padding-right 0.15s;
   }
+
   #timeInput:focus { border-color: var(--border-focus); }
   #timeInput::placeholder { color: var(--placeholder); }
 
@@ -159,9 +171,25 @@
     white-space: nowrap;
     transition: border-color 0.15s, color 0.15s;
   }
+
   .btn:hover { border-color: var(--border-focus); color: var(--btn-hover); }
 
   .error { color: var(--error); font-size: 0.8rem; margin-bottom: 8px; min-height: 1.2em; }
+
+  .tz-assumption {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .tz-assumption:empty { display: none; }
+
+  /* ─── Calendar ─────────────────────────────────────── */
 
   .calendar {
     background: var(--surface);
@@ -170,13 +198,16 @@
     margin-bottom: 24px;
     user-select: none;
   }
+
   .cal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px;
   }
+
   .cal-title { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+
   .cal-nav {
     background: none;
     border: none;
@@ -187,14 +218,18 @@
     border-radius: 6px;
     transition: color 0.15s, background 0.15s;
   }
+
   .cal-nav:hover { color: var(--cal-nav-hover); background: var(--cal-nav-hover-bg); }
+
   .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 3px;
     text-align: center;
   }
+
   .cal-dow { font-size: 0.75rem; color: var(--text-dim); padding: 6px 0; }
+
   .cal-day {
     font-size: 0.88rem;
     padding: 10px 0;
@@ -203,15 +238,16 @@
     color: var(--cal-day);
     transition: background 0.1s, color 0.1s;
   }
+
   .cal-day:hover { background: var(--cal-hover-bg); color: var(--btn-hover); }
   .cal-day.other { color: var(--cal-day-other); }
   .cal-day.today { color: var(--cal-today); font-weight: 600; }
   .cal-day.selected { background: var(--cal-selected-bg); color: var(--cal-selected); }
-  .add-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
+
+  /* ─── Timezone Search ──────────────────────────────── */
+
+  .add-row { display: flex; gap: 8px; margin-bottom: 24px; }
+
   #tzSearch {
     flex: 1;
     background: var(--input-bg);
@@ -223,10 +259,12 @@
     outline: none;
     transition: border-color 0.15s;
   }
+
   #tzSearch:focus { border-color: var(--border-focus); }
   #tzSearch::placeholder { color: var(--placeholder); }
 
   .suggestions { position: relative; }
+
   .suggestions-list {
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -238,7 +276,9 @@
     z-index: 10;
     display: none;
   }
+
   .suggestions-list.open { display: block; }
+
   .suggestion-item {
     padding: 8px 14px;
     font-size: 0.85rem;
@@ -248,23 +288,25 @@
     justify-content: space-between;
     align-items: center;
   }
+
   .suggestion-item:hover, .suggestion-item.active {
     background: var(--suggestion-hover-bg);
     color: var(--suggestion-hover);
   }
+
   .suggestion-offset {
     font-size: 0.75rem;
     color: var(--suggestion-offset);
     margin-left: 12px;
     flex-shrink: 0;
   }
-  .suggestion-hint {
-    padding: 8px 14px;
-    font-size: 0.78rem;
-    color: var(--text-dim);
-  }
+
+  .suggestion-hint { padding: 8px 14px; font-size: 0.78rem; color: var(--text-dim); }
+
+  /* ─── Timezone Cards ───────────────────────────────── */
 
   .tz-list { display: flex; flex-direction: column; gap: 2px; }
+
   .tz-card {
     display: flex;
     align-items: center;
@@ -274,16 +316,16 @@
     transition: background 0.1s, opacity 0.15s;
     cursor: grab;
   }
+
   .tz-card:hover { background: var(--surface-hover); }
   .tz-card:active { cursor: grabbing; }
   .tz-card.dragging { opacity: 0.3; }
   .tz-card.drag-over { border-top: 2px solid var(--drag-border); margin-top: -2px; }
+
   .tz-flag { font-size: 1.2rem; width: 28px; flex-shrink: 0; }
   .tz-name { font-size: 0.8rem; color: var(--text-muted); min-width: 180px; }
-  .tz-time-area {
-    flex: 1;
-    text-align: right;
-  }
+  .tz-time-area { flex: 1; text-align: right; }
+
   .tz-time {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 1rem;
@@ -292,7 +334,9 @@
     border-radius: 4px;
     transition: color 0.1s;
   }
+
   .tz-time:hover { color: var(--cal-today); }
+
   .tz-offset {
     font-size: 0.75rem;
     color: var(--offset-color);
@@ -300,6 +344,7 @@
     min-width: 70px;
     text-align: right;
   }
+
   .tz-remove {
     background: none;
     border: none;
@@ -310,8 +355,13 @@
     padding: 0 4px;
     transition: color 0.15s;
   }
+
   .tz-remove:hover { color: var(--remove-hover); }
+
+  /* ─── Copy Menu ────────────────────────────────────── */
+
   .tz-copy-wrap { position: relative; margin-left: 8px; }
+
   .tz-copy {
     background: none;
     border: 1px solid var(--border);
@@ -323,7 +373,9 @@
     transition: color 0.15s, border-color 0.15s;
     white-space: nowrap;
   }
+
   .tz-copy:hover { color: var(--btn-hover); border-color: var(--border-focus); }
+
   .tz-copy-menu {
     position: absolute;
     right: 0;
@@ -338,7 +390,9 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     display: none;
   }
+
   .tz-copy-menu.open { display: block; }
+
   .tz-copy-item {
     display: flex;
     justify-content: space-between;
@@ -351,13 +405,21 @@
     white-space: nowrap;
     gap: 12px;
   }
+
   .tz-copy-item:hover { background: var(--surface-hover); color: var(--text); }
-  .tz-copy-item .label { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; flex: 1; text-align: left; }
+
+  .tz-copy-item .label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    flex: 1;
+    text-align: left;
+  }
+
   .tz-copy-item .value {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.7rem;
     color: var(--text-faint);
   }
+
   .tz-copy-key {
     display: inline-flex;
     align-items: center;
@@ -376,11 +438,14 @@
     box-shadow: 0 1px 0 var(--border);
   }
 
+  /* ─── Usage ────────────────────────────────────────── */
+
   .usage {
     margin-top: 48px;
     padding-top: 24px;
     border-top: 1px solid var(--border);
   }
+
   .usage-title {
     font-size: 0.7rem;
     font-weight: 500;
@@ -389,30 +454,22 @@
     letter-spacing: 0.05em;
     margin-bottom: 12px;
   }
+
   .usage-item {
     margin-bottom: 8px;
     font-size: 0.75rem;
     color: var(--text-dim);
     line-height: 1.5;
   }
+
   .usage-item strong { color: var(--text-muted); font-weight: 500; }
+
   .usage-example {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.68rem;
     color: var(--text-faint);
     margin-top: 2px;
   }
-  .tz-assumption {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.7rem;
-    color: var(--text-faint);
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .tz-assumption:empty { display: none; }
 </style>
 </head>
 <body>
@@ -455,810 +512,941 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'tz-converter-zones';
-const THEME_KEY = 'tz-converter-theme';
-const LANG_KEY = 'tz-converter-lang';
-const DEFAULT_TZ_KEY = 'tz-converter-default-tz';
-const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
-const DEFAULT_ZONES = ['Asia/Seoul', 'America/New_York', 'Europe/London', 'UTC'];
+(function () {
+  'use strict';
 
-const I18N = {
-  en: {
-    title: 'Timezone Converter',
-    toggleTheme: 'Toggle theme',
-    toggleLang: 'Toggle language',
-    defaultTzUtc: 'Default timezone: UTC',
-    defaultTzLocal: 'Default timezone: Local',
-    now: 'Now',
-    placeholderIso: '2025-01-15T09:00:00+09:00',
-    placeholderTz: 'Asia/Seoul or UTC+5:30',
-    invalidEpoch: 'Invalid epoch milliseconds',
-    invalidIso: 'Invalid ISO 8601 format',
-    copy: 'copy',
-    copied: 'copied!',
-    epochSeconds: 'Epoch Seconds',
-    epochMilliseconds: 'Epoch Milliseconds',
-    localDate: 'LocalDate',
-    localDateTime: 'LocalDateTime',
-    isoOffset: 'ISO Offset',
-    suggestionHint: 'e.g. UTC+9, +5:30, 09:00',
-    usageTitle: 'Usage',
-    usageItems: [
-      ['Time Input', 'Enter time in ISO 8601 or Epoch milliseconds format. Switch format with the dropdown.'],
-      ['Default Timezone', 'Toggle UTC/Local button to set how offset-less input is interpreted.'],
-      ['Timezone Search', 'Search by IANA name (Asia/Seoul) or UTC offset (UTC+9, +5:30).'],
-      ['Time Select', 'Click a time in the timezone list to update the input with that timezone\'s offset.'],
-      ['Copy', 'Click the copy button on a timezone card to copy in various formats. Use number keys 1–5 for quick copy.'],
-      ['Drag & Drop', 'Reorder timezone cards by dragging.'],
-      ['URL Hash', 'Append #epoch or #ISO8601 to the URL to open with a specific time.'],
-    ],
-    usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
-    months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-    dow: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-  },
-  ko: {
-    title: '타임존 변환기',
-    toggleTheme: '테마 전환',
-    toggleLang: '언어 전환',
-    defaultTzUtc: '기본 타임존: UTC',
-    defaultTzLocal: '기본 타임존: 로컬',
-    now: '현재',
-    placeholderIso: '2025-01-15T09:00:00+09:00',
-    placeholderTz: 'Asia/Seoul 또는 UTC+5:30',
-    invalidEpoch: '유효하지 않은 epoch 밀리초',
-    invalidIso: '유효하지 않은 ISO 8601 형식',
-    copy: '복사',
-    copied: '완료!',
-    epochSeconds: 'Epoch Seconds',
-    epochMilliseconds: 'Epoch Milliseconds',
-    localDate: 'LocalDate',
-    localDateTime: 'LocalDateTime',
-    isoOffset: 'ISO Offset',
-    suggestionHint: '예: UTC+9, +5:30, 09:00',
-    usageTitle: '사용법',
-    usageItems: [
-      ['시간 입력', 'ISO 8601 또는 Epoch 밀리초 형식으로 입력. 드롭다운으로 형식 전환.'],
-      ['기본 타임존', 'UTC/Local 버튼으로 오프셋 없는 입력의 해석 기준 설정.'],
-      ['타임존 검색', 'IANA 이름(Asia/Seoul) 또는 UTC 오프셋(UTC+9, +5:30)으로 검색.'],
-      ['시간 선택', '타임존 목록에서 시간을 클릭하면 해당 타임존 오프셋으로 입력 업데이트.'],
-      ['복사', '타임존 카드의 복사 버튼을 클릭하면 다양한 형식으로 복사. 숫자키 1–5로 빠른 복사.'],
-      ['드래그 & 드롭', '타임존 카드를 드래그하여 순서 변경.'],
-      ['URL 해시', 'URL 뒤에 #epoch 또는 #ISO8601을 붙여 특정 시간으로 열기.'],
-    ],
-    usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
-    months: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-    dow: ['일','월','화','수','목','금','토'],
-  },
-};
+  /* ════════════════════════════════════════════════════
+     Constants
+     ════════════════════════════════════════════════════ */
 
-function getLang() { return localStorage.getItem(LANG_KEY) || 'en'; }
-function t(key) { return I18N[getLang()][key]; }
+  const STORAGE_KEY    = 'tz-converter-zones';
+  const THEME_KEY      = 'tz-converter-theme';
+  const LANG_KEY       = 'tz-converter-lang';
+  const DEFAULT_TZ_KEY = 'tz-converter-default-tz';
 
-function setLang(lang) {
-  localStorage.setItem(LANG_KEY, lang);
-  document.getElementById('langBtn').textContent = lang.toUpperCase();
-  document.getElementById('title').textContent = t('title');
-  document.getElementById('themeBtn').title = t('toggleTheme');
-  document.getElementById('langBtn').title = t('toggleLang');
-  document.getElementById('defaultTzBtn').title = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
-  document.getElementById('nowBtn').textContent = t('now');
-  document.getElementById('timeInput').placeholder = t('placeholderIso');
-  document.getElementById('tzSearch').placeholder = t('placeholderTz');
-  renderUsage();
-  renderCalendar();
-  renderTz();
-  renderTzAssumption();
-}
+  const ALL_TIMEZONES  = Intl.supportedValuesOf('timeZone');
+  const DEFAULT_ZONES  = ['Asia/Seoul', 'America/New_York', 'Europe/London', 'UTC'];
+  const OFFSET_RE      = /^UTC([+-])(\d{1,2})(?::(\d{2}))?$/i;
+  const THEME_ORDER    = ['dark', 'light', 'system'];
+  const THEME_ICONS    = { dark: '☀️', light: '🌙', system: '🖥️' };
 
-document.getElementById('langBtn').addEventListener('click', () => {
-  setLang(getLang() === 'en' ? 'ko' : 'en');
-});
+  /* ════════════════════════════════════════════════════
+     DOM Cache
+     ════════════════════════════════════════════════════ */
 
-// Theme
-function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
-function resolveTheme(t) {
-  if (t === 'system') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  return t;
-}
-function setTheme(t) {
-  localStorage.setItem(THEME_KEY, t);
-  document.documentElement.setAttribute('data-theme', resolveTheme(t));
-  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : t === 'light' ? '🌙' : '🖥️';
-}
-setTheme(getTheme());
-document.getElementById('themeBtn').addEventListener('click', () => {
-  const order = ['dark', 'light', 'system'];
-  setTheme(order[(order.indexOf(getTheme()) + 1) % 3]);
-});
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-  if (getTheme() === 'system') setTheme('system');
-});
+  const $ = (id) => document.getElementById(id);
 
-// Default timezone for offset-less input
-function getDefaultTz() { return localStorage.getItem(DEFAULT_TZ_KEY) || 'local'; }
-function setDefaultTz(v) {
-  localStorage.setItem(DEFAULT_TZ_KEY, v);
-  document.getElementById('defaultTzBtn').textContent = v === 'utc' ? 'UTC' : 'Local';
-  document.getElementById('defaultTzBtn').title = v === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
-  if (currentDate) parseAndRender();
-}
-document.getElementById('defaultTzBtn').textContent = getDefaultTz() === 'utc' ? 'UTC' : 'Local';
-document.getElementById('defaultTzBtn').addEventListener('click', () => {
-  setDefaultTz(getDefaultTz() === 'local' ? 'utc' : 'local');
-});
+  const dom = {
+    title:         $('title'),
+    themeBtn:      $('themeBtn'),
+    langBtn:       $('langBtn'),
+    defaultTzBtn:  $('defaultTzBtn'),
+    formatSelect:  $('formatSelect'),
+    timeInput:     $('timeInput'),
+    tzAssumption:  $('tzAssumption'),
+    nowBtn:        $('nowBtn'),
+    error:         $('error'),
+    calendar:      $('calendar'),
+    tzSearch:      $('tzSearch'),
+    suggestionsList: $('suggestionsList'),
+    tzList:        $('tzList'),
+    usage:         $('usage'),
+  };
 
-const TZ_TO_CC = {
-  'Asia/Seoul':'KR','Asia/Tokyo':'JP','Asia/Shanghai':'CN','Asia/Hong_Kong':'HK',
-  'Asia/Taipei':'TW','Asia/Singapore':'SG','Asia/Kolkata':'IN','Asia/Calcutta':'IN',
-  'Asia/Bangkok':'TH','Asia/Ho_Chi_Minh':'VN','Asia/Saigon':'VN','Asia/Jakarta':'ID',
-  'Asia/Manila':'PH','Asia/Kuala_Lumpur':'MY','Asia/Dubai':'AE','Asia/Riyadh':'SA',
-  'Asia/Tehran':'IR','Asia/Karachi':'PK','Asia/Dhaka':'BD','Asia/Colombo':'LK',
-  'Asia/Kathmandu':'NP','Asia/Yangon':'MM','Asia/Almaty':'KZ','Asia/Tashkent':'UZ',
-  'Asia/Bishkek':'KG','Asia/Tbilisi':'GE','Asia/Yerevan':'AM','Asia/Baku':'AZ',
-  'Asia/Beirut':'LB','Asia/Jerusalem':'IL','Asia/Amman':'JO','Asia/Baghdad':'IQ',
-  'Asia/Kuwait':'KW','Asia/Qatar':'QA','Asia/Bahrain':'BH','Asia/Muscat':'OM',
-  'Asia/Kabul':'AF','Asia/Ulaanbaatar':'MN','Asia/Phnom_Penh':'KH','Asia/Vientiane':'LA',
-  'Asia/Brunei':'BN','Asia/Dili':'TL','Asia/Macau':'MO',
-  'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE','Europe/Rome':'IT',
-  'Europe/Madrid':'ES','Europe/Lisbon':'PT','Europe/Amsterdam':'NL','Europe/Brussels':'BE',
-  'Europe/Zurich':'CH','Europe/Vienna':'AT','Europe/Stockholm':'SE','Europe/Oslo':'NO',
-  'Europe/Copenhagen':'DK','Europe/Helsinki':'FI','Europe/Warsaw':'PL','Europe/Prague':'CZ',
-  'Europe/Budapest':'HU','Europe/Bucharest':'RO','Europe/Sofia':'BG','Europe/Athens':'GR',
-  'Europe/Istanbul':'TR','Europe/Moscow':'RU','Europe/Kiev':'UA','Europe/Kyiv':'UA',
-  'Europe/Dublin':'IE','Europe/Tallinn':'EE','Europe/Riga':'LV','Europe/Vilnius':'LT',
-  'Europe/Belgrade':'RS','Europe/Zagreb':'HR','Europe/Ljubljana':'SI','Europe/Bratislava':'SK',
-  'Europe/Luxembourg':'LU','Europe/Monaco':'MC','Europe/Malta':'MT','Europe/Sarajevo':'BA',
-  'Europe/Skopje':'MK','Europe/Podgorica':'ME','Europe/Tirane':'AL','Europe/Minsk':'BY',
-  'Europe/Chisinau':'MD','Europe/Reykjavik':'IS',
-  'America/New_York':'US','America/Chicago':'US','America/Denver':'US',
-  'America/Los_Angeles':'US','America/Anchorage':'US','America/Phoenix':'US',
-  'America/Toronto':'CA','America/Vancouver':'CA','America/Edmonton':'CA',
-  'America/Winnipeg':'CA','America/Halifax':'CA','America/St_Johns':'CA',
-  'America/Mexico_City':'MX','America/Cancun':'MX','America/Tijuana':'MX',
-  'America/Sao_Paulo':'BR','America/Manaus':'BR','America/Fortaleza':'BR',
-  'America/Argentina/Buenos_Aires':'AR','America/Buenos_Aires':'AR',
-  'America/Santiago':'CL','America/Lima':'PE','America/Bogota':'CO',
-  'America/Caracas':'VE','America/Guayaquil':'EC','America/La_Paz':'BO',
-  'America/Asuncion':'PY','America/Montevideo':'UY',
-  'America/Havana':'CU','America/Jamaica':'JM','America/Panama':'PA',
-  'America/Costa_Rica':'CR','America/Guatemala':'GT','America/Tegucigalpa':'HN',
-  'America/El_Salvador':'SV','America/Managua':'NI',
-  'Pacific/Auckland':'NZ','Pacific/Fiji':'FJ','Pacific/Honolulu':'US',
-  'Pacific/Guam':'GU','Pacific/Tahiti':'PF','Pacific/Port_Moresby':'PG',
-  'Pacific/Noumea':'NC','Pacific/Tongatapu':'TO','Pacific/Apia':'WS',
-  'Africa/Cairo':'EG','Africa/Lagos':'NG','Africa/Johannesburg':'ZA',
-  'Africa/Nairobi':'KE','Africa/Casablanca':'MA','Africa/Algiers':'DZ',
-  'Africa/Tunis':'TN','Africa/Accra':'GH','Africa/Addis_Ababa':'ET',
-  'Africa/Dar_es_Salaam':'TZ','Africa/Kampala':'UG','Africa/Khartoum':'SD',
-  'Africa/Tripoli':'LY','Africa/Abidjan':'CI','Africa/Dakar':'SN',
-  'Australia/Sydney':'AU','Australia/Melbourne':'AU','Australia/Brisbane':'AU',
-  'Australia/Perth':'AU','Australia/Adelaide':'AU','Australia/Darwin':'AU',
-  'Australia/Hobart':'AU','Australia/Lord_Howe':'AU',
-  'Indian/Maldives':'MV','Indian/Mauritius':'MU','Indian/Reunion':'RE',
-};
+  /* ════════════════════════════════════════════════════
+     State
+     ════════════════════════════════════════════════════ */
 
-function ccToFlag(cc) {
-  if (!cc || cc.length !== 2) return '';
-  return String.fromCodePoint(...[...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
-}
+  const state = {
+    zones:              loadZones(),
+    currentDate:        null,
+    calYear:            new Date().getFullYear(),
+    calMonth:           new Date().getMonth(),
+    assumedLocal:       false,
+    dragSrcIdx:         null,
+    selectedSuggestion: -1,
+  };
 
-function getFlag(tz) {
-  if (isCustomOffset(tz)) return '🌐';
-  if (tz === 'UTC') return '🌐';
-  const cc = TZ_TO_CC[tz];
-  if (cc) return ccToFlag(cc);
-  if (tz.split('/')[0] === 'Etc') return '🌐';
-  return '';
-}
+  /* ════════════════════════════════════════════════════
+     I18N
+     ════════════════════════════════════════════════════ */
 
-const CUSTOM_OFFSET_RE = /^UTC([+-])(\d{1,2})(?::(\d{2}))?$/i;
+  const I18N = {
+    en: {
+      title: 'Timezone Converter',
+      toggleTheme: 'Toggle theme',
+      toggleLang: 'Toggle language',
+      defaultTzUtc: 'Default timezone: UTC',
+      defaultTzLocal: 'Default timezone: Local',
+      now: 'Now',
+      placeholderIso: '2025-01-15T09:00:00+09:00',
+      placeholderTz: 'Asia/Seoul or UTC+5:30',
+      invalidEpoch: 'Invalid epoch milliseconds',
+      invalidIso: 'Invalid ISO 8601 format',
+      copy: 'copy',
+      copied: 'copied!',
+      epochSeconds: 'Epoch Seconds',
+      epochMilliseconds: 'Epoch Milliseconds',
+      localDate: 'LocalDate',
+      localDateTime: 'LocalDateTime',
+      isoOffset: 'ISO Offset',
+      suggestionHint: 'e.g. UTC+9, +5:30, 09:00',
+      usageTitle: 'Usage',
+      usageItems: [
+        ['Time Input', 'Enter time in ISO 8601 or Epoch milliseconds format. Switch format with the dropdown.'],
+        ['Default Timezone', 'Toggle UTC/Local button to set how offset-less input is interpreted.'],
+        ['Timezone Search', 'Search by IANA name (Asia/Seoul) or UTC offset (UTC+9, +5:30).'],
+        ['Time Select', 'Click a time in the timezone list to update the input with that timezone\'s offset.'],
+        ['Copy', 'Click the copy button on a timezone card to copy in various formats. Use number keys 1–5 for quick copy.'],
+        ['Drag & Drop', 'Reorder timezone cards by dragging.'],
+        ['URL Hash', 'Append #epoch or #ISO8601 to the URL to open with a specific time.'],
+      ],
+      usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
+      months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      dow: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+    },
+    ko: {
+      title: '타임존 변환기',
+      toggleTheme: '테마 전환',
+      toggleLang: '언어 전환',
+      defaultTzUtc: '기본 타임존: UTC',
+      defaultTzLocal: '기본 타임존: 로컬',
+      now: '현재',
+      placeholderIso: '2025-01-15T09:00:00+09:00',
+      placeholderTz: 'Asia/Seoul 또는 UTC+5:30',
+      invalidEpoch: '유효하지 않은 epoch 밀리초',
+      invalidIso: '유효하지 않은 ISO 8601 형식',
+      copy: '복사',
+      copied: '완료!',
+      epochSeconds: 'Epoch Seconds',
+      epochMilliseconds: 'Epoch Milliseconds',
+      localDate: 'LocalDate',
+      localDateTime: 'LocalDateTime',
+      isoOffset: 'ISO Offset',
+      suggestionHint: '예: UTC+9, +5:30, 09:00',
+      usageTitle: '사용법',
+      usageItems: [
+        ['시간 입력', 'ISO 8601 또는 Epoch 밀리초 형식으로 입력. 드롭다운으로 형식 전환.'],
+        ['기본 타임존', 'UTC/Local 버튼으로 오프셋 없는 입력의 해석 기준 설정.'],
+        ['타임존 검색', 'IANA 이름(Asia/Seoul) 또는 UTC 오프셋(UTC+9, +5:30)으로 검색.'],
+        ['시간 선택', '타임존 목록에서 시간을 클릭하면 해당 타임존 오프셋으로 입력 업데이트.'],
+        ['복사', '타임존 카드의 복사 버튼을 클릭하면 다양한 형식으로 복사. 숫자키 1–5로 빠른 복사.'],
+        ['드래그 & 드롭', '타임존 카드를 드래그하여 순서 변경.'],
+        ['URL 해시', 'URL 뒤에 #epoch 또는 #ISO8601을 붙여 특정 시간으로 열기.'],
+      ],
+      usageHashExamples: '#1708300800000 · #1708300800 · #2024-02-19T09:00:00+09:00',
+      months: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+      dow: ['일','월','화','수','목','금','토'],
+    },
+  };
 
-function isCustomOffset(tz) { return CUSTOM_OFFSET_RE.test(tz); }
+  /* ════════════════════════════════════════════════════
+     Timezone → Country Code Mapping
+     ════════════════════════════════════════════════════ */
 
-function parseCustomOffset(tz) {
-  const m = tz.match(CUSTOM_OFFSET_RE);
-  if (!m) return null;
-  const sign = m[1] === '+' ? 1 : -1;
-  return sign * (parseInt(m[2], 10) * 60 + parseInt(m[3] || '0', 10));
-}
+  const TZ_TO_CC = {
+    'Asia/Seoul':'KR','Asia/Tokyo':'JP','Asia/Shanghai':'CN','Asia/Hong_Kong':'HK',
+    'Asia/Taipei':'TW','Asia/Singapore':'SG','Asia/Kolkata':'IN','Asia/Calcutta':'IN',
+    'Asia/Bangkok':'TH','Asia/Ho_Chi_Minh':'VN','Asia/Saigon':'VN','Asia/Jakarta':'ID',
+    'Asia/Manila':'PH','Asia/Kuala_Lumpur':'MY','Asia/Dubai':'AE','Asia/Riyadh':'SA',
+    'Asia/Tehran':'IR','Asia/Karachi':'PK','Asia/Dhaka':'BD','Asia/Colombo':'LK',
+    'Asia/Kathmandu':'NP','Asia/Yangon':'MM','Asia/Almaty':'KZ','Asia/Tashkent':'UZ',
+    'Asia/Bishkek':'KG','Asia/Tbilisi':'GE','Asia/Yerevan':'AM','Asia/Baku':'AZ',
+    'Asia/Beirut':'LB','Asia/Jerusalem':'IL','Asia/Amman':'JO','Asia/Baghdad':'IQ',
+    'Asia/Kuwait':'KW','Asia/Qatar':'QA','Asia/Bahrain':'BH','Asia/Muscat':'OM',
+    'Asia/Kabul':'AF','Asia/Ulaanbaatar':'MN','Asia/Phnom_Penh':'KH','Asia/Vientiane':'LA',
+    'Asia/Brunei':'BN','Asia/Dili':'TL','Asia/Macau':'MO',
+    'Europe/London':'GB','Europe/Paris':'FR','Europe/Berlin':'DE','Europe/Rome':'IT',
+    'Europe/Madrid':'ES','Europe/Lisbon':'PT','Europe/Amsterdam':'NL','Europe/Brussels':'BE',
+    'Europe/Zurich':'CH','Europe/Vienna':'AT','Europe/Stockholm':'SE','Europe/Oslo':'NO',
+    'Europe/Copenhagen':'DK','Europe/Helsinki':'FI','Europe/Warsaw':'PL','Europe/Prague':'CZ',
+    'Europe/Budapest':'HU','Europe/Bucharest':'RO','Europe/Sofia':'BG','Europe/Athens':'GR',
+    'Europe/Istanbul':'TR','Europe/Moscow':'RU','Europe/Kiev':'UA','Europe/Kyiv':'UA',
+    'Europe/Dublin':'IE','Europe/Tallinn':'EE','Europe/Riga':'LV','Europe/Vilnius':'LT',
+    'Europe/Belgrade':'RS','Europe/Zagreb':'HR','Europe/Ljubljana':'SI','Europe/Bratislava':'SK',
+    'Europe/Luxembourg':'LU','Europe/Monaco':'MC','Europe/Malta':'MT','Europe/Sarajevo':'BA',
+    'Europe/Skopje':'MK','Europe/Podgorica':'ME','Europe/Tirane':'AL','Europe/Minsk':'BY',
+    'Europe/Chisinau':'MD','Europe/Reykjavik':'IS',
+    'America/New_York':'US','America/Chicago':'US','America/Denver':'US',
+    'America/Los_Angeles':'US','America/Anchorage':'US','America/Phoenix':'US',
+    'America/Toronto':'CA','America/Vancouver':'CA','America/Edmonton':'CA',
+    'America/Winnipeg':'CA','America/Halifax':'CA','America/St_Johns':'CA',
+    'America/Mexico_City':'MX','America/Cancun':'MX','America/Tijuana':'MX',
+    'America/Sao_Paulo':'BR','America/Manaus':'BR','America/Fortaleza':'BR',
+    'America/Argentina/Buenos_Aires':'AR','America/Buenos_Aires':'AR',
+    'America/Santiago':'CL','America/Lima':'PE','America/Bogota':'CO',
+    'America/Caracas':'VE','America/Guayaquil':'EC','America/La_Paz':'BO',
+    'America/Asuncion':'PY','America/Montevideo':'UY',
+    'America/Havana':'CU','America/Jamaica':'JM','America/Panama':'PA',
+    'America/Costa_Rica':'CR','America/Guatemala':'GT','America/Tegucigalpa':'HN',
+    'America/El_Salvador':'SV','America/Managua':'NI',
+    'Pacific/Auckland':'NZ','Pacific/Fiji':'FJ','Pacific/Honolulu':'US',
+    'Pacific/Guam':'GU','Pacific/Tahiti':'PF','Pacific/Port_Moresby':'PG',
+    'Pacific/Noumea':'NC','Pacific/Tongatapu':'TO','Pacific/Apia':'WS',
+    'Africa/Cairo':'EG','Africa/Lagos':'NG','Africa/Johannesburg':'ZA',
+    'Africa/Nairobi':'KE','Africa/Casablanca':'MA','Africa/Algiers':'DZ',
+    'Africa/Tunis':'TN','Africa/Accra':'GH','Africa/Addis_Ababa':'ET',
+    'Africa/Dar_es_Salaam':'TZ','Africa/Kampala':'UG','Africa/Khartoum':'SD',
+    'Africa/Tripoli':'LY','Africa/Abidjan':'CI','Africa/Dakar':'SN',
+    'Australia/Sydney':'AU','Australia/Melbourne':'AU','Australia/Brisbane':'AU',
+    'Australia/Perth':'AU','Australia/Adelaide':'AU','Australia/Darwin':'AU',
+    'Australia/Hobart':'AU','Australia/Lord_Howe':'AU',
+    'Indian/Maldives':'MV','Indian/Mauritius':'MU','Indian/Reunion':'RE',
+  };
 
-function normalizeCustomOffset(raw) {
-  const m = raw.match(CUSTOM_OFFSET_RE);
-  if (!m) return null;
-  const h = parseInt(m[2], 10);
-  const min = parseInt(m[3] || '0', 10);
-  if (h * 60 + min > 840) return null;
-  if (h === 0 && min === 0) return 'UTC';
-  return `UTC${m[1]}${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
-}
+  /* ════════════════════════════════════════════════════
+     Utilities
+     ════════════════════════════════════════════════════ */
 
-function formatCustomOffset(date, offsetMin) {
-  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
-  const target = new Date(utc + offsetMin * 60000);
-  const p = (n) => String(n).padStart(2, '0');
-  return `${target.getFullYear()}-${p(target.getMonth()+1)}-${p(target.getDate())} ${p(target.getHours())}:${p(target.getMinutes())}:${p(target.getSeconds())}`;
-}
-
-let zones = loadZones();
-let currentDate = null;
-let selectedSuggestion = -1;
-let calYear, calMonth;
-let assumedLocalTimezone = false;
-
-function inputLacksTimezone(raw) {
-  return !/(?:Z|[+-]\d{2}(?::?\d{2})?)$/i.test(raw.trim());
-}
-
-function renderTzAssumption() {
-  const el = document.getElementById('tzAssumption');
-  const input = document.getElementById('timeInput');
-  if (assumedLocalTimezone && currentDate) {
-    el.textContent = getDefaultTz() === 'utc' ? 'UTC' : Intl.DateTimeFormat().resolvedOptions().timeZone;
-    input.style.paddingRight = (el.offsetWidth + 20) + 'px';
-  } else {
-    el.textContent = '';
-    input.style.paddingRight = '';
+  function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
-}
 
-function loadZones() {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    if (s) { const p = JSON.parse(s); if (Array.isArray(p) && p.length > 0) return p; }
-  } catch {}
-  return [...DEFAULT_ZONES];
-}
-function saveZones() { localStorage.setItem(STORAGE_KEY, JSON.stringify(zones)); }
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const getLang = () => localStorage.getItem(LANG_KEY) || 'en';
+  const t = (key) => I18N[getLang()][key];
+  const getFormat = () => dom.formatSelect.value;
+  const getDefaultTz = () => localStorage.getItem(DEFAULT_TZ_KEY) || 'local';
 
-function getFormat() { return document.getElementById('formatSelect').value; }
+  /* ════════════════════════════════════════════════════
+     Storage
+     ════════════════════════════════════════════════════ */
 
-function toISO(date) {
-  const off = -date.getTimezoneOffset();
-  const sign = off >= 0 ? '+' : '-';
-  const h = String(Math.floor(Math.abs(off) / 60)).padStart(2, '0');
-  const m = String(Math.abs(off) % 60).padStart(2, '0');
-  const p = (n) => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${p(date.getMonth()+1)}-${p(date.getDate())}T${p(date.getHours())}:${p(date.getMinutes())}:${p(date.getSeconds())}${sign}${h}:${m}`;
-}
+  function loadZones() {
+    try {
+      const s = localStorage.getItem(STORAGE_KEY);
+      if (s) {
+        const p = JSON.parse(s);
+        if (Array.isArray(p) && p.length > 0) return p;
+      }
+    } catch (_) { /* ignore */ }
+    return DEFAULT_ZONES.slice();
+  }
 
-function formatForInput(date) {
-  return getFormat() === 'epoch' ? String(date.getTime()) : toISO(date);
-}
+  function saveZones() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.zones));
+  }
 
-function getPlaceholder() {
-  return getFormat() === 'epoch' ? '1700000000000' : t('placeholderIso');
-}
+  /* ════════════════════════════════════════════════════
+     Custom Offset Helpers
+     ════════════════════════════════════════════════════ */
 
-function updateHash(date) {
-  if (!date) { history.replaceState(null, '', window.location.pathname + window.location.search); return; }
-  const val = getFormat() === 'epoch' ? String(date.getTime()) : toISO(date);
-  history.replaceState(null, '', '#' + val);
-}
+  const isCustomOffset = (tz) => OFFSET_RE.test(tz);
 
-function setNow() {
-  const now = new Date();
-  document.getElementById('timeInput').value = formatForInput(now);
-  document.getElementById('timeInput').placeholder = getPlaceholder();
-  currentDate = now;
-  assumedLocalTimezone = false;
-  calYear = now.getFullYear();
-  calMonth = now.getMonth();
-  updateHash(now);
-  renderCalendar();
-  renderTz();
-  renderTzAssumption();
-}
+  function parseCustomOffset(tz) {
+    const m = tz.match(OFFSET_RE);
+    if (!m) return null;
+    const sign = m[1] === '+' ? 1 : -1;
+    return sign * (parseInt(m[2], 10) * 60 + parseInt(m[3] || '0', 10));
+  }
 
-function parseAndRender() {
-  const raw = document.getElementById('timeInput').value.trim();
-  const errEl = document.getElementById('error');
-  if (!raw) { errEl.textContent = ''; currentDate = null; assumedLocalTimezone = false; renderCalendar(); renderTz(); renderTzAssumption(); return; }
+  function normalizeCustomOffset(raw) {
+    const m = raw.match(OFFSET_RE);
+    if (!m) return null;
+    const h = parseInt(m[2], 10);
+    const min = parseInt(m[3] || '0', 10);
+    if (h * 60 + min > 840) return null;
+    if (h === 0 && min === 0) return 'UTC';
+    return 'UTC' + m[1] + pad2(h) + ':' + pad2(min);
+  }
 
-  let d;
-  if (getFormat() === 'epoch') {
-    const num = Number(raw);
-    if (!Number.isFinite(num) || num < 0) {
-      errEl.textContent = t('invalidEpoch');
-      currentDate = null;
-      assumedLocalTimezone = false;
-      renderCalendar();
-      renderTz();
-      renderTzAssumption();
+  function parseShorthandOffsets(query) {
+    const results = [];
+    const signedRe = /^([+-])(\d{1,2})(?::(\d{2}))?$/;
+    const unsignedRe = /^(\d{1,2})(?::(\d{2}))?$/;
+
+    let m = query.match(signedRe);
+    if (m) {
+      const norm = normalizeCustomOffset('UTC' + m[1] + m[2] + (m[3] ? ':' + m[3] : ''));
+      if (norm) results.push(norm);
+      return results;
+    }
+
+    m = query.match(unsignedRe);
+    if (m) {
+      const plus  = normalizeCustomOffset('UTC+' + m[1] + (m[2] ? ':' + m[2] : ''));
+      const minus = normalizeCustomOffset('UTC-' + m[1] + (m[2] ? ':' + m[2] : ''));
+      if (plus)  results.push(plus);
+      if (minus && minus !== plus) results.push(minus);
+    }
+
+    return results;
+  }
+
+  /* ════════════════════════════════════════════════════
+     Date / Timezone Formatting
+     ════════════════════════════════════════════════════ */
+
+  function formatOffset(date, tz) {
+    if (isCustomOffset(tz)) {
+      const m = tz.match(OFFSET_RE);
+      return 'UTC' + m[1] + pad2(parseInt(m[2])) + ':' + pad2(parseInt(m[3] || '0'));
+    }
+    try {
+      const utcStr = date.toLocaleString('en-US', { timeZone: 'UTC' });
+      const tzStr  = date.toLocaleString('en-US', { timeZone: tz });
+      const diff   = (new Date(tzStr) - new Date(utcStr)) / 60000;
+      const sign   = diff >= 0 ? '+' : '-';
+      return 'UTC' + sign + pad2(Math.floor(Math.abs(diff) / 60)) + ':' + pad2(Math.abs(diff) % 60);
+    } catch (_) { return ''; }
+  }
+
+  function formatInZone(date, tz) {
+    if (isCustomOffset(tz)) {
+      const offsetMin = parseCustomOffset(tz);
+      const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+      const target = new Date(utc + offsetMin * 60000);
+      return target.getFullYear() + '-' + pad2(target.getMonth() + 1) + '-' + pad2(target.getDate()) +
+        ' ' + pad2(target.getHours()) + ':' + pad2(target.getMinutes()) + ':' + pad2(target.getSeconds());
+    }
+    return new Intl.DateTimeFormat('sv-SE', {
+      timeZone: tz,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false,
+    }).format(date);
+  }
+
+  function toISO(date) {
+    const off  = -date.getTimezoneOffset();
+    const sign = off >= 0 ? '+' : '-';
+    const h    = pad2(Math.floor(Math.abs(off) / 60));
+    const m    = pad2(Math.abs(off) % 60);
+    return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate()) +
+      'T' + pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds()) +
+      sign + h + ':' + m;
+  }
+
+  function formatForInput(date) {
+    return getFormat() === 'epoch' ? String(date.getTime()) : toISO(date);
+  }
+
+  function getPlaceholder() {
+    return getFormat() === 'epoch' ? '1700000000000' : t('placeholderIso');
+  }
+
+  function getCopyValues(date, tz) {
+    const time      = formatInZone(date, tz);
+    const offsetStr = formatOffset(date, tz).replace('UTC', '');
+    const datePart  = time.split(' ')[0];
+    const isoTime   = time.replace(' ', 'T');
+    return {
+      epochMs:       String(date.getTime()),
+      epochS:        String(Math.floor(date.getTime() / 1000)),
+      localDate:     datePart,
+      localDateTime: isoTime,
+      isoOffset:     isoTime + offsetStr,
+    };
+  }
+
+  /* ════════════════════════════════════════════════════
+     Flag Helpers
+     ════════════════════════════════════════════════════ */
+
+  function ccToFlag(cc) {
+    if (!cc || cc.length !== 2) return '';
+    return String.fromCodePoint(
+      0x1F1E6 + cc.charCodeAt(0) - 65,
+      0x1F1E6 + cc.charCodeAt(1) - 65
+    );
+  }
+
+  function getFlag(tz) {
+    if (isCustomOffset(tz) || tz === 'UTC') return '🌐';
+    const cc = TZ_TO_CC[tz];
+    if (cc) return ccToFlag(cc);
+    if (tz.startsWith('Etc/')) return '🌐';
+    return '';
+  }
+
+  /* ════════════════════════════════════════════════════
+     Hash Routing
+     ════════════════════════════════════════════════════ */
+
+  function inputLacksTimezone(raw) {
+    return !/(?:Z|[+-]\d{2}(?::?\d{2})?)$/i.test(raw.trim());
+  }
+
+  function updateHash(date) {
+    if (!date) {
+      history.replaceState(null, '', location.pathname + location.search);
       return;
     }
-    d = new Date(num);
-    assumedLocalTimezone = false;
-  } else {
-    const lacksOffset = inputLacksTimezone(raw);
-    if (lacksOffset && getDefaultTz() === 'utc') {
-      d = new Date(raw.replace(' ', 'T') + 'Z');
-    } else {
-      d = new Date(raw);
+    history.replaceState(null, '', '#' + formatForInput(date));
+  }
+
+  function parseHash() {
+    const hash = decodeURIComponent(location.hash.slice(1)).trim();
+    if (!hash) return null;
+
+    if (/^\d+$/.test(hash)) {
+      const num = Number(hash);
+      const ms  = num > 1e12 ? num : num * 1000;
+      const d   = new Date(ms);
+      return isNaN(d.getTime()) ? null : d;
     }
-    assumedLocalTimezone = lacksOffset;
-  }
 
-  if (isNaN(d.getTime())) {
-    errEl.textContent = getFormat() === 'epoch' ? t('invalidEpoch') : t('invalidIso');
-    currentDate = null;
-    assumedLocalTimezone = false;
-    renderCalendar();
-    renderTz();
-    renderTzAssumption();
-    return;
-  }
-  errEl.textContent = '';
-  currentDate = d;
-  calYear = d.getFullYear();
-  calMonth = d.getMonth();
-  updateHash(d);
-  renderCalendar();
-  renderTz();
-  renderTzAssumption();
-}
-
-function applyCalendarSelection(year, month, day) {
-  const d = new Date(year, month, day, 0, 0, 0);
-  document.getElementById('timeInput').value = formatForInput(d);
-  currentDate = d;
-  assumedLocalTimezone = false;
-  updateHash(d);
-  renderCalendar();
-  renderTz();
-  renderTzAssumption();
-}
-
-function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-
-function renderCalendar() {
-  const cal = document.getElementById('calendar');
-  const now = new Date();
-  const todayStr = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-
-  const selDay = currentDate ? currentDate.getDate() : -1;
-  const selMonth = currentDate ? currentDate.getMonth() : -1;
-  const selYear = currentDate ? currentDate.getFullYear() : -1;
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
-
-  let html = `<div class="cal-header">
-    <button class="cal-nav" id="calPrev">&lsaquo;</button>
-    <span class="cal-title">${t('months')[calMonth]} ${calYear}</span>
-    <button class="cal-nav" id="calNext">&rsaquo;</button>
-  </div>`;
-
-  html += '<div class="cal-grid">';
-  t('dow').forEach(d => { html += `<div class="cal-dow">${d}</div>`; });
-
-  for (let i = firstDay - 1; i >= 0; i--) {
-    const d = daysInPrev - i;
-    html += `<div class="cal-day other" data-y="${calMonth === 0 ? calYear-1 : calYear}" data-m="${calMonth === 0 ? 11 : calMonth-1}" data-d="${d}">${d}</div>`;
-  }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isToday = `${calYear}-${calMonth}-${d}` === todayStr;
-    const isSel = calYear === selYear && calMonth === selMonth && d === selDay;
-    let cls = 'cal-day';
-    if (isToday) cls += ' today';
-    if (isSel) cls += ' selected';
-    html += `<div class="${cls}" data-y="${calYear}" data-m="${calMonth}" data-d="${d}">${d}</div>`;
-  }
-
-  const totalCells = firstDay + daysInMonth;
-  const remaining = (7 - totalCells % 7) % 7;
-  for (let d = 1; d <= remaining; d++) {
-    html += `<div class="cal-day other" data-y="${calMonth === 11 ? calYear+1 : calYear}" data-m="${calMonth === 11 ? 0 : calMonth+1}" data-d="${d}">${d}</div>`;
-  }
-  html += '</div>';
-
-  cal.innerHTML = html;
-
-  document.getElementById('calPrev').addEventListener('click', () => {
-    calMonth--;
-    if (calMonth < 0) { calMonth = 11; calYear--; }
-    renderCalendar();
-  });
-  document.getElementById('calNext').addEventListener('click', () => {
-    calMonth++;
-    if (calMonth > 11) { calMonth = 0; calYear++; }
-    renderCalendar();
-  });
-
-  cal.querySelectorAll('.cal-day').forEach(el => {
-    el.addEventListener('click', () => {
-      applyCalendarSelection(parseInt(el.dataset.y), parseInt(el.dataset.m), parseInt(el.dataset.d));
-    });
-  });
-
-}
-
-function formatInZone(date, tz) {
-  if (isCustomOffset(tz)) return formatCustomOffset(date, parseCustomOffset(tz));
-  const fmt = new Intl.DateTimeFormat('sv-SE', {
-    timeZone: tz,
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
-    hour12: false,
-  });
-  return fmt.format(date);
-}
-
-function getOffset(date, tz) {
-  if (isCustomOffset(tz)) {
-    const m = tz.match(CUSTOM_OFFSET_RE);
-    return `UTC${m[1]}${String(parseInt(m[2])).padStart(2,'0')}:${String(parseInt(m[3]||'0')).padStart(2,'0')}`;
-  }
-  const utcStr = date.toLocaleString('en-US', { timeZone: 'UTC' });
-  const tzStr = date.toLocaleString('en-US', { timeZone: tz });
-  const diff = (new Date(tzStr) - new Date(utcStr)) / 60000;
-  const sign = diff >= 0 ? '+' : '-';
-  return `UTC${sign}${String(Math.floor(Math.abs(diff)/60)).padStart(2,'0')}:${String(Math.abs(diff)%60).padStart(2,'0')}`;
-}
-
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function getIsoOffsetStr(date, tz) {
-  const offset = getOffset(date, tz);
-  return offset.replace('UTC', '');
-}
-
-function getCopyValues(date, tz) {
-  const time = formatInZone(date, tz);
-  const offsetStr = getIsoOffsetStr(date, tz);
-  const datePart = time.split(' ')[0];
-  const isoTime = time.replace(' ', 'T');
-  return {
-    epochMs: String(date.getTime()),
-    epochS: String(Math.floor(date.getTime() / 1000)),
-    localDate: datePart,
-    localDateTime: isoTime,
-    isoOffset: isoTime + offsetStr,
-  };
-}
-
-function renderTz() {
-  const list = document.getElementById('tzList');
-  list.innerHTML = zones.map((tz, idx) => {
-    const flag = getFlag(tz);
-    const time = currentDate ? formatInZone(currentDate, tz) : '--';
-    const offset = currentDate ? getOffset(currentDate, tz) : '--';
-    const timeStyle = currentDate ? '' : ' style="color:var(--time-empty)"';
-    const timeHtml = currentDate ? esc(time) : '--';
-    let copyHtml = '';
-    if (currentDate) {
-      const cv = getCopyValues(currentDate, tz);
-      copyHtml = `<div class="tz-copy-wrap">
-        <button class="tz-copy" data-idx="${idx}">${t('copy')}</button>
-        <div class="tz-copy-menu" data-idx="${idx}">
-          <div class="tz-copy-item" data-val="${esc(cv.epochS)}" data-key="1"><span class="tz-copy-key">1</span><span class="label">${t('epochSeconds')}</span><span class="value">${esc(cv.epochS)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.epochMs)}" data-key="2"><span class="tz-copy-key">2</span><span class="label">${t('epochMilliseconds')}</span><span class="value">${esc(cv.epochMs)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.localDate)}" data-key="3"><span class="tz-copy-key">3</span><span class="label">${t('localDate')}</span><span class="value">${esc(cv.localDate)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.localDateTime)}" data-key="4"><span class="tz-copy-key">4</span><span class="label">${t('localDateTime')}</span><span class="value">${esc(cv.localDateTime)}</span></div>
-          <div class="tz-copy-item" data-val="${esc(cv.isoOffset)}" data-key="5"><span class="tz-copy-key">5</span><span class="label">${t('isoOffset')}</span><span class="value">${esc(cv.isoOffset)}</span></div>
-        </div>
-      </div>`;
-    }
-    return `<div class="tz-card" draggable="true" data-idx="${idx}">
-      <span class="tz-flag">${flag}</span>
-      <span class="tz-name">${esc(tz)}</span>
-      <span class="tz-time-area"><span class="tz-time" data-tz="${esc(tz)}"${timeStyle}>${timeHtml}</span></span>
-      <span class="tz-offset">${esc(offset)}</span>
-      ${copyHtml}
-      <button class="tz-remove" data-tz="${esc(tz)}">&times;</button>
-    </div>`;
-  }).join('');
-  list.querySelectorAll('.tz-remove').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      zones = zones.filter(z => z !== btn.dataset.tz);
-      saveZones();
-      renderTz();
-    });
-  });
-  list.querySelectorAll('.tz-copy').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllCopyMenus();
-      const menu = btn.parentElement.querySelector('.tz-copy-menu');
-      menu.classList.toggle('open');
-    });
-  });
-  list.querySelectorAll('.tz-copy-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-      e.stopPropagation();
-      navigator.clipboard.writeText(item.dataset.val);
-      closeAllCopyMenus();
-      const btn = item.closest('.tz-copy-wrap').querySelector('.tz-copy');
-      btn.textContent = t('copied');
-      setTimeout(() => { btn.textContent = t('copy'); }, 1200);
-    });
-  });
-  list.querySelectorAll('.tz-time').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!currentDate) return;
-      const tz = el.dataset.tz;
-      const cv = getCopyValues(currentDate, tz);
-      const input = document.getElementById('timeInput');
-      if (getFormat() === 'epoch') {
-        input.value = cv.epochMs;
-      } else {
-        input.value = cv.isoOffset;
-      }
-      assumedLocalTimezone = false;
-      updateHash(currentDate);
-      renderTzAssumption();
-    });
-  });
-  bindDragAndDrop();
-}
-
-function closeAllCopyMenus() {
-  document.querySelectorAll('.tz-copy-menu.open').forEach(m => m.classList.remove('open'));
-}
-document.addEventListener('click', closeAllCopyMenus);
-
-document.addEventListener('keydown', (e) => {
-  const openMenu = document.querySelector('.tz-copy-menu.open');
-  if (!openMenu) return;
-  const item = openMenu.querySelector(`.tz-copy-item[data-key="${e.key}"]`);
-  if (!item) return;
-  e.preventDefault();
-  navigator.clipboard.writeText(item.dataset.val);
-  closeAllCopyMenus();
-  const btn = openMenu.closest('.tz-copy-wrap').querySelector('.tz-copy');
-  btn.textContent = t('copied');
-  setTimeout(() => { btn.textContent = t('copy'); }, 1200);
-});
-
-let dragSrcIdx = null;
-
-function bindDragAndDrop() {
-  const cards = document.querySelectorAll('.tz-card');
-  cards.forEach(card => {
-    card.addEventListener('dragstart', (e) => {
-      dragSrcIdx = parseInt(card.dataset.idx);
-      card.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    card.addEventListener('dragend', () => {
-      card.classList.remove('dragging');
-      cards.forEach(c => c.classList.remove('drag-over'));
-      dragSrcIdx = null;
-    });
-    card.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      cards.forEach(c => c.classList.remove('drag-over'));
-      card.classList.add('drag-over');
-    });
-    card.addEventListener('dragleave', () => {
-      card.classList.remove('drag-over');
-    });
-    card.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const targetIdx = parseInt(card.dataset.idx);
-      if (dragSrcIdx !== null && dragSrcIdx !== targetIdx) {
-        const [moved] = zones.splice(dragSrcIdx, 1);
-        zones.splice(targetIdx, 0, moved);
-        saveZones();
-        renderTz();
-      }
-    });
-  });
-}
-
-function addZone(tz) {
-  if (!zones.includes(tz)) { zones.push(tz); saveZones(); renderTz(); }
-  document.getElementById('tzSearch').value = '';
-  closeSuggestions();
-}
-
-function getSuggestionOffset(tz) {
-  const now = new Date();
-  if (isCustomOffset(tz)) {
-    const m = tz.match(CUSTOM_OFFSET_RE);
-    return `UTC${m[1]}${String(parseInt(m[2])).padStart(2,'0')}:${String(parseInt(m[3]||'0')).padStart(2,'0')}`;
-  }
-  try {
-    const utcStr = now.toLocaleString('en-US', { timeZone: 'UTC' });
-    const tzStr = now.toLocaleString('en-US', { timeZone: tz });
-    const diff = (new Date(tzStr) - new Date(utcStr)) / 60000;
-    const sign = diff >= 0 ? '+' : '-';
-    return `UTC${sign}${String(Math.floor(Math.abs(diff)/60)).padStart(2,'0')}:${String(Math.abs(diff)%60).padStart(2,'0')}`;
-  } catch { return ''; }
-}
-
-// Parse shorthand offsets: "+9", "+09:00", "09:00", "5:30"
-function parseShorthandOffsets(query) {
-  const results = [];
-  // "+HH:MM" or "+HH" or "+H"
-  const signedRe = /^([+-])(\d{1,2})(?::(\d{2}))?$/;
-  // "HH:MM" or "HH" (no sign → suggest both + and -)
-  const unsignedRe = /^(\d{1,2})(?::(\d{2}))?$/;
-
-  let m = query.match(signedRe);
-  if (m) {
-    const norm = normalizeCustomOffset(`UTC${m[1]}${m[2]}${m[3] ? ':' + m[3] : ''}`);
-    if (norm) results.push(norm);
-    return results;
-  }
-
-  m = query.match(unsignedRe);
-  if (m) {
-    const plus = normalizeCustomOffset(`UTC+${m[1]}${m[2] ? ':' + m[2] : ''}`);
-    const minus = normalizeCustomOffset(`UTC-${m[1]}${m[2] ? ':' + m[2] : ''}`);
-    if (plus) results.push(plus);
-    if (minus && minus !== plus) results.push(minus);
-    return results;
-  }
-
-  return results;
-}
-
-function showSuggestions(query) {
-  const list = document.getElementById('suggestionsList');
-  if (!query) { closeSuggestions(); return; }
-  const q = query.toLowerCase();
-  const customNorm = normalizeCustomOffset(query);
-  const shorthandOffsets = !customNorm ? parseShorthandOffsets(query) : [];
-  const partialCustom = /^utc[+-]?\d{0,2}:?\d{0,2}$/i.test(query) || /^[+-]?\d{0,2}:?\d{0,2}$/.test(query);
-  const matches = ALL_TIMEZONES.filter(tz => tz.toLowerCase().includes(q) && !zones.includes(tz)).slice(0, 8);
-
-  const items = [];
-  const added = new Set();
-  if (customNorm && !zones.includes(customNorm)) {
-    items.push({ tz: customNorm, label: `🌐  ${customNorm}`, offset: getSuggestionOffset(customNorm) });
-    added.add(customNorm);
-  }
-  shorthandOffsets.forEach(tz => {
-    if (!added.has(tz) && !zones.includes(tz)) {
-      items.push({ tz, label: `🌐  ${tz}`, offset: getSuggestionOffset(tz) });
-      added.add(tz);
-    }
-  });
-  matches.forEach(tz => {
-    if (added.has(tz)) return;
-    const flag = getFlag(tz);
-    items.push({ tz, label: `${flag ? flag + '  ' : ''}${tz}`, offset: getSuggestionOffset(tz) });
-    added.add(tz);
-  });
-
-  if (items.length === 0 && !partialCustom) { closeSuggestions(); return; }
-  if (items.length === 0) {
-    list.innerHTML = `<div class="suggestion-hint">${t('suggestionHint')}</div>`;
-    list.classList.add('open');
-    return;
-  }
-
-  selectedSuggestion = -1;
-  list.innerHTML = items.map((it, i) =>
-    `<div class="suggestion-item" data-tz="${esc(it.tz)}" data-idx="${i}"><span>${it.label}</span><span class="suggestion-offset">${esc(it.offset)}</span></div>`
-  ).join('');
-  list.classList.add('open');
-  list.querySelectorAll('.suggestion-item').forEach(el => {
-    el.addEventListener('click', () => addZone(el.dataset.tz));
-  });
-}
-
-function closeSuggestions() {
-  document.getElementById('suggestionsList').classList.remove('open');
-  selectedSuggestion = -1;
-}
-
-// Events
-document.getElementById('timeInput').addEventListener('input', parseAndRender);
-document.getElementById('nowBtn').addEventListener('click', setNow);
-document.getElementById('formatSelect').addEventListener('change', () => {
-  document.getElementById('timeInput').placeholder = getPlaceholder();
-  if (currentDate) {
-    document.getElementById('timeInput').value = formatForInput(currentDate);
-  }
-  assumedLocalTimezone = false;
-  renderTzAssumption();
-});
-
-document.getElementById('tzSearch').addEventListener('input', (e) => showSuggestions(e.target.value.trim()));
-document.getElementById('tzSearch').addEventListener('keydown', (e) => {
-  const list = document.getElementById('suggestionsList');
-  const items = list.querySelectorAll('.suggestion-item');
-  if (!list.classList.contains('open') || items.length === 0) {
-    if (e.key === 'Enter') {
-      const val = e.target.value.trim();
-      const norm = normalizeCustomOffset(val);
-      if (norm) { addZone(norm); return; }
-      const sh = parseShorthandOffsets(val);
-      if (sh.length > 0) { addZone(sh[0]); return; }
-      if (ALL_TIMEZONES.includes(val)) addZone(val);
-    }
-    return;
-  }
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    selectedSuggestion = Math.min(selectedSuggestion + 1, items.length - 1);
-    items.forEach((it, i) => it.classList.toggle('active', i === selectedSuggestion));
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    selectedSuggestion = Math.max(selectedSuggestion - 1, 0);
-    items.forEach((it, i) => it.classList.toggle('active', i === selectedSuggestion));
-  } else if (e.key === 'Enter') {
-    e.preventDefault();
-    if (selectedSuggestion >= 0 && selectedSuggestion < items.length)
-      addZone(items[selectedSuggestion].dataset.tz);
-  } else if (e.key === 'Escape') {
-    closeSuggestions();
-  }
-});
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
-});
-
-function renderUsage() {
-  const el = document.getElementById('usage');
-  const items = t('usageItems');
-  const examples = t('usageHashExamples');
-  el.innerHTML = `<div class="usage-title">${t('usageTitle')}</div>` +
-    items.map((item, i) => {
-      let html = `<div class="usage-item"><strong>${item[0]}</strong> — ${item[1]}`;
-      if (i === items.length - 1) html += `<div class="usage-example">${examples}</div>`;
-      html += '</div>';
-      return html;
-    }).join('');
-}
-
-// Hash-based time input: #epochMillis, #epochSeconds, #ISO8601
-function parseHash() {
-  const hash = decodeURIComponent(window.location.hash.slice(1)).trim();
-  if (!hash) return null;
-  // All digits → epoch
-  if (/^\d+$/.test(hash)) {
-    const num = Number(hash);
-    // 13+ digits or value > 1e12 → millis, otherwise seconds
-    const ms = num > 1e12 ? num : num * 1000;
-    const d = new Date(ms);
+    const lacksOffset = inputLacksTimezone(hash);
+    const d = (lacksOffset && getDefaultTz() === 'utc')
+      ? new Date(hash.replace(' ', 'T') + 'Z')
+      : new Date(hash);
     return isNaN(d.getTime()) ? null : d;
   }
-  // Try ISO 8601 parse
-  const lacksOffset = inputLacksTimezone(hash);
-  const d = (lacksOffset && getDefaultTz() === 'utc') ? new Date(hash.replace(' ', 'T') + 'Z') : new Date(hash);
-  return isNaN(d.getTime()) ? null : d;
-}
 
-function applyHash() {
-  const d = parseHash();
-  if (!d) return false;
-  const hash = decodeURIComponent(window.location.hash.slice(1)).trim();
-  assumedLocalTimezone = !/^\d+$/.test(hash) && inputLacksTimezone(hash);
-  document.getElementById('timeInput').value = formatForInput(d);
-  currentDate = d;
-  calYear = d.getFullYear();
-  calMonth = d.getMonth();
-  renderCalendar();
-  renderTz();
-  renderTzAssumption();
-  return true;
-}
+  function applyHash() {
+    const d = parseHash();
+    if (!d) return false;
 
-window.addEventListener('hashchange', () => { applyHash(); });
+    const hash = decodeURIComponent(location.hash.slice(1)).trim();
+    state.assumedLocal = !/^\d+$/.test(hash) && inputLacksTimezone(hash);
+    state.currentDate  = d;
+    state.calYear      = d.getFullYear();
+    state.calMonth     = d.getMonth();
+    dom.timeInput.value = formatForInput(d);
+    render();
+    return true;
+  }
 
-// Init
-const initLang = getLang();
-document.getElementById('langBtn').textContent = initLang.toUpperCase();
-document.getElementById('title').textContent = t('title');
-document.getElementById('themeBtn').title = t('toggleTheme');
-document.getElementById('langBtn').title = t('toggleLang');
-document.getElementById('defaultTzBtn').title = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
-document.getElementById('nowBtn').textContent = t('now');
-document.getElementById('timeInput').placeholder = t('placeholderIso');
-document.getElementById('tzSearch').placeholder = t('placeholderTz');
-renderUsage();
-const now = new Date();
-calYear = now.getFullYear();
-calMonth = now.getMonth();
-if (!applyHash()) setNow();
+  /* ════════════════════════════════════════════════════
+     Unified Render
+     ════════════════════════════════════════════════════ */
+
+  function render() {
+    renderCalendar();
+    renderTzList();
+    renderTzAssumption();
+  }
+
+  /* ─── Timezone Assumption Badge ────────────────────── */
+
+  function renderTzAssumption() {
+    if (state.assumedLocal && state.currentDate) {
+      dom.tzAssumption.textContent = getDefaultTz() === 'utc'
+        ? 'UTC'
+        : Intl.DateTimeFormat().resolvedOptions().timeZone;
+      dom.timeInput.style.paddingRight = (dom.tzAssumption.offsetWidth + 20) + 'px';
+    } else {
+      dom.tzAssumption.textContent = '';
+      dom.timeInput.style.paddingRight = '';
+    }
+  }
+
+  /* ─── Calendar ─────────────────────────────────────── */
+
+  function renderCalendar() {
+    const now      = new Date();
+    const todayKey = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
+    const sd       = state.currentDate;
+    const selKey   = sd ? (sd.getFullYear() + '-' + sd.getMonth() + '-' + sd.getDate()) : '';
+
+    const firstDay    = new Date(state.calYear, state.calMonth, 1).getDay();
+    const daysInMonth = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+    const daysInPrev  = new Date(state.calYear, state.calMonth, 0).getDate();
+
+    let html = '<div class="cal-header">' +
+      '<button class="cal-nav" data-dir="-1">&lsaquo;</button>' +
+      '<span class="cal-title">' + t('months')[state.calMonth] + ' ' + state.calYear + '</span>' +
+      '<button class="cal-nav" data-dir="1">&rsaquo;</button>' +
+      '</div><div class="cal-grid">';
+
+    t('dow').forEach((d) => { html += '<div class="cal-dow">' + d + '</div>'; });
+
+    // Previous month's trailing days
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const d  = daysInPrev - i;
+      const py = state.calMonth === 0 ? state.calYear - 1 : state.calYear;
+      const pm = state.calMonth === 0 ? 11 : state.calMonth - 1;
+      html += '<div class="cal-day other" data-y="' + py + '" data-m="' + pm + '" data-d="' + d + '">' + d + '</div>';
+    }
+
+    // Current month
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = state.calYear + '-' + state.calMonth + '-' + d;
+      let cls = 'cal-day';
+      if (key === todayKey) cls += ' today';
+      if (key === selKey)   cls += ' selected';
+      html += '<div class="' + cls + '" data-y="' + state.calYear + '" data-m="' + state.calMonth + '" data-d="' + d + '">' + d + '</div>';
+    }
+
+    // Next month's leading days
+    const totalCells = firstDay + daysInMonth;
+    const remaining  = (7 - totalCells % 7) % 7;
+    for (let d = 1; d <= remaining; d++) {
+      const ny = state.calMonth === 11 ? state.calYear + 1 : state.calYear;
+      const nm = state.calMonth === 11 ? 0 : state.calMonth + 1;
+      html += '<div class="cal-day other" data-y="' + ny + '" data-m="' + nm + '" data-d="' + d + '">' + d + '</div>';
+    }
+
+    html += '</div>';
+    dom.calendar.innerHTML = html;
+
+    // Event delegation on calendar
+    dom.calendar.addEventListener('click', handleCalendarClick);
+  }
+
+  function handleCalendarClick(e) {
+    const nav = e.target.closest('.cal-nav');
+    if (nav) {
+      const dir = parseInt(nav.dataset.dir);
+      state.calMonth += dir;
+      if (state.calMonth < 0)  { state.calMonth = 11; state.calYear--; }
+      if (state.calMonth > 11) { state.calMonth = 0;  state.calYear++; }
+      renderCalendar();
+      return;
+    }
+
+    const day = e.target.closest('.cal-day');
+    if (day) {
+      const d = new Date(parseInt(day.dataset.y), parseInt(day.dataset.m), parseInt(day.dataset.d));
+      setDate(d, false);
+    }
+  }
+
+  /* ─── Timezone List ────────────────────────────────── */
+
+  function renderTzList() {
+    dom.tzList.innerHTML = state.zones.map((tz, idx) => buildTzCard(tz, idx)).join('');
+    bindTzListEvents();
+  }
+
+  function buildTzCard(tz, idx) {
+    const flag      = getFlag(tz);
+    const d         = state.currentDate;
+    const time      = d ? formatInZone(d, tz) : '--';
+    const offset    = d ? formatOffset(d, tz) : '--';
+    const timeStyle = d ? '' : ' style="color:var(--time-empty)"';
+    const copyHtml  = d ? buildCopyMenu(tz, idx) : '';
+
+    return '<div class="tz-card" draggable="true" data-idx="' + idx + '">' +
+      '<span class="tz-flag">' + flag + '</span>' +
+      '<span class="tz-name">' + esc(tz) + '</span>' +
+      '<span class="tz-time-area"><span class="tz-time" data-tz="' + esc(tz) + '"' + timeStyle + '>' + (d ? esc(time) : '--') + '</span></span>' +
+      '<span class="tz-offset">' + esc(offset) + '</span>' +
+      copyHtml +
+      '<button class="tz-remove" data-tz="' + esc(tz) + '">&times;</button>' +
+      '</div>';
+  }
+
+  function buildCopyMenu(tz, idx) {
+    const cv = getCopyValues(state.currentDate, tz);
+    const items = [
+      ['1', t('epochSeconds'),      cv.epochS],
+      ['2', t('epochMilliseconds'), cv.epochMs],
+      ['3', t('localDate'),         cv.localDate],
+      ['4', t('localDateTime'),     cv.localDateTime],
+      ['5', t('isoOffset'),         cv.isoOffset],
+    ];
+
+    const menuHtml = items.map((it) =>
+      '<div class="tz-copy-item" data-val="' + esc(it[2]) + '" data-key="' + it[0] + '">' +
+        '<span class="tz-copy-key">' + it[0] + '</span>' +
+        '<span class="label">' + it[1] + '</span>' +
+        '<span class="value">' + esc(it[2]) + '</span></div>'
+    ).join('');
+
+    return '<div class="tz-copy-wrap">' +
+      '<button class="tz-copy" data-idx="' + idx + '">' + t('copy') + '</button>' +
+      '<div class="tz-copy-menu" data-idx="' + idx + '">' + menuHtml + '</div></div>';
+  }
+
+  function bindTzListEvents() {
+    // Event delegation on tzList
+    dom.tzList.onclick = (e) => {
+      // Remove button
+      const removeBtn = e.target.closest('.tz-remove');
+      if (removeBtn) {
+        e.stopPropagation();
+        state.zones = state.zones.filter((z) => z !== removeBtn.dataset.tz);
+        saveZones();
+        renderTzList();
+        return;
+      }
+
+      // Copy button → toggle menu
+      const copyBtn = e.target.closest('.tz-copy');
+      if (copyBtn) {
+        e.stopPropagation();
+        closeAllCopyMenus();
+        copyBtn.parentElement.querySelector('.tz-copy-menu').classList.toggle('open');
+        return;
+      }
+
+      // Copy item → clipboard
+      const copyItem = e.target.closest('.tz-copy-item');
+      if (copyItem) {
+        e.stopPropagation();
+        copyToClipboard(copyItem.dataset.val, copyItem.closest('.tz-copy-wrap').querySelector('.tz-copy'));
+        return;
+      }
+
+      // Time click → update input
+      const timeEl = e.target.closest('.tz-time');
+      if (timeEl && state.currentDate) {
+        e.stopPropagation();
+        const cv = getCopyValues(state.currentDate, timeEl.dataset.tz);
+        dom.timeInput.value = getFormat() === 'epoch' ? cv.epochMs : cv.isoOffset;
+        state.assumedLocal = false;
+        updateHash(state.currentDate);
+        renderTzAssumption();
+      }
+    };
+
+    bindDragAndDrop();
+  }
+
+  /* ─── Copy Helpers ─────────────────────────────────── */
+
+  function closeAllCopyMenus() {
+    document.querySelectorAll('.tz-copy-menu.open').forEach((m) => m.classList.remove('open'));
+  }
+
+  function copyToClipboard(val, btn) {
+    navigator.clipboard.writeText(val);
+    closeAllCopyMenus();
+    btn.textContent = t('copied');
+    setTimeout(() => { btn.textContent = t('copy'); }, 1200);
+  }
+
+  /* ─── Drag & Drop ──────────────────────────────────── */
+
+  function bindDragAndDrop() {
+    const cards = dom.tzList.querySelectorAll('.tz-card');
+
+    cards.forEach((card) => {
+      card.addEventListener('dragstart', (e) => {
+        state.dragSrcIdx = parseInt(card.dataset.idx);
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        cards.forEach((c) => c.classList.remove('drag-over'));
+        state.dragSrcIdx = null;
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        cards.forEach((c) => c.classList.remove('drag-over'));
+        card.classList.add('drag-over');
+      });
+
+      card.addEventListener('dragleave', () => {
+        card.classList.remove('drag-over');
+      });
+
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const targetIdx = parseInt(card.dataset.idx);
+        if (state.dragSrcIdx !== null && state.dragSrcIdx !== targetIdx) {
+          const [moved] = state.zones.splice(state.dragSrcIdx, 1);
+          state.zones.splice(targetIdx, 0, moved);
+          saveZones();
+          renderTzList();
+        }
+      });
+    });
+  }
+
+  /* ─── Usage Section ────────────────────────────────── */
+
+  function renderUsage() {
+    const items    = t('usageItems');
+    const examples = t('usageHashExamples');
+    dom.usage.innerHTML = '<div class="usage-title">' + t('usageTitle') + '</div>' +
+      items.map((item, i) => {
+        let html = '<div class="usage-item"><strong>' + item[0] + '</strong> — ' + item[1];
+        if (i === items.length - 1) html += '<div class="usage-example">' + examples + '</div>';
+        return html + '</div>';
+      }).join('');
+  }
+
+  /* ════════════════════════════════════════════════════
+     State Transitions
+     ════════════════════════════════════════════════════ */
+
+  function setDate(date, assumed) {
+    state.currentDate  = date;
+    state.assumedLocal = assumed;
+    state.calYear      = date.getFullYear();
+    state.calMonth     = date.getMonth();
+    dom.timeInput.value = formatForInput(date);
+    updateHash(date);
+    render();
+  }
+
+  function clearDate() {
+    state.currentDate  = null;
+    state.assumedLocal = false;
+    dom.error.textContent = '';
+    render();
+  }
+
+  function setNow() {
+    dom.timeInput.placeholder = getPlaceholder();
+    setDate(new Date(), false);
+  }
+
+  function parseAndRender() {
+    const raw = dom.timeInput.value.trim();
+    if (!raw) { clearDate(); return; }
+
+    let d;
+    let assumed = false;
+
+    if (getFormat() === 'epoch') {
+      const num = Number(raw);
+      if (!Number.isFinite(num) || num < 0) {
+        dom.error.textContent = t('invalidEpoch');
+        clearDate();
+        return;
+      }
+      d = new Date(num);
+    } else {
+      const lacksOffset = inputLacksTimezone(raw);
+      d = (lacksOffset && getDefaultTz() === 'utc')
+        ? new Date(raw.replace(' ', 'T') + 'Z')
+        : new Date(raw);
+      assumed = lacksOffset;
+    }
+
+    if (isNaN(d.getTime())) {
+      dom.error.textContent = getFormat() === 'epoch' ? t('invalidEpoch') : t('invalidIso');
+      clearDate();
+      return;
+    }
+
+    dom.error.textContent = '';
+    state.currentDate  = d;
+    state.assumedLocal = assumed;
+    state.calYear      = d.getFullYear();
+    state.calMonth     = d.getMonth();
+    updateHash(d);
+    render();
+  }
+
+  /* ════════════════════════════════════════════════════
+     Timezone Search & Suggestions
+     ════════════════════════════════════════════════════ */
+
+  function addZone(tz) {
+    if (!state.zones.includes(tz)) {
+      state.zones.push(tz);
+      saveZones();
+      renderTzList();
+    }
+    dom.tzSearch.value = '';
+    closeSuggestions();
+  }
+
+  function closeSuggestions() {
+    dom.suggestionsList.classList.remove('open');
+    state.selectedSuggestion = -1;
+  }
+
+  function showSuggestions(query) {
+    if (!query) { closeSuggestions(); return; }
+
+    const q = query.toLowerCase();
+    const customNorm       = normalizeCustomOffset(query);
+    const shorthandResults = customNorm ? [] : parseShorthandOffsets(query);
+    const partialCustom    = /^utc[+-]?\d{0,2}:?\d{0,2}$/i.test(query) || /^[+-]?\d{0,2}:?\d{0,2}$/.test(query);
+    const ianaMatches      = ALL_TIMEZONES.filter((tz) =>
+      tz.toLowerCase().includes(q) && !state.zones.includes(tz)
+    ).slice(0, 8);
+
+    const items = [];
+    const added = new Set();
+
+    const tryAdd = (tz, label, offset) => {
+      if (added.has(tz) || state.zones.includes(tz)) return;
+      items.push({ tz, label, offset });
+      added.add(tz);
+    };
+
+    if (customNorm) tryAdd(customNorm, '🌐  ' + customNorm, formatOffset(new Date(), customNorm));
+    shorthandResults.forEach((tz) => tryAdd(tz, '🌐  ' + tz, formatOffset(new Date(), tz)));
+    ianaMatches.forEach((tz) => {
+      const flag = getFlag(tz);
+      tryAdd(tz, (flag ? flag + '  ' : '') + tz, formatOffset(new Date(), tz));
+    });
+
+    if (items.length === 0 && !partialCustom) { closeSuggestions(); return; }
+    if (items.length === 0) {
+      dom.suggestionsList.innerHTML = '<div class="suggestion-hint">' + t('suggestionHint') + '</div>';
+      dom.suggestionsList.classList.add('open');
+      return;
+    }
+
+    state.selectedSuggestion = -1;
+    dom.suggestionsList.innerHTML = items.map((it, i) =>
+      '<div class="suggestion-item" data-tz="' + esc(it.tz) + '" data-idx="' + i + '">' +
+        '<span>' + it.label + '</span>' +
+        '<span class="suggestion-offset">' + esc(it.offset) + '</span></div>'
+    ).join('');
+    dom.suggestionsList.classList.add('open');
+
+    dom.suggestionsList.querySelectorAll('.suggestion-item').forEach((el) => {
+      el.addEventListener('click', () => addZone(el.dataset.tz));
+    });
+  }
+
+  /* ════════════════════════════════════════════════════
+     Theme
+     ════════════════════════════════════════════════════ */
+
+  const getTheme = () => localStorage.getItem(THEME_KEY) || 'dark';
+
+  function resolveTheme(theme) {
+    if (theme === 'system') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return theme;
+  }
+
+  function setTheme(theme) {
+    localStorage.setItem(THEME_KEY, theme);
+    document.documentElement.setAttribute('data-theme', resolveTheme(theme));
+    dom.themeBtn.textContent = THEME_ICONS[theme];
+  }
+
+  function cycleTheme() {
+    const idx = THEME_ORDER.indexOf(getTheme());
+    setTheme(THEME_ORDER[(idx + 1) % THEME_ORDER.length]);
+  }
+
+  /* ════════════════════════════════════════════════════
+     Language
+     ════════════════════════════════════════════════════ */
+
+  function setLang(lang) {
+    localStorage.setItem(LANG_KEY, lang);
+    dom.langBtn.textContent      = lang.toUpperCase();
+    dom.title.textContent        = t('title');
+    dom.themeBtn.title           = t('toggleTheme');
+    dom.langBtn.title            = t('toggleLang');
+    dom.defaultTzBtn.title       = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
+    dom.nowBtn.textContent       = t('now');
+    dom.timeInput.placeholder    = t('placeholderIso');
+    dom.tzSearch.placeholder     = t('placeholderTz');
+    renderUsage();
+    render();
+  }
+
+  /* ════════════════════════════════════════════════════
+     Default Timezone Toggle
+     ════════════════════════════════════════════════════ */
+
+  function setDefaultTz(v) {
+    localStorage.setItem(DEFAULT_TZ_KEY, v);
+    dom.defaultTzBtn.textContent = v === 'utc' ? 'UTC' : 'Local';
+    dom.defaultTzBtn.title       = v === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
+    if (state.currentDate) parseAndRender();
+  }
+
+  /* ════════════════════════════════════════════════════
+     Event Binding
+     ════════════════════════════════════════════════════ */
+
+  function bindEvents() {
+    dom.themeBtn.addEventListener('click', cycleTheme);
+    dom.langBtn.addEventListener('click', () => setLang(getLang() === 'en' ? 'ko' : 'en'));
+    dom.defaultTzBtn.addEventListener('click', () => setDefaultTz(getDefaultTz() === 'local' ? 'utc' : 'local'));
+    dom.timeInput.addEventListener('input', parseAndRender);
+    dom.nowBtn.addEventListener('click', setNow);
+
+    dom.formatSelect.addEventListener('change', () => {
+      dom.timeInput.placeholder = getPlaceholder();
+      if (state.currentDate) dom.timeInput.value = formatForInput(state.currentDate);
+      state.assumedLocal = false;
+      renderTzAssumption();
+    });
+
+    dom.tzSearch.addEventListener('input', (e) => showSuggestions(e.target.value.trim()));
+    dom.tzSearch.addEventListener('keydown', handleSearchKeydown);
+
+    document.addEventListener('click', (e) => {
+      closeAllCopyMenus();
+      if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
+    });
+
+    document.addEventListener('keydown', handleCopyShortcut);
+
+    window.addEventListener('hashchange', applyHash);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (getTheme() === 'system') setTheme('system');
+    });
+  }
+
+  function handleSearchKeydown(e) {
+    const items = dom.suggestionsList.querySelectorAll('.suggestion-item');
+    if (!dom.suggestionsList.classList.contains('open') || items.length === 0) {
+      if (e.key === 'Enter') {
+        const val  = e.target.value.trim();
+        const norm = normalizeCustomOffset(val);
+        if (norm) { addZone(norm); return; }
+        const sh = parseShorthandOffsets(val);
+        if (sh.length > 0) { addZone(sh[0]); return; }
+        if (ALL_TIMEZONES.includes(val)) addZone(val);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      state.selectedSuggestion = Math.min(state.selectedSuggestion + 1, items.length - 1);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      state.selectedSuggestion = Math.max(state.selectedSuggestion - 1, 0);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (state.selectedSuggestion >= 0 && state.selectedSuggestion < items.length)
+        addZone(items[state.selectedSuggestion].dataset.tz);
+      return;
+    } else if (e.key === 'Escape') {
+      closeSuggestions();
+      return;
+    } else {
+      return;
+    }
+
+    items.forEach((it, i) => it.classList.toggle('active', i === state.selectedSuggestion));
+  }
+
+  function handleCopyShortcut(e) {
+    const openMenu = document.querySelector('.tz-copy-menu.open');
+    if (!openMenu) return;
+    const item = openMenu.querySelector('.tz-copy-item[data-key="' + e.key + '"]');
+    if (!item) return;
+    e.preventDefault();
+    copyToClipboard(item.dataset.val, openMenu.closest('.tz-copy-wrap').querySelector('.tz-copy'));
+  }
+
+  /* ════════════════════════════════════════════════════
+     Init
+     ════════════════════════════════════════════════════ */
+
+  function init() {
+    setTheme(getTheme());
+    dom.defaultTzBtn.textContent = getDefaultTz() === 'utc' ? 'UTC' : 'Local';
+
+    const lang = getLang();
+    dom.langBtn.textContent   = lang.toUpperCase();
+    dom.title.textContent     = t('title');
+    dom.themeBtn.title        = t('toggleTheme');
+    dom.langBtn.title         = t('toggleLang');
+    dom.defaultTzBtn.title    = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
+    dom.nowBtn.textContent    = t('now');
+    dom.timeInput.placeholder = t('placeholderIso');
+    dom.tzSearch.placeholder  = t('placeholderTz');
+
+    renderUsage();
+    bindEvents();
+
+    if (!applyHash()) setNow();
+  }
+
+  init();
+})();
 </script>
 </body>
 </html>
