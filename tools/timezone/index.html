@@ -93,7 +93,7 @@
   }
   h1 { font-size: 1.1rem; font-weight: 500; color: var(--text-muted); }
   .top-right { display: flex; gap: 6px; }
-  #themeBtn, #langBtn {
+  #themeBtn, #langBtn, #defaultTzBtn {
     background: none;
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -103,8 +103,8 @@
     line-height: 1;
     transition: border-color 0.15s;
   }
-  #themeBtn:hover, #langBtn:hover { border-color: var(--border-focus); }
-  #langBtn { font-size: 0.75rem; color: var(--text-muted); }
+  #themeBtn:hover, #langBtn:hover, #defaultTzBtn:hover { border-color: var(--border-focus); }
+  #langBtn, #defaultTzBtn { font-size: 0.75rem; color: var(--text-muted); }
 
   .input-row {
     display: flex;
@@ -127,8 +127,14 @@
     transition: border-color 0.15s;
   }
   #formatSelect:focus { border-color: var(--border-focus); }
-  #timeInput {
+  .input-wrap {
     flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  #timeInput {
+    width: 100%;
     background: var(--input-bg);
     border: 1px solid var(--border);
     color: var(--text);
@@ -137,7 +143,7 @@
     font-family: 'SF Mono', 'Fira Code', monospace;
     border-radius: 8px;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, padding-right 0.15s;
   }
   #timeInput:focus { border-color: var(--border-focus); }
   #timeInput::placeholder { color: var(--placeholder); }
@@ -274,13 +280,19 @@
   .tz-card.drag-over { border-top: 2px solid var(--drag-border); margin-top: -2px; }
   .tz-flag { font-size: 1.2rem; width: 28px; flex-shrink: 0; }
   .tz-name { font-size: 0.8rem; color: var(--text-muted); min-width: 180px; }
+  .tz-time-area {
+    flex: 1;
+    text-align: right;
+  }
   .tz-time {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 1rem;
     color: var(--text);
-    flex: 1;
-    text-align: right;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: color 0.1s;
   }
+  .tz-time:hover { color: var(--cal-today); }
   .tz-offset {
     font-size: 0.75rem;
     color: var(--offset-color);
@@ -390,6 +402,17 @@
     color: var(--text-faint);
     margin-top: 2px;
   }
+  .tz-assumption {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .tz-assumption:empty { display: none; }
 </style>
 </head>
 <body>
@@ -398,6 +421,7 @@
   <div class="top-row">
     <h1 id="title">Timezone Converter</h1>
     <div class="top-right">
+      <button id="defaultTzBtn"></button>
       <button id="langBtn">EN</button>
       <button id="themeBtn" title="Toggle theme"></button>
     </div>
@@ -408,7 +432,10 @@
       <option value="iso">ISO</option>
       <option value="epoch">Epoch</option>
     </select>
-    <input type="text" id="timeInput" placeholder="2025-01-15T09:00:00+09:00" />
+    <div class="input-wrap">
+      <input type="text" id="timeInput" placeholder="2025-01-15T09:00:00+09:00" />
+      <span id="tzAssumption" class="tz-assumption"></span>
+    </div>
     <button class="btn" id="nowBtn">Now</button>
   </div>
   <div id="error" class="error"></div>
@@ -431,6 +458,7 @@
 const STORAGE_KEY = 'tz-converter-zones';
 const THEME_KEY = 'tz-converter-theme';
 const LANG_KEY = 'tz-converter-lang';
+const DEFAULT_TZ_KEY = 'tz-converter-default-tz';
 const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
 const DEFAULT_ZONES = ['Asia/Seoul', 'America/New_York', 'Europe/London', 'UTC'];
 
@@ -438,6 +466,9 @@ const I18N = {
   en: {
     title: 'Timezone Converter',
     toggleTheme: 'Toggle theme',
+    toggleLang: 'Toggle language',
+    defaultTzUtc: 'Default timezone: UTC',
+    defaultTzLocal: 'Default timezone: Local',
     now: 'Now',
     placeholderIso: '2025-01-15T09:00:00+09:00',
     placeholderTz: 'Asia/Seoul or UTC+5:30',
@@ -454,8 +485,10 @@ const I18N = {
     usageTitle: 'Usage',
     usageItems: [
       ['Time Input', 'Enter time in ISO 8601 or Epoch milliseconds format. Switch format with the dropdown.'],
+      ['Default Timezone', 'Toggle UTC/Local button to set how offset-less input is interpreted.'],
       ['Timezone Search', 'Search by IANA name (Asia/Seoul) or UTC offset (UTC+9, +5:30).'],
-      ['Copy', 'Click a timezone card to copy in various formats. Use number keys 1–5 for quick copy.'],
+      ['Time Select', 'Click a time in the timezone list to update the input with that timezone\'s offset.'],
+      ['Copy', 'Click the copy button on a timezone card to copy in various formats. Use number keys 1–5 for quick copy.'],
       ['Drag & Drop', 'Reorder timezone cards by dragging.'],
       ['URL Hash', 'Append #epoch or #ISO8601 to the URL to open with a specific time.'],
     ],
@@ -466,6 +499,9 @@ const I18N = {
   ko: {
     title: '타임존 변환기',
     toggleTheme: '테마 전환',
+    toggleLang: '언어 전환',
+    defaultTzUtc: '기본 타임존: UTC',
+    defaultTzLocal: '기본 타임존: 로컬',
     now: '현재',
     placeholderIso: '2025-01-15T09:00:00+09:00',
     placeholderTz: 'Asia/Seoul 또는 UTC+5:30',
@@ -482,8 +518,10 @@ const I18N = {
     usageTitle: '사용법',
     usageItems: [
       ['시간 입력', 'ISO 8601 또는 Epoch 밀리초 형식으로 입력. 드롭다운으로 형식 전환.'],
+      ['기본 타임존', 'UTC/Local 버튼으로 오프셋 없는 입력의 해석 기준 설정.'],
       ['타임존 검색', 'IANA 이름(Asia/Seoul) 또는 UTC 오프셋(UTC+9, +5:30)으로 검색.'],
-      ['복사', '타임존 카드를 클릭하면 다양한 형식으로 복사. 숫자키 1–5로 빠른 복사.'],
+      ['시간 선택', '타임존 목록에서 시간을 클릭하면 해당 타임존 오프셋으로 입력 업데이트.'],
+      ['복사', '타임존 카드의 복사 버튼을 클릭하면 다양한 형식으로 복사. 숫자키 1–5로 빠른 복사.'],
       ['드래그 & 드롭', '타임존 카드를 드래그하여 순서 변경.'],
       ['URL 해시', 'URL 뒤에 #epoch 또는 #ISO8601을 붙여 특정 시간으로 열기.'],
     ],
@@ -501,12 +539,15 @@ function setLang(lang) {
   document.getElementById('langBtn').textContent = lang.toUpperCase();
   document.getElementById('title').textContent = t('title');
   document.getElementById('themeBtn').title = t('toggleTheme');
+  document.getElementById('langBtn').title = t('toggleLang');
+  document.getElementById('defaultTzBtn').title = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
   document.getElementById('nowBtn').textContent = t('now');
   document.getElementById('timeInput').placeholder = t('placeholderIso');
   document.getElementById('tzSearch').placeholder = t('placeholderTz');
   renderUsage();
   renderCalendar();
   renderTz();
+  renderTzAssumption();
 }
 
 document.getElementById('langBtn').addEventListener('click', () => {
@@ -515,14 +556,35 @@ document.getElementById('langBtn').addEventListener('click', () => {
 
 // Theme
 function getTheme() { return localStorage.getItem(THEME_KEY) || 'dark'; }
+function resolveTheme(t) {
+  if (t === 'system') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return t;
+}
 function setTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem(THEME_KEY, t);
-  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.documentElement.setAttribute('data-theme', resolveTheme(t));
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : t === 'light' ? '🌙' : '🖥️';
 }
 setTheme(getTheme());
 document.getElementById('themeBtn').addEventListener('click', () => {
-  setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+  const order = ['dark', 'light', 'system'];
+  setTheme(order[(order.indexOf(getTheme()) + 1) % 3]);
+});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (getTheme() === 'system') setTheme('system');
+});
+
+// Default timezone for offset-less input
+function getDefaultTz() { return localStorage.getItem(DEFAULT_TZ_KEY) || 'local'; }
+function setDefaultTz(v) {
+  localStorage.setItem(DEFAULT_TZ_KEY, v);
+  document.getElementById('defaultTzBtn').textContent = v === 'utc' ? 'UTC' : 'Local';
+  document.getElementById('defaultTzBtn').title = v === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
+  if (currentDate) parseAndRender();
+}
+document.getElementById('defaultTzBtn').textContent = getDefaultTz() === 'utc' ? 'UTC' : 'Local';
+document.getElementById('defaultTzBtn').addEventListener('click', () => {
+  setDefaultTz(getDefaultTz() === 'local' ? 'utc' : 'local');
 });
 
 const TZ_TO_CC = {
@@ -621,6 +683,23 @@ let zones = loadZones();
 let currentDate = null;
 let selectedSuggestion = -1;
 let calYear, calMonth;
+let assumedLocalTimezone = false;
+
+function inputLacksTimezone(raw) {
+  return !/(?:Z|[+-]\d{2}(?::?\d{2})?)$/i.test(raw.trim());
+}
+
+function renderTzAssumption() {
+  const el = document.getElementById('tzAssumption');
+  const input = document.getElementById('timeInput');
+  if (assumedLocalTimezone && currentDate) {
+    el.textContent = getDefaultTz() === 'utc' ? 'UTC' : Intl.DateTimeFormat().resolvedOptions().timeZone;
+    input.style.paddingRight = (el.offsetWidth + 20) + 'px';
+  } else {
+    el.textContent = '';
+    input.style.paddingRight = '';
+  }
+}
 
 function loadZones() {
   try {
@@ -661,17 +740,19 @@ function setNow() {
   document.getElementById('timeInput').value = formatForInput(now);
   document.getElementById('timeInput').placeholder = getPlaceholder();
   currentDate = now;
+  assumedLocalTimezone = false;
   calYear = now.getFullYear();
   calMonth = now.getMonth();
   updateHash(now);
   renderCalendar();
   renderTz();
+  renderTzAssumption();
 }
 
 function parseAndRender() {
   const raw = document.getElementById('timeInput').value.trim();
   const errEl = document.getElementById('error');
-  if (!raw) { errEl.textContent = ''; currentDate = null; renderCalendar(); renderTz(); return; }
+  if (!raw) { errEl.textContent = ''; currentDate = null; assumedLocalTimezone = false; renderCalendar(); renderTz(); renderTzAssumption(); return; }
 
   let d;
   if (getFormat() === 'epoch') {
@@ -679,20 +760,31 @@ function parseAndRender() {
     if (!Number.isFinite(num) || num < 0) {
       errEl.textContent = t('invalidEpoch');
       currentDate = null;
+      assumedLocalTimezone = false;
       renderCalendar();
       renderTz();
+      renderTzAssumption();
       return;
     }
     d = new Date(num);
+    assumedLocalTimezone = false;
   } else {
-    d = new Date(raw);
+    const lacksOffset = inputLacksTimezone(raw);
+    if (lacksOffset && getDefaultTz() === 'utc') {
+      d = new Date(raw.replace(' ', 'T') + 'Z');
+    } else {
+      d = new Date(raw);
+    }
+    assumedLocalTimezone = lacksOffset;
   }
 
   if (isNaN(d.getTime())) {
     errEl.textContent = getFormat() === 'epoch' ? t('invalidEpoch') : t('invalidIso');
     currentDate = null;
+    assumedLocalTimezone = false;
     renderCalendar();
     renderTz();
+    renderTzAssumption();
     return;
   }
   errEl.textContent = '';
@@ -702,15 +794,18 @@ function parseAndRender() {
   updateHash(d);
   renderCalendar();
   renderTz();
+  renderTzAssumption();
 }
 
 function applyCalendarSelection(year, month, day) {
   const d = new Date(year, month, day, 0, 0, 0);
   document.getElementById('timeInput').value = formatForInput(d);
   currentDate = d;
+  assumedLocalTimezone = false;
   updateHash(d);
   renderCalendar();
   renderTz();
+  renderTzAssumption();
 }
 
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
@@ -848,7 +943,7 @@ function renderTz() {
     return `<div class="tz-card" draggable="true" data-idx="${idx}">
       <span class="tz-flag">${flag}</span>
       <span class="tz-name">${esc(tz)}</span>
-      <span class="tz-time"${timeStyle}>${timeHtml}</span>
+      <span class="tz-time-area"><span class="tz-time" data-tz="${esc(tz)}"${timeStyle}>${timeHtml}</span></span>
       <span class="tz-offset">${esc(offset)}</span>
       ${copyHtml}
       <button class="tz-remove" data-tz="${esc(tz)}">&times;</button>
@@ -878,6 +973,23 @@ function renderTz() {
       const btn = item.closest('.tz-copy-wrap').querySelector('.tz-copy');
       btn.textContent = t('copied');
       setTimeout(() => { btn.textContent = t('copy'); }, 1200);
+    });
+  });
+  list.querySelectorAll('.tz-time').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!currentDate) return;
+      const tz = el.dataset.tz;
+      const cv = getCopyValues(currentDate, tz);
+      const input = document.getElementById('timeInput');
+      if (getFormat() === 'epoch') {
+        input.value = cv.epochMs;
+      } else {
+        input.value = cv.isoOffset;
+      }
+      assumedLocalTimezone = false;
+      updateHash(currentDate);
+      renderTzAssumption();
     });
   });
   bindDragAndDrop();
@@ -1044,6 +1156,8 @@ document.getElementById('formatSelect').addEventListener('change', () => {
   if (currentDate) {
     document.getElementById('timeInput').value = formatForInput(currentDate);
   }
+  assumedLocalTimezone = false;
+  renderTzAssumption();
 });
 
 document.getElementById('tzSearch').addEventListener('input', (e) => showSuggestions(e.target.value.trim()));
@@ -1108,19 +1222,23 @@ function parseHash() {
     return isNaN(d.getTime()) ? null : d;
   }
   // Try ISO 8601 parse
-  const d = new Date(hash);
+  const lacksOffset = inputLacksTimezone(hash);
+  const d = (lacksOffset && getDefaultTz() === 'utc') ? new Date(hash.replace(' ', 'T') + 'Z') : new Date(hash);
   return isNaN(d.getTime()) ? null : d;
 }
 
 function applyHash() {
   const d = parseHash();
   if (!d) return false;
+  const hash = decodeURIComponent(window.location.hash.slice(1)).trim();
+  assumedLocalTimezone = !/^\d+$/.test(hash) && inputLacksTimezone(hash);
   document.getElementById('timeInput').value = formatForInput(d);
   currentDate = d;
   calYear = d.getFullYear();
   calMonth = d.getMonth();
   renderCalendar();
   renderTz();
+  renderTzAssumption();
   return true;
 }
 
@@ -1131,6 +1249,8 @@ const initLang = getLang();
 document.getElementById('langBtn').textContent = initLang.toUpperCase();
 document.getElementById('title').textContent = t('title');
 document.getElementById('themeBtn').title = t('toggleTheme');
+document.getElementById('langBtn').title = t('toggleLang');
+document.getElementById('defaultTzBtn').title = getDefaultTz() === 'utc' ? t('defaultTzUtc') : t('defaultTzLocal');
 document.getElementById('nowBtn').textContent = t('now');
 document.getElementById('timeInput').placeholder = t('placeholderIso');
 document.getElementById('tzSearch').placeholder = t('placeholderTz');
