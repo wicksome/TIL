@@ -565,6 +565,8 @@
     assumedLocal:       false,
     dragSrcIdx:         null,
     selectedSuggestion: -1,
+    inputHistory:       [],
+    inputRedoStack:     [],
   };
 
   /* ════════════════════════════════════════════════════
@@ -867,12 +869,13 @@
     return !/(?:Z|[+-]\d{2}(?::?\d{2})?)$/i.test(raw.trim());
   }
 
-  function updateHash(date) {
-    if (!date) {
+  function syncHash() {
+    const val = dom.timeInput.value.trim();
+    if (val && state.currentDate) {
+      history.replaceState(null, '', '#' + val);
+    } else {
       history.replaceState(null, '', location.pathname + location.search);
-      return;
     }
-    history.replaceState(null, '', '#' + formatForInput(date));
   }
 
   function parseHash() {
@@ -902,7 +905,7 @@
     state.currentDate  = d;
     state.calYear      = d.getFullYear();
     state.calMonth     = d.getMonth();
-    dom.timeInput.value = formatForInput(d);
+    setInputValue(formatForInput(d));
     render();
     return true;
   }
@@ -1084,9 +1087,9 @@
       if (timeEl && state.currentDate) {
         e.stopPropagation();
         const cv = getCopyValues(state.currentDate, timeEl.dataset.tz);
-        dom.timeInput.value = getFormat() === 'epoch' ? cv.epochMs : cv.isoOffset;
+        setInputValue(getFormat() === 'epoch' ? cv.epochMs : cv.isoOffset);
         state.assumedLocal = false;
-        updateHash(state.currentDate);
+        syncHash();
         renderTzAssumption();
       }
     };
@@ -1163,6 +1166,33 @@
   }
 
   /* ════════════════════════════════════════════════════
+     Input History (undo for programmatic changes)
+     ════════════════════════════════════════════════════ */
+
+  function setInputValue(value) {
+    const prev = dom.timeInput.value;
+    if (prev !== value) {
+      state.inputHistory.push(prev);
+      state.inputRedoStack.length = 0;
+    }
+    dom.timeInput.value = value;
+  }
+
+  function undoInput() {
+    if (state.inputHistory.length === 0) return;
+    state.inputRedoStack.push(dom.timeInput.value);
+    dom.timeInput.value = state.inputHistory.pop();
+    parseAndRender();
+  }
+
+  function redoInput() {
+    if (state.inputRedoStack.length === 0) return;
+    state.inputHistory.push(dom.timeInput.value);
+    dom.timeInput.value = state.inputRedoStack.pop();
+    parseAndRender();
+  }
+
+  /* ════════════════════════════════════════════════════
      State Transitions
      ════════════════════════════════════════════════════ */
 
@@ -1171,8 +1201,8 @@
     state.assumedLocal = assumed;
     state.calYear      = date.getFullYear();
     state.calMonth     = date.getMonth();
-    dom.timeInput.value = formatForInput(date);
-    updateHash(date);
+    setInputValue(formatForInput(date));
+    syncHash();
     render();
   }
 
@@ -1222,7 +1252,7 @@
     state.assumedLocal = assumed;
     state.calYear      = d.getFullYear();
     state.calMonth     = d.getMonth();
-    updateHash(d);
+    syncHash();
     render();
   }
 
@@ -1356,7 +1386,7 @@
 
     dom.formatSelect.addEventListener('change', () => {
       dom.timeInput.placeholder = getPlaceholder();
-      if (state.currentDate) dom.timeInput.value = formatForInput(state.currentDate);
+      if (state.currentDate) setInputValue(formatForInput(state.currentDate));
       state.assumedLocal = false;
       renderTzAssumption();
     });
@@ -1369,6 +1399,16 @@
       if (!e.target.closest('.add-row') && !e.target.closest('.suggestions')) closeSuggestions();
     });
 
+    document.addEventListener('keydown', (e) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key !== 'z') return;
+      if (e.shiftKey && state.inputRedoStack.length > 0) {
+        e.preventDefault();
+        redoInput();
+      } else if (!e.shiftKey && state.inputHistory.length > 0) {
+        e.preventDefault();
+        undoInput();
+      }
+    });
     document.addEventListener('keydown', handleCopyShortcut);
 
     window.addEventListener('hashchange', applyHash);
