@@ -705,6 +705,7 @@
   }
 
   const pad2 = (n) => String(n).padStart(2, '0');
+  const pad3 = (n) => String(n).padStart(3, '0');
   const getLang = () => localStorage.getItem(LANG_KEY) || 'en';
   const t = (key) => I18N[getLang()][key];
   const getFormat = () => dom.formatSelect.value;
@@ -794,19 +795,22 @@
   }
 
   function formatInZone(date, tz) {
+    const ms = date.getMilliseconds();
+    const msSuffix = ms === 0 ? '' : '.' + pad3(ms);
     if (isCustomOffset(tz)) {
       const offsetMin = parseCustomOffset(tz);
       const utc = date.getTime() + date.getTimezoneOffset() * 60000;
       const target = new Date(utc + offsetMin * 60000);
       return target.getFullYear() + '-' + pad2(target.getMonth() + 1) + '-' + pad2(target.getDate()) +
-        ' ' + pad2(target.getHours()) + ':' + pad2(target.getMinutes()) + ':' + pad2(target.getSeconds());
+        ' ' + pad2(target.getHours()) + ':' + pad2(target.getMinutes()) + ':' + pad2(target.getSeconds()) + msSuffix;
     }
-    return new Intl.DateTimeFormat('sv-SE', {
+    const base = new Intl.DateTimeFormat('sv-SE', {
       timeZone: tz,
       year: 'numeric', month: '2-digit', day: '2-digit',
       hour: '2-digit', minute: '2-digit', second: '2-digit',
       hour12: false,
     }).format(date);
+    return base + msSuffix;
   }
 
   function toISO(date) {
@@ -814,8 +818,10 @@
     const sign = off >= 0 ? '+' : '-';
     const h    = pad2(Math.floor(Math.abs(off) / 60));
     const m    = pad2(Math.abs(off) % 60);
+    const ms   = date.getMilliseconds();
+    const msPart = ms === 0 ? '' : '.' + pad3(ms);
     return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate()) +
-      'T' + pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds()) +
+      'T' + pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds()) + msPart +
       sign + h + ':' + m;
   }
 
@@ -1228,9 +1234,34 @@
   }
 
   function tryParseEpoch(raw) {
-    const num = Number(raw);
-    if (!Number.isFinite(num) || num < 0) return null;
-    const d = new Date(num);
+    const s = raw.trim();
+    if (!/^[+-]?\d+(\.\d+)?$/.test(s)) return null;
+
+    const sign = s.startsWith('-') ? -1n : 1n;
+    const unsigned = s.replace(/^[+-]/, '');
+
+    let msBig;
+    if (unsigned.includes('.')) {
+      const parts = unsigned.split('.');
+      const secStr = parts[0] || '0';
+      let fracStr = parts[1] || '';
+      // Normalize to nanoseconds precision (pad/truncate to 9)
+      if (fracStr.length > 9) fracStr = fracStr.slice(0, 9);
+      while (fracStr.length < 9) fracStr += '0';
+
+      const secBig  = BigInt(secStr || '0');
+      const nanoBig = BigInt(fracStr || '0');
+      msBig = sign * (secBig * 1000n + nanoBig / 1000000n);
+    } else {
+      const intStr = unsigned;
+      const valBig = BigInt(intStr || '0') * sign;
+      // Heuristic: <= 10 digits => seconds, else milliseconds
+      msBig = intStr.length <= 10 ? valBig * 1000n : valBig;
+    }
+
+    const msNum = Number(msBig);
+    if (!Number.isFinite(msNum)) return null;
+    const d = new Date(msNum);
     return isNaN(d.getTime()) ? null : { date: d, assumed: false };
   }
 
