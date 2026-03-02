@@ -33,9 +33,3 @@ Today I Learned
 확장자: `/index.adoc` → `/index` or `/index.html`
 
 https://github.com/wicksome/TIL[TIL]에 있는 모든 `.adoc` 파일은 `.html` 파일로 변환되어 https://github.com/wicksome/TIL/actions/workflows/pages.yml[github pages]를 통해 배포된다.
-
-== Tools
-
-* link:pages.html[전체 페이지 목록]
-* https://wickso.me/tools/json[JSON Formatter]
-* https://wickso.me/tools/mybatis-log-to-sql/[MyBatis log parser]
