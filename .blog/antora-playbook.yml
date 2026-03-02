@@ -1,5 +1,5 @@
 site:
-  title: Documents
+  title: TIL
   start_page: blog::index.adoc
 
 content:

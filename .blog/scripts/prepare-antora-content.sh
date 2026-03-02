@@ -10,6 +10,7 @@ ATTACHMENTS_DIR="$ASSETS_DIR/attachments"
 TOOLS_ATTACH_DIR="$ATTACHMENTS_DIR/tools"
 NAV_FILE="$BLOG_DIR/docs/modules/ROOT/nav.adoc"
 ABOUT_SRC_FILE="$ROOT_DIR/about.adoc"
+INDEX_SRC_FILE="$ROOT_DIR/index.adoc"
 
 mkdir -p "$PAGES_DIR" "$ATTACHMENTS_DIR"
 rm -rf "$TIL_PAGES_DIR"
@@ -26,6 +27,10 @@ while IFS= read -r -d '' file; do
   fi
 
   if [[ "$rel" == "pages.adoc" ]]; then
+    continue
+  fi
+
+  if [[ "$rel" == "index.adoc" ]]; then
     continue
   fi
 
@@ -60,14 +65,17 @@ if [[ -d "$ROOT_DIR/tools" ]]; then
   done < <(find "$ROOT_DIR/tools" -type f -print0 | sort -z)
 fi
 
-cat > "$PAGES_DIR/index.adoc" <<'INDEX'
+if [[ -f "$INDEX_SRC_FILE" ]]; then
+  cp "$INDEX_SRC_FILE" "$PAGES_DIR/index.adoc"
+else
+  cat > "$PAGES_DIR/index.adoc" <<'INDEX'
 = Documents
 
 * xref:about.adoc[About]
 * xref:pages.adoc[All TIL Pages]
-* xref:til/index.adoc[TIL Home]
 * xref:tools.adoc[Tools]
 INDEX
+fi
 
 if [[ -f "$ABOUT_SRC_FILE" ]]; then
   cp "$ABOUT_SRC_FILE" "$PAGES_DIR/about.adoc"
@@ -122,11 +130,6 @@ HEADER
     rel="${file#"$PAGES_DIR"/}"
 
     if [[ "$rel" == "index.adoc" || "$rel" == "pages.adoc" || "$rel" == "tools.adoc" ]]; then
-      continue
-    fi
-
-    if [[ "$rel" == "til/index.adoc" ]]; then
-      printf '* xref:%s[TIL Home]\n' "$rel"
       continue
     fi
 
