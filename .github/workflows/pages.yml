@@ -40,6 +40,10 @@ jobs:
         run: npx -y -p @antora/cli@3.1 -p @antora/site-generator@3.1 antora antora-playbook.yml --to-dir ../site
         working-directory: .blog
 
+      - name: Postprocess site output
+        run: bash scripts/postprocess-site.sh ../site
+        working-directory: .blog
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
