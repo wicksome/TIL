@@ -1,0 +1,10 @@
+:root {
+  --toc-width: 13rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .toc.sidebar {
+    flex: 0 0 var(--toc-width);
+    width: var(--toc-width);
+  }
+}
