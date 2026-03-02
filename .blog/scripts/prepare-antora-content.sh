@@ -88,7 +88,13 @@ TOOLS_HEADER
       label="${rel%.html}"
     fi
 
-    printf '* xref:attachment$tools/%s[`%s`]\n' "$rel" "$label"
+    if [[ "$rel" == */index.html ]]; then
+      url="/tools/${rel%/index.html}"
+    else
+      url="/tools/$rel"
+    fi
+
+    printf '* link:%s[`%s`]\n' "$url" "$label"
   done < <(find "$TOOLS_ATTACH_DIR" -type f -name '*.html' -print0 | sort -z)
 } > "$PAGES_DIR/tools.adoc"
 
