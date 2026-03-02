@@ -1,4 +1,5 @@
 name: blog
 title: Documents
+version: latest
 nav:
   - modules/ROOT/nav.adoc

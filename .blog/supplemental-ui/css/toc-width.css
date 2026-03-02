@@ -8,3 +8,9 @@
     width: var(--toc-width);
   }
 }
+
+/* Hide Antora component version badge/list (e.g., "latest") in nav explore */
+.nav-panel-explore .context .version,
+.nav-panel-explore .versions {
+  display: none !important;
+}
