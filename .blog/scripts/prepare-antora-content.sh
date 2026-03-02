@@ -9,6 +9,7 @@ ASSETS_DIR="$BLOG_DIR/docs/modules/ROOT/assets"
 ATTACHMENTS_DIR="$ASSETS_DIR/attachments"
 TOOLS_ATTACH_DIR="$ATTACHMENTS_DIR/tools"
 NAV_FILE="$BLOG_DIR/docs/modules/ROOT/nav.adoc"
+ABOUT_SRC_FILE="$ROOT_DIR/about.adoc"
 
 mkdir -p "$PAGES_DIR" "$ATTACHMENTS_DIR"
 rm -rf "$TIL_PAGES_DIR"
@@ -62,10 +63,21 @@ fi
 cat > "$PAGES_DIR/index.adoc" <<'INDEX'
 = Documents
 
+* xref:about.adoc[About]
 * xref:pages.adoc[All TIL Pages]
 * xref:til/index.adoc[TIL Home]
 * xref:tools.adoc[Tools]
 INDEX
+
+if [[ -f "$ABOUT_SRC_FILE" ]]; then
+  cp "$ABOUT_SRC_FILE" "$PAGES_DIR/about.adoc"
+else
+  cat > "$PAGES_DIR/about.adoc" <<'ABOUT'
+= About
+
+This page introduces the Documents site.
+ABOUT
+fi
 
 {
   cat <<'TOOLS_HEADER'
@@ -125,7 +137,8 @@ HEADER
 {
   cat <<'NAV_HEADER'
 * Blog
-** xref:index.adoc[About]
+** xref:index.adoc[Home]
+** xref:about.adoc[About]
 ** xref:pages.adoc[All Pages]
 ** xref:tools.adoc[Tools]
 * Documents
