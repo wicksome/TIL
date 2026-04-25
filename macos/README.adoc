@@ -35,22 +35,25 @@
 
 == 어플리케이션
 
+=== 그간 사용하면서 필수
+
+* https://www.hammerspoon.org/[Hammerspoon] - 유틸리티 `brew install --cask hammerspoon`
+* https://www.busymac.com/busycal/[BusyCal] - 달력 `brew install --cask busycal`
+* [.line-through]#https://www.macbartender.com/[Bartender]# - 메뉴바 관리 → https://matthewpalmer.net/vanilla/[vanilla] → https://github.com/dwarvesf/hidden[hidden]
+* https://github.com/Clipy/Clipy[Clipy] - 클립보드
+** [.line-through]#https://www.raycast.com/#
+** [.line-through]#https://www.alfredapp.com/#
+* https://iterm2.com/index.html[iTerm2] - 터미널 `brew install --cask iterm2`
+** ghostty - 터미널 `brew install --cask ghostty`
+* 1Password
+* https://folivora.ai/[BetterTouchTool] - 창 관리 `brew install --cask bettertouchtool`
+* https://github.com/sbarex/QLMarkdown
+
 === 필수
 
 * https://apps.apple.com/kr/app/runcat/id1429033973?mt=12[RunCat] - 시스템 모니터링
-* [.line-through]#https://www.macbartender.com/[Bartender]# - 메뉴바 관리 → https://matthewpalmer.net/vanilla/[vanilla] → https://github.com/dwarvesf/hidden[hidden]
 * https://gikken.co/mate-translate/[Mate Translate] - 번역기
-* https://github.com/Clipy/Clipy[Clipy] - 클립보드
-** https://www.raycast.com/
-** https://www.alfredapp.com/
-* https://www.hammerspoon.org/[Hammerspoon] - 유틸리티 `brew install --cask hammerspoon`
-* https://www.busymac.com/busycal/[BusyCal] - 달력 `brew install --cask busycal`
-** https://cron.com/ ?
-* https://iterm2.com/index.html[iTerm2] - 터미널 `brew install --cask iterm2`
-* ghostty - 터미널 `brew install --cask ghostty`
-* https://folivora.ai/[BetterTouchTool] - 창 관리 `brew install --cask bettertouchtool`
 * https://www.taskpaper.com/[TaskPaper] - 할일 관리
-* 1Password
 * MindNode - 마인드맵
 * https://freemacsoft.net/appcleaner/[AppCleaner] - 어플리케이션 삭제툴
 * https://theunarchiver.com/[Unarchiver]
@@ -58,7 +61,6 @@
 ** https://github.com/michaelvillar/timer-app[Timer] - 타이머
 ** https://flowapp.info/[Flow]
 ** https://fiplab.com/apps/window-focus-for-mac[Window Focus]
-* https://github.com/sbarex/QLMarkdown
 
 === 추천
 
